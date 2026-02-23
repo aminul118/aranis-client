@@ -3,6 +3,7 @@
 import { Monitor, Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 
 const themes = [
     { value: 'light', icon: Sun, label: 'Light' },
@@ -22,19 +23,29 @@ const FooterThemeToggle = () => {
             {themes.map(({ value, icon: Icon, label }) => {
                 const isActive = theme === value;
                 return (
-                    <button
+                    <motion.button
                         key={value}
                         onClick={() => setTheme(value)}
                         title={label}
                         aria-label={`Switch to ${label} theme`}
-                        className={`flex items-center justify-center rounded-full p-2 transition-all duration-200
+                        whileTap={{ scale: 0.85 }}
+                        whileHover={{ scale: 1.1 }}
+                        transition={{ type: 'spring', stiffness: 400, damping: 20 }}
+                        className={`relative flex items-center justify-center rounded-full p-2
               ${isActive
-                                ? 'bg-primary text-primary-foreground shadow-sm'
+                                ? 'text-primary-foreground'
                                 : 'text-muted-foreground hover:text-foreground'
                             }`}
                     >
-                        <Icon className="h-3.5 w-3.5" />
-                    </button>
+                        {isActive && (
+                            <motion.span
+                                layoutId="footer-theme-pill"
+                                className="absolute inset-0 rounded-full bg-primary shadow-sm"
+                                transition={{ type: 'spring', stiffness: 350, damping: 25 }}
+                            />
+                        )}
+                        <Icon className="relative z-10 h-3.5 w-3.5" />
+                    </motion.button>
                 );
             })}
         </div>
