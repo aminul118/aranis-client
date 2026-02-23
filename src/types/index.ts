@@ -73,22 +73,26 @@ export interface IModal {
 }
 
 export interface IProduct {
-  _id: string;
+  _id?: string;
   name: string;
   category: string;
   subCategory: string;
   type: string;
   price: number;
-  rating: number;
   image: string;
+  images?: string[];
   description: string;
-  details: string;
-  stock: number;
-  buyPrice: number;
-  colors: string[];
+  details: string | string[];
+  color: string;
   sizes: string[];
   featured: boolean;
+  rating: number;
   slug: string;
+  stock: number;
+  buyPrice: number;
+  salePrice?: number;
+  soldCount?: number;
+  isDeleted?: boolean;
 }
 
 export interface ICartItem extends IProduct {

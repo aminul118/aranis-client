@@ -13,7 +13,7 @@ const userSidebarMenu: MenuGroup[] = [
     title: 'Shopping',
     menu: [
       { name: 'My Orders', url: '/user/orders', icon: ShoppingBag },
-      { name: 'Products', url: '/products', icon: Package },
+      { name: 'Shop', url: '/shop', icon: Package },
     ],
   },
 ];

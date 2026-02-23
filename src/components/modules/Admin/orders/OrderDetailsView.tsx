@@ -236,9 +236,9 @@ const OrderDetailsView = ({ order }: { order: IOrder }) => {
                                                         </div>
                                                     </td>
                                                     <td className="px-6 py-4 text-center font-bold text-sm">{item.quantity}</td>
-                                                    <td className="px-6 py-4 text-right text-sm">${item.price.toFixed(2)}</td>
+                                                    <td className="px-6 py-4 text-right text-sm">৳{item.price.toFixed(2)}</td>
                                                     <td className="px-6 py-4 text-right font-black text-blue-500 text-sm">
-                                                        ${(item.quantity * item.price).toFixed(2)}
+                                                        ৳{(item.quantity * item.price).toFixed(2)}
                                                     </td>
                                                 </tr>
                                             );
@@ -276,7 +276,7 @@ const OrderDetailsView = ({ order }: { order: IOrder }) => {
                                 <div className="space-y-3">
                                     <div className="flex justify-between items-center text-sm">
                                         <span className="text-muted-foreground">Subtotal</span>
-                                        <span className="font-bold">${order.totalPrice.toFixed(2)}</span>
+                                        <span className="font-bold">৳{order.totalPrice.toFixed(2)}</span>
                                     </div>
                                     <div className="flex justify-between items-center text-sm">
                                         <span className="text-muted-foreground">Shipping</span>
@@ -284,7 +284,7 @@ const OrderDetailsView = ({ order }: { order: IOrder }) => {
                                     </div>
                                     <div className="pt-3 border-t border-border/40 flex justify-between items-center">
                                         <span className="font-black uppercase tracking-widest text-sm">Grand Total</span>
-                                        <span className="text-2xl font-black text-blue-500">${order.totalPrice.toFixed(2)}</span>
+                                        <span className="text-2xl font-black text-blue-500">৳{order.totalPrice.toFixed(2)}</span>
                                     </div>
                                 </div>
                             </div>

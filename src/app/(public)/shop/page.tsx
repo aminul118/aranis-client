@@ -74,7 +74,7 @@ const ShopPage = () => {
             const matchCategory = selectedCategory === 'All' || product.category === selectedCategory;
             const matchSub = selectedSub === 'All' || product.subCategory === selectedSub;
             const matchPrice = product.price >= selectedPrice[0] && product.price <= selectedPrice[1];
-            const matchColor = selectedColors.length === 0 || selectedColors.some(c => product.colors.includes(c));
+            const matchColor = selectedColors.length === 0 || selectedColors.includes(product.color);
             const matchSize = selectedSizes.length === 0 || selectedSizes.some(s => product.sizes.includes(s));
 
             return matchSearch && matchCategory && matchSub && matchPrice && matchColor && matchSize;
@@ -201,8 +201,8 @@ const ShopPage = () => {
                                 className="w-full h-1 bg-muted rounded-lg appearance-none cursor-pointer accent-blue-500"
                             />
                             <div className="flex justify-between mt-3 text-xs font-mono text-muted-foreground">
-                                <span>$50</span>
-                                <span className="text-blue-500 font-bold">${selectedPrice[1]}</span>
+                                <span>৳50</span>
+                                <span className="text-blue-500 font-bold">৳{selectedPrice[1]}</span>
                             </div>
                         </div>
 
@@ -325,11 +325,11 @@ const ShopPage = () => {
                                                         <div className="flex flex-col">
                                                             {product.salePrice && product.salePrice > 0 ? (
                                                                 <>
-                                                                    <span className="text-sm text-muted-foreground line-through">${product.price.toFixed(2)}</span>
-                                                                    <span className="text-2xl font-black text-blue-500">${product.salePrice.toFixed(2)}</span>
+                                                                    <span className="text-sm text-muted-foreground line-through">৳{product.price.toFixed(2)}</span>
+                                                                    <span className="text-2xl font-black text-blue-500">৳{product.salePrice.toFixed(2)}</span>
                                                                 </>
                                                             ) : (
-                                                                <span className="text-2xl font-bold text-foreground">${product.price.toFixed(2)}</span>
+                                                                <span className="text-2xl font-bold text-foreground">৳{product.price.toFixed(2)}</span>
                                                             )}
                                                         </div>
                                                         <Button

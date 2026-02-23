@@ -22,6 +22,7 @@ const CheckoutPage = () => {
     const [isEditingAddress, setIsEditingAddress] = useState(false);
     const [addressInput, setAddressInput] = useState('');
     const [phoneInput, setPhoneInput] = useState('');
+    const [isSuccess, setIsSuccess] = useState(false);
 
     const router = useRouter();
 
@@ -76,7 +77,7 @@ const CheckoutPage = () => {
         try {
             const orderPayload = {
                 items: cart.map(item => ({
-                    product: item._id,
+                    product: item._id as string,
                     quantity: item.quantity,
                     price: item.price
                 })),
@@ -88,8 +89,9 @@ const CheckoutPage = () => {
             const res = await createOrder(orderPayload);
             if (res.success) {
                 toast.success('Order placed successfully!');
+                setIsSuccess(true);
                 clearCart();
-                router.push('/user/dashboard');
+                router.push('/user/orders');
             } else {
                 toast.error(res.message || 'Failed to place order');
             }
@@ -108,7 +110,7 @@ const CheckoutPage = () => {
         );
     }
 
-    if (cart.length === 0) {
+    if (cart.length === 0 && !isSuccess) {
         router.push('/cart');
         return null;
     }
@@ -311,7 +313,7 @@ const CheckoutPage = () => {
                                                 <p className="text-xs text-muted-foreground italic">Qty: {item.quantity}</p>
                                             </div>
                                         </div>
-                                        <p className="font-bold text-sm">${(item.price * item.quantity).toFixed(2)}</p>
+                                        <p className="font-bold text-sm">৳{(item.price * item.quantity).toFixed(2)}</p>
                                     </div>
                                 ))}
                             </div>
@@ -319,7 +321,7 @@ const CheckoutPage = () => {
                             <div className="space-y-4 pt-4">
                                 <div className="flex justify-between text-muted-foreground text-sm">
                                     <span>Subtotal</span>
-                                    <span className="text-foreground font-bold">${subtotal.toFixed(2)}</span>
+                                    <span className="text-foreground font-bold">৳{subtotal.toFixed(2)}</span>
                                 </div>
                                 <div className="flex justify-between text-muted-foreground text-sm">
                                     <span>Shipping</span>
@@ -328,13 +330,13 @@ const CheckoutPage = () => {
                                 {discount > 0 && (
                                     <div className="flex justify-between text-blue-500 text-sm font-bold">
                                         <span>Discount</span>
-                                        <span>-${discount.toFixed(2)}</span>
+                                        <span>-৳{discount.toFixed(2)}</span>
                                     </div>
                                 )}
                                 <div className="h-px bg-border pt-2" />
                                 <div className="flex justify-between items-center pt-2">
                                     <span className="text-xl font-black italic tracking-tighter">Total Due</span>
-                                    <span className="text-3xl font-black text-foreground tracking-tighter">${total.toFixed(2)}</span>
+                                    <span className="text-3xl font-black text-foreground tracking-tighter">৳{total.toFixed(2)}</span>
                                 </div>
                             </div>
 

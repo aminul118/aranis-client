@@ -95,7 +95,7 @@ const CartPage = () => {
                                                 <p className="text-muted-foreground text-sm mb-4">{item.category}</p>
                                             </div>
                                             <button
-                                                onClick={() => removeFromCart(item._id)}
+                                                onClick={() => removeFromCart(item._id as string)}
                                                 className="text-muted-foreground hover:text-red-500 transition-colors p-2"
                                             >
                                                 <Trash2 size={20} />
@@ -105,20 +105,20 @@ const CartPage = () => {
                                         <div className="flex justify-between items-center">
                                             <div className="flex items-center gap-4 bg-muted/50 rounded-full border border-border p-1">
                                                 <button
-                                                    onClick={() => updateQuantity(item._id, item.quantity - 1)}
+                                                    onClick={() => updateQuantity(item._id as string, item.quantity - 1)}
                                                     className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-muted text-muted-foreground transition-colors"
                                                 >
                                                     <Minus size={14} />
                                                 </button>
                                                 <span className="text-foreground font-bold text-sm w-4 text-center">{item.quantity}</span>
                                                 <button
-                                                    onClick={() => updateQuantity(item._id, item.quantity + 1)}
+                                                    onClick={() => updateQuantity(item._id as string, item.quantity + 1)}
                                                     className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-muted text-muted-foreground transition-colors"
                                                 >
                                                     <Plus size={14} />
                                                 </button>
                                             </div>
-                                            <p className="text-xl font-bold text-foreground">${(item.price * item.quantity).toFixed(2)}</p>
+                                            <p className="text-xl font-bold text-foreground">৳{(item.price * item.quantity).toFixed(2)}</p>
                                         </div>
                                     </div>
                                 </motion.div>
@@ -134,7 +134,7 @@ const CartPage = () => {
                             <div className="flex flex-col gap-4 mb-8">
                                 <div className="flex justify-between text-muted-foreground">
                                     <span>Subtotal</span>
-                                    <span className="text-foreground font-medium">${subtotal.toFixed(2)}</span>
+                                    <span className="text-foreground font-medium">৳{subtotal.toFixed(2)}</span>
                                 </div>
                                 <div className="flex justify-between text-muted-foreground">
                                     <span>Shipping</span>
@@ -147,7 +147,7 @@ const CartPage = () => {
                                             <Tag size={14} className="text-blue-500" />
                                             <span>Discount (10%)</span>
                                         </div>
-                                        <span className="text-blue-500 font-medium">-${discount.toFixed(2)}</span>
+                                        <span className="text-blue-500 font-medium">-৳{discount.toFixed(2)}</span>
                                     </div>
                                 )}
 
@@ -155,7 +155,7 @@ const CartPage = () => {
 
                                 <div className="flex justify-between text-foreground text-xl font-bold">
                                     <span>Total</span>
-                                    <span>${total.toFixed(2)}</span>
+                                    <span>৳{total.toFixed(2)}</span>
                                 </div>
                             </div>
 

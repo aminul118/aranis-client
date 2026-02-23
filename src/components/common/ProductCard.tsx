@@ -91,11 +91,11 @@ const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
                 <div className="flex items-center gap-2">
                     {product.salePrice && product.salePrice > 0 ? (
                         <>
-                            <p className="text-lg font-bold text-blue-600">${product.salePrice.toFixed(2)}</p>
-                            <p className="text-sm font-medium text-muted-foreground line-through decoration-muted-foreground/50">${product.price.toFixed(2)}</p>
+                            <p className="text-lg font-bold text-blue-600">৳{product.salePrice.toFixed(2)}</p>
+                            <p className="text-sm font-medium text-muted-foreground line-through decoration-muted-foreground/50">৳{product.price.toFixed(2)}</p>
                         </>
                     ) : (
-                        <p className="text-lg font-bold text-foreground">${product.price.toFixed(2)}</p>
+                        <p className="text-lg font-bold text-foreground">৳{product.price.toFixed(2)}</p>
                     )}
                 </div>
             </div>

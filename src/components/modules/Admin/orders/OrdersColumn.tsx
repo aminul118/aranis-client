@@ -40,7 +40,7 @@ const OrdersColumn: Column<IOrder>[] = [
     },
     {
         header: 'Total',
-        accessor: (o) => <span className="font-black text-foreground">${o.totalPrice?.toFixed(2) || '0.00'}</span>,
+        accessor: (o) => <span className="font-black text-foreground">৳{o.totalPrice?.toFixed(2) || '0.00'}</span>,
     },
     {
         header: 'Status',

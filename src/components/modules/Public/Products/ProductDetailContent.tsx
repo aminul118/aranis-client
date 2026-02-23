@@ -160,11 +160,11 @@ const ProductDetailContent = ({ product }: ProductDetailContentProps) => {
                         <div className="flex items-center gap-6">
                             {product.salePrice && product.salePrice > 0 ? (
                                 <div className="flex items-center gap-4">
-                                    <span className="text-5xl font-black text-blue-500 tracking-tighter">${product.salePrice.toFixed(2)}</span>
-                                    <span className="text-2xl text-muted-foreground/40 line-through font-medium italic">${product.price.toFixed(2)}</span>
+                                    <span className="text-5xl font-black text-blue-500 tracking-tighter">৳{product.salePrice.toFixed(2)}</span>
+                                    <span className="text-2xl text-muted-foreground/40 line-through font-medium italic">৳{product.price.toFixed(2)}</span>
                                 </div>
                             ) : (
-                                <p className="text-5xl font-black text-foreground tracking-tighter">${product.price.toFixed(2)}</p>
+                                <p className="text-5xl font-black text-foreground tracking-tighter">৳{product.price.toFixed(2)}</p>
                             )}
                         </div>
                     </div>

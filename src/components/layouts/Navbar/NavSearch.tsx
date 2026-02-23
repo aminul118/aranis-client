@@ -198,7 +198,7 @@ const NavSearch = () => {
 
                                                     {/* Price */}
                                                     <div className="text-right shrink-0">
-                                                        <p className="font-bold text-sm">${product.price?.toFixed(2)}</p>
+                                                        <p className="font-bold text-sm">৳{product.price?.toFixed(2)}</p>
                                                     </div>
 
                                                     <ArrowRight size={14} className="text-muted-foreground shrink-0 opacity-0 -translate-x-1 transition-all group-hover:opacity-100 group-hover:translate-x-0" />

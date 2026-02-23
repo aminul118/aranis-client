@@ -150,7 +150,7 @@ const UserOrdersPage = () => {
                                                     {getStatusIcon(order.status)}
                                                     {order.status}
                                                 </Badge>
-                                                <p className="text-2xl font-black text-foreground tracking-tighter">${order.totalPrice.toFixed(2)}</p>
+                                                <p className="text-2xl font-black text-foreground tracking-tighter">৳{order.totalPrice.toFixed(2)}</p>
                                             </div>
                                         </div>
 
@@ -181,7 +181,7 @@ const UserOrdersPage = () => {
                                                                 {item.product?.name || 'Product Unavailable'}
                                                             </h4>
                                                             <p className="text-xs text-muted-foreground uppercase tracking-widest font-bold">
-                                                                Qty: {item.quantity} • ${item.price.toFixed(2)}
+                                                                Qty: {item.quantity} • ৳{item.price.toFixed(2)}
                                                             </p>
                                                         </div>
                                                         {item.product && (
