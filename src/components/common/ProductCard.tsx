@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ShoppingCart, Star } from 'lucide-react';
@@ -27,12 +27,22 @@ const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
         >
             <div className="relative aspect-4/5 overflow-hidden rounded-2xl bg-muted border border-border mb-4 group-hover:border-blue-500/20 transition-all duration-300">
                 <Link href={`/products/${product.slug || product._id}`}>
-                    <Image
-                        src={product.image}
-                        alt={product.name}
-                        fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
+                    <AnimatePresence mode="wait">
+                        <Image
+                            src={product.image}
+                            alt={product.name}
+                            fill
+                            className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                        {product.images?.find(img => img !== product.image) && (
+                            <Image
+                                src={product.images.find(img => img !== product.image) as string}
+                                alt={`${product.name} - Second View`}
+                                fill
+                                className="object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-700 delay-100"
+                            />
+                        )}
+                    </AnimatePresence>
                 </Link>
 
                 {/* Overlay with Quick Add */}

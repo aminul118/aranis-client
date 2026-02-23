@@ -7,7 +7,7 @@ import { ShoppingCart, Star, Heart, Share2, Check } from 'lucide-react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { IProduct } from '@/services/product/product';
 import HtmlContent from '@/components/rich-text/core/html-content';
 import ReviewSection from './Reviews/ReviewSection';
@@ -18,7 +18,7 @@ interface ProductDetailContentProps {
 
 const ProductDetailContent = ({ product }: ProductDetailContentProps) => {
     const { addToCart } = useCart();
-    const [selectedColor, setSelectedColor] = useState(product.colors[0]);
+    const [selectedColor, setSelectedColor] = useState(product.color);
     const [selectedSize, setSelectedSize] = useState(product.sizes[0]);
     const [isWishlisted, setIsWishlisted] = useState(false);
 
@@ -30,8 +30,17 @@ const ProductDetailContent = ({ product }: ProductDetailContentProps) => {
         });
     };
 
-    const allImages = [product.image, ...(product.images || [])].filter(Boolean) as string[];
+    // Get images
+    const allImages = Array.from(new Set([product.image, ...(product.images || [])])).filter(Boolean) as string[];
     const [selectedImage, setSelectedImage] = useState(allImages[0] || product.image);
+
+    // Update selected image when color changes (not applicable anymore for specific images, but keeping logic for general use if needed)
+    useEffect(() => {
+        setSelectedImage(allImages[0] || product.image);
+    }, [product.image, product.images]);
+
+    // Stock for product
+    const currentStock = product.stock;
 
     return (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
@@ -82,18 +91,26 @@ const ProductDetailContent = ({ product }: ProductDetailContentProps) => {
 
                 {/* Thumbnail strip — only shown when multiple images exist */}
                 {allImages.length > 1 && (
-                    <div className="flex gap-3 overflow-x-auto pb-1 scrollbar-thin">
+                    <div className="flex gap-4 overflow-x-auto py-4 px-2 scrollbar-none snap-x">
                         {allImages.map((img, idx) => (
                             <button
                                 key={img + idx}
                                 type="button"
                                 onClick={() => setSelectedImage(img)}
-                                className={`relative shrink-0 w-16 h-16 md:w-20 md:h-20 rounded-xl overflow-hidden border-2 transition-all ${selectedImage === img
-                                    ? 'border-blue-500 ring-2 ring-blue-500/30 scale-105'
-                                    : 'border-border/50 hover:border-blue-500/40 opacity-70 hover:opacity-100'
+                                className={`relative shrink-0 w-20 h-24 md:w-24 md:h-28 rounded-2xl overflow-hidden border-2 transition-all duration-300 snap-start shadow-sm ${selectedImage === img
+                                    ? 'border-blue-500 ring-4 ring-blue-500/10 scale-105 shadow-blue-500/20'
+                                    : 'border-border/40 hover:border-blue-500/30 opacity-60 hover:opacity-100 hover:scale-[1.02]'
                                     }`}
                             >
-                                <Image src={img} alt={`View ${idx + 1}`} fill className="object-cover" />
+                                <Image
+                                    src={img}
+                                    alt={`View ${idx + 1}`}
+                                    fill
+                                    className="object-cover"
+                                />
+                                {selectedImage === img && (
+                                    <div className="absolute inset-0 bg-blue-500/10 backdrop-blur-[1px]" />
+                                )}
                             </button>
                         ))}
                     </div>
@@ -178,28 +195,21 @@ const ProductDetailContent = ({ product }: ProductDetailContentProps) => {
                             </div>
                         </div>
 
-                        {/* Color Selection */}
+                        {/* Color Display */}
                         <div className="space-y-4">
-                            <h3 className="text-foreground font-black text-sm uppercase tracking-widest">Color: <span className="text-muted-foreground">{selectedColor}</span></h3>
+                            <h3 className="text-foreground font-black text-sm uppercase tracking-widest">Color: <span className="text-muted-foreground">{product.color}</span></h3>
                             <div className="flex gap-4">
-                                {product.colors.map((color) => (
-                                    <button
-                                        key={color}
-                                        onClick={() => setSelectedColor(color)}
-                                        className={`relative w-12 h-12 rounded-full border-2 transition-all p-1 ${selectedColor === color ? 'border-blue-500 scale-110 shadow-lg' : 'border-transparent'
-                                            }`}
-                                    >
-                                        <div
-                                            className="w-full h-full rounded-full border border-border/50"
-                                            style={{ backgroundColor: color.toLowerCase().replace('silk ', '') }}
-                                        />
-                                        {selectedColor === color && (
-                                            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                                                <Check className={`h-4 w-4 ${['white', 'beige', 'silk white', 'gold'].includes(color.toLowerCase()) ? 'text-black' : 'text-white'}`} />
-                                            </div>
-                                        )}
-                                    </button>
-                                ))}
+                                <div
+                                    className="relative w-12 h-12 rounded-full border-2 border-blue-500 scale-110 shadow-lg p-1"
+                                >
+                                    <div
+                                        className="w-full h-full rounded-full border border-border/50"
+                                        style={{ backgroundColor: product.color.toLowerCase().replace('silk ', '') }}
+                                    />
+                                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                        <Check className={`h-4 w-4 ${['white', 'beige', 'silk white', 'gold'].includes(product.color.toLowerCase()) ? 'text-black' : 'text-white'}`} />
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -208,16 +218,18 @@ const ProductDetailContent = ({ product }: ProductDetailContentProps) => {
                     <div className="flex flex-col gap-4 pt-6">
                         <Button
                             onClick={handleAddToCart}
-                            disabled={product.stock < 1}
+                            disabled={currentStock < 1}
                             size="lg"
-                            className="w-full rounded-[1.5rem] py-8 text-xl font-black bg-blue-600 hover:bg-blue-700 text-white shadow-2xl shadow-blue-500/30 transition-all active:scale-[0.98] disabled:bg-muted disabled:text-muted-foreground disabled:shadow-none"
+                            className="w-full rounded-3xl py-8 text-xl font-black bg-blue-600 hover:bg-blue-700 text-white shadow-2xl shadow-blue-500/30 transition-all active:scale-[0.98] disabled:bg-muted disabled:text-muted-foreground disabled:shadow-none"
                         >
-                            {product.stock < 1 ? 'Out of Stock' : 'Add to Cart'} <ShoppingCart className="ml-3 h-6 w-6" />
+                            {currentStock < 1 ? 'Out of Stock' : 'Add to Cart'} <ShoppingCart className="ml-3 h-6 w-6" />
                         </Button>
                         <div className="flex items-center justify-center gap-8 py-4">
                             <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-tighter text-muted-foreground">
-                                <div className={`w-1.5 h-1.5 rounded-full ${product.stock > 0 ? 'bg-emerald-500' : 'bg-red-500'}`} />
-                                {product.stock > 0 ? 'In Stock' : 'Out of Stock'}
+                                <div className={`w-1.5 h-1.5 rounded-full ${currentStock > 0 ? 'bg-emerald-500' : 'bg-red-500'}`} />
+                                {currentStock > 0
+                                    ? (currentStock < 10 ? `Only ${currentStock} Left!` : 'In Stock')
+                                    : 'Out of Stock'}
                             </div>
                             <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-tighter text-muted-foreground">
                                 <div className="w-1.5 h-1.5 rounded-full bg-blue-500" />

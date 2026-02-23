@@ -7,12 +7,17 @@ export const productSchema = z.object({
   type: z.string().min(1, 'Type is required'),
   price: z.coerce.number().positive('Price must be positive'),
   image: z.union([z.string(), z.any()]).optional(),
-  images: z.array(z.string()).optional().default([]),
+  images: z
+    .array(z.union([z.string(), z.any()]))
+    .optional()
+    .default([]),
   description: z.string().min(1, 'Description is required'),
   details: z.string().default(''),
   slug: z.string().optional(),
+  buyPrice: z.coerce.number().positive('Buy price must be positive'),
+  stock: z.coerce.number().min(0, 'Stock cannot be negative'),
   salePrice: z.coerce.number().optional().default(0),
-  colors: z.array(z.string()).min(1, 'At least one color is required'),
+  color: z.string().min(1, 'Color is required'),
   sizes: z.array(z.string()).min(1, 'At least one size is required'),
   featured: z.boolean().default(false),
   rating: z.coerce.number().min(0).max(5).default(0),

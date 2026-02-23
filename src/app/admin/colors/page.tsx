@@ -1,6 +1,6 @@
 import ClientTableWrapper from '@/components/common/wrapper/ClientTableWrapper';
 import ColorsTable from '@/components/modules/Admin/colors/ColorsTable';
-import ColorForm from '@/components/modules/Admin/colors/ColorForm';
+import ColorModal from '@/components/modules/Admin/colors/ColorModal';
 import cleanSearchParams from '@/lib/cleanSearchParams';
 import { getColors } from '@/services/color/color';
 import { SearchParams } from '@/types';
@@ -10,16 +10,13 @@ const ColorPage = async ({ searchParams }: SearchParams) => {
     const params = await cleanSearchParams(searchParams);
     const { data, meta } = await getColors(params);
     return (
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-            <div className="lg:col-span-2">
-                <ClientTableWrapper tableTitle="Colors" meta={meta}>
-                    <ColorsTable colors={data} />
-                </ClientTableWrapper>
-            </div>
-            <div className="lg:col-span-1">
-                <ColorForm />
-            </div>
-        </div>
+        <ClientTableWrapper
+            tableTitle="Colors"
+            meta={meta}
+            action={<ColorModal />}
+        >
+            <ColorsTable colors={data} />
+        </ClientTableWrapper>
     );
 };
 

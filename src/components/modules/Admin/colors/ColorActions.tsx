@@ -11,8 +11,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { deleteColor, IColor } from '@/services/color/color';
 import { EllipsisIcon, PencilIcon, Trash2Icon } from 'lucide-react';
-import Link from 'next/link';
 import { useState } from 'react';
+import ColorModal from './ColorModal';
 
 const ColorActions = ({ color }: { color: IColor }) => {
     const [deleteOpen, setDeleteOpen] = useState(false);
@@ -39,15 +39,18 @@ const ColorActions = ({ color }: { color: IColor }) => {
                 </DropdownMenuTrigger>
 
                 <DropdownMenuContent align="end" className="min-w-48">
-                    <DropdownMenuItem asChild>
-                        <Link
-                            href={`/admin/colors/${color._id}/edit`}
-                            className="flex cursor-pointer items-center"
-                        >
-                            <PencilIcon className="mr-2 h-4 w-4" />
-                            <span>Edit</span>
-                        </Link>
-                    </DropdownMenuItem>
+                    <ColorModal
+                        color={color}
+                        trigger={
+                            <DropdownMenuItem
+                                onSelect={(e) => e.preventDefault()}
+                                className="flex cursor-pointer items-center"
+                            >
+                                <PencilIcon className="mr-2 h-4 w-4" />
+                                <span>Edit</span>
+                            </DropdownMenuItem>
+                        }
+                    />
 
                     <DropdownMenuSeparator />
                     <DropdownMenuItem

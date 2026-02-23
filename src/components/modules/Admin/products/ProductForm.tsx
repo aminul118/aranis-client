@@ -28,15 +28,16 @@ import { IColor } from '@/services/color/color';
 import { createProduct, IProduct, updateProduct } from '@/services/product/product';
 import { addProductSchema, updateProductSchema } from '@/zod/product';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Plus, Save, Trash2, X } from 'lucide-react';
+import { Check, Plus, Save, Trash2, X } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { Suspense } from 'react';
+import { Suspense, useEffect } from 'react';
 import PlateRichEditor from '@/components/rich-text/core/rich-editor';
 import { toast } from 'sonner';
 import MultiImageUploader from '@/components/ui/multi-image-uploader';
+import { cn } from '@/lib/utils';
 
 type FormValues = {
     name: string;
@@ -45,15 +46,17 @@ type FormValues = {
     type: string;
     price: number | string;
     salePrice: number | string;
+    buyPrice: number | string;
+    stock: number | string;
     slug: string;
     description: string;
     details: string;
-    colors: string[];
+    color: string;
     sizes: string[];
     featured: boolean;
     rating: number | string;
     image?: any;
-    images: string[];
+    images: (string | File)[];
 };
 
 interface Props {
@@ -76,11 +79,13 @@ const ProductForm = ({ product, categories, colors }: Props) => {
             subCategory: product?.subCategory || '',
             type: product?.type || '',
             price: product?.price || 0,
+            buyPrice: product?.buyPrice || 0,
+            stock: product?.stock || 0,
             slug: product?.slug || '',
             salePrice: product?.salePrice || 0,
             description: product?.description || '',
             details: (product?.details as string) || '',
-            colors: product?.colors || [],
+            color: product?.color || '',
             sizes: product?.sizes || [],
             featured: product?.featured || false,
             rating: product?.rating || 0,
@@ -88,57 +93,66 @@ const ProductForm = ({ product, categories, colors }: Props) => {
         },
     });
 
+    const watchedColor = form.watch('color');
+    const watchedSizes = form.watch('sizes');
+
     const selectedCategory = categories.find((c) => c.name === form.watch('category'));
     const subCategories = selectedCategory?.subCategories || [];
     const selectedSubCategory = subCategories.find((s) => s.title === form.watch('subCategory'));
     const types = selectedSubCategory?.items || [];
 
     const onSubmit = async (data: FormValues) => {
-        const payload = {
-            ...data,
-            price: Number(data.price),
-            salePrice: Number(data.salePrice),
-            rating: Number(data.rating),
-            details: data.details || '',
-        };
+        const formData = new FormData();
 
-        const handleServerErrors = (res: any) => {
-            // If the server returns field-level errors, map them into the form
-            if (res?.errorDetails && Array.isArray(res.errorDetails)) {
-                res.errorDetails.forEach((err: { path?: string; message?: string }) => {
-                    if (err.path && err.message) {
-                        form.setError(err.path as keyof FormValues, {
-                            type: 'server',
-                            message: err.message,
-                        });
-                    }
-                });
+        // Basic fields
+        formData.append('name', data.name);
+        formData.append('price', String(data.price));
+        formData.append('buyPrice', String(data.buyPrice));
+        formData.append('stock', String(data.stock));
+        formData.append('salePrice', String(data.salePrice));
+        formData.append('description', data.description);
+        formData.append('details', data.details || '');
+        formData.append('category', data.category);
+        formData.append('subCategory', data.subCategory);
+        formData.append('type', data.type);
+        formData.append('slug', data.slug);
+        formData.append('featured', String(data.featured));
+        formData.append('rating', String(data.rating));
+
+        // Arrays (Stringify for backend to parse)
+        formData.append('color', data.color);
+        formData.append('sizes', JSON.stringify(data.sizes));
+
+        // Single Image
+        if ((data.image as any) instanceof File) {
+            formData.append('image', data.image as any);
+        } else if (typeof data.image === 'string') {
+            formData.append('image', data.image);
+        }
+
+        // Gallery Images (General)
+        const existingGalleryUrls: string[] = [];
+        data.images.forEach((item: any) => {
+            if (typeof item === 'string') {
+                existingGalleryUrls.push(item);
+            } else if (item instanceof File) {
+                formData.append('images', item);
             }
-            // Also handle Zod-style errors object: { field: ['message'] }
-            if (res?.errors && typeof res.errors === 'object') {
-                Object.entries(res.errors).forEach(([field, msgs]) => {
-                    const message = Array.isArray(msgs) ? msgs[0] : String(msgs);
-                    form.setError(field as keyof FormValues, {
-                        type: 'server',
-                        message,
-                    });
-                });
-            }
-        };
+        });
+        formData.append('images', JSON.stringify(existingGalleryUrls));
 
         if (isEdit && product) {
-            const res = await updateProduct(payload as Partial<IProduct>, product._id as string);
+            const res = await updateProduct(formData as any, product._id as string);
             if (res?.success) {
                 toast.success('Product updated successfully');
                 router.push('/admin/products');
                 router.refresh();
             } else {
                 toast.error(res?.message || 'Failed to update product');
-                handleServerErrors(res);
             }
         } else {
             await executePost({
-                action: () => createProduct(payload as IProduct),
+                action: () => createProduct(formData as any),
                 success: {
                     onSuccess: () => {
                         router.push('/admin/products');
@@ -154,7 +168,7 @@ const ProductForm = ({ product, categories, colors }: Props) => {
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                <div className="grid grid-cols-1 gap-6 md:grid-cols-4">
                     <FormField
                         control={form.control}
                         name="name"
@@ -170,10 +184,10 @@ const ProductForm = ({ product, categories, colors }: Props) => {
                     />
                     <FormField
                         control={form.control}
-                        name="price"
+                        name="buyPrice"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Price ($)</FormLabel>
+                                <FormLabel>Buy Price ($)</FormLabel>
                                 <FormControl>
                                     <Input type="number" step="0.01" {...field} />
                                 </FormControl>
@@ -183,10 +197,39 @@ const ProductForm = ({ product, categories, colors }: Props) => {
                     />
                     <FormField
                         control={form.control}
-                        name="salePrice"
+                        name="price"
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Sale Price ($)</FormLabel>
+                                <FormControl>
+                                    <Input type="number" step="0.01" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="stock"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Stock Count</FormLabel>
+                                <FormControl>
+                                    <Input type="number" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                </div>
+
+                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                    <FormField
+                        control={form.control}
+                        name="salePrice"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Discounted Price ($)</FormLabel>
                                 <FormControl>
                                     <Input type="number" step="0.01" {...field} />
                                 </FormControl>
@@ -329,88 +372,74 @@ const ProductForm = ({ product, categories, colors }: Props) => {
                         </FormItem>
                     )}
                 />
-
+                {/* Product Color & Sizes */}
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                     <FormField
                         control={form.control}
-                        name="colors"
-                        render={() => (
+                        name="color"
+                        render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Available Colors</FormLabel>
-                                <div className="flex flex-wrap gap-4 pt-2">
+                                <FormLabel>Product Color</FormLabel>
+                                <div className="flex flex-wrap gap-3 p-4 rounded-xl border border-border/50 bg-muted/10">
                                     {colors.map((color) => (
-                                        <FormField
-                                            key={color._id}
-                                            control={form.control}
-                                            name="colors"
-                                            render={({ field }) => {
-                                                return (
-                                                    <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                                                        <FormControl>
-                                                            <Checkbox
-                                                                checked={field.value?.includes(color.name)}
-                                                                onCheckedChange={(checked) => {
-                                                                    return checked
-                                                                        ? field.onChange([...field.value, color.name])
-                                                                        : field.onChange(
-                                                                            field.value?.filter(
-                                                                                (value) => value !== color.name
-                                                                            )
-                                                                        )
-                                                                }}
-                                                            />
-                                                        </FormControl>
-                                                        <FormLabel className="flex items-center gap-2 font-normal cursor-pointer">
-                                                            {color.hex && <div className="h-3 w-3 rounded-full border border-white/10" style={{ backgroundColor: color.hex }} />}
-                                                            {color.name}
-                                                        </FormLabel>
-                                                    </FormItem>
-                                                )
-                                            }}
-                                        />
+                                        <button
+                                            key={color.name}
+                                            type="button"
+                                            onClick={() => field.onChange(color.name)}
+                                            className={cn(
+                                                "group relative flex flex-col items-center gap-2 transition-all",
+                                                field.value === color.name ? "scale-110" : "opacity-60 hover:opacity-100"
+                                            )}
+                                        >
+                                            <div
+                                                className={cn(
+                                                    "h-10 w-10 rounded-full border-2 transition-all flex items-center justify-center",
+                                                    field.value === color.name ? "border-blue-500 shadow-lg shadow-blue-500/20" : "border-transparent"
+                                                )}
+                                                style={{ backgroundColor: color.hex }}
+                                            >
+                                                {field.value === color.name && (
+                                                    <Check className={cn(
+                                                        "h-5 w-5",
+                                                        ["White", "Beige", "Silk White", "Gold"].includes(color.name) ? "text-black" : "text-white"
+                                                    )} />
+                                                )}
+                                            </div>
+                                            <span className="text-[10px] font-bold uppercase tracking-tighter">{color.name}</span>
+                                        </button>
                                     ))}
                                 </div>
                                 <FormMessage />
                             </FormItem>
                         )}
                     />
-
                     <FormField
                         control={form.control}
                         name="sizes"
-                        render={() => (
+                        render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Available Sizes</FormLabel>
-                                <div className="flex flex-wrap gap-4 pt-2">
-                                    {['XS', 'S', 'M', 'L', 'XL', 'XXL', 'One Size'].map((size) => (
-                                        <FormField
+                                <div className="flex flex-wrap gap-2 p-4 rounded-xl border border-border/50 bg-muted/10">
+                                    {['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL'].map((size) => (
+                                        <button
                                             key={size}
-                                            control={form.control}
-                                            name="sizes"
-                                            render={({ field }) => {
-                                                return (
-                                                    <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                                                        <FormControl>
-                                                            <Checkbox
-                                                                checked={field.value?.includes(size)}
-                                                                onCheckedChange={(checked) => {
-                                                                    return checked
-                                                                        ? field.onChange([...field.value, size])
-                                                                        : field.onChange(
-                                                                            field.value?.filter(
-                                                                                (value) => value !== size
-                                                                            )
-                                                                        )
-                                                                }}
-                                                            />
-                                                        </FormControl>
-                                                        <FormLabel className="font-normal cursor-pointer text-xs">
-                                                            {size}
-                                                        </FormLabel>
-                                                    </FormItem>
-                                                )
+                                            type="button"
+                                            onClick={() => {
+                                                const current = field.value || [];
+                                                const updated = current.includes(size)
+                                                    ? current.filter((s: string) => s !== size)
+                                                    : [...current, size];
+                                                field.onChange(updated);
                                             }}
-                                        />
+                                            className={cn(
+                                                "min-w-[3rem] px-4 py-2 rounded-lg border text-xs font-black transition-all",
+                                                field.value?.includes(size)
+                                                    ? "bg-foreground text-background border-foreground shadow-md"
+                                                    : "border-border/50 bg-background text-muted-foreground hover:border-foreground/30"
+                                            )}
+                                        >
+                                            {size}
+                                        </button>
                                     ))}
                                 </div>
                                 <FormMessage />
@@ -440,7 +469,8 @@ const ProductForm = ({ product, categories, colors }: Props) => {
                     )}
                 />
 
-                {/* Gallery Images */}
+
+                {/* Gallery Images (General) */}
                 <div className="rounded-xl border border-border/50 p-5 bg-muted/20">
                     <FormField
                         control={form.control}
@@ -448,7 +478,7 @@ const ProductForm = ({ product, categories, colors }: Props) => {
                         render={({ field }) => (
                             <FormItem>
                                 <MultiImageUploader
-                                    label="Gallery Images (shown on product detail page)"
+                                    label="General Gallery Images"
                                     value={field.value || []}
                                     onChange={field.onChange}
                                     max={8}

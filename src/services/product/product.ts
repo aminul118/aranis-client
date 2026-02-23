@@ -15,7 +15,7 @@ export interface IProduct {
   images?: string[];
   description: string;
   details: string | string[];
-  colors: string[];
+  color: string;
   sizes: string[];
   featured: boolean;
   rating: number;
@@ -27,25 +27,24 @@ export interface IProduct {
   isDeleted?: boolean;
 }
 
-const createProduct = async (payload: IProduct) => {
+export const createProduct = async (
+  payload: FormData,
+): Promise<ApiResponse<IProduct>> => {
   const res = await serverFetch.post<ApiResponse<IProduct>>('/products', {
-    body: JSON.stringify(payload),
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    body: payload,
   });
   revalidate('product');
   return res;
 };
 
-const updateProduct = async (payload: Partial<IProduct>, id: string) => {
+export const updateProduct = async (
+  payload: FormData,
+  id: string,
+): Promise<ApiResponse<IProduct>> => {
   const res = await serverFetch.patch<ApiResponse<IProduct>>(
     `/products/${id}`,
     {
-      body: JSON.stringify(payload),
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      body: payload,
     },
   );
   revalidate('product');
@@ -86,11 +85,9 @@ const getBestSellingProducts = async () => {
 };
 
 export {
-  createProduct,
   deleteProduct,
   getBestSellingProducts,
   getProducts,
   getSingleProduct,
   getTopRatedProducts,
-  updateProduct,
 };

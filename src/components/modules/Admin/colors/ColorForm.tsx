@@ -23,9 +23,10 @@ type FormValues = z.infer<typeof addColorSchema>;
 
 interface Props {
     color?: IColor;
+    onSuccess?: () => void;
 }
 
-const ColorForm = ({ color }: Props) => {
+const ColorForm = ({ color, onSuccess }: Props) => {
     const router = useRouter();
     const { executePost } = useActionHandler();
     const isEdit = !!color;
@@ -44,19 +45,9 @@ const ColorForm = ({ color }: Props) => {
                 action: () => updateColor(data, color._id as string),
                 success: {
                     onSuccess: () => {
-                        router.refresh();
-                    },
-                    loadingText: 'Color updating...',
-                    message: 'Color updated successfully',
-                },
-            });
-        } else {
-            await executePost({
-                action: () => createColor(data as IColor),
-                success: {
-                    onSuccess: () => {
                         form.reset();
                         router.refresh();
+                        onSuccess?.();
                     },
                     loadingText: 'Color adding...',
                     message: 'Color added successfully',
@@ -66,7 +57,7 @@ const ColorForm = ({ color }: Props) => {
     };
 
     return (
-        <div className="rounded-xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
+        <div className="">
             <h3 className="mb-4 text-lg font-bold text-white tracking-tight">{isEdit ? 'Edit Color' : 'Add New Color'}</h3>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
