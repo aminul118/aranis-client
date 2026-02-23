@@ -1,0 +1,68 @@
+.height-adjust {
+  height: calc(100vh - 453px);
+}
+
+/* Custom Tailwind Classes */
+.scrollbar-thin {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: #888 transparent; /* Firefox */
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px; /* Chrome, Edge, Safari */
+}
+
+/* Swiper js */
+
+.swiper-button-next,
+.swiper-button-prev {
+  display: none !important;
+}
+
+/* Add some space inside the Swiper container */
+.mySwiper {
+  padding-bottom: 40px; /* allows room for pagination */
+}
+
+/* Default (desktop) bullet style */
+.swiper-pagination-bullet {
+  width: 24px;
+  height: 8px;
+  background-color: #999;
+  opacity: 1;
+  border-radius: 0;
+  margin: 0 6px;
+  transition: all 0.3s ease-in-out;
+  z-index: 50;
+}
+
+/* Active bullet */
+.swiper-pagination-bullet-active {
+  background-color: #2563eb;
+  transform: scale(1.1);
+}
+
+/* ✅ Responsive style for smaller devices */
+@media (max-width: 640px) {
+  .swiper-pagination-bullet {
+    width: 12px;
+    height: 5px;
+  }
+  .mySwiper {
+    padding-bottom: 30px;
+  }
+}
+
+@keyframes loading-bar {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* register the class so Tailwind can use it */
+.before\:animate-loading-bar::before {
+  animation: loading-bar 1.2s linear infinite;
+}
