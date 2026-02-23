@@ -13,11 +13,13 @@ export interface IProduct {
   price: number;
   image: string;
   description: string;
-  details: string[];
+  details: string | string[];
   colors: string[];
   sizes: string[];
   featured: boolean;
   rating: number;
+  slug: string;
+  salePrice?: number;
   isDeleted?: boolean;
 }
 

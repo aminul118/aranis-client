@@ -7,6 +7,7 @@ import {
   Package,
   Palette,
   ShoppingCart,
+  TicketPercent,
   Users,
 } from 'lucide-react';
 
@@ -25,6 +26,7 @@ const adminSidebarMenu: MenuGroup[] = [
       { name: 'Categories', url: '/admin/categories', icon: Layers },
       { name: 'Colors', url: '/admin/colors', icon: Palette },
       { name: 'Navbar', url: '/admin/navbar', icon: MenuIcon },
+      { name: 'Coupons', url: '/admin/coupons', icon: TicketPercent },
       { name: 'Orders', url: '/admin/orders', icon: ShoppingCart },
     ],
   },

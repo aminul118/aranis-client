@@ -284,12 +284,19 @@ const ShopPage = () => {
                                                 )}
                                             >
                                                 <Link
-                                                    href={`/products/${product._id}`}
+                                                    href={`/products/${product.slug}`}
                                                     className={cn(
                                                         "relative block overflow-hidden",
                                                         viewMode === 'grid' ? "aspect-4/5" : "w-full sm:w-48 aspect-square rounded-2xl"
                                                     )}
                                                 >
+                                                    {product.salePrice && product.salePrice > 0 && (
+                                                        <div className="absolute top-4 left-4 z-10">
+                                                            <div className="bg-red-500 text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-tighter shadow-lg">
+                                                                Sale {Math.round((1 - product.salePrice / product.price) * 100)}% OFF
+                                                            </div>
+                                                        </div>
+                                                    )}
                                                     <Image
                                                         src={product.image}
                                                         alt={product.name}
@@ -306,7 +313,7 @@ const ShopPage = () => {
                                                             <span>{product.rating}</span>
                                                         </div>
                                                     </div>
-                                                    <Link href={`/products/${product._id}`}>
+                                                    <Link href={`/products/${product.slug}`}>
                                                         <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-blue-500 transition-colors truncate capitalize">
                                                             {product.name}
                                                         </h3>
@@ -315,7 +322,16 @@ const ShopPage = () => {
                                                         {product.description}
                                                     </p>
                                                     <div className="flex items-center justify-between mt-auto">
-                                                        <span className="text-2xl font-bold text-foreground">${product.price.toFixed(2)}</span>
+                                                        <div className="flex flex-col">
+                                                            {product.salePrice && product.salePrice > 0 ? (
+                                                                <>
+                                                                    <span className="text-sm text-muted-foreground line-through">${product.price.toFixed(2)}</span>
+                                                                    <span className="text-2xl font-black text-blue-500">${product.salePrice.toFixed(2)}</span>
+                                                                </>
+                                                            ) : (
+                                                                <span className="text-2xl font-bold text-foreground">${product.price.toFixed(2)}</span>
+                                                            )}
+                                                        </div>
                                                         <Button
                                                             size="sm"
                                                             onClick={() => {

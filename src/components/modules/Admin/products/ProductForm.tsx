@@ -19,7 +19,7 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
-import { Textarea } from '@/components/ui/textarea';
+import RichTextEditor from '@/components/ui/rich-text-editor';
 import { Checkbox } from '@/components/ui/checkbox';
 import SingleImageUploader from '@/components/ui/single-image-uploader';
 import useActionHandler from '@/hooks/useActionHandler';
@@ -33,6 +33,8 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { Suspense } from 'react';
+import PlateRichEditor from '@/components/rich-text/core/rich-editor';
 
 type FormValues = {
     name: string;
@@ -40,8 +42,10 @@ type FormValues = {
     subCategory: string;
     type: string;
     price: number | string;
+    salePrice: number | string;
+    slug: string;
     description: string;
-    details: string | string[];
+    details: string;
     colors: string[];
     sizes: string[];
     featured: boolean;
@@ -68,9 +72,10 @@ const ProductForm = ({ product, categories, colors }: Props) => {
             subCategory: product?.subCategory || '',
             type: product?.type || '',
             price: product?.price || 0,
-            image: product?.image || '',
+            slug: product?.slug || '',
+            salePrice: product?.salePrice || 0,
             description: product?.description || '',
-            details: product?.details?.join(', ') || '',
+            details: (product?.details as string) || '',
             colors: product?.colors || [],
             sizes: product?.sizes || [],
             featured: product?.featured || false,
@@ -87,8 +92,9 @@ const ProductForm = ({ product, categories, colors }: Props) => {
         const payload = {
             ...data,
             price: Number(data.price),
+            salePrice: Number(data.salePrice),
             rating: Number(data.rating),
-            details: Array.isArray(data.details) ? data.details : (data.details as string).split(',').map((s: string) => s.trim()).filter(Boolean),
+            details: data.details || '',
         };
 
         if (isEdit && product) {
@@ -144,6 +150,34 @@ const ProductForm = ({ product, categories, colors }: Props) => {
                                 <FormControl>
                                     <Input type="number" step="0.01" {...field} />
                                 </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="salePrice"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Sale Price ($)</FormLabel>
+                                <FormControl>
+                                    <Input type="number" step="0.01" {...field} />
+                                </FormControl>
+                                <FormDescription>Set to 0 if no discount.</FormDescription>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="slug"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Slug (Unique ID)</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="e.g. classic-silk-shirt" {...field} />
+                                </FormControl>
+                                <FormDescription>Auto-generated from name if left empty.</FormDescription>
                                 <FormMessage />
                             </FormItem>
                         )}
@@ -237,7 +271,12 @@ const ProductForm = ({ product, categories, colors }: Props) => {
                         <FormItem>
                             <FormLabel>Description</FormLabel>
                             <FormControl>
-                                <Textarea placeholder="Enter product description" {...field} />
+                                <Suspense fallback={<div>Loading editor…</div>}>
+                                    <PlateRichEditor
+                                        value={field.value}
+                                        onChange={field.onChange}
+                                    />
+                                </Suspense>
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -249,10 +288,16 @@ const ProductForm = ({ product, categories, colors }: Props) => {
                     name="details"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Details (comma separated)</FormLabel>
+                            <FormLabel>Product Details</FormLabel>
                             <FormControl>
-                                <Input placeholder="High-quality, Limited edition" {...field} />
+                                <Suspense fallback={<div>Loading editor…</div>}>
+                                    <PlateRichEditor
+                                        value={field.value}
+                                        onChange={field.onChange}
+                                    />
+                                </Suspense>
                             </FormControl>
+                            <FormDescription>Use headings, lists, and formatting to design your product details page.</FormDescription>
                             <FormMessage />
                         </FormItem>
                     )}

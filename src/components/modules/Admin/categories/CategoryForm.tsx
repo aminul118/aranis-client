@@ -32,7 +32,7 @@ const CategoryForm = ({ category }: Props) => {
     const isEdit = !!category;
 
     const form = useForm<FormValues>({
-        resolver: zodResolver(addCategorySchema),
+        resolver: zodResolver(addCategorySchema) as any,
         defaultValues: {
             name: category?.name || '',
             subCategories: category?.subCategories || [{ title: '', items: [] }],
