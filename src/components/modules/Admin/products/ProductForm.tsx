@@ -218,9 +218,9 @@ const ProductForm = ({ product, categories, colors }: Props) => {
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Category</FormLabel>
-                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <Select onValueChange={field.onChange} defaultValue={field.value} >
                                     <FormControl>
-                                        <SelectTrigger>
+                                        <SelectTrigger className="w-full">
                                             <SelectValue placeholder="Select Category" />
                                         </SelectTrigger>
                                     </FormControl>
@@ -240,7 +240,7 @@ const ProductForm = ({ product, categories, colors }: Props) => {
                                 <FormLabel>Sub Category</FormLabel>
                                 <Select onValueChange={field.onChange} defaultValue={field.value} disabled={!form.watch('category')}>
                                     <FormControl>
-                                        <SelectTrigger>
+                                        <SelectTrigger className="w-full">
                                             <SelectValue placeholder="Select Sub Category" />
                                         </SelectTrigger>
                                     </FormControl>
@@ -260,7 +260,7 @@ const ProductForm = ({ product, categories, colors }: Props) => {
                                 <FormLabel>Type</FormLabel>
                                 <Select onValueChange={field.onChange} defaultValue={field.value} disabled={!form.watch('subCategory')}>
                                     <FormControl>
-                                        <SelectTrigger>
+                                        <SelectTrigger className="w-full">
                                             <SelectValue placeholder="Select Type" />
                                         </SelectTrigger>
                                     </FormControl>
