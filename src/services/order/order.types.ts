@@ -1,5 +1,4 @@
-// Shared order types — importable by both server and client components.
-// Do NOT add 'use server' or 'use client' directives here.
+import { IProduct, IUser } from '../../types';
 
 export enum OrderStatus {
   PENDING = 'Pending',
@@ -14,19 +13,25 @@ export enum PaymentStatus {
   UNPAID = 'Unpaid',
 }
 
+export enum PaymentMethod {
+  COD = 'COD',
+  CARD = 'CARD',
+}
+
 export interface IOrderItem {
-  product: string;
+  product: string | IProduct;
   quantity: number;
   price: number;
 }
 
 export interface IOrder {
   _id?: string;
-  user: string;
+  user: IUser;
   items: IOrderItem[];
   totalPrice: number;
   status: OrderStatus;
   shippingAddress: string;
+  paymentMethod: PaymentMethod;
   paymentStatus: PaymentStatus;
   isDeleted?: boolean;
   createdAt?: string;

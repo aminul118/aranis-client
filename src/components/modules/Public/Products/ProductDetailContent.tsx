@@ -169,15 +169,16 @@ const ProductDetailContent = ({ product }: ProductDetailContentProps) => {
                     <div className="flex flex-col gap-4 pt-6">
                         <Button
                             onClick={handleAddToCart}
+                            disabled={product.stock < 1}
                             size="lg"
-                            className="w-full rounded-[1.5rem] py-8 text-xl font-black bg-blue-600 hover:bg-blue-700 text-white shadow-2xl shadow-blue-500/30 transition-all active:scale-[0.98]"
+                            className="w-full rounded-[1.5rem] py-8 text-xl font-black bg-blue-600 hover:bg-blue-700 text-white shadow-2xl shadow-blue-500/30 transition-all active:scale-[0.98] disabled:bg-muted disabled:text-muted-foreground disabled:shadow-none"
                         >
-                            Add to Cart <ShoppingCart className="ml-3 h-6 w-6" />
+                            {product.stock < 1 ? 'Out of Stock' : 'Add to Cart'} <ShoppingCart className="ml-3 h-6 w-6" />
                         </Button>
                         <div className="flex items-center justify-center gap-8 py-4">
                             <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-tighter text-muted-foreground">
-                                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                                In Stock
+                                <div className={`w-1.5 h-1.5 rounded-full ${product.stock > 0 ? 'bg-emerald-500' : 'bg-red-500'}`} />
+                                {product.stock > 0 ? 'In Stock' : 'Out of Stock'}
                             </div>
                             <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-tighter text-muted-foreground">
                                 <div className="w-1.5 h-1.5 rounded-full bg-blue-500" />

@@ -82,10 +82,13 @@ export interface IProduct {
   rating: number;
   image: string;
   description: string;
-  details: string[];
+  details: string;
+  stock: number;
+  buyPrice: number;
   colors: string[];
   sizes: string[];
   featured: boolean;
+  slug: string;
 }
 
 export interface ICartItem extends IProduct {

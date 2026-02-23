@@ -24,6 +24,8 @@ export interface IUser {
   lastName: string;
   fullName: string;
   email: string;
+  phone?: string;
+  address?: string;
   role: string;
   picture?: string;
   isDeleted: boolean;
@@ -124,6 +126,11 @@ export interface IStats {
   productCount: number;
   orderCount: number;
   totalSales: number;
+  totalRevenue: number;
+  totalCost: number;
+  totalProfit: number;
+  totalStockValue: number;
+  lowStockCount: number;
   orderStatusDistribution: {
     Pending: number;
     Processing: number;

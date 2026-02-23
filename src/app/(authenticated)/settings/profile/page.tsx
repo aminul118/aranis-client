@@ -3,16 +3,15 @@ import { getMe } from '@/services/user/users';
 import { Metadata } from 'next';
 
 export default async function ProfilePage() {
-  const { data: user } = await getMe();
+    const { data: user } = await getMe();
 
-  if (!user) {
-    return null;
-  }
+    if (!user) {
+        return null;
+    }
 
-  return <ProfileClient user={user} />;
+    return <ProfileClient user={user} />;
 }
 
-// SEO Metadata
 export const metadata: Metadata = {
-  title: 'Profile Settings | Md. Aminul Islam',
+    title: 'Profile Settings | Lumiere',
 };

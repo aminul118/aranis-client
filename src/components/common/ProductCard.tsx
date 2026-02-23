@@ -38,13 +38,14 @@ const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
                 {/* Overlay with Quick Add */}
                 <div className="absolute inset-0 bg-background/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center pointer-events-none group-hover:pointer-events-auto">
                     <Button
+                        disabled={product.stock < 1}
                         onClick={() => {
                             addToCart(product as any);
                             toast.success(`${product.name} added to cart!`);
                         }}
-                        className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full font-bold shadow-xl translate-y-4 group-hover:translate-y-0 transition-transform duration-300"
+                        className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full font-bold shadow-xl translate-y-4 group-hover:translate-y-0 transition-transform duration-300 disabled:bg-muted disabled:text-muted-foreground"
                     >
-                        Quick Add <ShoppingCart size={16} className="ml-2" />
+                        {product.stock < 1 ? 'Out of Stock' : 'Quick Add'} <ShoppingCart size={16} className="ml-2" />
                     </Button>
                 </div>
 

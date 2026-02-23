@@ -1,10 +1,12 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { IStats } from '@/types';
 import {
+  AlertTriangle,
   Banknote,
   Clock,
   FileText,
   PieChart,
+  ShoppingBag,
   Trash2,
   UserCheck,
   UserMinus,
@@ -27,19 +29,68 @@ const Stats = ({ stats }: StatsProps) => {
           <Card className="border-l-4 border-l-emerald-500 shadow-sm transition-all hover:shadow-md">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-muted-foreground text-sm font-medium">
-                Total Sales
+                Total Revenue
               </CardTitle>
               <Banknote className="h-4 w-4 text-emerald-500" />
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold">
-                ${stats.totalSales.toLocaleString()}
+                ${stats.totalRevenue.toLocaleString()}
               </div>
-              <p className="text-muted-foreground mt-1 text-xs">Lifetime revenue</p>
+              <p className="text-muted-foreground mt-1 text-xs">Total income from orders</p>
             </CardContent>
           </Card>
 
-          <Card className="border-l-4 border-l-blue-500 shadow-sm transition-all hover:shadow-md">
+          <Card className="border-l-4 border-l-blue-600 shadow-sm transition-all hover:shadow-md">
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-muted-foreground text-sm font-medium">
+                Net Profit
+              </CardTitle>
+              <Banknote className="h-4 w-4 text-blue-600" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold">
+                ${stats.totalProfit.toLocaleString()}
+              </div>
+              <p className="text-muted-foreground mt-1 text-xs">Revenue - Cost of Goods</p>
+            </CardContent>
+          </Card>
+
+          <Card className="border-l-4 border-l-purple-500 shadow-sm transition-all hover:shadow-md">
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-muted-foreground text-sm font-medium">
+                Inventory Value
+              </CardTitle>
+              <ShoppingBag className="h-4 w-4 text-purple-500" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold">${stats.totalStockValue.toLocaleString()}</div>
+              <p className="text-muted-foreground mt-1 text-xs">Asset value of stock</p>
+            </CardContent>
+          </Card>
+
+          <Card className="border-l-4 border-l-red-500 shadow-sm transition-all hover:shadow-md">
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-muted-foreground text-sm font-medium">
+                Low Stock Alerts
+              </CardTitle>
+              <AlertTriangle className="h-4 w-4 text-red-500" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold">{stats.lowStockCount}</div>
+              <p className="mt-1 text-xs text-red-500 font-medium">Items needing restock</p>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+
+      {/* Classic Metrics */}
+      <div className="space-y-4">
+        <h3 className="text-foreground/80 text-lg font-semibold">
+          Operations & Volume
+        </h3>
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <Card className="shadow-sm transition-all hover:shadow-md">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-muted-foreground text-sm font-medium">
                 Total Orders
@@ -48,20 +99,20 @@ const Stats = ({ stats }: StatsProps) => {
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold">{stats.orderCount}</div>
-              <p className="text-muted-foreground mt-1 text-xs">Orders placed</p>
+              <p className="text-muted-foreground mt-1 text-xs">Volume of orders</p>
             </CardContent>
           </Card>
 
-          <Card className="border-l-4 border-l-orange-500 shadow-sm transition-all hover:shadow-md">
+          <Card className="shadow-sm transition-all hover:shadow-md">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-muted-foreground text-sm font-medium">
-                Total Products
+                Live Products
               </CardTitle>
               <FileText className="h-4 w-4 text-orange-500" />
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold">{stats.productCount}</div>
-              <p className="text-muted-foreground mt-1 text-xs">Live products</p>
+              <p className="text-muted-foreground mt-1 text-xs">Active catalog items</p>
             </CardContent>
           </Card>
 

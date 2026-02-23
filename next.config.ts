@@ -31,6 +31,21 @@ const nextConfig: NextConfig = {
 
   // Enable source maps in production
   productionBrowserSourceMaps: true,
+
+  redirects: async () => {
+    return [
+      {
+        source: '/admin/settings/:path*',
+        destination: '/settings/:path*',
+        permanent: true,
+      },
+      {
+        source: '/user/settings/:path*',
+        destination: '/settings/:path*',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

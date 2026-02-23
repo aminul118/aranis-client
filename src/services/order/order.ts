@@ -14,14 +14,28 @@ export type {
   PaymentStatus,
 } from './order.types';
 
-const createOrder = async (payload: Partial<IOrder>) => {
-  const res = await serverFetch.post<ApiResponse<IOrder>>('/orders', {
-    body: JSON.stringify(payload),
+export interface IOrderPayload {
+  items: {
+    product: string;
+    quantity: number;
+    price: number;
+  }[];
+  totalPrice: number;
+  shippingAddress: string;
+  paymentMethod: 'COD' | 'CARD';
+}
+
+const createOrder = async (payload: IOrderPayload) => {
+  const res = await serverFetch.post<ApiResponse<any>>('/orders', {
     headers: {
       'Content-Type': 'application/json',
     },
+    body: JSON.stringify(payload),
   });
+
+  revalidate('ME');
   revalidate('order');
+
   return res;
 };
 
@@ -34,7 +48,7 @@ const getAllOrders = async (query: Record<string, string>) => {
   });
 };
 
-const getMyOrders = async (query: Record<string, string>) => {
+const getMyOrders = async (query?: Record<string, string>) => {
   return await serverFetch.get<ApiResponse<IOrder[]>>('/orders/my-orders', {
     query,
     next: {

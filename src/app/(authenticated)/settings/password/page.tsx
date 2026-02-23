@@ -2,10 +2,9 @@ import ChangePasswordClient from '@/components/modules/Admin/settings/ChangePass
 import { Metadata } from 'next';
 
 export default function PasswordPage() {
-  return <ChangePasswordClient />;
+    return <ChangePasswordClient />;
 }
 
-// SEO Metadata
 export const metadata: Metadata = {
-  title: 'Change Password | Md. Aminul Islam',
+    title: 'Change Password | Lumiere',
 };

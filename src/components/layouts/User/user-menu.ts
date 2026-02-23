@@ -1,5 +1,6 @@
 import { MenuGroup } from '@/types/admin-menu';
 import {
+  Globe,
   LayoutDashboard,
   Package,
   Settings,
@@ -10,7 +11,10 @@ import {
 const userSidebarMenu: MenuGroup[] = [
   {
     title: 'Portal',
-    menu: [{ name: 'Dashboard', url: '/user', icon: LayoutDashboard }],
+    menu: [
+      { name: 'Dashboard', url: '/user', icon: LayoutDashboard },
+      { name: 'Website', url: '/', icon: Globe },
+    ],
   },
   {
     title: 'Shopping',
@@ -22,8 +26,8 @@ const userSidebarMenu: MenuGroup[] = [
   {
     title: 'Account',
     menu: [
-      { name: 'Profile', url: '/user/settings/profile', icon: User },
-      { name: 'Settings', url: '/user/settings', icon: Settings },
+      { name: 'Profile', url: '/settings/profile', icon: User },
+      { name: 'Settings', url: '/settings/appearance', icon: Settings },
     ],
   },
 ];

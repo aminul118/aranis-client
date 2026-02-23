@@ -48,6 +48,15 @@ const OrderActions = ({ order }: { order: IOrder }) => {
             </DropdownMenuTrigger>
 
             <DropdownMenuContent align="end" className="min-w-48">
+                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                    className="cursor-pointer"
+                    onClick={() => router.push(`/admin/orders/${order._id}`)}
+                >
+                    View Details
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
                 <DropdownMenuLabel>Update Status</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 {Object.values(OrderStatus).map((status) => (

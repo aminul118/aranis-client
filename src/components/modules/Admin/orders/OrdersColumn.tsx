@@ -2,6 +2,7 @@ import DateFormat from '@/components/common/formater/date-format';
 import { Column } from '@/components/common/table/TableManageMent';
 import { IOrder, OrderStatus } from '@/services/order/order.types';
 import OrderActions from './OrderActions';
+import Link from 'next/link';
 
 const OrdersColumn: Column<IOrder>[] = [
     {
@@ -10,11 +11,36 @@ const OrdersColumn: Column<IOrder>[] = [
     },
     {
         header: 'Order ID',
-        accessor: (o) => <span className="font-semibold">#{o._id?.slice(-6).toUpperCase() || 'N/A'}</span>,
+        accessor: (o) => (
+            <Link href={`/admin/orders/${o._id}`} className="hover:underline text-blue-500 font-semibold transition-colors">
+                #{o._id?.slice(-6).toUpperCase() || 'N/A'}
+            </Link>
+        ),
+    },
+    {
+        header: 'Customer',
+        accessor: (o) => (
+            <div className="flex flex-col">
+                <span className="font-bold text-foreground">{o.user?.fullName || 'Guest'}</span>
+                <span className="text-xs text-muted-foreground">{o.user?.email || 'N/A'}</span>
+            </div>
+        ),
+    },
+    {
+        header: 'Contact',
+        accessor: (o) => <span className="text-sm italic">{o.user?.phone || 'No phone'}</span>,
+    },
+    {
+        header: 'Payment',
+        accessor: (o) => (
+            <span className={`text-[10px] px-2 py-0.5 rounded-full font-black uppercase tracking-widest ${o.paymentMethod === 'CARD' ? 'text-blue-500 bg-blue-500/10' : 'text-slate-500 bg-slate-500/10'}`}>
+                {o.paymentMethod || 'COD'}
+            </span>
+        ),
     },
     {
         header: 'Total',
-        accessor: (o) => `$${o.totalPrice?.toFixed(2) || '0.00'}`,
+        accessor: (o) => <span className="font-black text-foreground">${o.totalPrice?.toFixed(2) || '0.00'}</span>,
     },
     {
         header: 'Status',

@@ -34,7 +34,10 @@ const adminSidebarMenu: MenuGroup[] = [
     title: 'System',
     // Only SUPER_ADMIN sees user management by default
     roles: ['SUPER_ADMIN'] as UserRole[],
-    menu: [{ name: 'Users', url: '/admin/users', icon: Users }],
+    menu: [
+      { name: 'Users', url: '/admin/users', icon: Users },
+      { name: 'Settings', url: '/settings/profile', icon: MenuIcon },
+    ],
   },
 ];
 

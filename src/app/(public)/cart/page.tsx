@@ -186,8 +186,10 @@ const CartPage = () => {
                                 )}
                             </div>
 
-                            <Button className="w-full rounded-full py-7 text-lg font-bold bg-primary text-primary-foreground hover:bg-primary/90 shadow-xl transition-all">
-                                Proceed to Checkout <ArrowRight className="ml-2 h-5 w-5" />
+                            <Button asChild className="w-full rounded-full py-7 text-lg font-bold bg-primary text-primary-foreground hover:bg-primary/90 shadow-xl transition-all">
+                                <Link href="/checkout">
+                                    Proceed to Checkout <ArrowRight className="ml-2 h-5 w-5" />
+                                </Link>
                             </Button>
                         </div>
 

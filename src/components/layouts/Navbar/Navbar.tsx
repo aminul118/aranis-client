@@ -19,6 +19,7 @@ import { ShoppingCart, ChevronDown } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import UserAvatar from './NavUser';
 import PortalButton from './PortalButton';
+import NavSearch from './NavSearch';
 
 interface MobileProps {
   navItems: NavMenu[];
@@ -108,7 +109,8 @@ const Navbar = ({ user, navItems = [] }: { user: IUser; navItems?: NavMenu[] }) 
         </div>
 
         {/* Right Side */}
-        <div className="hidden items-center gap-6 lg:flex">
+        <div className="hidden items-center gap-4 lg:flex">
+          <NavSearch />
           <Link href="/cart" className="relative text-muted-foreground transition-colors hover:text-foreground">
             <ShoppingCart size={22} />
             {totalItems > 0 && (
@@ -125,7 +127,8 @@ const Navbar = ({ user, navItems = [] }: { user: IUser; navItems?: NavMenu[] }) 
           {user ? <UserAvatar user={user} /> : <PortalButton />}
         </div>
 
-        <div className="lg:hidden">
+        <div className="flex items-center gap-2 lg:hidden">
+          <NavSearch />
           <Hamburger toggled={menuOpen} toggle={setMenuOpen} size={24} rounded />
         </div>
       </nav>
