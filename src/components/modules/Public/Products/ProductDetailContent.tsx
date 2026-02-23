@@ -10,6 +10,7 @@ import { toast } from 'sonner';
 import { useState } from 'react';
 import { IProduct } from '@/services/product/product';
 import HtmlContent from '@/components/rich-text/core/html-content';
+import ReviewSection from './Reviews/ReviewSection';
 
 interface ProductDetailContentProps {
     product: IProduct;
@@ -128,8 +129,8 @@ const ProductDetailContent = ({ product }: ProductDetailContentProps) => {
                                         key={size}
                                         onClick={() => setSelectedSize(size)}
                                         className={`min-w-[4rem] px-5 py-3 rounded-2xl border font-black transition-all duration-300 ${selectedSize === size
-                                                ? 'bg-foreground text-background border-foreground shadow-lg scale-105'
-                                                : 'border-border/50 bg-muted/30 text-muted-foreground hover:border-foreground/30'
+                                            ? 'bg-foreground text-background border-foreground shadow-lg scale-105'
+                                            : 'border-border/50 bg-muted/30 text-muted-foreground hover:border-foreground/30'
                                             }`}
                                     >
                                         {size}
@@ -210,6 +211,11 @@ const ProductDetailContent = ({ product }: ProductDetailContentProps) => {
                         )}
                     </div>
                 </motion.div>
+            </div>
+
+            {/* Full Width Review Section */}
+            <div className="lg:col-span-12 mt-20">
+                <ReviewSection productId={product._id as string} />
             </div>
         </div>
     );

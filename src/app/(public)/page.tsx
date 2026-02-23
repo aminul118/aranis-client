@@ -1,6 +1,8 @@
 import HeroBanner from '@/components/modules/Public/Home/HeroBanner';
 import Categories from '@/components/modules/Public/Home/Categories';
 import FeaturedProducts from '@/components/modules/Public/Home/FeaturedProducts';
+import TopRatedProducts from '@/components/modules/Public/Home/TopRatedProducts';
+import BestSellingProducts from '@/components/modules/Public/Home/BestSellingProducts';
 import generateMetaTags from '@/seo/generateMetaTags';
 import { Metadata } from 'next';
 
@@ -10,6 +12,8 @@ const HomePage = async () => {
       <HeroBanner />
       <Categories />
       <FeaturedProducts />
+      <TopRatedProducts />
+      <BestSellingProducts />
     </>
   );
 };

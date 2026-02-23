@@ -20,6 +20,7 @@ export interface IProduct {
   rating: number;
   slug: string;
   salePrice?: number;
+  soldCount?: number;
   isDeleted?: boolean;
 }
 
@@ -69,10 +70,24 @@ const deleteProduct = async (id: string) => {
   return res;
 };
 
+const getTopRatedProducts = async () => {
+  return await serverFetch.get<ApiResponse<IProduct[]>>('/products', {
+    query: { sort: '-rating', limit: '10' },
+  });
+};
+
+const getBestSellingProducts = async () => {
+  return await serverFetch.get<ApiResponse<IProduct[]>>('/products', {
+    query: { sort: '-soldCount', limit: '10' },
+  });
+};
+
 export {
   createProduct,
   deleteProduct,
+  getBestSellingProducts,
   getProducts,
   getSingleProduct,
+  getTopRatedProducts,
   updateProduct,
 };

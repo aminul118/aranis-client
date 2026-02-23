@@ -9,9 +9,8 @@ import {
 import { getMe } from '@/services/user/users';
 import Link from 'next/link';
 import Logo from '../../../assets/Logo';
-import DynamicMenu from '../shared/DynamicMenu';
+import Menu from './Menu';
 import UserFooter from './UserFooter';
-import { userSidebarMenu } from './user-menu';
 
 const UserSidebar = async () => {
     const { data } = await getMe();
@@ -26,7 +25,7 @@ const UserSidebar = async () => {
             <Separator />
             <SidebarContent>
                 {/* User menu — role filtering available but all items visible to USER */}
-                <DynamicMenu menuGroups={userSidebarMenu} role={data?.role} />
+                <Menu role={data?.role} />
             </SidebarContent>
             {/* Footer */}
             <SidebarFooter className="py-6">
