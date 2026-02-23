@@ -30,35 +30,74 @@ const ProductDetailContent = ({ product }: ProductDetailContentProps) => {
         });
     };
 
+    const allImages = [product.image, ...(product.images || [])].filter(Boolean) as string[];
+    const [selectedImage, setSelectedImage] = useState(allImages[0] || product.image);
+
     return (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
             {/* Image Section */}
-            <div className="lg:col-span-7 space-y-6">
+            <div className="lg:col-span-7 space-y-4">
+                {/* Main image viewer */}
                 <motion.div
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.5 }}
                     className="relative aspect-square md:aspect-[4/5] rounded-[2rem] overflow-hidden border border-border/50 bg-secondary/30 backdrop-blur-sm group"
                 >
-                    <Image
-                        src={product.image}
-                        alt={product.name}
-                        fill
-                        className="object-cover transition-transform duration-700 group-hover:scale-105"
-                        priority
-                    />
+                    <AnimatePresence mode="wait">
+                        <motion.div
+                            key={selectedImage}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.25 }}
+                            className="absolute inset-0"
+                        >
+                            <Image
+                                src={selectedImage}
+                                alt={product.name}
+                                fill
+                                className="object-cover transition-transform duration-700 group-hover:scale-105"
+                                priority
+                            />
+                        </motion.div>
+                    </AnimatePresence>
 
                     {/* Floating Badges */}
                     {product.salePrice && product.salePrice > 0 && (
-                        <div className="absolute top-6 left-6">
+                        <div className="absolute top-6 left-6 z-10">
                             <Badge className="bg-red-500 text-white border-none px-4 py-1.5 rounded-full text-sm font-black shadow-xl shadow-red-500/30">
                                 {Math.round((1 - product.salePrice / product.price) * 100)}% OFF
                             </Badge>
                         </div>
                     )}
+
+                    {/* Image counter */}
+                    {allImages.length > 1 && (
+                        <div className="absolute bottom-4 right-4 z-10 bg-black/60 text-white text-xs font-bold px-3 py-1.5 rounded-full backdrop-blur-sm">
+                            {allImages.indexOf(selectedImage) + 1} / {allImages.length}
+                        </div>
+                    )}
                 </motion.div>
 
-                {/* Thumbnail placeholders or gallery would go here */}
+                {/* Thumbnail strip — only shown when multiple images exist */}
+                {allImages.length > 1 && (
+                    <div className="flex gap-3 overflow-x-auto pb-1 scrollbar-thin">
+                        {allImages.map((img, idx) => (
+                            <button
+                                key={img + idx}
+                                type="button"
+                                onClick={() => setSelectedImage(img)}
+                                className={`relative shrink-0 w-16 h-16 md:w-20 md:h-20 rounded-xl overflow-hidden border-2 transition-all ${selectedImage === img
+                                    ? 'border-blue-500 ring-2 ring-blue-500/30 scale-105'
+                                    : 'border-border/50 hover:border-blue-500/40 opacity-70 hover:opacity-100'
+                                    }`}
+                            >
+                                <Image src={img} alt={`View ${idx + 1}`} fill className="object-cover" />
+                            </button>
+                        ))}
+                    </div>
+                )}
             </div>
 
             {/* Content Section */}

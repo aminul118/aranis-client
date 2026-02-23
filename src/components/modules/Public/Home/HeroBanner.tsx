@@ -1,87 +1,297 @@
 'use client';
 
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { ArrowRight } from 'lucide-react';
 import Image from 'next/image';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect, useCallback } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { IHeroBanner, IMiniBanner } from '@/services/hero-banner/hero-banner';
 
-const HeroBanner = () => {
+// ─── Fallback data (shown when DB has no banners yet) ───────────────────────
+const FALLBACK_SLIDES: IHeroBanner[] = [
+  {
+    image: 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?q=80&w=1600&auto=format&fit=crop',
+    tag: 'New Collection 2026',
+    title: 'Elevate Your\nSignature Style',
+    subtitle: 'Up to 40% OFF on premium fashion picks. Limited time offer.',
+    cta: 'Shop Now',
+    ctaHref: '/shop',
+    accentColor: 'from-blue-600 to-cyan-400',
+    bgGlow: 'bg-blue-600/20',
+    order: 0,
+    isActive: true,
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=1600&auto=format&fit=crop',
+    tag: "Women's Collection",
+    title: 'Timeless Beauty,\nModern Edge',
+    subtitle: "Discover our curated women's fashion for every occasion.",
+    cta: 'Explore Women',
+    ctaHref: '/shop?category=Women',
+    accentColor: 'from-pink-500 to-rose-400',
+    bgGlow: 'bg-pink-600/20',
+    order: 1,
+    isActive: true,
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=1600&auto=format&fit=crop',
+    tag: 'Summer Sale',
+    title: 'Hot Deals,\nCooler Looks',
+    subtitle: 'Shop our biggest summer sale before it ends!',
+    cta: 'View Offers',
+    ctaHref: '/shop?featured=true',
+    accentColor: 'from-amber-500 to-orange-400',
+    bgGlow: 'bg-amber-600/20',
+    order: 2,
+    isActive: true,
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=1600&auto=format&fit=crop',
+    tag: "Men's Essentials",
+    title: 'Dress Sharp,\nLive Bold',
+    subtitle: "Premium men's fashion — from casual to formal.",
+    cta: 'Shop Men',
+    ctaHref: '/shop?category=Men',
+    accentColor: 'from-slate-600 to-gray-400',
+    bgGlow: 'bg-slate-600/20',
+    order: 3,
+    isActive: true,
+  },
+];
+
+const FALLBACK_MINI: IMiniBanner[] = [
+  {
+    image: 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=800&auto=format&fit=crop',
+    label: 'Featured Picks',
+    title: 'Staff Favourites',
+    href: '/shop?featured=true',
+    accent: 'from-purple-600/80 to-indigo-800/90',
+    order: 0,
+    isActive: true,
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1542060748-10c28b62716f?q=80&w=800&auto=format&fit=crop',
+    label: 'Best Sellers',
+    title: 'Top Rated Styles',
+    href: '/shop?sort=-rating',
+    accent: 'from-emerald-600/80 to-teal-800/90',
+    order: 1,
+    isActive: true,
+  },
+];
+
+const SLIDE_INTERVAL = 5000;
+
+interface HeroBannerProps {
+  mainSlides?: IHeroBanner[];
+  miniBanners?: IMiniBanner[];
+}
+
+const HeroBanner = ({ mainSlides, miniBanners }: HeroBannerProps) => {
+  const slides = (mainSlides && mainSlides.length > 0) ? mainSlides : FALLBACK_SLIDES;
+  const minis = (miniBanners && miniBanners.length > 0) ? miniBanners : FALLBACK_MINI;
+
+  const [current, setCurrent] = useState(0);
+  const [direction, setDirection] = useState(1);
+
+  const goTo = useCallback((index: number) => {
+    setDirection(index > current ? 1 : -1);
+    setCurrent((index + slides.length) % slides.length);
+  }, [current, slides.length]);
+
+  const next = useCallback(() => goTo(current + 1), [current, goTo]);
+  const prev = useCallback(() => goTo(current - 1), [current, goTo]);
+
+  useEffect(() => {
+    const timer = setInterval(next, SLIDE_INTERVAL);
+    return () => clearInterval(timer);
+  }, [next]);
+
+  const slide = slides[current];
+
+  const variants = {
+    enter: (dir: number) => ({ x: dir > 0 ? '100%' : '-100%', opacity: 0 }),
+    center: { x: 0, opacity: 1 },
+    exit: (dir: number) => ({ x: dir > 0 ? '-100%' : '100%', opacity: 0 }),
+  };
+
   return (
-    <section className="relative min-h-[80vh] flex items-center overflow-hidden bg-background px-3 pt-20">
-      {/* Background Glow Effects */}
-      <div className="pointer-events-none absolute -top-40 -left-40 h-[600px] w-[600px] rounded-full bg-blue-500/5 blur-[120px]" />
-      <div className="pointer-events-none absolute top-1/2 -right-40 h-[500px] w-[500px] rounded-full bg-cyan-500/5 blur-[100px]" />
+    <section className="w-full pt-20 pb-4 bg-background">
+      <div className="container mx-auto px-4">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-3">
 
-      <div className="relative container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-        {/* Left Content */}
-        <div className="z-10 text-center lg:text-left">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <span className="inline-block px-4 py-1.5 mb-6 text-xs font-semibold tracking-widest text-blue-500 uppercase bg-blue-500/10 rounded-full">
-              New Collection 2026
-            </span>
-            <h1 className="text-5xl md:text-6xl xl:text-7xl font-bold text-foreground leading-tight mb-6">
-              Elevate Your <br />
-              <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-500 to-cyan-400">
-                Signature Style
-              </span>
-            </h1>
-            <p className="max-w-xl mx-auto lg:mx-0 text-lg text-muted-foreground mb-10 leading-relaxed">
-              Discover the latest trends in premium fashion. Lumiere brings you curated
-              collections that blend contemporary design with timeless elegance.
-            </p>
+          {/* ── Main Carousel ─────────────────────────────────────── */}
+          <div className="relative h-[340px] sm:h-[420px] lg:h-[480px] rounded-2xl overflow-hidden group bg-muted">
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-              <Button size="lg" className="rounded-full px-8 py-6 text-base font-bold bg-blue-600 hover:bg-blue-700 text-white transition-all shadow-lg hover:shadow-blue-500/25">
-                Shop Collection <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-              <Button variant="outline" size="lg" className="rounded-full px-8 py-6 text-base font-bold border-border text-foreground hover:bg-muted transition-all">
-                View Lookbook
-              </Button>
+            {/* Slides */}
+            <AnimatePresence custom={direction} initial={false}>
+              <motion.div
+                key={slide._id ?? String(current)}
+                custom={direction}
+                variants={variants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={{ duration: 0.55, ease: 'easeInOut' }}
+                className="absolute inset-0"
+              >
+                <Link href={slide.ctaHref} className="block w-full h-full">
+                  {/* Background image */}
+                  <Image
+                    src={slide.image}
+                    alt={slide.title}
+                    fill
+                    className="object-cover object-top"
+                    priority
+                    sizes="(max-width: 1024px) 100vw, 75vw"
+                  />
+                  {/* Gradient overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/40 to-transparent" />
+
+                  {/* Text content */}
+                  <div className="absolute inset-0 flex flex-col justify-center px-8 md:px-12 max-w-xl">
+                    <motion.span
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.2 }}
+                      className="inline-block text-xs font-bold uppercase tracking-widest text-white/80 bg-white/10 border border-white/20 px-3 py-1 rounded-full mb-4 w-fit backdrop-blur-sm"
+                    >
+                      {slide.tag}
+                    </motion.span>
+
+                    <motion.h1
+                      initial={{ opacity: 0, y: 15 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.3 }}
+                      className={`text-3xl sm:text-4xl md:text-5xl font-black text-white leading-tight mb-3 whitespace-pre-line`}
+                    >
+                      {slide.title.split('\n').map((line, i) =>
+                        i === 1 ? (
+                          <span key={i} className={`block text-transparent bg-clip-text bg-gradient-to-r ${slide.accentColor}`}>
+                            {line}
+                          </span>
+                        ) : (
+                          <span key={i} className="block">{line}</span>
+                        )
+                      )}
+                    </motion.h1>
+
+                    <motion.p
+                      initial={{ opacity: 0, y: 15 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.4 }}
+                      className="text-white/75 text-sm md:text-base mb-6 leading-relaxed"
+                    >
+                      {slide.subtitle}
+                    </motion.p>
+
+                    <motion.span
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: 0.5 }}
+                      className={`inline-flex items-center gap-2 self-start px-6 py-3 rounded-full font-bold text-sm text-white bg-gradient-to-r ${slide.accentColor} shadow-lg hover:opacity-90 transition-opacity`}
+                    >
+                      {slide.cta} →
+                    </motion.span>
+                  </div>
+                </Link>
+              </motion.div>
+            </AnimatePresence>
+
+            {/* Arrow controls */}
+            <button
+              onClick={(e) => { e.preventDefault(); prev(); }}
+              className="absolute left-3 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-black/40 hover:bg-black/70 text-white backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100"
+              aria-label="Previous"
+            >
+              <ChevronLeft size={22} />
+            </button>
+            <button
+              onClick={(e) => { e.preventDefault(); next(); }}
+              className="absolute right-3 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-black/40 hover:bg-black/70 text-white backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100"
+              aria-label="Next"
+            >
+              <ChevronRight size={22} />
+            </button>
+
+            {/* Dot indicators */}
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+              {slides.map((s, i) => (
+                <button
+                  key={s._id ?? i}
+                  onClick={() => goTo(i)}
+                  className={`h-1.5 rounded-full transition-all duration-300 ${i === current ? 'w-6 bg-white' : 'w-1.5 bg-white/40 hover:bg-white/70'
+                    }`}
+                  aria-label={`Go to slide ${i + 1}`}
+                />
+              ))}
             </div>
-          </motion.div>
-        </div>
 
-        {/* Right Content - Fashion Image */}
-        <div className="relative order-first lg:order-last">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="relative z-10 mx-auto max-w-[500px] lg:max-w-none shadow-2xl rounded-2xl overflow-hidden"
-          >
-            <div className="aspect-4/5 relative bg-muted overflow-hidden rounded-2xl border border-border group">
-              <div className="absolute inset-0 bg-linear-to-t from-background/80 via-transparent to-transparent z-10 opacity-60 group-hover:opacity-40 transition-opacity" />
-              <Image
-                src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=800"
-                fill
-                alt="High Fashion Collection"
-                className="object-cover transition-transform duration-700 group-hover:scale-110"
-                priority
+            {/* Progress bar */}
+            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-white/10 z-20">
+              <motion.div
+                key={current}
+                className={`h-full bg-gradient-to-r ${slide.accentColor}`}
+                initial={{ width: '0%' }}
+                animate={{ width: '100%' }}
+                transition={{ duration: SLIDE_INTERVAL / 1000, ease: 'linear' }}
               />
             </div>
+          </div>
 
-            {/* Floating Info Cards */}
-            <div className="absolute top-10 -left-6 z-20 hidden xl:block">
-              <div className="bg-card/80 backdrop-blur-md border border-border p-4 rounded-xl shadow-xl">
-                <p className="text-xs text-muted-foreground uppercase tracking-tighter mb-1">Featured Item</p>
-                <p className="font-bold text-card-foreground text-sm">Lumiere Nocturne Jacket</p>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Decorative Elements */}
-          <div className="absolute -bottom-10 -right-10 w-64 h-64 bg-blue-600/10 blur-[100px] rounded-full" />
+          {/* ── Mini Banners ──────────────────────────────────────── */}
+          <div className="hidden lg:flex flex-col gap-3">
+            {minis.map((banner, i) => (
+              <Link
+                key={banner._id ?? i}
+                href={banner.href}
+                className="relative flex-1 rounded-2xl overflow-hidden group block"
+              >
+                <Image
+                  src={banner.image}
+                  alt={banner.title}
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  sizes="320px"
+                />
+                <div className={`absolute inset-0 bg-gradient-to-br ${banner.accent}`} />
+                <div className="absolute inset-0 flex flex-col justify-end p-5">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-white/70 mb-1">
+                    {banner.label}
+                  </span>
+                  <p className="text-white font-black text-lg leading-tight">{banner.title}</p>
+                  <span className="mt-2 text-xs text-white/80 font-semibold inline-flex items-center gap-1 group-hover:gap-2 transition-all">
+                    Shop now →
+                  </span>
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
-      </div>
 
-      {/* Scroll Indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50">
-        <div className="w-px h-12 bg-linear-to-b from-blue-500 to-transparent" />
+        {/* ── Mobile mini banners (horizontal) ────────────────────── */}
+        <div className="grid grid-cols-2 gap-3 mt-3 lg:hidden">
+          {minis.map((banner, i) => (
+            <Link
+              key={(banner._id ?? i) + '-m'}
+              href={banner.href}
+              className="relative h-28 rounded-xl overflow-hidden group"
+            >
+              <Image
+                src={banner.image}
+                alt={banner.title}
+                fill
+                className="object-cover transition-transform duration-500 group-hover:scale-105"
+                sizes="50vw"
+              />
+              <div className={`absolute inset-0 bg-gradient-to-br ${banner.accent}`} />
+              <div className="absolute inset-0 flex flex-col justify-end p-3">
+                <p className="text-white font-black text-sm leading-tight">{banner.title}</p>
+                <span className="text-xs text-white/80 mt-0.5">Shop now →</span>
+              </div>
+            </Link>
+          ))}
+        </div>
       </div>
     </section>
   );

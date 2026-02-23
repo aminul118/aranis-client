@@ -26,7 +26,7 @@ import useActionHandler from '@/hooks/useActionHandler';
 import { ICategory } from '@/services/category/category';
 import { IColor } from '@/services/color/color';
 import { createProduct, IProduct, updateProduct } from '@/services/product/product';
-import { addProductSchema } from '@/zod/product';
+import { addProductSchema, updateProductSchema } from '@/zod/product';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Plus, Save, Trash2, X } from 'lucide-react';
 import Image from 'next/image';
@@ -35,6 +35,8 @@ import { useFieldArray, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Suspense } from 'react';
 import PlateRichEditor from '@/components/rich-text/core/rich-editor';
+import { toast } from 'sonner';
+import MultiImageUploader from '@/components/ui/multi-image-uploader';
 
 type FormValues = {
     name: string;
@@ -51,6 +53,7 @@ type FormValues = {
     featured: boolean;
     rating: number | string;
     image?: any;
+    images: string[];
 };
 
 interface Props {
@@ -63,9 +66,10 @@ const ProductForm = ({ product, categories, colors }: Props) => {
     const router = useRouter();
     const { executePost } = useActionHandler();
     const isEdit = !!product;
+    const schema = isEdit ? updateProductSchema : addProductSchema;
 
     const form = useForm<FormValues>({
-        resolver: zodResolver(addProductSchema) as any,
+        resolver: zodResolver(schema) as any,
         defaultValues: {
             name: product?.name || '',
             category: product?.category || '',
@@ -80,6 +84,7 @@ const ProductForm = ({ product, categories, colors }: Props) => {
             sizes: product?.sizes || [],
             featured: product?.featured || false,
             rating: product?.rating || 0,
+            images: product?.images || [],
         },
     });
 
@@ -97,18 +102,40 @@ const ProductForm = ({ product, categories, colors }: Props) => {
             details: data.details || '',
         };
 
+        const handleServerErrors = (res: any) => {
+            // If the server returns field-level errors, map them into the form
+            if (res?.errorDetails && Array.isArray(res.errorDetails)) {
+                res.errorDetails.forEach((err: { path?: string; message?: string }) => {
+                    if (err.path && err.message) {
+                        form.setError(err.path as keyof FormValues, {
+                            type: 'server',
+                            message: err.message,
+                        });
+                    }
+                });
+            }
+            // Also handle Zod-style errors object: { field: ['message'] }
+            if (res?.errors && typeof res.errors === 'object') {
+                Object.entries(res.errors).forEach(([field, msgs]) => {
+                    const message = Array.isArray(msgs) ? msgs[0] : String(msgs);
+                    form.setError(field as keyof FormValues, {
+                        type: 'server',
+                        message,
+                    });
+                });
+            }
+        };
+
         if (isEdit && product) {
-            await executePost({
-                action: () => updateProduct(payload as Partial<IProduct>, product._id as string),
-                success: {
-                    onSuccess: () => {
-                        router.push('/admin/products');
-                        router.refresh();
-                    },
-                    loadingText: 'Product updating...',
-                    message: 'Product updated successfully',
-                },
-            });
+            const res = await updateProduct(payload as Partial<IProduct>, product._id as string);
+            if (res?.success) {
+                toast.success('Product updated successfully');
+                router.push('/admin/products');
+                router.refresh();
+            } else {
+                toast.error(res?.message || 'Failed to update product');
+                handleServerErrors(res);
+            }
         } else {
             await executePost({
                 action: () => createProduct(payload as IProduct),
@@ -412,6 +439,25 @@ const ProductForm = ({ product, categories, colors }: Props) => {
                         </FormItem>
                     )}
                 />
+
+                {/* Gallery Images */}
+                <div className="rounded-xl border border-border/50 p-5 bg-muted/20">
+                    <FormField
+                        control={form.control}
+                        name="images"
+                        render={({ field }) => (
+                            <FormItem>
+                                <MultiImageUploader
+                                    label="Gallery Images (shown on product detail page)"
+                                    value={field.value || []}
+                                    onChange={field.onChange}
+                                    max={8}
+                                />
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                </div>
 
                 <div className="flex justify-end pt-4">
                     <SubmitButton

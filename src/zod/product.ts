@@ -7,6 +7,7 @@ export const productSchema = z.object({
   type: z.string().min(1, 'Type is required'),
   price: z.coerce.number().positive('Price must be positive'),
   image: z.union([z.string(), z.any()]).optional(),
+  images: z.array(z.string()).optional().default([]),
   description: z.string().min(1, 'Description is required'),
   details: z.string().default(''),
   slug: z.string().optional(),
@@ -18,4 +19,10 @@ export const productSchema = z.object({
 });
 
 export const addProductSchema = productSchema;
-export const updateProductSchema = productSchema.partial();
+
+// On update: all fields optional, but still validated if provided.
+// Arrays drop min(1) so you can update other fields without re-specifying colors/sizes.
+export const updateProductSchema = productSchema.partial().extend({
+  colors: z.array(z.string()).optional(),
+  sizes: z.array(z.string()).optional(),
+});

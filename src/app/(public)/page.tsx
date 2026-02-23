@@ -5,11 +5,20 @@ import TopRatedProducts from '@/components/modules/Public/Home/TopRatedProducts'
 import BestSellingProducts from '@/components/modules/Public/Home/BestSellingProducts';
 import generateMetaTags from '@/seo/generateMetaTags';
 import { Metadata } from 'next';
+import { getHeroBanners, getMiniBanners } from '@/services/hero-banner/hero-banner';
 
 const HomePage = async () => {
+  const [heroBannersRes, miniBannersRes] = await Promise.all([
+    getHeroBanners({ isActive: 'true', sort: 'order' }),
+    getMiniBanners({ isActive: 'true', sort: 'order' }),
+  ]);
+
   return (
     <>
-      <HeroBanner />
+      <HeroBanner
+        mainSlides={heroBannersRes?.data}
+        miniBanners={miniBannersRes?.data}
+      />
       <Categories />
       <FeaturedProducts />
       <TopRatedProducts />
@@ -29,3 +38,4 @@ export const metadata: Metadata = generateMetaTags({
     'Lumiere Fashion, Premium Clothing, Luxury Apparel, Fashion E-commerce, Men Fashion, Women Fashion, Accessories, Designer Clothing, Online Shopping',
   websitePath: '/',
 });
+

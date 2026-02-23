@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { IOrder, OrderStatus } from '@/services/order/order.types';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -12,21 +13,59 @@ import {
     Phone,
     User,
     ShoppingBag,
-    ArrowLeft
+    ArrowLeft,
+    ChevronDown,
+    Loader2,
+    CheckCircle2,
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { IProduct } from '@/types';
+import { updateOrderStatus } from '@/services/order/order';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
+import { cn } from '@/lib/utils';
+
+const STATUS_CONFIG: Record<OrderStatus, { color: string; bg: string; label: string }> = {
+    [OrderStatus.PENDING]: { color: 'text-amber-500', bg: 'bg-amber-500/10 border-amber-500/20', label: 'Pending' },
+    [OrderStatus.PROCESSING]: { color: 'text-blue-500', bg: 'bg-blue-500/10 border-blue-500/20', label: 'Processing' },
+    [OrderStatus.SHIPPED]: { color: 'text-purple-500', bg: 'bg-purple-500/10 border-purple-500/20', label: 'Shipped' },
+    [OrderStatus.DELIVERED]: { color: 'text-emerald-500', bg: 'bg-emerald-500/10 border-emerald-500/20', label: 'Delivered' },
+    [OrderStatus.CANCELLED]: { color: 'text-red-500', bg: 'bg-red-500/10 border-red-500/20', label: 'Cancelled' },
+};
+
+const ALL_STATUSES = [
+    OrderStatus.PENDING,
+    OrderStatus.PROCESSING,
+    OrderStatus.SHIPPED,
+    OrderStatus.DELIVERED,
+    OrderStatus.CANCELLED,
+];
 
 const OrderDetailsView = ({ order }: { order: IOrder }) => {
-    const getStatusColor = (status: OrderStatus) => {
-        switch (status) {
-            case OrderStatus.DELIVERED: return 'bg-green-500/10 text-green-500 border-green-500/20';
-            case OrderStatus.PROCESSING: return 'bg-blue-500/10 text-blue-500 border-blue-500/20';
-            case OrderStatus.SHIPPED: return 'bg-purple-500/10 text-purple-500 border-purple-500/20';
-            case OrderStatus.CANCELLED: return 'bg-red-500/10 text-red-500 border-red-500/20';
-            default: return 'bg-amber-500/10 text-amber-500 border-amber-500/20';
+    const router = useRouter();
+    const [currentStatus, setCurrentStatus] = useState<OrderStatus>(order.status);
+    const [updating, setUpdating] = useState(false);
+
+    const cfg = STATUS_CONFIG[currentStatus];
+
+    const handleStatusChange = async (newStatus: OrderStatus) => {
+        if (newStatus === currentStatus) return;
+        setUpdating(true);
+        try {
+            const res = await updateOrderStatus(order._id!, newStatus);
+            if (res.success) {
+                setCurrentStatus(newStatus);
+                toast.success(`Order status updated to ${newStatus}`);
+                router.refresh();
+            } else {
+                toast.error(res.message || 'Failed to update status');
+            }
+        } catch {
+            toast.error('Something went wrong');
+        } finally {
+            setUpdating(false);
         }
     };
 
@@ -45,8 +84,8 @@ const OrderDetailsView = ({ order }: { order: IOrder }) => {
                         <h1 className="text-3xl font-black tracking-tight text-foreground">
                             Order <span className="text-blue-500">#{order._id?.slice(-6).toUpperCase()}</span>
                         </h1>
-                        <Badge variant="outline" className={`${getStatusColor(order.status)} font-bold px-3 py-1 rounded-full border`}>
-                            {order.status}
+                        <Badge variant="outline" className={`${cfg.bg} ${cfg.color} font-bold px-3 py-1 rounded-full border`}>
+                            {currentStatus}
                         </Badge>
                     </div>
                     <div className="flex items-center gap-2 mt-2 text-sm text-muted-foreground">
@@ -56,15 +95,58 @@ const OrderDetailsView = ({ order }: { order: IOrder }) => {
                         <span>{new Date(order.createdAt!).toLocaleTimeString('en-US', { timeStyle: 'short' })}</span>
                     </div>
                 </div>
-                <div className="flex items-center gap-3">
-                    <Button variant="outline" className="rounded-full font-bold">Download Invoice</Button>
-                    <Button className="rounded-full bg-blue-600 hover:bg-blue-700 font-bold">Print Receipt</Button>
-                </div>
+                <Button variant="outline" className="rounded-full font-bold self-start md:self-auto">Download Invoice</Button>
             </div>
+
+            {/* ── STATUS CHANGE PANEL ── */}
+            <Card className="border-blue-500/20 bg-blue-500/5 shadow-xl shadow-blue-500/5">
+                <CardHeader className="pb-3">
+                    <CardTitle className="flex items-center gap-2 text-lg text-blue-600">
+                        <Package size={18} />
+                        Update Order Status
+                    </CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <p className="text-sm text-muted-foreground mb-4">
+                        Current status: <span className={cn('font-bold', cfg.color)}>{currentStatus}</span>
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                        {ALL_STATUSES.map((s) => {
+                            const sCfg = STATUS_CONFIG[s];
+                            const isActive = s === currentStatus;
+                            return (
+                                <button
+                                    key={s}
+                                    disabled={updating || isActive}
+                                    onClick={() => handleStatusChange(s)}
+                                    className={cn(
+                                        'flex items-center gap-2 px-4 py-2 rounded-full border font-bold text-sm transition-all',
+                                        isActive
+                                            ? `${sCfg.bg} ${sCfg.color} cursor-default`
+                                            : 'border-border bg-background hover:border-blue-500/30 hover:bg-muted/60 text-muted-foreground hover:text-foreground',
+                                    )}
+                                >
+                                    {updating && isActive ? (
+                                        <Loader2 size={14} className="animate-spin" />
+                                    ) : isActive ? (
+                                        <CheckCircle2 size={14} />
+                                    ) : null}
+                                    {sCfg.label}
+                                </button>
+                            );
+                        })}
+                    </div>
+                    {updating && (
+                        <p className="text-sm text-muted-foreground mt-3 flex items-center gap-2">
+                            <Loader2 size={14} className="animate-spin" /> Updating status...
+                        </p>
+                    )}
+                </CardContent>
+            </Card>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Customer Details */}
-                <Card className="lg:col-span-1 border-border/40 shadow-xl shadow-black/5 bg-background/50 backdrop-blur-sm overflow-hidden group">
+                <Card className="lg:col-span-1 border-border/40 shadow-xl shadow-black/5 bg-background/50 backdrop-blur-sm overflow-hidden group relative">
                     <div className="absolute top-0 left-0 w-1 h-full bg-blue-500 group-hover:w-2 transition-all" />
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2 text-lg">
@@ -79,7 +161,9 @@ const OrderDetailsView = ({ order }: { order: IOrder }) => {
                             </div>
                             <div>
                                 <h3 className="font-black text-foreground">{order.user?.fullName}</h3>
-                                <p className="text-xs text-muted-foreground uppercase tracking-widest font-bold">Customer ID: {order.user?._id?.slice(-6)}</p>
+                                <p className="text-xs text-muted-foreground uppercase tracking-widest font-bold">
+                                    ID: {order.user?._id?.slice(-6)}
+                                </p>
                             </div>
                         </div>
 
@@ -87,14 +171,14 @@ const OrderDetailsView = ({ order }: { order: IOrder }) => {
                             <div className="flex items-start gap-3">
                                 <Mail className="text-muted-foreground mt-1" size={16} />
                                 <div className="min-w-0">
-                                    <p className="text-[10px] font-black uppercase text-muted-foreground tracking-widest mb-0.5">Email Address</p>
+                                    <p className="text-[10px] font-black uppercase text-muted-foreground tracking-widest mb-0.5">Email</p>
                                     <p className="text-sm font-medium truncate">{order.user?.email}</p>
                                 </div>
                             </div>
                             <div className="flex items-start gap-3">
                                 <Phone className="text-muted-foreground mt-1" size={16} />
                                 <div>
-                                    <p className="text-[10px] font-black uppercase text-muted-foreground tracking-widest mb-0.5">Phone Number</p>
+                                    <p className="text-[10px] font-black uppercase text-muted-foreground tracking-widest mb-0.5">Phone</p>
                                     <p className="text-sm font-medium">{order.user?.phone || 'Not provided'}</p>
                                 </div>
                             </div>
@@ -116,7 +200,7 @@ const OrderDetailsView = ({ order }: { order: IOrder }) => {
                         <CardHeader className="border-b border-border/40 bg-muted/20">
                             <CardTitle className="flex items-center gap-2 text-lg">
                                 <ShoppingBag className="text-blue-500" size={18} />
-                                Ordered Products
+                                Ordered Products ({order.items.length})
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="p-0">
@@ -125,9 +209,9 @@ const OrderDetailsView = ({ order }: { order: IOrder }) => {
                                     <thead>
                                         <tr className="border-b border-border/40 text-[10px] font-black uppercase tracking-widest text-muted-foreground">
                                             <th className="px-6 py-4 text-left">Product</th>
-                                            <th className="px-6 py-4 text-center">Quantity</th>
-                                            <th className="px-6 py-4 text-right">Price</th>
-                                            <th className="px-6 py-4 text-right">Total</th>
+                                            <th className="px-6 py-4 text-center">Qty</th>
+                                            <th className="px-6 py-4 text-right">Unit Price</th>
+                                            <th className="px-6 py-4 text-right">Subtotal</th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-border/40">
@@ -151,12 +235,8 @@ const OrderDetailsView = ({ order }: { order: IOrder }) => {
                                                             </div>
                                                         </div>
                                                     </td>
-                                                    <td className="px-6 py-4 text-center font-bold text-sm">
-                                                        {item.quantity}
-                                                    </td>
-                                                    <td className="px-6 py-4 text-right text-sm">
-                                                        ${item.price.toFixed(2)}
-                                                    </td>
+                                                    <td className="px-6 py-4 text-center font-bold text-sm">{item.quantity}</td>
+                                                    <td className="px-6 py-4 text-right text-sm">${item.price.toFixed(2)}</td>
                                                     <td className="px-6 py-4 text-right font-black text-blue-500 text-sm">
                                                         ${(item.quantity * item.price).toFixed(2)}
                                                     </td>
@@ -188,12 +268,11 @@ const OrderDetailsView = ({ order }: { order: IOrder }) => {
                                             <Package size={20} />
                                         </div>
                                         <div>
-                                            <p className="text-[10px] font-black uppercase text-muted-foreground tracking-widest">Shipping Method</p>
-                                            <p className="font-bold">Standard Delivery (Free)</p>
+                                            <p className="text-[10px] font-black uppercase text-muted-foreground tracking-widest">Shipping</p>
+                                            <p className="font-bold">Standard (Free)</p>
                                         </div>
                                     </div>
                                 </div>
-
                                 <div className="space-y-3">
                                     <div className="flex justify-between items-center text-sm">
                                         <span className="text-muted-foreground">Subtotal</span>

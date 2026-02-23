@@ -1,6 +1,7 @@
 import { MenuGroup, UserRole } from '@/types/admin-menu';
 import {
   Globe,
+  ImageIcon,
   Layers,
   LayoutDashboard,
   Menu as MenuIcon,
@@ -28,6 +29,13 @@ const adminSidebarMenu: MenuGroup[] = [
       { name: 'Navbar', url: '/admin/navbar', icon: MenuIcon },
       { name: 'Coupons', url: '/admin/coupons', icon: TicketPercent },
       { name: 'Orders', url: '/admin/orders', icon: ShoppingCart },
+    ],
+  },
+  {
+    title: 'Content',
+    menu: [
+      { name: 'Hero Banners', url: '/admin/hero-banners', icon: ImageIcon },
+      { name: 'Mini Banners', url: '/admin/mini-banners', icon: ImageIcon },
     ],
   },
   {
