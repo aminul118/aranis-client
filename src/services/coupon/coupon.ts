@@ -54,10 +54,17 @@ const deleteCoupon = async (id: string) => {
   return res;
 };
 
+const validateCoupon = async (code: string) => {
+  return await serverFetch.get<ApiResponse<ICoupon>>(
+    `/coupons/validate/${code}`,
+  );
+};
+
 export {
   createCoupon,
   deleteCoupon,
   getCoupons,
   getSingleCoupon,
   updateCoupon,
+  validateCoupon,
 };

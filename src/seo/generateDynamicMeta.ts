@@ -36,9 +36,16 @@ export async function generateDynamicMeta(
  * Generates dynamic SEO for categorization routes (e.g. /men/shirts/formal)
  * by matching URL slugs with the navbar hierarchy.
  */
+const RESTRICTED_SEGMENTS = ['admin', 'api', 'auth', 'dashboard', 'user'];
+
 export async function generateCategorizedMeta(
   slugs: string[],
 ): Promise<Metadata> {
+  // Guard against capturing admin or system routes
+  if (slugs.some((s) => RESTRICTED_SEGMENTS.includes(s.toLowerCase()))) {
+    return {};
+  }
+
   const [settingsRes, navItemsRes] = await Promise.all([
     getSiteSettings(),
     getNavbars({}),

@@ -1,6 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import { validateCoupon } from '@/services/coupon/coupon';
 import { ArrowRight, Tag, X } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -9,27 +10,36 @@ import { toast } from 'sonner';
 interface CartSummaryProps {
   subtotal: number;
   discount: number;
+  discountPercent: number;
   total: number;
   couponCode: string | null;
-  onApplyCoupon: (code: string) => void;
+  onApplyCoupon: (coupon: any) => void;
 }
 
 const CartSummary = ({
   subtotal,
   discount,
+  discountPercent,
   total,
   couponCode,
   onApplyCoupon,
 }: CartSummaryProps) => {
   const [couponInput, setCouponInput] = useState('');
 
-  const handleApplyCoupon = () => {
-    if (couponInput.toUpperCase() === 'LUMIERE10') {
-      onApplyCoupon(couponInput);
-      toast.success('10% Discount Applied!');
-      setCouponInput('');
-    } else {
-      toast.error('Invalid Coupon Code');
+  const handleApplyCoupon = async () => {
+    if (!couponInput.trim()) return;
+
+    try {
+      const res = await validateCoupon(couponInput);
+      if (res.success && res.data) {
+        onApplyCoupon(res.data);
+        toast.success(`${res.data.discount}% Discount Applied!`);
+        setCouponInput('');
+      } else {
+        toast.error(res.message || 'Invalid Coupon Code');
+      }
+    } catch (error: any) {
+      toast.error(error?.message || 'Failed to apply coupon');
     }
   };
 
@@ -54,7 +64,7 @@ const CartSummary = ({
             <div className="text-muted-foreground flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Tag size={14} className="text-blue-500" />
-                <span>Discount (10%)</span>
+                <span>Discount ({discountPercent}%)</span>
               </div>
               <span className="font-medium text-blue-500">
                 -৳{discount.toFixed(2)}
@@ -81,7 +91,7 @@ const CartSummary = ({
                 <Tag size={14} /> {couponCode}
               </span>
               <button
-                onClick={() => onApplyCoupon('')}
+                onClick={() => onApplyCoupon(null)}
                 className="text-blue-500/50 hover:text-blue-500"
               >
                 <X size={16} />
