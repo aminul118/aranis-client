@@ -48,6 +48,7 @@ const getCategories = async (query: Record<string, string>) => {
     query,
     next: {
       tags: ['category'],
+      revalidate: 3600,
     },
   });
 };

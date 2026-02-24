@@ -1,4 +1,6 @@
 import Container from '@/components/ui/Container';
+import { generateDynamicMeta } from '@/seo/generateDynamicMeta';
+import { Metadata } from 'next';
 
 const EMIPage = () => {
   return (
@@ -15,3 +17,11 @@ const EMIPage = () => {
 };
 
 export default EMIPage;
+
+export async function generateMetadata(): Promise<Metadata> {
+  return generateDynamicMeta(
+    '/emi',
+    'EMI Policy',
+    'We offer flexible EMI facilities for your favorite gadgets and apparel.',
+  );
+}

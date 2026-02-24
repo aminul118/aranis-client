@@ -1,5 +1,7 @@
 import Container from '@/components/ui/Container';
+import { generateDynamicMeta } from '@/seo/generateDynamicMeta';
 import { Clock } from 'lucide-react';
+import { Metadata } from 'next';
 
 const PreOrderPage = () => {
   return (
@@ -19,3 +21,11 @@ const PreOrderPage = () => {
 };
 
 export default PreOrderPage;
+
+export async function generateMetadata(): Promise<Metadata> {
+  return generateDynamicMeta(
+    '/pre-order',
+    'Pre-Order',
+    'Be the first to get your hands on the latest premium collections.',
+  );
+}

@@ -6,7 +6,7 @@ const generateMetaTags = ({
   title,
   description,
   keywords,
-  image = metaConfig.baseImage,
+  image,
   websitePath = '',
 }: MetaProps): Metadata => {
   const cleanPath = websitePath.replace(/^\/+/, '').replace(/\/+$/, '');
@@ -19,33 +19,36 @@ const generateMetaTags = ({
     facebook_app_id,
     authors_name,
     authorPortfolio,
-    category,
     publisher,
     bookmarks,
   } = metaConfig;
 
+  const finalTitle = title || siteName;
+  const finalDescription = description || metaConfig.category;
+  const finalImage = image || metaConfig.baseImage;
+
   return {
     metadataBase: new URL(baseUrl),
-    title,
-    description,
+    title: finalTitle,
+    description: finalDescription,
     keywords,
-    category,
+    category: metaConfig.category,
     openGraph: {
       type: 'website',
       url: `${baseUrl}/${cleanPath}`,
-      title,
-      description,
+      title: finalTitle,
+      description: finalDescription,
       siteName,
-      images: [{ url: image, alt: title }],
+      images: [{ url: finalImage, alt: finalTitle }],
     },
     robots: { index: true, follow: true },
     twitter: {
       card: 'summary_large_image',
       site: twitter_site,
       creator: twitter_site,
-      title,
-      description,
-      images: image,
+      title: finalTitle,
+      description: finalDescription,
+      images: finalImage,
     },
     applicationName,
     alternates: {

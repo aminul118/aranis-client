@@ -117,7 +117,7 @@ const HomeSEOContent = () => {
             {highlights.map((h) => (
               <div
                 key={h}
-                className="group relative flex items-center gap-3 rounded-2xl border border-white/5 bg-white/[0.02] p-4 transition-all hover:bg-white/[0.05]"
+                className="group relative flex items-center gap-3 rounded-2xl border border-white/5 bg-white/2 p-4 transition-all hover:bg-white/5"
               >
                 <div className="bg-primary/20 grid h-6 w-6 place-items-center rounded-full">
                   <Check className="text-primary h-3.5 w-3.5" strokeWidth={3} />
@@ -145,7 +145,7 @@ const HomeSEOContent = () => {
                   <span className="bg-primary/10 text-primary rounded-full px-4 py-1 text-xs font-bold tracking-widest uppercase">
                     {section.badge}
                   </span>
-                  <div className="h-px flex-1 bg-gradient-to-r from-white/10 to-transparent" />
+                  <div className="h-px flex-1 bg-linear-to-r from-white/10 to-transparent" />
                 </div>
 
                 <h3 className="text-foreground text-3xl font-extrabold tracking-tight md:text-5xl">
@@ -169,7 +169,7 @@ const HomeSEOContent = () => {
 
               {/* Decorative side element */}
               <div className="bg-primary/5 relative grid h-[300px] flex-1 place-items-center overflow-hidden rounded-[48px] border border-white/5 opacity-50 backdrop-blur-3xl md:h-[400px]">
-                <div className="absolute inset-0 bg-gradient-to-br from-white/[0.03] to-transparent" />
+                <div className="absolute inset-0 bg-linear-to-br from-white/3 to-transparent" />
                 <span className="text-9xl font-black text-white/5 italic select-none">
                   {section.badge.charAt(0)}
                 </span>
@@ -180,7 +180,7 @@ const HomeSEOContent = () => {
 
         {/* Global Standards & Distribution Section */}
         <footer className="mt-32 md:mt-48">
-          <div className="relative overflow-hidden rounded-[64px] border border-white/10 bg-white/[0.02] p-8 shadow-2xl backdrop-blur-md md:p-20">
+          <div className="relative overflow-hidden rounded-[64px] border border-white/10 bg-white/2 p-8 shadow-2xl backdrop-blur-md md:p-20">
             <div className="relative z-10 grid gap-16 lg:grid-cols-2 lg:gap-24">
               <div className="space-y-8">
                 <h3 className="text-foreground text-3xl font-extrabold md:text-4xl">

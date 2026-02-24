@@ -3,37 +3,52 @@ import { Routes } from '@/types';
 export const staticRoutes: Routes[] = [
   {
     url: '',
-    changeFrequency: 'monthly',
+    changeFrequency: 'daily',
     priority: 1.0,
   },
   {
-    url: 'about',
-    changeFrequency: 'monthly',
-    priority: 1.0,
+    url: 'shop',
+    changeFrequency: 'daily',
+    priority: 0.9,
   },
   {
-    url: 'projects',
+    url: 'cart',
     changeFrequency: 'monthly',
-    priority: 1.0,
+    priority: 0.5,
+  },
+  {
+    url: 'checkout',
+    changeFrequency: 'monthly',
+    priority: 0.5,
   },
   {
     url: 'contact',
     changeFrequency: 'monthly',
+    priority: 0.7,
+  },
+  {
+    url: 'emi',
+    changeFrequency: 'monthly',
+    priority: 0.6,
+  },
+  {
+    url: 'pre-order',
+    changeFrequency: 'daily',
     priority: 0.8,
   },
   {
-    url: 'skills',
+    url: 'location',
     changeFrequency: 'monthly',
-    priority: 0.8,
+    priority: 0.7,
   },
   {
-    url: 'experience',
-    changeFrequency: 'monthly',
-    priority: 0.8,
+    url: 'privacy-policy',
+    changeFrequency: 'yearly',
+    priority: 0.3,
   },
   {
-    url: 'blogs',
-    changeFrequency: 'monthly',
-    priority: 0.8,
+    url: 'terms-conditions',
+    changeFrequency: 'yearly',
+    priority: 0.3,
   },
 ];

@@ -1,21 +1,21 @@
 import { MetaConfig } from '@/types';
 
 const metaConfig: MetaConfig = {
-  baseUrl: 'https://www.aminuldev.site',
+  baseUrl: 'https://lumiere-fashion.vercel.app', // Update with actual domain if known
   baseImage: '/og-image.png',
-  siteName: 'Md. Aminul Islam Portfolio',
-  category: 'portfolio',
-  applicationName: 'Md. Aminul Islam Portfolio',
-  facebook_app_id: '580317868506376',
-  authors_name: 'Md. Aminul Islam',
-  authorPortfolio: 'http://www.aminuldev.site',
-  twitter_site: '@aminul118',
-  bookmarks: 'https://www.aminuldev.site/logo.png',
+  siteName: 'Lumiere Fashion',
+  category: 'Premium Contemporary Clothing',
+  applicationName: 'Lumiere Fashion Store',
+  facebook_app_id: '',
+  authors_name: 'Lumiere Fashion Team',
+  authorPortfolio: 'https://lumiere-fashion.vercel.app',
+  twitter_site: '@lumierefashion',
+  bookmarks: '/logo.png',
   verification: {
-    google: 'xUHURPD29At_D9F66UvFk6hYJXWC6i0lmpjcVL4c_LA',
-    microsoft_bing: 'EE37CB89A12B6DB168EE052A7D138295',
+    google: '',
+    microsoft_bing: '',
   },
-  publisher: 'https://www.aminuldev.site',
+  publisher: 'Lumiere Fashion',
   preventCrawler: ['/dashboard', '/admin'],
 };
 

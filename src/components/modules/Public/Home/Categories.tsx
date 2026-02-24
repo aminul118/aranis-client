@@ -1,11 +1,7 @@
-'use client';
-
 import { generateShopPath } from '@/lib/url-slugs';
-import { getCategories, ICategory } from '@/services/category/category';
-import { motion } from 'framer-motion';
+import { getCategories } from '@/services/category/category';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
 
 const categoryImages: Record<string, string> = {
   Men: 'https://images.unsplash.com/photo-1516259762381-22954d7d3ad2?auto=format&fit=crop&q=80&w=800',
@@ -15,25 +11,10 @@ const categoryImages: Record<string, string> = {
     'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=800',
 };
 
-const Categories = () => {
-  const [categories, setCategories] = useState<ICategory[]>([]);
-  const [loading, setLoading] = useState(true);
+const Categories = async () => {
+  const { data: categories = [] } = await getCategories({});
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const { data } = await getCategories({});
-        setCategories(data || []);
-      } catch (error) {
-        console.error('Failed to fetch categories', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchCategories();
-  }, []);
-
-  if (loading) return null;
+  if (categories.length === 0) return null;
 
   return (
     <section className="bg-background py-24">
@@ -42,17 +23,13 @@ const Categories = () => {
           <h2 className="text-foreground mb-4 text-3xl font-bold md:text-4xl">
             Shop by Category
           </h2>
-          <div className="mx-auto h-1 w-20 rounded-full bg-blue-600" />
+          <div className="bg-primary mx-auto h-1 w-20 rounded-full" />
         </div>
 
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
-          {categories.map((category, index) => (
-            <motion.div
+          {categories.map((category) => (
+            <div
               key={category._id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1, duration: 0.6 }}
               className="group relative aspect-3/4 overflow-hidden rounded-2xl"
             >
               <Image
@@ -71,13 +48,13 @@ const Categories = () => {
                 </p>
                 <Link
                   href={generateShopPath(category.name)}
-                  className="inline-flex items-center text-sm font-bold tracking-widest text-blue-400 uppercase transition-colors hover:text-blue-300"
+                  className="text-primary inline-flex items-center text-sm font-bold tracking-widest uppercase transition-colors"
                 >
                   Explore Now
-                  <span className="ml-2 h-px w-0 bg-blue-400 transition-all duration-300 group-hover:w-8" />
+                  <span className="bg-primary ml-2 h-px w-0 transition-all duration-300 group-hover:w-8" />
                 </Link>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>
