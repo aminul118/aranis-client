@@ -188,7 +188,7 @@ const ShopContent = ({ initialFilters }: ShopContentProps) => {
     <TransitionContext.Provider value={{ startTransition, isPending }}>
       <div
         className={cn(
-          'bg-background min-h-screen pt-28 pb-20 transition-opacity',
+          'bg-background min-h-screen pb-20 transition-opacity',
           isPending && 'pointer-events-none opacity-50',
         )}
       >

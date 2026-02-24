@@ -22,7 +22,7 @@ const RootLayout = async ({ children }: Children) => {
   return (
     <main className="flex min-h-screen flex-col">
       <Navbar user={user as any} navItems={sortedNavItems as any} />
-      <div className="grow">{children}</div>
+      <div className="grow pt-[60px] lg:pt-[156px]">{children}</div>
       <ChatFloatingButton user={user as any} />
       <Footer />
     </main>
