@@ -50,31 +50,17 @@ const ShopContent = ({ initialFilters }: ShopContentProps) => {
   const selectedColors = searchParams.get('color')?.split(',') || [];
   const selectedSizes = searchParams.get('sizes')?.split(',') || [];
   const sortBy = searchParams.get('sort') || 'Newest';
-  const viewModeParam = searchParams.get('view') || 'grid';
-
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
-  // Load view mode from localStorage or URL on mount
+  // Load view mode from localStorage on mount
   useEffect(() => {
     const savedView = localStorage.getItem('lumiere_shop_view') as
       | 'grid'
       | 'list';
-    const viewParam = searchParams.get('view') as 'grid' | 'list';
 
-    if (viewParam && (viewParam === 'grid' || viewParam === 'list')) {
-      setViewMode(viewParam);
-      localStorage.setItem('lumiere_shop_view', viewParam);
-    } else if (savedView && (savedView === 'grid' || savedView === 'list')) {
+    if (savedView && (savedView === 'grid' || savedView === 'list')) {
       setViewMode(savedView);
-      // Keep URL in sync with preference
-      const params = new URLSearchParams(window.location.search);
-      if (params.get('view') !== savedView) {
-        params.set('view', savedView);
-        router.replace(`${window.location.pathname}?${params.toString()}`, {
-          scroll: false,
-        });
-      }
     }
   }, []);
 
@@ -136,6 +122,13 @@ const ShopContent = ({ initialFilters }: ShopContentProps) => {
     let nextType = selectedType;
 
     Object.entries(newParams).forEach(([key, value]) => {
+      if (key === 'view') {
+        const nextView = value as 'grid' | 'list';
+        setViewMode(nextView);
+        localStorage.setItem('lumiere_shop_view', nextView);
+        return; // Don't add to URL params
+      }
+
       if (key === 'category') nextCategory = value || 'All';
       else if (key === 'subCategory') nextSubCategory = value || '';
       else if (key === 'type' || key === 'item') nextType = value || '';
@@ -144,14 +137,11 @@ const ShopContent = ({ initialFilters }: ShopContentProps) => {
           params.delete(key);
         } else {
           params.set(key, value);
-          // Persist view mode preference
-          if (key === 'view') {
-            setViewMode(value as 'grid' | 'list');
-            localStorage.setItem('lumiere_shop_view', value);
-          }
         }
       }
     });
+
+    params.delete('view'); // Final safety check to ensure 'view' is stripped
 
     if (!newParams.page) {
       params.delete('page');
