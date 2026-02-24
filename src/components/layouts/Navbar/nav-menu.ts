@@ -10,35 +10,14 @@ export interface NavMenu {
 }
 
 const navItems: NavMenu[] = [
-  { title: 'Home', href: '/' },
-  { title: 'Shop', href: '/shop' },
-  {
-    title: 'Men',
-    href: '/shop/Men',
-    subItems: [
-      { title: 'Shirts', items: ['Formal', 'Casual', 'Oversized'] },
-      { title: 'Pants', items: ['Denim', 'Chinos', 'Cargo'] },
-      { title: 'Blazers', items: ['Velvet', 'Wool', 'Linen'] },
-    ],
-  },
-  {
-    title: 'Women',
-    href: '/shop/Women',
-    subItems: [
-      { title: 'Dresses', items: ['Evening', 'Summer', 'Cocktail'] },
-      { title: 'Tops', items: ['Blouses', 'Knitwear', 'Tees'] },
-      { title: 'Skirts', items: ['Midi', 'Mini', 'Pleated'] },
-    ],
-  },
-  {
-    title: 'Accessories',
-    href: '/shop/Accessories',
-    subItems: [
-      { title: 'Watches', items: ['Classic', 'Sport', 'Luxury'] },
-      { title: 'Bags', items: ['Handbags', 'Backpacks', 'Clutches'] },
-      { title: 'Jewelry', items: ['Necklaces', 'Bracelets', 'Rings'] },
-    ],
-  },
+  { title: 'PHONES', href: '/shop/Phones' },
+  { title: 'TABLET', href: '/shop/Tablet' },
+  { title: 'LAPTOP', href: '/shop/Laptop' },
+  { title: 'SMART WATCH', href: '/shop/Smart-Watch' },
+  { title: 'GADGET', href: '/shop/Gadget' },
+  { title: 'ACCESSORIES', href: '/shop/Accessories' },
+  { title: 'SOUNDS', href: '/shop/Sounds' },
+  { title: 'SMART TV', href: '/shop/Smart-TV' },
 ];
 
 export { navItems };
