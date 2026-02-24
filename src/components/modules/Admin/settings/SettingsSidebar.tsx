@@ -5,15 +5,30 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { settingNavigationMenu } from './settingNavigationMenu';
 
-const SettingsSidebar = ({ basePath = '/admin/settings' }: { basePath?: string }) => {
+import { IUser } from '@/types';
+
+const SettingsSidebar = ({
+  basePath = '/admin/settings',
+  user,
+}: {
+  basePath?: string;
+  user?: IUser;
+}) => {
   const pathname = usePathname();
+
+  const filteredMenu = settingNavigationMenu.filter((item) => {
+    if (!item.roles) return true;
+    if (!user) return false;
+    return (item.roles as string[]).includes(user.role);
+  });
 
   return (
     <aside className="w-full lg:w-64">
       <nav className="space-y-2">
-        {settingNavigationMenu.map((item) => {
+        {filteredMenu.map((item) => {
           const Icon = item.icon;
-          const isActive = pathname === item.href.replace('/admin/settings', basePath);
+          const isActive =
+            pathname === item.href.replace('/admin/settings', basePath);
           const href = item.href.replace('/admin/settings', basePath);
 
           return (

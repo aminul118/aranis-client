@@ -46,6 +46,7 @@ const adminSidebarMenu: MenuGroup[] = [
     menu: [
       { name: 'Users', url: '/admin/users', icon: Users },
       { name: 'Support Center', url: '/admin/chat', icon: MessageCircle },
+      { name: 'Site Settings', url: '/settings/site', icon: Globe },
     ],
   },
 ];

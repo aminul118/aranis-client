@@ -1,4 +1,4 @@
-import { KeyRound, Palette, User } from 'lucide-react';
+import { Globe, Lock, Palette, User } from 'lucide-react';
 
 const settingNavigationMenu = [
   {
@@ -12,7 +12,7 @@ const settingNavigationMenu = [
     id: 'password',
     label: 'Password',
     href: '/admin/settings/password',
-    icon: KeyRound,
+    icon: Lock,
     description: 'Update your password',
   },
   {
@@ -21,6 +21,14 @@ const settingNavigationMenu = [
     href: '/admin/settings/appearance',
     icon: Palette,
     description: 'Customize theme and appearance',
+  },
+  {
+    id: 'site',
+    label: 'Site Settings',
+    href: '/admin/settings/site',
+    icon: Globe,
+    description: 'Manage logo and social links',
+    roles: ['ADMIN', 'SUPER_ADMIN'],
   },
 ];
 

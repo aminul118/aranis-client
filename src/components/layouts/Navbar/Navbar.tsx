@@ -1,6 +1,6 @@
 'use client';
 
-import AminulLogo from '@/components/common/AminulLogo';
+import AminulLogo from '@/components/common/Logo';
 import { Button } from '@/components/ui/button';
 import { toUrlSlug } from '@/lib/url-slugs';
 import { cn } from '@/lib/utils';
@@ -29,9 +29,11 @@ interface MobileProps {
 const Navbar = ({
   user,
   navItems = [],
+  logoUrl,
 }: {
   user: IUser | null;
   navItems?: NavMenu[];
+  logoUrl?: string;
 }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -66,12 +68,12 @@ const Navbar = ({
       )}
     >
       <TopBar />
-      <MainNavbar user={user} />
+      <MainNavbar user={user} logoUrl={logoUrl} />
       <CategoryBar />
 
-      {/* Mobile Header (Shown on mobile instead of the tiers above if desired, but image shows a more complex mobile nav) */}
+      {/* Mobile Header */}
       <div className="flex items-center justify-between border-b border-white/10 bg-[#111111] px-4 py-3 lg:hidden">
-        <AminulLogo className="origin-left scale-75" />
+        <AminulLogo className="origin-left scale-75" logoUrl={logoUrl} />
         <div className="flex items-center gap-4">
           <Link href="/cart" className="relative text-white">
             <ShoppingCart size={20} />
@@ -90,13 +92,23 @@ const Navbar = ({
       </div>
 
       <AnimatePresence>
-        {menuOpen && <Mobile navItems={navItems} setMenuOpen={setMenuOpen} />}
+        {menuOpen && (
+          <Mobile
+            navItems={navItems}
+            setMenuOpen={setMenuOpen}
+            logoUrl={logoUrl}
+          />
+        )}
       </AnimatePresence>
     </motion.header>
   );
 };
 
-const Mobile = ({ navItems, setMenuOpen }: MobileProps) => {
+const Mobile = ({
+  navItems,
+  setMenuOpen,
+  logoUrl,
+}: MobileProps & { logoUrl?: string }) => {
   const pathname = usePathname();
   const pathSegments = pathname.split('/').filter(Boolean);
   const currentCategorySlug = pathSegments[0];
@@ -111,7 +123,10 @@ const Mobile = ({ navItems, setMenuOpen }: MobileProps) => {
     >
       <div className="flex h-full flex-col p-4">
         <div className="mb-8 flex items-center justify-between">
-          <AminulLogo className="scale-90 text-black! dark:text-white!" />
+          <AminulLogo
+            className="scale-90 text-black! dark:text-white!"
+            logoUrl={logoUrl}
+          />
           <button
             onClick={() => setMenuOpen(false)}
             className="p-2 text-gray-900"

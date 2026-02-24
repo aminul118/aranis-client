@@ -5,6 +5,7 @@ import UserSidebar from '@/components/layouts/User/user-sidebar';
 import UserHeader from '@/components/layouts/User/UserHeader';
 import SettingsSidebar from '@/components/modules/Admin/settings/SettingsSidebar';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
+import { getSiteSettings } from '@/services/settings/settings';
 import { getMe } from '@/services/user/users';
 import { Role } from '@/types';
 import { Suspense } from 'react';
@@ -14,7 +15,10 @@ export default async function SettingsLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { data: user } = await getMe();
+  const [{ data: user }, { data: siteSettings }] = await Promise.all([
+    getMe(),
+    getSiteSettings(),
+  ]);
 
   if (!user) {
     return null;
@@ -26,7 +30,7 @@ export default async function SettingsLayout({
     return (
       <SidebarProvider>
         <Suspense fallback={<AdminSidebarSkeleton />}>
-          <AdminSidebar user={user} />
+          <AdminSidebar user={user} logoUrl={siteSettings?.logo} />
         </Suspense>
         <SidebarInset>
           <AdminHeader user={user} />
@@ -38,7 +42,7 @@ export default async function SettingsLayout({
               </p>
             </div>
             <div className="flex flex-col gap-6 lg:flex-row">
-              <SettingsSidebar basePath="/settings" />
+              <SettingsSidebar basePath="/settings" user={user} />
               <main className="max-w-3xl flex-1">{children}</main>
             </div>
           </div>
@@ -64,7 +68,7 @@ export default async function SettingsLayout({
             </p>
           </div>
           <div className="flex flex-col gap-8 lg:flex-row">
-            <SettingsSidebar basePath="/settings" />
+            <SettingsSidebar basePath="/settings" user={user} />
             <main className="max-w-4xl flex-1">{children}</main>
           </div>
         </div>

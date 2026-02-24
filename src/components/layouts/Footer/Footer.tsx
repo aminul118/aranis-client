@@ -1,5 +1,6 @@
-import AminulLogo from '@/components/common/AminulLogo';
+import AminulLogo from '@/components/common/Logo';
 import SocialLinks from '@/components/modules/Public/Home/SocialLinks';
+import { ISocialLink } from '@/services/settings/settings';
 import Link from 'next/link';
 import ThemeToggle from './ThemeToggle';
 
@@ -19,7 +20,12 @@ const customerServiceLinks = [
   { title: 'Help Center', href: '/help' },
 ];
 
-const Footer = () => {
+interface FooterProps {
+  socialLinks?: ISocialLink[];
+  logoUrl?: string;
+}
+
+const Footer = ({ socialLinks = [], logoUrl }: FooterProps) => {
   return (
     <footer className="relative overflow-hidden bg-slate-900">
       {/* Top gradient line */}
@@ -35,7 +41,7 @@ const Footer = () => {
           {/* Brand Column */}
           <div className="lg:col-span-1">
             <div className="mb-4">
-              <AminulLogo />
+              <AminulLogo logoUrl={logoUrl} />
             </div>
             <p className="mb-6 max-w-xs text-sm leading-relaxed text-slate-400">
               Lumiere Fashion - Discover the latest trends in high-quality
@@ -44,7 +50,7 @@ const Footer = () => {
             </p>
 
             {/* Social Icons */}
-            <SocialLinks />
+            <SocialLinks links={socialLinks} />
           </div>
 
           {/* Quick Links */}

@@ -17,7 +17,7 @@ import {
   LayoutDashboard,
   Lock,
   MessageCircle,
-  Settings,
+  Palette,
   User,
 } from 'lucide-react';
 import Link from 'next/link';
@@ -28,7 +28,7 @@ interface Props {
   portalType?: 'admin' | 'user';
 }
 
-const HeaderUser = ({ user, portalType }: Props) => {
+const HeaderUser = ({ user }: Props) => {
   const pathname = usePathname();
   const isInsidePortal =
     pathname.startsWith('/admin') || pathname.startsWith('/user');
@@ -48,49 +48,56 @@ const HeaderUser = ({ user, portalType }: Props) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Avatar className="border-primary/10 hover:border-primary/30 h-9 w-9 cursor-pointer border-2 transition-all">
+        {/* ✅ Always dark avatar styling */}
+        <Avatar className="h-9 w-9 cursor-pointer border-2 border-white/15 transition-all hover:border-white/30">
           <AvatarImage
             src={user?.picture ? user?.picture : '/profile.jpg'}
             alt={user?.fullName}
           />
-          <AvatarFallback className="bg-primary/10 text-primary">
+          <AvatarFallback className="bg-white/10 text-white">
             {initials}
           </AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
+
+      {/* ✅ Always dark dropdown (ignores theme) */}
       <DropdownMenuContent
-        className="w-64 rounded-xl p-2"
+        className="w-64 rounded-xl border border-white/10 bg-[#0b0b0b] p-2 text-white shadow-xl"
         align="end"
         sideOffset={8}
       >
         <DropdownMenuLabel className="p-2 font-normal">
           <div className="flex items-center gap-3">
-            <Avatar className="border-border h-10 w-10 border">
+            <Avatar className="h-10 w-10 border border-white/10">
               <AvatarImage
                 src={user?.picture ? user?.picture : '/profile.jpg'}
                 alt={user?.fullName}
               />
-              <AvatarFallback>{initials}</AvatarFallback>
+              <AvatarFallback className="bg-white/10 text-white">
+                {initials}
+              </AvatarFallback>
             </Avatar>
+
             <div className="flex flex-col space-y-0.5">
-              <span className="truncate text-sm leading-none font-bold">
+              <span className="truncate text-sm leading-none font-bold text-white">
                 {user?.fullName}
               </span>
-              <span className="text-muted-foreground truncate text-[11px] leading-none">
+              <span className="truncate text-[11px] leading-none text-white/60">
                 {user?.email}
               </span>
             </div>
           </div>
         </DropdownMenuLabel>
-        <DropdownMenuSeparator className="my-2" />
+
+        <DropdownMenuSeparator className="my-2 bg-white/10" />
 
         <DropdownMenuGroup className="space-y-1">
           <DropdownMenuItem asChild>
             <Link
               href="/settings/profile"
-              className="hover:bg-accent flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2"
+              className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-white/90 transition-colors hover:bg-white/10 hover:text-white focus:bg-white/10"
             >
-              <User className="text-muted-foreground h-4 w-4" />
+              <User className="h-4 w-4 text-white/60" />
               <span className="text-sm">My Profile</span>
             </Link>
           </DropdownMenuItem>
@@ -99,9 +106,9 @@ const HeaderUser = ({ user, portalType }: Props) => {
             <DropdownMenuItem asChild>
               <Link
                 href={dashboardRoute}
-                className="hover:bg-accent flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2"
+                className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-white/90 transition-colors hover:bg-white/10 hover:text-white focus:bg-white/10"
               >
-                <LayoutDashboard className="text-muted-foreground h-4 w-4" />
+                <LayoutDashboard className="h-4 w-4 text-white/60" />
                 <span className="text-sm">Dashboard</span>
               </Link>
             </DropdownMenuItem>
@@ -110,9 +117,9 @@ const HeaderUser = ({ user, portalType }: Props) => {
           <DropdownMenuItem asChild>
             <Link
               href="/settings/password"
-              className="hover:bg-accent flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2"
+              className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-white/90 transition-colors hover:bg-white/10 hover:text-white focus:bg-white/10"
             >
-              <Lock className="text-muted-foreground h-4 w-4" />
+              <Lock className="h-4 w-4 text-white/60" />
               <span className="text-sm">Password</span>
             </Link>
           </DropdownMenuItem>
@@ -120,17 +127,18 @@ const HeaderUser = ({ user, portalType }: Props) => {
           <DropdownMenuItem asChild>
             <Link
               href="/settings/appearance"
-              className="hover:bg-accent flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2"
+              className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-white/90 transition-colors hover:bg-white/10 hover:text-white focus:bg-white/10"
             >
-              <Settings className="text-muted-foreground h-4 w-4" />
+              <Palette className="h-4 w-4 text-white/60" />
               <span className="text-sm">Appearance</span>
             </Link>
           </DropdownMenuItem>
 
+          {/* ✅ Keep link visible on dark always */}
           <DropdownMenuItem asChild>
             <Link
               href="/user/chat"
-              className="hover:bg-accent flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 font-medium text-blue-600 dark:text-blue-400"
+              className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 font-medium text-blue-400 transition-colors hover:bg-white/10 hover:text-blue-300 focus:bg-white/10"
             >
               <MessageCircle className="h-4 w-4" />
               <span className="text-sm">Live Support Chat</span>
@@ -138,8 +146,10 @@ const HeaderUser = ({ user, portalType }: Props) => {
           </DropdownMenuItem>
         </DropdownMenuGroup>
 
-        <DropdownMenuSeparator className="my-2" />
+        <DropdownMenuSeparator className="my-2 bg-white/10" />
+
         <div className="px-1">
+          {/* If LogOutDropDown has theme colors inside, paste it and I’ll dark-force it too */}
           <LogOutDropDown />
         </div>
       </DropdownMenuContent>

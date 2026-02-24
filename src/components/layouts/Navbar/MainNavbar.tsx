@@ -1,6 +1,6 @@
 'use client';
 
-import AminulLogo from '@/components/common/AminulLogo';
+import AminulLogo from '@/components/common/Logo';
 import { useCart } from '@/context/CartContext';
 import { IUser } from '@/types';
 import { Clock, Gift, ShoppingCart, User } from 'lucide-react';
@@ -13,9 +13,10 @@ import NavSearch from './NavSearch';
 
 interface MainNavbarProps {
   user?: IUser | null;
+  logoUrl?: string;
 }
 
-const MainNavbar = ({ user }: MainNavbarProps) => {
+const MainNavbar = ({ user, logoUrl }: MainNavbarProps) => {
   const { totalItems } = useCart();
   const [searchQuery, setSearchQuery] = useState('');
   const router = useRouter();
@@ -28,14 +29,15 @@ const MainNavbar = ({ user }: MainNavbarProps) => {
   };
 
   return (
-    <div className="w-full border-b border-gray-100 bg-white py-4 transition-colors dark:border-none dark:bg-[#111111]">
+    // ✅ Always black background (light/dark theme doesn't affect)
+    <div className="w-full border-b border-white/10 bg-black py-4 text-white">
       <div className="container mx-auto flex items-center gap-4 px-4 lg:gap-8">
         {/* Logo */}
         <div className="shrink-0 origin-left scale-90 lg:scale-100">
-          <AminulLogo className="text-black! dark:text-white!" />
+          <AminulLogo className="text-white" logoUrl={logoUrl} />
         </div>
 
-        {/* Modal Search Bar */}
+        {/* Search */}
         <NavSearch />
 
         {/* Action Buttons */}
@@ -56,10 +58,10 @@ const MainNavbar = ({ user }: MainNavbarProps) => {
           {/* Pre-Order Button */}
           <Link
             href="/pre-order"
-            className="hidden items-center gap-2 rounded-md border border-gray-100 px-4 py-2 transition-colors hover:bg-gray-50 lg:flex dark:border-white/20 dark:hover:bg-white/5"
+            className="hidden items-center gap-2 rounded-md border border-white/20 px-4 py-2 transition-colors hover:bg-white/5 lg:flex"
           >
-            <Clock size={16} className="text-gray-400 dark:text-white/60" />
-            <span className="text-[10px] font-bold tracking-widest text-gray-900 uppercase dark:text-white">
+            <Clock size={16} className="text-white/70" />
+            <span className="text-[10px] font-bold tracking-widest text-white uppercase">
               Pre Order
             </span>
           </Link>
@@ -67,20 +69,17 @@ const MainNavbar = ({ user }: MainNavbarProps) => {
           {/* Cart */}
           <Link
             href="/cart"
-            className="group flex items-center gap-2 rounded-md border border-gray-100 px-4 py-2 transition-colors hover:bg-gray-50 dark:border-white/20 dark:hover:bg-white/5"
+            className="group flex items-center gap-2 rounded-md border border-white/20 px-4 py-2 transition-colors hover:bg-white/5"
           >
             <div className="relative">
-              <ShoppingCart
-                size={18}
-                className="text-gray-900 dark:text-white"
-              />
+              <ShoppingCart size={18} className="text-white" />
               {totalItems > 0 && (
-                <span className="absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center rounded-full border-2 border-white bg-blue-600 text-[8px] font-bold text-white dark:border-[#111111]">
+                <span className="absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center rounded-full border-2 border-black bg-blue-600 text-[8px] font-bold text-white">
                   {totalItems}
                 </span>
               )}
             </div>
-            <span className="hidden text-[10px] font-bold tracking-widest text-gray-900 uppercase md:inline dark:text-white">
+            <span className="hidden text-[10px] font-bold tracking-widest text-white uppercase md:inline">
               Cart
             </span>
           </Link>
@@ -92,12 +91,13 @@ const MainNavbar = ({ user }: MainNavbarProps) => {
                 <NotificationBell user={user} />
               </div>
             )}
+
             {user ? (
               <HeaderUser user={user} />
             ) : (
               <Link
                 href="/login"
-                className="flex items-center gap-2 rounded-md border border-white/20 bg-white px-4 py-2 transition-colors hover:bg-gray-100"
+                className="flex items-center gap-2 rounded-md border border-white/20 bg-white px-4 py-2 transition-colors hover:bg-gray-200"
               >
                 <User size={16} className="text-gray-900" />
                 <span className="text-[10px] font-black tracking-widest text-gray-900 uppercase">

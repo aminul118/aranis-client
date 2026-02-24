@@ -5,9 +5,12 @@ import Link from 'next/link';
 
 interface Props {
   className?: string;
+  logoUrl?: string;
 }
 
-const AminulLogo = ({ className }: Props) => {
+const Logo = ({ className, logoUrl }: Props) => {
+  const src = logoUrl || icons.logo;
+
   return (
     <>
       <Link
@@ -16,16 +19,16 @@ const AminulLogo = ({ className }: Props) => {
         className={cn('flex items-center text-2xl font-semibold', className)}
       >
         <Image
-          src={icons.logo}
-          height={40}
-          width={40}
-          alt="Md Aminul Islam Developer logo"
+          src={src}
+          height={80}
+          width={180}
+          alt="Lumiere logo"
           priority={true}
+          className="object-contain"
         />
-        <p className="text-white">Lumiere</p>
       </Link>
     </>
   );
 };
 
-export default AminulLogo;
+export default Logo;
