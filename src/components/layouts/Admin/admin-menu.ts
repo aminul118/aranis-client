@@ -5,6 +5,7 @@ import {
   Layers,
   LayoutDashboard,
   Menu as MenuIcon,
+  MessageCircle,
   Package,
   Palette,
   ShoppingCart,
@@ -41,8 +42,12 @@ const adminSidebarMenu: MenuGroup[] = [
   {
     title: 'System',
     // Only SUPER_ADMIN sees user management by default
-    roles: ['SUPER_ADMIN'] as UserRole[],
-    menu: [{ name: 'Users', url: '/admin/users', icon: Users }],
+    roles: ['SUPER_ADMIN', 'ADMIN'] as UserRole[],
+    menu: [
+      { name: 'Users', url: '/admin/users', icon: Users },
+      { name: 'Support Center', url: '/admin/chat', icon: MessageCircle },
+      { name: 'Live Support', url: '/user/chat', icon: MessageCircle },
+    ],
   },
 ];
 

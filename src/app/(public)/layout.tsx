@@ -1,4 +1,5 @@
 import Footer from '@/components/layouts/Footer/Footer';
+import ChatFloatingButton from '@/components/layouts/Navbar/ChatFloatingButton';
 import Navbar from '@/components/layouts/Navbar/Navbar';
 import { getNavbars } from '@/services/navbar/navbar';
 import { getMe } from '@/services/user/users';
@@ -14,12 +15,15 @@ const RootLayout = async ({ children }: Children) => {
   }
 
   const { data: navItems } = await getNavbars({});
-  const sortedNavItems = [...(navItems || [])].sort((a, b) => a.order - b.order);
+  const sortedNavItems = [...(navItems || [])].sort(
+    (a, b) => a.order - b.order,
+  );
 
   return (
     <main className="flex min-h-screen flex-col">
       <Navbar user={user as any} navItems={sortedNavItems as any} />
       <div className="grow">{children}</div>
+      <ChatFloatingButton user={user as any} />
       <Footer />
     </main>
   );

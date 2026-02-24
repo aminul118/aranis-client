@@ -17,8 +17,8 @@ import { usePathname } from 'next/navigation';
 import { Dispatch, SetStateAction, useState } from 'react';
 import CategoryBar from './CategoryBar';
 import MainNavbar from './MainNavbar';
-import { NavMenu } from './nav-menu';
 import TopBar from './TopBar';
+import { NavMenu } from './nav-menu';
 
 interface MobileProps {
   navItems: NavMenu[];

@@ -1,5 +1,11 @@
 import { MenuGroup } from '@/types/admin-menu';
-import { Globe, LayoutDashboard, Package, ShoppingBag } from 'lucide-react';
+import {
+  Globe,
+  LayoutDashboard,
+  MessageCircle,
+  Package,
+  ShoppingBag,
+} from 'lucide-react';
 
 const userSidebarMenu: MenuGroup[] = [
   {
@@ -7,6 +13,7 @@ const userSidebarMenu: MenuGroup[] = [
     menu: [
       { name: 'Dashboard', url: '/user', icon: LayoutDashboard },
       { name: 'Website', url: '/', icon: Globe },
+      { name: 'Live Chat', url: '/user/chat', icon: MessageCircle },
     ],
   },
   {

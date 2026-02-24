@@ -7,7 +7,6 @@ import {
   Cpu,
   Headphones,
   Laptop,
-  Menu,
   Smartphone,
   Speaker,
   Tablet,
@@ -53,11 +52,6 @@ const CategoryBar = () => {
     <div className="relative hidden w-full overflow-visible border-b border-gray-100 bg-white transition-colors lg:block dark:border-white/5 dark:bg-[#0a0a0a]">
       <div className="container mx-auto flex items-center justify-between px-4">
         <div className="flex items-center gap-1">
-          {/* Menu Icon Placeholder */}
-          <button className="mr-2 border-r border-gray-100 p-4 text-gray-600 transition-colors hover:text-blue-600 dark:border-white/5 dark:text-gray-400">
-            <Menu size={20} />
-          </button>
-
           {/* Category Links */}
           <div className="flex items-center">
             {navItems.map((item) => {
