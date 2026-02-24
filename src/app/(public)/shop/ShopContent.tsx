@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useCart } from '@/context/CartContext';
 import { TransitionContext } from '@/context/useTransition';
+import { generateShopPath } from '@/lib/url-slugs';
 import { cn } from '@/lib/utils';
 import { getProducts, IProduct } from '@/services/product/product';
 import { IMeta } from '@/types';
@@ -127,11 +128,27 @@ const ShopContent = ({ initialFilters }: ShopContentProps) => {
 
   const updateURL = (newParams: Record<string, string | null>) => {
     const params = new URLSearchParams(searchParams.toString());
+
+    // Separate structural params (path segments) from query params
+    const structuralKeys = ['category', 'subCategory', 'type', 'item'];
+    const hasStructuralChange = Object.keys(newParams).some((key) =>
+      structuralKeys.includes(key),
+    );
+
+    let nextCategory = selectedCategory;
+    let nextSubCategory = selectedSubCategory;
+    let nextType = selectedType;
+
     Object.entries(newParams).forEach(([key, value]) => {
-      if (value === null || value === 'All' || value === '') {
-        params.delete(key);
-      } else {
-        params.set(key, value);
+      if (key === 'category') nextCategory = value || 'All';
+      else if (key === 'subCategory') nextSubCategory = value || '';
+      else if (key === 'type' || key === 'item') nextType = value || '';
+      else {
+        if (value === null || value === 'All' || value === '') {
+          params.delete(key);
+        } else {
+          params.set(key, value);
+        }
       }
     });
 
@@ -139,9 +156,25 @@ const ShopContent = ({ initialFilters }: ShopContentProps) => {
       params.delete('page');
     }
 
-    // If we are on a dynamic path, we might want to navigate back to /shop if category changes
-    // But for now, let's just update params
-    router.push(`?${params.toString()}`);
+    // Clean up structural params from query string since they'll be in the path
+    params.delete('category');
+    params.delete('subCategory');
+    params.delete('type');
+    params.delete('item');
+
+    const searchStr = params.toString();
+    const queryStr = searchStr ? `?${searchStr}` : '';
+
+    if (hasStructuralChange || initialFilters) {
+      const nextPath = generateShopPath(
+        nextCategory,
+        nextSubCategory,
+        nextType,
+      );
+      router.push(`${nextPath}${queryStr}`);
+    } else {
+      router.push(`${queryStr}`, { scroll: false });
+    }
   };
 
   const toggleMultiFilter = (key: string, value: string, current: string[]) => {
@@ -213,11 +246,7 @@ const ShopContent = ({ initialFilters }: ShopContentProps) => {
                     <button
                       key={cat}
                       onClick={() => {
-                        if (initialFilters) {
-                          router.push(cat === 'All' ? '/shop' : `/shop/${cat}`);
-                        } else {
-                          updateURL({ category: cat });
-                        }
+                        updateURL({ category: cat, subCategory: '', type: '' });
                       }}
                       className={cn(
                         'text-left text-base transition-colors',
@@ -508,13 +537,11 @@ const ShopContent = ({ initialFilters }: ShopContentProps) => {
                       <button
                         key={cat}
                         onClick={() => {
-                          if (initialFilters) {
-                            router.push(
-                              cat === 'All' ? '/shop' : `/shop/${cat}`,
-                            );
-                          } else {
-                            updateURL({ category: cat });
-                          }
+                          updateURL({
+                            category: cat,
+                            subCategory: '',
+                            type: '',
+                          });
                           setIsSidebarOpen(false);
                         }}
                         className={cn(

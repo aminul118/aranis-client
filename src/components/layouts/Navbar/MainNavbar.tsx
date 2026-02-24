@@ -23,7 +23,7 @@ const MainNavbar = ({ user }: MainNavbarProps) => {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      router.push(`/shop?search=${encodeURIComponent(searchQuery)}`);
+      router.push(`/shop?q=${encodeURIComponent(searchQuery)}`);
     }
   };
 

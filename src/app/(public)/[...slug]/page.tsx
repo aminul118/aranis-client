@@ -1,5 +1,6 @@
+import { normalizeSlug } from '@/lib/url-slugs';
 import { Suspense } from 'react';
-import ShopContent from '../ShopContent';
+import ShopContent from '../shop/ShopContent';
 
 interface Props {
   params: Promise<{ slug: string[] }>;
@@ -8,10 +9,10 @@ interface Props {
 const DynamicShopPage = async ({ params }: Props) => {
   const { slug } = await params;
 
-  // slug = ['Men', 'Shirts', 'Formal']
-  const category = slug[0] || 'All';
-  const subCategory = slug[1] || '';
-  const type = slug[2] || '';
+  // slug = ['men', 'shirts', 'formal']
+  const category = slug[0] ? normalizeSlug(slug[0]) : 'All';
+  const subCategory = slug[1] ? normalizeSlug(slug[1]) : '';
+  const type = slug[2] ? normalizeSlug(slug[2]) : '';
 
   return (
     <Suspense

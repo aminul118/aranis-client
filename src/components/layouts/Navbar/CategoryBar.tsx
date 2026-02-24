@@ -1,5 +1,6 @@
 'use client';
 
+import { toUrlSlug } from '@/lib/url-slugs';
 import { cn } from '@/lib/utils';
 import { getNavbars, INavItem } from '@/services/navbar/navbar';
 import {
@@ -111,7 +112,7 @@ const CategoryBar = () => {
                             {sub.items.map((subItem) => (
                               <Link
                                 key={subItem}
-                                href={`/shop?category=${item.title}&subCategory=${sub.title}&item=${subItem}`}
+                                href={`/${toUrlSlug(item.title)}/${toUrlSlug(sub.title)}/${toUrlSlug(subItem)}`}
                                 className="text-xs font-bold text-gray-500 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
                               >
                                 {subItem}
