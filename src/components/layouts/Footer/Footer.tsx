@@ -12,11 +12,17 @@ const quickLinks = [
   { title: 'Accessories', href: '/accessories' },
 ];
 
+const authLinks = [
+  { title: 'Login', href: '/login' },
+  { title: 'Register', href: '/register' },
+  { title: 'Forgot Password', href: '/forgot-password' },
+];
+
 const customerServiceLinks = [
-  { title: 'My Account', href: '/profile' },
+  { title: 'My Account', href: '/user/my-profile' },
   { title: 'Track Order', href: '/track-order' },
-  { title: 'Returns & Exchanges', href: '/returns' },
-  { title: 'Shipping Policy', href: '/shipping' },
+  { title: 'Terms & Conditions', href: '/terms-conditions' },
+  { title: 'Privacy Policy', href: '/privacy-policy' },
   { title: 'Help Center', href: '/help' },
 ];
 
@@ -37,7 +43,7 @@ const Footer = ({ socialLinks = [], logoUrl }: FooterProps) => {
 
       <div className="container mx-auto px-4 pt-16 pb-8">
         {/* Main Footer Grid */}
-        <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-4">
           {/* Brand Column */}
           <div className="lg:col-span-1">
             <div className="mb-4">
@@ -60,6 +66,26 @@ const Footer = ({ socialLinks = [], logoUrl }: FooterProps) => {
             </h3>
             <ul className="space-y-3">
               {quickLinks.map(({ title, href }) => (
+                <li key={title}>
+                  <Link
+                    href={href}
+                    className="group flex items-center text-sm text-slate-400 transition-colors duration-300 hover:text-blue-400"
+                  >
+                    <span className="mr-2 inline-block h-px w-0 bg-blue-400 transition-all duration-300 group-hover:w-4" />
+                    {title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Authentication */}
+          <div>
+            <h3 className="mb-5 text-sm font-semibold tracking-wider text-white uppercase">
+              Authentication
+            </h3>
+            <ul className="space-y-3">
+              {authLinks.map(({ title, href }) => (
                 <li key={title}>
                   <Link
                     href={href}

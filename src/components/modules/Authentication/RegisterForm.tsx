@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
+import SubmitButton from '@/components/common/button/submit-button';
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -10,11 +12,12 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import SubmitButton from '@/components/common/button/submit-button';
 import Password from '@/components/ui/password';
+import useSearchParamsValues from '@/hooks/useSearchParamsValues';
 import { registerAction } from '@/services/user/register';
 import { registrationFormValidation } from '@/zod/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -23,6 +26,7 @@ import { z } from 'zod';
 type FormValues = z.infer<typeof registrationFormValidation>;
 
 const RegisterForm = () => {
+  const { redirect } = useSearchParamsValues('redirect');
   const router = useRouter();
   const form = useForm<FormValues>({
     resolver: zodResolver(registrationFormValidation),
@@ -45,7 +49,9 @@ const RegisterForm = () => {
         toast.success(res.message || 'Registration successful');
         form.reset();
         if (!res.data?.isVerified) {
-          router.push(`/verify?email=${res.data?.email}`);
+          router.push(
+            `/verify?email=${res.data?.email}${redirect ? `&redirect=${redirect}` : ''}`,
+          );
         }
       } else {
         toast.error(res.message || 'Failed to create user');
@@ -162,6 +168,15 @@ const RegisterForm = () => {
             loading={form.formState.isSubmitting}
             className="w-full"
           />
+
+          <div className="mt-4 text-center text-sm">
+            Already have an account?
+            <Link href={`/login${redirect ? `?redirect=${redirect}` : ''}`}>
+              <Button variant="link" className="p-0 pl-1">
+                Sign in
+              </Button>
+            </Link>
+          </div>
         </form>
       </Form>
     </div>

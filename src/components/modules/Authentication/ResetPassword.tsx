@@ -1,6 +1,5 @@
 'use client';
 
-import Logo from '@/assets/Logo';
 import SubmitButton from '@/components/common/button/submit-button';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -72,9 +71,6 @@ const ResetPassword = ({ props }: { props: Record<string, any> }) => {
                 className="flex flex-col gap-6"
               >
                 <div className="grid place-items-center">
-                  <Link href={'/'}>
-                    <Logo />
-                  </Link>
                   <p className="text-muted-foreground mt-4 text-center">
                     Reset your password to access your Smart Healthcare &
                     Research Ltd. portal

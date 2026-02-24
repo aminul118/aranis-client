@@ -14,11 +14,11 @@ export default ForgotPasswordPage;
 
 // SEO Metatags
 export const metadata: Metadata = generateMetaTags({
-  title: 'Forgot Password | Md Aminul Islam',
+  title: 'Forgot Password | Lumiere Fashion',
   description:
-    'Recover your account password for the Md Aminul Islam portfolio admin dashboard.',
+    'Recover your Lumiere Fashion account password to resume your premium shopping experience.',
   keywords:
-    'forgot password, password recovery, Aminul Islam, portfolio admin, secure login',
+    'forgot password, password recovery, Lumiere Fashion, secure account, fashion e-commerce',
   image: '/seo/aminul-hero-ss.png',
   websitePath: '/forgot-password',
 });

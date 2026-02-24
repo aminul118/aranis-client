@@ -17,11 +17,11 @@ export default VerifyOTPPage;
 
 // SEO Metatg
 export const metadata: Metadata = generateMetaTags({
-  title: 'Verify OTP | Md Aminul Islam',
+  title: 'Verify OTP | Lumiere Fashion',
   description:
-    'Verify your one-time password (OTP) to securely access the Md Aminul Islam portfolio admin panel.',
+    'Verify your account with a one-time password (OTP) to securely access your Lumiere Fashion profile.',
   keywords:
-    'verify otp, one time password, Aminul Islam, account verification, secure login, authentication, portfolio admin',
+    'verify otp, one time password, Lumiere Fashion, account verification, secure access',
   image: '/seo/aminul-hero-ss.png',
-  websitePath: '/verify-otp',
+  websitePath: '/verify',
 });

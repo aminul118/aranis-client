@@ -16,11 +16,11 @@ export default ResetPasswordPage;
 
 // >> SEO Start
 export const metadata: Metadata = generateMetaTags({
-  title: 'Reset Password | Md Aminul Islam',
+  title: 'Reset Password | Lumiere Fashion',
   description:
-    'Reset your password for the Md Aminul Islam portfolio admin dashboard to regain access to content management tools.',
+    'Set a new password for your Lumiere Fashion account to keep your data and preferences secure.',
   keywords:
-    'reset password, password recovery, Aminul Islam, portfolio admin, secure login, content management',
+    'reset password, password recovery, Lumiere Fashion, secure account, fashion updates',
   image: '/seo/aminul-hero-ss.png',
   websitePath: '/reset-password',
 });

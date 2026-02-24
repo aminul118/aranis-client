@@ -1,38 +1,27 @@
-import Logo from '@/assets/Logo';
 import LoginForm from '@/components/modules/Authentication/LoginForm';
 import { Card, CardContent } from '@/components/ui/card';
 import images from '@/config/images';
 import generateMetaTags from '@/seo/generateMetaTags';
 import { Metadata } from 'next';
 import Image from 'next/image';
-import Link from 'next/link';
 
 const LoginPage = () => {
   return (
     <section className="center">
-      <div className="flex w-full max-w-sm items-center justify-center rounded-lg shadow-lg md:max-w-4xl">
+      <div className="mx-auto flex w-full max-w-sm items-center justify-center rounded-lg shadow-lg md:max-w-4xl">
         <Card className="w-full max-w-5xl overflow-hidden p-0">
           <CardContent className="grid p-0 md:grid-cols-2">
             <div className="p-6">
               <div className="mb-6 grid place-items-center">
-                <Link href={'/'}>
-                  <Logo />
-                </Link>
-                <p className="text-muted-foreground mt-4 text-center">
-                  Login to your portfolio portal
+                <h1 className="text-foreground mt-6 text-3xl font-bold tracking-tight">
+                  Login
+                </h1>
+                <p className="text-muted-foreground mt-2 text-center text-sm">
+                  Welcome back to Lumiere Fashion. Please enter your details.
                 </p>
               </div>
               {/* Form Section */}
               <LoginForm />
-
-              <div className="mt-4 text-center text-sm">
-                Don&apos;t have an account?
-                <Link href="/register">
-                  <button className="p-0 pl-1 text-blue-600 hover:underline font-medium">
-                    Create one
-                  </button>
-                </Link>
-              </div>
             </div>
 
             {/* Image Section */}
@@ -56,11 +45,11 @@ export default LoginPage;
 
 // >> SEO Start
 export const metadata: Metadata = generateMetaTags({
-  title: 'Login | Md Aminul Islam',
+  title: 'Login | Lumiere Fashion',
   description:
-    'Login to the Md Aminul Islam portfolio admin dashboard to manage projects, blogs, and other content.',
+    'Securely log in to your Lumiere Fashion account to manage your orders, wishlist, and profile.',
   keywords:
-    'login, sign in, Aminul Islam, portfolio admin, project management, blog management, secure access',
+    'login, sign in, Lumiere Fashion, e-commerce login, secure access, fashion portal',
   image: '/seo/aminul-hero-ss.png',
   websitePath: '/login',
 });

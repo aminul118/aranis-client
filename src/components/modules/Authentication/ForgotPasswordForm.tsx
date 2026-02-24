@@ -1,6 +1,5 @@
 'use client';
 
-import Logo from '@/assets/Logo';
 import SubmitButton from '@/components/common/button/submit-button';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -58,12 +57,12 @@ const ForgotPasswordForm = ({ className }: { className?: string }) => {
     <div data-aos="fade-right" className={cn('w-full', className)}>
       <Card className="mx-auto w-full max-w-md rounded-2xl shadow-xl">
         <CardHeader className="flex flex-col items-center space-y-2 pb-2">
-          <Logo />
           <CardTitle className="text-center text-xl font-semibold">
             Forgot Password?
           </CardTitle>
           <p className="text-muted-foreground text-center text-sm">
-            Enter your email address to reset your password
+            Enter your email to receive a password reset link from Lumiere
+            Fashion.
           </p>
         </CardHeader>
 

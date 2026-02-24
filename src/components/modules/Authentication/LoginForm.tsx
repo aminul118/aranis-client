@@ -137,6 +137,16 @@ const LoginForm = () => {
           loadingText="Logging In"
           loadingEffect
         />
+
+        <div className="mt-4 text-center text-sm">
+          Don&apos;t have an account?
+          <Link
+            href={`/register${redirect ? `?redirect=${redirect}` : ''}`}
+            className="p-0 pl-1 font-medium text-blue-600 hover:underline"
+          >
+            Create one
+          </Link>
+        </div>
       </form>
     </Form>
   );

@@ -39,7 +39,7 @@ type FormValues = z.infer<typeof otpValidation>;
 
 const VerifyOTPForm = () => {
   const [counter, setCounter] = useState(6); // 1 min timer
-  const { email } = useSearchParamsValues('email');
+  const { email, redirect } = useSearchParamsValues('email', 'redirect');
   const router = useRouter();
 
   // Email no email received -> User can't visit this page
@@ -77,7 +77,9 @@ const VerifyOTPForm = () => {
         toast.error(res.message);
       }
       if (res.success && 'user' in res) {
-        router.push(getDefaultDashboardRoute(res.user.role as UserRole));
+        router.push(
+          redirect || getDefaultDashboardRoute(res.user.role as UserRole),
+        );
       }
     } catch (err: any) {
       toast.error(err.message);
@@ -105,10 +107,11 @@ const VerifyOTPForm = () => {
             <Logo />
           </Link>
           <CardTitle className="text-center text-xl font-semibold">
-            Verify Your Email
+            Verify Your Account
           </CardTitle>
           <p className="text-muted-foreground text-center text-sm">
-            Enter the 6-digit code we sent to your email
+            Enter the 6-digit code sent to your email to secure your Lumiere
+            Fashion profile.
           </p>
         </CardHeader>
 
