@@ -2,6 +2,7 @@
 
 import AminulLogo from '@/components/common/AminulLogo';
 import { Button } from '@/components/ui/button';
+import { useCart } from '@/context/CartContext';
 import { cn } from '@/lib/utils';
 import { IUser } from '@/types';
 import {
@@ -11,22 +12,28 @@ import {
   useScroll,
 } from 'framer-motion';
 import { Fade as Hamburger } from 'hamburger-react';
+import { ChevronDown, ShoppingCart } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { NavMenu } from './nav-menu';
-import { ShoppingCart, ChevronDown } from 'lucide-react';
-import { useCart } from '@/context/CartContext';
 import HeaderUser from '../shared/HeaderUser';
-import PortalButton from './PortalButton';
+import NotificationBell from '../shared/NotificationBell';
+import { NavMenu } from './nav-menu';
 import NavSearch from './NavSearch';
+import PortalButton from './PortalButton';
 
 interface MobileProps {
   navItems: NavMenu[];
   setMenuOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-const Navbar = ({ user, navItems = [] }: { user: IUser; navItems?: NavMenu[] }) => {
+const Navbar = ({
+  user,
+  navItems = [],
+}: {
+  user: IUser;
+  navItems?: NavMenu[];
+}) => {
   const { totalItems } = useCart();
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -65,7 +72,7 @@ const Navbar = ({ user, navItems = [] }: { user: IUser; navItems?: NavMenu[] }) 
       className={cn(
         'fixed top-0 left-0 z-50 w-full transition-all duration-300',
         scrolled || hoveredItem
-          ? 'border-b border-border bg-background/80 py-4 shadow-lg backdrop-blur-md'
+          ? 'border-border bg-background/80 border-b py-4 shadow-lg backdrop-blur-md'
           : 'bg-transparent py-4',
       )}
       onMouseLeave={() => setHoveredItem(null)}
@@ -74,7 +81,7 @@ const Navbar = ({ user, navItems = [] }: { user: IUser; navItems?: NavMenu[] }) 
         <AminulLogo className="ml-2 lg:ml-0" />
 
         {/* Desktop Navigation */}
-        <div className="hidden items-center gap-1 rounded-full border border-border bg-muted/50 px-2 py-1.5 shadow-sm backdrop-blur-sm lg:flex">
+        <div className="border-border bg-muted/50 hidden items-center gap-1 rounded-full border px-2 py-1.5 shadow-sm backdrop-blur-sm lg:flex">
           {navItems.map((item) => {
             const isActive = active === item.href;
             const hasSubItems = !!item.subItems && item.subItems.length > 0;
@@ -83,35 +90,58 @@ const Navbar = ({ user, navItems = [] }: { user: IUser; navItems?: NavMenu[] }) 
               <div
                 key={item.title}
                 className="relative"
-                onMouseEnter={() => setHoveredItem(hasSubItems ? item.title : null)}
+                onMouseEnter={() =>
+                  setHoveredItem(hasSubItems ? item.title : null)
+                }
               >
                 <Link
                   href={item.href}
                   onClick={() => setActive(item.href)}
                   className={cn(
-                    'relative rounded-full px-5 py-2 text-sm font-medium transition-colors duration-200 flex items-center gap-1',
-                    isActive || hoveredItem === item.title ? 'text-foreground' : 'text-muted-foreground hover:text-foreground',
+                    'relative flex items-center gap-1 rounded-full px-5 py-2 text-sm font-medium transition-colors duration-200',
+                    isActive || hoveredItem === item.title
+                      ? 'text-foreground'
+                      : 'text-muted-foreground hover:text-foreground',
                   )}
                 >
                   {isActive && (
                     <motion.span
                       layoutId="navbar-active-pill"
-                      transition={{ type: 'spring', stiffness: 350, damping: 30 }}
+                      transition={{
+                        type: 'spring',
+                        stiffness: 350,
+                        damping: 30,
+                      }}
                       className="absolute inset-0 rounded-full bg-blue-600/20"
                     />
                   )}
                   <span className="relative z-10">{item.title}</span>
-                  {hasSubItems && <ChevronDown size={14} className={cn("relative z-10 transition-transform", hoveredItem === item.title && "rotate-180")} />}
+                  {hasSubItems && (
+                    <ChevronDown
+                      size={14}
+                      className={cn(
+                        'relative z-10 transition-transform',
+                        hoveredItem === item.title && 'rotate-180',
+                      )}
+                    />
+                  )}
                 </Link>
               </div>
             );
           })}
         </div>
 
-        {/* Right Side */}
-        <div className="hidden items-center gap-4 lg:flex">
+        <div className="flex items-center gap-4">
+          {user && (
+            <div className="hidden lg:block">
+              <NotificationBell user={user} />
+            </div>
+          )}
           <NavSearch />
-          <Link href="/cart" className="relative text-muted-foreground transition-colors hover:text-foreground">
+          <Link
+            href="/cart"
+            className="text-muted-foreground hover:text-foreground relative transition-colors"
+          >
             <ShoppingCart size={22} />
             {totalItems > 0 && (
               <motion.span
@@ -123,13 +153,18 @@ const Navbar = ({ user, navItems = [] }: { user: IUser; navItems?: NavMenu[] }) 
               </motion.span>
             )}
           </Link>
-          <div className="h-6 w-px bg-border" />
+          <div className="bg-border h-6 w-px" />
           {user ? <HeaderUser user={user} /> : <PortalButton />}
         </div>
 
         <div className="flex items-center gap-2 lg:hidden">
           <NavSearch />
-          <Hamburger toggled={menuOpen} toggle={setMenuOpen} size={24} rounded />
+          <Hamburger
+            toggled={menuOpen}
+            toggle={setMenuOpen}
+            size={24}
+            rounded
+          />
         </div>
       </nav>
 
@@ -141,26 +176,30 @@ const Navbar = ({ user, navItems = [] }: { user: IUser; navItems?: NavMenu[] }) 
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
             transition={{ duration: 0.2 }}
-            className="absolute left-0 top-full w-full border-b border-border bg-background/95 py-12 shadow-2xl backdrop-blur-xl"
+            className="border-border bg-background/95 absolute top-full left-0 w-full border-b py-12 shadow-2xl backdrop-blur-xl"
           >
             <div className="container mx-auto grid grid-cols-3 gap-8">
-              {navItems.find(i => i.title === hoveredItem)?.subItems?.map((sub) => (
-                <div key={sub.title} className="flex flex-col gap-4">
-                  <h3 className="text-sm font-bold uppercase tracking-widest text-muted-foreground/60">{sub.title}</h3>
-                  <div className="flex flex-col gap-2">
-                    {sub.items.map((subItem) => (
-                      <Link
-                        key={subItem}
-                        href={`/shop?category=${hoveredItem}&subCategory=${sub.title}&type=${subItem}`}
-                        className="text-muted-foreground hover:text-blue-500 transition-colors text-base font-medium"
-                        onClick={() => setHoveredItem(null)}
-                      >
-                        {subItem} {sub.title}
-                      </Link>
-                    ))}
+              {navItems
+                .find((i) => i.title === hoveredItem)
+                ?.subItems?.map((sub) => (
+                  <div key={sub.title} className="flex flex-col gap-4">
+                    <h3 className="text-muted-foreground/60 text-sm font-bold tracking-widest uppercase">
+                      {sub.title}
+                    </h3>
+                    <div className="flex flex-col gap-2">
+                      {sub.items.map((subItem) => (
+                        <Link
+                          key={subItem}
+                          href={`/shop?category=${hoveredItem}&subCategory=${sub.title}&type=${subItem}`}
+                          className="text-muted-foreground text-base font-medium transition-colors hover:text-blue-500"
+                          onClick={() => setHoveredItem(null)}
+                        >
+                          {subItem} {sub.title}
+                        </Link>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
             </div>
           </motion.div>
         )}
@@ -182,7 +221,7 @@ const Mobile = ({ navItems, setMenuOpen }: MobileProps) => {
       animate={{ opacity: 1, height: 'auto' }}
       exit={{ opacity: 0, height: 0 }}
       transition={{ duration: 0.3 }}
-      className="overflow-hidden border-b border-border bg-background/95 backdrop-blur-xl lg:hidden"
+      className="border-border bg-background/95 overflow-hidden border-b backdrop-blur-xl lg:hidden"
     >
       <div className="container mx-auto flex flex-col items-center gap-1 p-4">
         {navItems.map(({ title, href }) => {
@@ -203,13 +242,17 @@ const Mobile = ({ navItems, setMenuOpen }: MobileProps) => {
             </Link>
           );
         })}
-        <div className="mt-4 flex w-full justify-center border-t border-border pt-4">
-          <Button asChild size="sm" className="group relative w-full max-w-xs overflow-hidden rounded-full bg-primary font-bold text-primary-foreground shadow-lg">
+        <div className="border-border mt-4 flex w-full justify-center border-t pt-4">
+          <Button
+            asChild
+            size="sm"
+            className="group bg-primary text-primary-foreground relative w-full max-w-xs overflow-hidden rounded-full font-bold shadow-lg"
+          >
             <Link href="/login" onClick={() => setMenuOpen(false)}>
-              <div className="absolute inset-0 rounded-full border border-border p-px">
+              <div className="border-border absolute inset-0 rounded-full border p-px">
                 <div className="absolute inset-[-1000%] animate-[spin_4s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#3b82f6_0%,#06b6d4_50%,#3b82f6_100%)]" />
               </div>
-              <div className="absolute inset-px rounded-full bg-primary" />
+              <div className="bg-primary absolute inset-px rounded-full" />
               <span className="relative z-10 bg-linear-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
                 Login
               </span>
