@@ -24,7 +24,7 @@ const CenterSpinner = ({ className }: Props) => {
         <div className="absolute h-16 w-16 animate-pulse rounded-full bg-blue-500/20 blur-xl" />
 
         {/* Logo in Center */}
-        <div className="relative z-10 flex h-16 w-16 items-center justify-center rounded-full border border-border bg-card shadow-2xl">
+        <div className="border-border bg-card relative z-10 flex h-16 w-16 items-center justify-center rounded-full border shadow-2xl">
           <Image
             src={icons.logo}
             height={32}
@@ -38,7 +38,7 @@ const CenterSpinner = ({ className }: Props) => {
       {/* Modern Text with Gradient */}
       <div className="flex flex-col items-center gap-2">
         <h3 className="bg-linear-to-r from-blue-400 to-cyan-400 bg-clip-text text-lg font-bold tracking-widest text-transparent uppercase">
-          Aminul Islam
+          Lumiere
         </h3>
         <div className="flex items-center gap-1.5">
           <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-blue-500 [animation-delay:-0.3s]" />
