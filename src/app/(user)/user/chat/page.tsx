@@ -40,8 +40,12 @@ export default function UserChatPage() {
             setMessages(msgRes.data || []);
           }
           setLoading(false);
-          // Backup mark as seen
+          // mark as seen in DB and notify via socket
           markAsSeen(convRes.data._id);
+          socketRef.current?.emit('message-seen', {
+            conversationId: convRes.data._id,
+            userId: res.data._id,
+          });
         }
       }
     };

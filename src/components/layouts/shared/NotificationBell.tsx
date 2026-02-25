@@ -62,6 +62,27 @@ const NotificationBell = ({ user }: Props) => {
   );
   useSocket(handleSocketNotification, undefined, 'order-status-updated');
 
+  // Sync with chat status
+  useSocket(
+    () => {
+      fetchNotifications();
+    },
+    user?._id || user?.userId,
+    'receive-message',
+    user?.role === 'ADMIN' ? ['admins'] : [],
+  );
+
+  useSocket(
+    (data) => {
+      // If messages in a conversation are marked seen, refresh our notification list
+      // to clear the related chat notifications
+      fetchNotifications();
+    },
+    user?._id || user?.userId,
+    'messages-marked-seen',
+    user?.role === 'ADMIN' ? ['admins'] : [],
+  );
+
   const handleMarkAsRead = async (id: string) => {
     await markAsRead(id);
     setNotifications((prev) =>

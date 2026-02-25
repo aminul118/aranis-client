@@ -1,4 +1,4 @@
-import AminulLogo from '@/components/common/Logo';
+import Logo from '@/components/common/Logo';
 import { Separator } from '@/components/ui/separator';
 import {
   Sidebar,
@@ -15,7 +15,7 @@ const AdminSidebar = ({ user }: { user: IUser }) => {
       {/* Header */}
       <SidebarHeader>
         <div className="flex items-center gap-2 px-4 py-4">
-          <AminulLogo className="origin-left scale-90" />
+          <Logo className="origin-left scale-90" />
         </div>
       </SidebarHeader>
       <Separator className="bg-white/10" />

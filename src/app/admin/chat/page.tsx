@@ -47,6 +47,7 @@ export default function AdminChatPage() {
           conversationId: activeChat._id,
           userId: admin?._id,
         });
+        markAsSeen(activeChat._id);
       } else {
         // Update unread count in sidebar
         setConversations((prev) =>
@@ -153,7 +154,13 @@ export default function AdminChatPage() {
     const res = await getMessages(id);
     if (res?.success) {
       setMessages(res.data || []);
+      // Mark as seen in DB
       await markAsSeen(id);
+      // Notify via socket to sync other clients/components (e.g. NotificationBell)
+      getSocket().emit('message-seen', {
+        conversationId: id,
+        userId: admin?._id,
+      });
     }
     setLoading(false);
   };

@@ -25,9 +25,7 @@ const adminSidebarMenu: MenuGroup[] = [
     title: 'E-commerce',
     menu: [
       { name: 'Products', url: '/admin/products', icon: Package },
-      { name: 'Categories', url: '/admin/categories', icon: Layers },
-      { name: 'Colors', url: '/admin/colors', icon: Palette },
-      { name: 'Navbar', url: '/admin/navbar', icon: MenuIcon },
+
       { name: 'Coupons', url: '/admin/coupons', icon: TicketPercent },
       { name: 'Orders', url: '/admin/orders', icon: ShoppingCart },
     ],
@@ -35,6 +33,10 @@ const adminSidebarMenu: MenuGroup[] = [
   {
     title: 'Content',
     menu: [
+      { name: 'Site Settings', url: '/admin/site', icon: Globe },
+      { name: 'Navbar', url: '/admin/navbar', icon: MenuIcon },
+      { name: 'Categories', url: '/admin/categories', icon: Layers },
+      { name: 'Colors', url: '/admin/colors', icon: Palette },
       { name: 'Hero Banners', url: '/admin/hero-banners', icon: ImageIcon },
       { name: 'Mini Banners', url: '/admin/mini-banners', icon: ImageIcon },
     ],
@@ -44,9 +46,8 @@ const adminSidebarMenu: MenuGroup[] = [
     // Only SUPER_ADMIN sees user management by default
     roles: ['SUPER_ADMIN', 'ADMIN'] as UserRole[],
     menu: [
-      { name: 'Users', url: '/admin/users', icon: Users },
       { name: 'Support Center', url: '/admin/chat', icon: MessageCircle },
-      { name: 'Site Settings', url: '/admin/site', icon: Globe },
+      { name: 'Users', url: '/admin/users', icon: Users },
     ],
   },
 ];
