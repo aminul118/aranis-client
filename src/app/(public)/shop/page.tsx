@@ -4,16 +4,11 @@ import { getSiteSettings } from '@/services/settings/settings';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
 import ShopContent from './_components/ShopContent';
+import ShopSkeleton from './_components/ShopSkeleton';
 
 const ShopPage = () => {
   return (
-    <Suspense
-      fallback={
-        <div className="flex min-h-screen items-center justify-center">
-          Loading shop...
-        </div>
-      }
-    >
+    <Suspense fallback={<ShopSkeleton />}>
       <ShopContent />
     </Suspense>
   );

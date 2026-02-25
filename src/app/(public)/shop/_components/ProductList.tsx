@@ -1,6 +1,7 @@
 'use client';
 
 import ProductCard from '@/components/common/ProductCard';
+import ProductCardSkeleton from '@/components/common/loader/ProductCardSkeleton';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { IProduct } from '@/services/product/product';
@@ -18,8 +19,17 @@ const ProductList = ({ products, loading, viewMode }: ProductListProps) => {
 
   if (loading) {
     return (
-      <div className="flex h-64 items-center justify-center">
-        <div className="h-12 w-12 animate-spin rounded-full border-t-2 border-b-2 border-blue-500"></div>
+      <div
+        className={cn(
+          'grid gap-6 md:gap-8',
+          viewMode === 'grid'
+            ? 'grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4'
+            : 'grid-cols-1',
+        )}
+      >
+        {Array.from({ length: 8 }).map((_, i) => (
+          <ProductCardSkeleton key={i} viewMode={viewMode} />
+        ))}
       </div>
     );
   }

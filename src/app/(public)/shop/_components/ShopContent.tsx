@@ -155,16 +155,18 @@ const ShopContent = ({ initialFilters }: ShopContentProps) => {
     const searchStr = params.toString();
     const queryStr = searchStr ? `?${searchStr}` : '';
 
-    if (hasStructuralChange || initialFilters) {
-      const nextPath = generateShopPath(
-        nextCategory,
-        nextSubCategory,
-        nextType,
-      );
-      router.push(`${nextPath}${queryStr}`);
-    } else {
-      router.push(`${queryStr}`, { scroll: false });
-    }
+    startTransition(() => {
+      if (hasStructuralChange || initialFilters) {
+        const nextPath = generateShopPath(
+          nextCategory,
+          nextSubCategory,
+          nextType,
+        );
+        router.push(`${nextPath}${queryStr}`);
+      } else {
+        router.push(`${queryStr}`, { scroll: false });
+      }
+    });
   };
 
   const toggleMultiFilter = (key: string, value: string, current: string[]) => {
