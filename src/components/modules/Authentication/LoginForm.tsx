@@ -43,8 +43,8 @@ const LoginForm = () => {
   const form = useForm<FormValues>({
     resolver: zodResolver(loginFormValidation),
     defaultValues: {
-      email: 'super@admin.com',
-      password: '12345678',
+      email: '',
+      password: '',
     },
   });
 

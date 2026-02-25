@@ -3,15 +3,15 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 const AuthLoading = () => {
   return (
-    <section className="flex min-h-[80vh] items-center justify-center p-4">
-      <div className="flex w-full max-w-sm items-center justify-center rounded-lg md:max-w-4xl">
-        <Card className="w-full max-w-5xl overflow-hidden border-none p-0 shadow-2xl">
+    <section className="center">
+      <div className="mx-auto flex w-full max-w-sm items-center justify-center rounded-lg md:max-w-4xl">
+        <Card className="w-full max-w-5xl overflow-hidden p-0">
           <CardContent className="grid p-0 md:grid-cols-2">
             {/* Form Section Skeleton */}
-            <div className="flex flex-col justify-center p-8 lg:p-12">
-              <div className="mb-8 flex flex-col items-center space-y-4">
+            <div className="p-6 md:p-8">
+              <div className="mb-6 flex flex-col items-center space-y-4">
                 {/* Logo Skeleton */}
-                <Skeleton className="h-12 w-32" />
+                <Skeleton className="mt-6 h-12 w-32" />
                 {/* Subtitle Skeleton */}
                 <Skeleton className="h-4 w-48 opacity-60" />
               </div>
