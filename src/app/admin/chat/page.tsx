@@ -105,12 +105,34 @@ export default function AdminChatPage() {
       fetchMessages(activeChat._id);
       getSocket().emit('join-room', activeChat._id);
       if (admin) {
+        // eslint-disable-next-line no-console
+        console.log(`Admin ${admin._id} entering chat ${activeChat._id}`);
         getSocket().emit('message-seen', {
           conversationId: activeChat._id,
           userId: admin._id,
         });
+        getSocket().emit('set-active-chat', {
+          userId: admin._id,
+          conversationId: activeChat._id,
+        });
       }
+    } else if (admin) {
+      // eslint-disable-next-line no-console
+      console.log(`Admin ${admin._id} leaving chat`);
+      getSocket().emit('set-active-chat', {
+        userId: admin._id,
+        conversationId: null,
+      });
     }
+
+    return () => {
+      if (admin) {
+        getSocket().emit('set-active-chat', {
+          userId: admin._id,
+          conversationId: null,
+        });
+      }
+    };
   }, [activeChat?._id, admin]);
 
   useEffect(() => {

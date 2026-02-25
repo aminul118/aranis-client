@@ -1,3 +1,4 @@
+import Logo from '@/components/common/Logo';
 import Footer from '@/components/layouts/Footer/Footer';
 import ChatFloatingButton from '@/components/layouts/Navbar/ChatFloatingButton';
 import MobileBottomNav from '@/components/layouts/Navbar/MobileBottomNav';
@@ -31,15 +32,12 @@ const RootLayout = async ({ children }: Children) => {
       <Navbar
         user={user as any}
         navItems={sortedNavItems as any}
-        logoUrl={siteSettings?.logo}
+        logo={<Logo className="text-white" />}
       />
       <div className="grow pt-[60px] lg:pt-[176px]">{children}</div>
       <ChatFloatingButton user={user as any} />
       <MobileBottomNav />
-      <Footer
-        socialLinks={siteSettings?.socialLinks}
-        logoUrl={siteSettings?.logo}
-      />
+      <Footer socialLinks={siteSettings?.socialLinks} />
     </main>
   );
 };

@@ -28,10 +28,9 @@ const customerServiceLinks = [
 
 interface FooterProps {
   socialLinks?: ISocialLink[];
-  logoUrl?: string;
 }
 
-const Footer = ({ socialLinks = [], logoUrl }: FooterProps) => {
+const Footer = ({ socialLinks = [] }: FooterProps) => {
   return (
     <footer className="relative overflow-hidden bg-slate-900">
       {/* Top gradient line */}
@@ -47,7 +46,7 @@ const Footer = ({ socialLinks = [], logoUrl }: FooterProps) => {
           {/* Brand Column */}
           <div className="lg:col-span-1">
             <div className="mb-4">
-              <AminulLogo logoUrl={logoUrl} />
+              <AminulLogo />
             </div>
             <p className="mb-6 max-w-xs text-sm leading-relaxed text-slate-400">
               Lumiere Fashion - Discover the latest trends in high-quality

@@ -87,14 +87,35 @@ const ChatFloatingButton = ({ user }: ChatFloatingButtonProps) => {
   }, [conversation]);
 
   useEffect(() => {
-    if (isOpen && conversation?._id && user?._id) {
-      getSocket().emit('join-room', conversation._id);
-      getSocket().emit('message-seen', {
-        conversationId: conversation._id,
-        userId: user._id,
-      });
-      markAsSeen(conversation._id); // Backup API call
+    if (user?._id) {
+      const socket = getSocket();
+      if (isOpen && conversation?._id) {
+        socket.emit('join-room', conversation._id);
+        socket.emit('set-active-chat', {
+          userId: user._id,
+          conversationId: conversation._id,
+        });
+        socket.emit('message-seen', {
+          conversationId: conversation._id,
+          userId: user._id,
+        });
+        markAsSeen(conversation._id);
+      } else {
+        socket.emit('set-active-chat', {
+          userId: user._id,
+          conversationId: null,
+        });
+      }
     }
+
+    return () => {
+      if (user?._id) {
+        getSocket().emit('set-active-chat', {
+          userId: user._id,
+          conversationId: null,
+        });
+      }
+    };
   }, [isOpen, conversation?._id, user?._id]);
 
   useEffect(() => {

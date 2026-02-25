@@ -7,19 +7,14 @@ import { Children } from '@/types';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
 
-import { getSiteSettings } from '@/services/settings/settings';
-
 const AdminLayout = async ({ children }: Children) => {
-  const [{ data: user }, { data: siteSettings }] = await Promise.all([
-    getMe(),
-    getSiteSettings(),
-  ]);
+  const { data: user } = await getMe();
 
   return (
     <SidebarProvider>
       {/* Sidebar */}
       <Suspense fallback={<AdminSidebarSkeleton />}>
-        <AdminSidebar user={user as any} logoUrl={siteSettings?.logo} />
+        <AdminSidebar user={user as any} />
       </Suspense>
       <SidebarInset>
         <AdminHeader user={user as any} />

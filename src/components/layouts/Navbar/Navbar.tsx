@@ -1,6 +1,5 @@
 'use client';
 
-import AminulLogo from '@/components/common/Logo';
 import { useCart } from '@/context/CartContext';
 import { toUrlSlug } from '@/lib/url-slugs';
 import { cn } from '@/lib/utils';
@@ -30,11 +29,11 @@ interface MobileProps {
 const Navbar = ({
   user,
   navItems = [],
-  logoUrl,
+  logo,
 }: {
   user: IUser | null;
   navItems?: NavMenu[];
-  logoUrl?: string;
+  logo?: React.ReactNode;
 }) => {
   const { totalItems } = useCart();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -71,13 +70,13 @@ const Navbar = ({
     >
       <TopBar />
       <div className="hidden lg:block">
-        <MainNavbar user={user} logoUrl={logoUrl} />
+        <MainNavbar user={user} logo={logo} />
         <CategoryBar />
       </div>
 
       {/* Mobile Header */}
       <div className="flex items-center justify-between border-b border-white/10 bg-[#111111] px-4 py-3 lg:hidden">
-        <AminulLogo className="origin-left scale-75" logoUrl={logoUrl} />
+        <div className="origin-left scale-75">{logo}</div>
         <div className="flex items-center gap-4">
           <NavSearch />
           <Link href="/cart" className="relative text-white">
@@ -100,11 +99,7 @@ const Navbar = ({
 
       <AnimatePresence>
         {menuOpen && (
-          <Mobile
-            navItems={navItems}
-            setMenuOpen={setMenuOpen}
-            logoUrl={logoUrl}
-          />
+          <Mobile navItems={navItems} setMenuOpen={setMenuOpen} logo={logo} />
         )}
       </AnimatePresence>
     </motion.header>
@@ -114,8 +109,8 @@ const Navbar = ({
 const Mobile = ({
   navItems,
   setMenuOpen,
-  logoUrl,
-}: MobileProps & { logoUrl?: string }) => {
+  logo,
+}: MobileProps & { logo?: React.ReactNode }) => {
   const pathname = usePathname();
   const router = useRouter();
   const pathSegments = pathname.split('/').filter(Boolean);
@@ -132,10 +127,7 @@ const Mobile = ({
     >
       <div className="flex h-full flex-col p-4">
         <div className="mb-8 flex items-center justify-between">
-          <AminulLogo
-            className="scale-90 text-black! dark:text-white!"
-            logoUrl={logoUrl}
-          />
+          <div className="scale-90 text-black! dark:text-white!">{logo}</div>
           <button
             onClick={() => setMenuOpen(false)}
             className="p-2 text-gray-900 dark:text-gray-100"

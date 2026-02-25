@@ -1,6 +1,5 @@
 'use client';
 
-import AminulLogo from '@/components/common/Logo';
 import { useCart } from '@/context/CartContext';
 import { IUser } from '@/types';
 import { Clock, Gift, ShoppingCart, User } from 'lucide-react';
@@ -13,10 +12,10 @@ import NavSearch from './NavSearch';
 
 interface MainNavbarProps {
   user?: IUser | null;
-  logoUrl?: string;
+  logo?: React.ReactNode;
 }
 
-const MainNavbar = ({ user, logoUrl }: MainNavbarProps) => {
+const MainNavbar = ({ user, logo }: MainNavbarProps) => {
   const { totalItems } = useCart();
   const [searchQuery, setSearchQuery] = useState('');
   const router = useRouter();
@@ -33,9 +32,7 @@ const MainNavbar = ({ user, logoUrl }: MainNavbarProps) => {
     <div className="w-full border-b border-white/10 bg-black py-4 text-white">
       <div className="container mx-auto flex items-center gap-4 px-4 lg:gap-8">
         {/* Logo */}
-        <div className="shrink-0 origin-left scale-90 lg:scale-100">
-          <AminulLogo className="text-white" logoUrl={logoUrl} />
-        </div>
+        <div className="shrink-0 origin-left scale-90 lg:scale-100">{logo}</div>
 
         {/* Search */}
         <NavSearch />

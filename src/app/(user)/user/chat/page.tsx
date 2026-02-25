@@ -24,6 +24,7 @@ export default function UserChatPage() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const socketRef = useRef<Socket | null>(null);
 
+  // 1. Initial Data Fetch (User and Conversation)
   useEffect(() => {
     const init = async () => {
       const res = await getMe();
@@ -32,25 +33,49 @@ export default function UserChatPage() {
         const convRes = await getOrCreateConversation([res.data._id]);
         if (convRes?.success) {
           setConversation(convRes.data);
-          fetchMessages(convRes.data._id, res.data._id);
+          // Initial fetch of messages
+          setLoading(true);
+          const msgRes = await getMessages(convRes.data._id);
+          if (msgRes?.success) {
+            setMessages(msgRes.data || []);
+          }
+          setLoading(false);
+          // Backup mark as seen
+          markAsSeen(convRes.data._id);
         }
       }
     };
     init();
+  }, []);
 
-    socketRef.current = io(SOCKET_URL);
-    const socket = socketRef.current;
+  // 2. Socket Initialization and Room Joining
+  useEffect(() => {
+    if (!user?._id) return;
+
+    const socket = io(SOCKET_URL);
+    socketRef.current = socket;
 
     socket.on('connect', () => {
-      if (user?._id) socket.emit('join-user-room', user._id);
+      socket.emit('join-user-room', user._id);
+      if (conversation?._id) {
+        socket.emit('join-room', conversation._id);
+        socket.emit('set-active-chat', {
+          userId: user._id,
+          conversationId: conversation._id,
+        });
+      }
     });
 
     socket.on('receive-message', (data) => {
       if (conversation?._id === data.conversationId) {
-        setMessages((prev) => [...prev, data]);
+        setMessages((prev) => {
+          // Prevent duplicates if optimistic update already added it
+          if (prev.find((m) => m._id === data._id)) return prev;
+          return [...prev, data];
+        });
         socket.emit('message-seen', {
           conversationId: conversation._id,
-          userId: user?._id,
+          userId: user._id,
         });
       }
     });
@@ -68,30 +93,20 @@ export default function UserChatPage() {
     });
 
     return () => {
+      socket.emit('set-active-chat', {
+        userId: user._id,
+        conversationId: null,
+      });
       socket.disconnect();
+      socketRef.current = null;
     };
-  }, [conversation?._id, user?._id]);
+  }, [user?._id, conversation?._id]);
 
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [messages]);
-
-  const fetchMessages = async (id: string, userId: string) => {
-    setLoading(true);
-    const res = await getMessages(id);
-    if (res?.success) {
-      setMessages(res.data || []);
-      await markAsSeen(id);
-      socketRef.current?.emit('join-room', id);
-      socketRef.current?.emit('message-seen', {
-        conversationId: id,
-        userId: userId,
-      });
-    }
-    setLoading(false);
-  };
 
   const handleSend = () => {
     if (!message.trim() || !conversation || !user) return;
@@ -100,7 +115,7 @@ export default function UserChatPage() {
       (p: any) => p.role === 'ADMIN' || p.role === 'SUPER_ADMIN',
     );
 
-    const newMessage = {
+    const newMessage: any = {
       sender: user._id,
       senderRole: user.role,
       receiver: adminParticipant?._id,
