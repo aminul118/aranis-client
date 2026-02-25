@@ -4,7 +4,7 @@ const baseCookieOption = {
   httpOnly: true,
   secure: envVars.nodeEnv === 'production',
   sameSite: 'lax',
-  domain: envVars.nodeEnv === 'production' ? '.aminuldev.site' : 'localhost',
+  domain: envVars.nodeEnv === 'production' ? undefined : 'localhost',
   path: '/',
 } as const;
 
