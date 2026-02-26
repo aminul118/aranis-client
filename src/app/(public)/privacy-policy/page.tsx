@@ -43,11 +43,11 @@ const PrivacyPolicyPage = () => {
             </p>
           </header>
 
-          <div className="from-border via-border h-px bg-gradient-to-r to-transparent" />
+          <div className="from-border via-border h-px bg-linear-to-r to-transparent" />
 
           {/* Content */}
           <div className="prose prose-lg dark:prose-invert text-muted-foreground/90 max-w-none space-y-12 leading-relaxed">
-            <section className="bg-secondary/10 border-border/30 space-y-4 rounded-[2rem] border p-8">
+            <section className="bg-secondary/10 border-border/30 space-y-4 rounded-4xl border p-8">
               <div className="mb-4 flex items-center gap-3">
                 <div className="rounded-xl bg-blue-500/10 p-2">
                   <Lock className="text-blue-500" size={20} />
@@ -87,7 +87,7 @@ const PrivacyPolicyPage = () => {
             </section>
 
             <section className="space-y-6">
-              <h2 className="text-foreground text-2xl text-sm font-black tracking-widest uppercase">
+              <h2 className="text-foreground text-sm font-black tracking-widest uppercase">
                 Your Rights
               </h2>
               <p>
@@ -118,7 +118,7 @@ const PrivacyPolicyPage = () => {
             </section>
 
             <section className="space-y-4">
-              <h2 className="text-foreground text-2xl text-sm font-black tracking-widest uppercase">
+              <h2 className="text-foreground text-sm font-black tracking-widest uppercase">
                 Cookies Policies
               </h2>
               <p>
@@ -130,7 +130,7 @@ const PrivacyPolicyPage = () => {
             </section>
 
             <section className="border-border/50 space-y-4 border-t pt-10">
-              <h2 className="text-foreground text-2xl text-sm font-black tracking-widest uppercase">
+              <h2 className="text-foreground text-sm font-black tracking-widest uppercase">
                 Contact Us
               </h2>
               <p>

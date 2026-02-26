@@ -38,12 +38,12 @@ const TermsConditionsPage = () => {
             </div>
           </header>
 
-          <div className="from-border via-border h-px bg-gradient-to-r to-transparent" />
+          <div className="from-border via-border h-px bg-linear-to-r to-transparent" />
 
           {/* Content */}
           <div className="prose prose-lg dark:prose-invert text-muted-foreground/90 max-w-none space-y-10 leading-relaxed">
             <section className="space-y-4">
-              <h2 className="text-foreground text-2xl text-sm font-black tracking-widest uppercase">
+              <h2 className="text-foreground text-sm font-black tracking-widest uppercase">
                 1. Introduction
               </h2>
               <p>
@@ -55,7 +55,7 @@ const TermsConditionsPage = () => {
             </section>
 
             <section className="space-y-4">
-              <h2 className="text-foreground text-2xl text-sm font-black tracking-widest uppercase">
+              <h2 className="text-foreground text-sm font-black tracking-widest uppercase">
                 2. Use of License
               </h2>
               <p>
@@ -82,7 +82,7 @@ const TermsConditionsPage = () => {
             </section>
 
             <section className="space-y-4">
-              <h2 className="text-foreground text-2xl text-sm font-black tracking-widest uppercase">
+              <h2 className="text-foreground text-sm font-black tracking-widest uppercase">
                 3. Disclaimer
               </h2>
               <p>
@@ -97,7 +97,7 @@ const TermsConditionsPage = () => {
             </section>
 
             <section className="space-y-4">
-              <h2 className="text-foreground text-2xl text-sm font-black tracking-widest uppercase">
+              <h2 className="text-foreground text-sm font-black tracking-widest uppercase">
                 4. Limitations
               </h2>
               <p>
@@ -109,7 +109,7 @@ const TermsConditionsPage = () => {
             </section>
 
             <section className="space-y-4">
-              <h2 className="text-foreground text-2xl text-sm font-black tracking-widest uppercase">
+              <h2 className="text-foreground text-sm font-black tracking-widest uppercase">
                 5. Accuracy of Materials
               </h2>
               <p>
@@ -122,7 +122,7 @@ const TermsConditionsPage = () => {
             </section>
 
             <section className="space-y-4">
-              <h2 className="text-foreground text-2xl text-sm font-black tracking-widest uppercase">
+              <h2 className="text-foreground text-sm font-black tracking-widest uppercase">
                 6. Governing Law
               </h2>
               <p>

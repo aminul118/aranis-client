@@ -2,7 +2,6 @@ import { normalizeSlug } from '@/lib/url-slugs';
 import { generateCategorizedMeta } from '@/seo/generateDynamicMeta';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { Suspense } from 'react';
 import ShopContent from '../shop/_components/ShopContent';
 
 interface Props {
@@ -33,21 +32,13 @@ const DynamicShopPage = async ({ params }: Props) => {
   const type = slug[2] ? normalizeSlug(slug[2]) : '';
 
   return (
-    <Suspense
-      fallback={
-        <div className="flex min-h-screen items-center justify-center">
-          Loading shop...
-        </div>
-      }
-    >
-      <ShopContent
-        initialFilters={{
-          category: category === 'All' ? undefined : category,
-          subCategory: subCategory || undefined,
-          type: type || undefined,
-        }}
-      />
-    </Suspense>
+    <ShopContent
+      initialFilters={{
+        category: category === 'All' ? undefined : category,
+        subCategory: subCategory || undefined,
+        type: type || undefined,
+      }}
+    />
   );
 };
 
