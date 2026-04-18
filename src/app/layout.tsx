@@ -52,7 +52,7 @@ export async function generateMetadata(): Promise<Metadata> {
       'The Aranis - Discover curated collections of luxury apparel blending modern design with timeless elegance.',
     keywords:
       settings?.keywords ||
-      'Lumiere Fashion, Luxury Apparel, Premium Clothing, Fashion E-commerce, Designer Wear',
+      'The Aranis, Luxury Apparel, Premium Clothing, Fashion E-commerce, Designer Wear',
     image: settings?.baseImage,
   });
 }

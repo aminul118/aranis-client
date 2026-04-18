@@ -45,10 +45,10 @@ export default RegisterPage;
 
 // SEO Metadata
 export const metadata: Metadata = generateMetaTags({
-  title: 'Register | Lumiere Fashion',
+  title: 'Register | The Aranis',
   description:
     'Create your The Aranis account to enjoy a personalized shopping experience, track your orders, and receive exclusive offers.',
   keywords:
-    'register, create account, sign up, Lumiere Fashion, fashion registration, join platform',
+    'register, create account, sign up, The Aranis, fashion registration, join platform',
   websitePath: '/register',
 });

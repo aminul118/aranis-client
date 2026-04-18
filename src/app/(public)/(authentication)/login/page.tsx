@@ -44,11 +44,11 @@ export default LoginPage;
 
 // >> SEO Start
 export const metadata: Metadata = generateMetaTags({
-  title: 'Login | Lumiere Fashion',
+  title: 'Login | The Aranis',
   description:
     'Securely log in to your The Aranis account to manage your orders, wishlist, and profile.',
   keywords:
-    'login, sign in, Lumiere Fashion, e-commerce login, secure access, fashion portal',
+    'login, sign in, The Aranis, e-commerce login, secure access, fashion portal',
   image: '/seo/aminul-hero-ss.png',
   websitePath: '/login',
 });
