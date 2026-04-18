@@ -58,4 +58,30 @@ const updateUserWithFormData = async (id: string, formData: FormData) => {
   return res;
 };
 
-export { getMe, getUserById, getUsers, updateUser, updateUserWithFormData };
+const assignUserRole = async (id: string, role: string) => {
+  const res = await serverFetch.patch<ApiResponse<IUser>>(
+    `/user/update-role/${id}`,
+    {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ role }),
+      next: {
+        tags: ['users'],
+      },
+    },
+  );
+
+  revalidate('users');
+
+  return res;
+};
+
+export {
+  assignUserRole,
+  getMe,
+  getUserById,
+  getUsers,
+  updateUser,
+  updateUserWithFormData,
+};

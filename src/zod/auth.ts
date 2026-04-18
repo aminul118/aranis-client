@@ -1,103 +1,40 @@
 import { z } from 'zod';
 
 export const loginFormValidation = z.object({
-  email: z.string().email('Invalid email address'),
-  password: z.string().min(1, 'Password is required'),
+  identifier: z.string().min(1, 'Email or Phone is required'),
 });
 
 export type LoginFormValues = z.infer<typeof loginFormValidation>;
+
+export const userAddressZodSchema = z.object({
+  title: z.string().min(1, 'Title is required'),
+  address: z.string().min(1, 'Address is required'),
+});
 
 export const registrationFormValidation = z
   .object({
     firstName: z.string().min(2, 'First name must be at least 2 characters'),
     lastName: z.string().min(2, 'Last name must be at least 2 characters'),
-    email: z.string().email('Invalid email address'),
-    phone: z.string().min(1, 'Phone number is required'),
-    password: z
-      .string()
-      .min(8, 'Password must be at least 8 characters')
-      .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
-      .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
-      .regex(/\d/, 'Password must contain at least one number')
-      .regex(
-        /[^a-zA-Z0-9]/,
-        'Password must contain at least one special character',
-      ),
-    confirmPassword: z.string().min(1, 'Please confirm your password'),
+    email: z.string().email('Invalid email address').optional(),
+    phone: z.string().optional(),
+    addresses: z.array(userAddressZodSchema).max(4).optional(),
   })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ['confirmPassword'],
+  .refine((data) => data.email || data.phone, {
+    message: 'Either email or phone is required',
+    path: ['email'],
   });
 
 export type RegistrationFormValues = z.infer<typeof registrationFormValidation>;
-
-export const forgotPasswordValidation = z.object({
-  email: z.string().email('Invalid email address'),
-});
-
-export type ForgotPasswordValues = z.infer<typeof forgotPasswordValidation>;
-
-export const changePasswordSchema = z
-  .object({
-    oldPassword: z.string().min(1, 'Current password is required'),
-    newPassword: z
-      .string()
-      .min(8, 'Password must be at least 8 characters')
-      .regex(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
-        'Password must contain at least one uppercase letter, one lowercase letter, and one number',
-      ),
-    confirmPassword: z.string().min(1, 'Please confirm your password'),
-  })
-  .refine((data) => data.newPassword === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ['confirmPassword'],
-  });
-
-export type ChangePasswordValues = z.infer<typeof changePasswordSchema>;
 
 export const otpValidation = z.object({
   otp: z.string().length(6, 'OTP must be 6 digits'),
 });
 
-export const resetPasswordValidation = z
-  .object({
-    password: z
-      .string()
-      .min(8, 'Password must be at least 8 characters')
-      .regex(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
-        'Password must contain at least one uppercase letter, one lowercase letter, and one number',
-      ),
-    confirmPassword: z.string().min(1, 'Please confirm your password'),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ['confirmPassword'],
-  });
-
-export const passwordChangeValidation = z
-  .object({
-    oldPassword: z.string().min(1, 'Old password is required'),
-    newPassword: z
-      .string()
-      .min(8, 'Password must be at least 8 characters')
-      .regex(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
-        'Password must contain at least one uppercase letter, one lowercase letter, and one number',
-      ),
-    confirmNewPassword: z.string().min(1, 'Please confirm your new password'),
-  })
-  .refine((data) => data.newPassword === data.confirmNewPassword, {
-    message: "Passwords don't match",
-    path: ['confirmNewPassword'],
-  });
-
 export const userUpdateSchema = z.object({
   firstName: z.string().min(1, 'First name is required'),
   lastName: z.string().min(1, 'Last name is required'),
   picture: z.string().optional(),
+  addresses: z.array(userAddressZodSchema).max(4).optional(),
 });
 
 export type UserUpdateValues = z.infer<typeof userUpdateSchema>;

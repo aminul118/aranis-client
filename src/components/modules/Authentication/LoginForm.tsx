@@ -10,13 +10,8 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import Password from '@/components/ui/password';
 import useSearchParamsValues from '@/hooks/useSearchParamsValues';
-import { loginAction } from '@/services/auth/login';
-import {
-  getDefaultDashboardRoute,
-  UserRole,
-} from '@/services/user/user-access';
+import { requestOTP } from '@/services/auth/otp/sendOTP';
 import { loginFormValidation } from '@/zod/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
@@ -43,8 +38,7 @@ const LoginForm = () => {
   const form = useForm<FormValues>({
     resolver: zodResolver(loginFormValidation),
     defaultValues: {
-      email: '',
-      password: '',
+      identifier: '',
     },
   });
 
@@ -52,19 +46,19 @@ const LoginForm = () => {
     setAlert(null); // reset previous alert
 
     try {
-      const res = await loginAction(values);
+      const res = await requestOTP(values.identifier);
 
       if (res.success) {
-        toast.success(res.message);
+        toast.success('OTP sent to your email/phone');
         router.push(
-          redirect || getDefaultDashboardRoute(res.user?.role as UserRole),
+          `/verify?identifier=${encodeURIComponent(values.identifier)}${redirect ? `&redirect=${redirect}` : ''}`,
         );
       } else {
         setAlert({
           type: 'error',
-          title: 'Login failed',
+          title: 'Lookup failed',
           description:
-            res.message || 'Invalid email or password. Please try again.',
+            res.message || 'Unable to request OTP. Please try again.',
         });
       }
     } catch (error: any) {
@@ -81,7 +75,7 @@ const LoginForm = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col gap-6 py-8"
+        className="flex flex-col gap-6"
       >
         {/* Alert */}
         {alert && (
@@ -93,38 +87,21 @@ const LoginForm = () => {
           />
         )}
 
-        {/* Email */}
+        {/* Identifier */}
         <FormField
           control={form.control}
-          name="email"
+          name="identifier"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel className="text-muted-foreground text-xs font-bold tracking-wider uppercase">
+                Email or Phone Number
+              </FormLabel>
               <FormControl>
-                <Input placeholder="you@example.com" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        {/* Password */}
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <div className="flex items-center justify-between">
-                <FormLabel>Password</FormLabel>
-                <Link
-                  href="/forgot-password"
-                  className="text-sm text-blue-600 hover:underline"
-                >
-                  Forgot password?
-                </Link>
-              </div>
-              <FormControl>
-                <Password placeholder="********" {...field} />
+                <Input
+                  placeholder="Enter your email or phone"
+                  className="h-11 rounded-xl"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -133,8 +110,9 @@ const LoginForm = () => {
 
         <SubmitButton
           loading={form.formState.isSubmitting}
-          text="Login"
-          loadingText="Logging In"
+          className="h-12 w-full rounded-xl text-lg font-bold shadow-lg shadow-blue-500/20"
+          text="Send OTP →"
+          loadingText="Sending OTP"
           loadingEffect
         />
 
@@ -142,7 +120,7 @@ const LoginForm = () => {
           Don&apos;t have an account?
           <Link
             href={`/register${redirect ? `?redirect=${redirect}` : ''}`}
-            className="p-0 pl-1 font-medium text-blue-600 hover:underline"
+            className="p-0 pl-1 font-bold text-blue-500 hover:underline"
           >
             Create one
           </Link>

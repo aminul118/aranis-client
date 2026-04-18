@@ -11,16 +11,15 @@ const LoginPage = () => {
       <div className="mx-auto flex w-full max-w-sm items-center justify-center rounded-lg md:max-w-4xl">
         <Card className="w-full max-w-5xl overflow-hidden p-0">
           <CardContent className="grid p-0 md:grid-cols-2">
-            <div className="p-6">
-              <div className="mb-6 grid place-items-center">
-                <h1 className="text-foreground mt-6 text-3xl font-bold tracking-tight">
+            <div className="p-8">
+              <div className="mb-8 text-center">
+                <h1 className="text-foreground text-3xl font-bold tracking-tight">
                   Login
                 </h1>
-                <p className="text-muted-foreground mt-2 text-center text-sm">
+                <p className="text-muted-foreground mt-2 text-sm">
                   Welcome back to Lumiere Fashion. Please enter your details.
                 </p>
               </div>
-              {/* Form Section */}
               <LoginForm />
             </div>
 
@@ -47,7 +46,7 @@ export default LoginPage;
 export const metadata: Metadata = generateMetaTags({
   title: 'Login | Lumiere Fashion',
   description:
-    'Securely log in to your Lumiere Fashion account to manage your orders, wishlist, and profile.',
+    'Securely log in to your The Aranis account to manage your orders, wishlist, and profile.',
   keywords:
     'login, sign in, Lumiere Fashion, e-commerce login, secure access, fashion portal',
   image: '/seo/aminul-hero-ss.png',

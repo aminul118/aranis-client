@@ -49,8 +49,8 @@ const Footer = ({ socialLinks = [] }: FooterProps) => {
               <AminulLogo />
             </div>
             <p className="mb-6 max-w-xs text-sm leading-relaxed text-slate-400">
-              Lumiere Fashion - Discover the latest trends in high-quality
-              apparel. Elevate your style with our curated collections of modern
+              The Aranis - Discover the latest trends in high-quality apparel.
+              Elevate your style with our curated collections of modern
               clothing.
             </p>
 

@@ -167,7 +167,7 @@ const SiteSettingsForm = ({ settings }: Props) => {
                   </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="e.g. Lumiere Fashion | Premium Contemporary Clothing"
+                      placeholder="e.g. The Aranis | Premium Contemporary Clothing"
                       {...field}
                     />
                   </FormControl>

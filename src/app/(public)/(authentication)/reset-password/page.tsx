@@ -18,7 +18,7 @@ export default ResetPasswordPage;
 export const metadata: Metadata = generateMetaTags({
   title: 'Reset Password | Lumiere Fashion',
   description:
-    'Set a new password for your Lumiere Fashion account to keep your data and preferences secure.',
+    'Set a new password for your The Aranis account to keep your data and preferences secure.',
   keywords:
     'reset password, password recovery, Lumiere Fashion, secure account, fashion updates',
   image: '/seo/aminul-hero-ss.png',

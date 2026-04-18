@@ -18,15 +18,21 @@ export interface ApiResponse<T> {
   meta?: IMeta;
 }
 
+export interface IUserAddress {
+  title: string;
+  address: string;
+}
+
 export interface IUser {
   _id: string;
   firstName: string;
   lastName: string;
   fullName: string;
-  email: string;
+  email?: string;
   phone?: string;
-  address?: string;
+  addresses: IUserAddress[];
   role: string;
+  userId?: number;
   picture?: string;
   isDeleted: boolean;
   isActive: string;

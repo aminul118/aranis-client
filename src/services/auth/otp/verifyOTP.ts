@@ -1,7 +1,6 @@
 'use server';
 
 import serverFetch from '@/lib/server-fetch';
-import { ActionError } from '@/lib/serverResponse';
 import { ApiResponse, IUser } from '@/types';
 import { setAccessToken, setRefreshToken } from '../cookie-token';
 
@@ -11,15 +10,10 @@ interface IOtp {
   user: IUser;
 }
 
-const verifyOTP = async (formData: FormData) => {
+const verifyOTP = async (payload: { identifier: string; otp: string }) => {
   try {
-    const payload = {
-      email: formData.get('email'),
-      otp: formData.get('otp'),
-    };
-
     const res = await serverFetch.post<ApiResponse<IOtp | null>>(
-      '/otp/verify',
+      '/auth/verify-otp',
       {
         headers: {
           'Content-Type': 'application/json',
@@ -29,21 +23,23 @@ const verifyOTP = async (formData: FormData) => {
     );
 
     if (!res.success || !res.data) {
-      return ActionError(false, null, res.message || 'Invalid OTP');
+      return { success: false, message: res.message || 'Invalid OTP' };
     }
 
     const { accessToken, refreshToken, user } = res.data;
 
-    await setAccessToken(accessToken);
-    await setRefreshToken(refreshToken);
+    if (accessToken && refreshToken) {
+      await setAccessToken(accessToken);
+      await setRefreshToken(refreshToken);
+    }
 
     return {
       success: true,
       user,
-      message: 'Login successful',
+      message: res.message || 'Successful',
     };
-  } catch {
-    return ActionError(false, null, 'Wrong OTP');
+  } catch (err: any) {
+    return { success: false, message: 'OTP verification failed' };
   }
 };
 

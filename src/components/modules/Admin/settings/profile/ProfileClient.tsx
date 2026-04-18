@@ -1,20 +1,15 @@
 'use client';
 
 import { Card } from '@/components/ui/card';
-import { IUser } from '@/types/api.types';
 import { useState } from 'react';
+import AddressManagement from './AddressManagement';
 import ProfileDetails from './ProfileDetails';
-import UpdateProfileForm from './UpdateProfileForm';
-
-type Props = {
-  user: IUser;
-};
 
 const ProfileClient = ({ user }: Props) => {
   const [isEditing, setIsEditing] = useState(false);
 
   return (
-    <section>
+    <section className="space-y-6">
       <Card>
         {isEditing ? (
           <UpdateProfileForm user={user} setIsEditing={setIsEditing} />
@@ -22,6 +17,12 @@ const ProfileClient = ({ user }: Props) => {
           <ProfileDetails user={user} setIsEditing={setIsEditing} />
         )}
       </Card>
+
+      {!isEditing && (
+        <Card>
+          <AddressManagement user={user} />
+        </Card>
+      )}
     </section>
   );
 };

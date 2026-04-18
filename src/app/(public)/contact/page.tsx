@@ -16,6 +16,6 @@ export async function generateMetadata(): Promise<Metadata> {
   return generateDynamicMeta(
     '/contact',
     'Contact Us',
-    'Get in touch with Lumiere Fashion for any inquiries, project collaborations, or support.',
+    'Get in touch with The Aranis for any inquiries, project collaborations, or support.',
   );
 }

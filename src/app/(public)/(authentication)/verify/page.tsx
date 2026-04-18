@@ -19,7 +19,7 @@ export default VerifyOTPPage;
 export const metadata: Metadata = generateMetaTags({
   title: 'Verify OTP | Lumiere Fashion',
   description:
-    'Verify your account with a one-time password (OTP) to securely access your Lumiere Fashion profile.',
+    'Verify your account with a one-time password (OTP) to securely access your The Aranis profile.',
   keywords:
     'verify otp, one time password, Lumiere Fashion, account verification, secure access',
   image: '/seo/aminul-hero-ss.png',

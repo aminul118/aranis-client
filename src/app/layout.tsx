@@ -46,10 +46,10 @@ export async function generateMetadata(): Promise<Metadata> {
   const { data: settings } = await getSiteSettings();
 
   return generateMetaTags({
-    title: settings?.title || 'Lumiere Fashion | Premium Contemporary Clothing',
+    title: settings?.title || 'The Aranis | Premium Contemporary Clothing',
     description:
       settings?.description ||
-      'Lumiere Fashion - Discover curated collections of luxury apparel blending modern design with timeless elegance.',
+      'The Aranis - Discover curated collections of luxury apparel blending modern design with timeless elegance.',
     keywords:
       settings?.keywords ||
       'Lumiere Fashion, Luxury Apparel, Premium Clothing, Fashion E-commerce, Designer Wear',

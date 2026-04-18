@@ -8,7 +8,7 @@ const HomeSEOContent = () => {
       title: "Best Women's Wear in Bangladesh",
       slug: 'Women',
       content:
-        "Lumiere Fashion is the most popular Women's Brand Shop in BD. Whether you are a professional, a student, or a fashion enthusiast, Lumiere has the perfect attire for you. Our collection of Ethnic Wear and Contemporary Western Wear is loved by all because we always bring the latest trends in Bangladesh. As the best women's fashion shop in BD, we prioritize your style and comfort. We bring the latest designer Salwar Kameez, Kurtis, and Sarees under budget for every customer - from daily wear to festive expert choices. Lumiere is considered the most trusted women's wear shop in BD, allowing you to buy the best apparel from top local and international styles. Along with the best brands, our stylists provide you with the best fashion decisions based on your needs and budget.",
+        "The Aranis is the most popular Women's Brand Shop in BD. Whether you are a professional, a student, or a fashion enthusiast, Lumiere has the perfect attire for you. Our collection of Ethnic Wear and Contemporary Western Wear is loved by all because we always bring the latest trends in Bangladesh. As the best women's fashion shop in BD, we prioritize your style and comfort. We bring the latest designer Salwar Kameez, Kurtis, and Sarees under budget for every customer - from daily wear to festive expert choices. Lumiere is considered the most trusted women's wear shop in BD, allowing you to buy the best apparel from top local and international styles. Along with the best brands, our stylists provide you with the best fashion decisions based on your needs and budget.",
       badge: 'Women',
     },
     {
@@ -29,7 +29,7 @@ const HomeSEOContent = () => {
       title: 'Best Occasion Wear Shop In Bangladesh',
       slug: 'Ethnic Wear',
       content:
-        "Lumiere Fashion is Bangladesh's most trusted Occasion Wear Shop. For years, we have been providing the best stylistic solutions for weddings, parties, and corporate events. Furnish your wardrobe with the best festive supplies. Find Wedding Lehengas, Reception Gowns, Evening Dresses, and Festive Panjabis for a smooth and stunning presence. Our expert designers meticulously craft each piece to ensure it meets the highest standards of elegance and sophistication.",
+        "The Aranis is Bangladesh's most trusted Occasion Wear Shop. For years, we have been providing the best stylistic solutions for weddings, parties, and corporate events. Furnish your wardrobe with the best festive supplies. Find Wedding Lehengas, Reception Gowns, Evening Dresses, and Festive Panjabis for a smooth and stunning presence. Our expert designers meticulously craft each piece to ensure it meets the highest standards of elegance and sophistication.",
       badge: 'Occasion',
     },
     {
@@ -104,8 +104,8 @@ const HomeSEOContent = () => {
               touch of premium fashion.
             </p>
             <p>
-              This is where we come in. Starting as a boutique design house,
-              Lumiere Fashion focuses on giving the best customer experience in
+              This is where we come in. Starting as a boutique design house, The
+              Aranis focuses on giving the best customer experience in
               Bangladesh, following our motto:{' '}
               <span className="text-foreground font-bold italic">
                 “Customer Comes First.”
@@ -214,7 +214,7 @@ const HomeSEOContent = () => {
                 </h3>
                 <div className="text-muted-foreground space-y-6 text-lg leading-relaxed">
                   <p>
-                    Lumiere Fashion has taken care of its customers since the
+                    The Aranis has taken care of its customers since the
                     beginning. We deliver the best products for the best price
                     with extended after-sales support and the highest standard
                     of customer service.
@@ -244,7 +244,7 @@ const HomeSEOContent = () => {
               </p>
               <div className="flex flex-col gap-2">
                 <p className="text-foreground text-sm font-black tracking-widest uppercase">
-                  Lumiere Fashion • Bangladesh
+                  The Aranis • Bangladesh
                 </p>
                 <div className="flex justify-center gap-4 md:justify-end">
                   <div className="bg-primary h-1.5 w-1.5 rounded-full" />

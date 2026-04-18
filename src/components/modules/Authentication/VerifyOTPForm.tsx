@@ -20,7 +20,7 @@ import {
   InputOTPSlot,
 } from '@/components/ui/input-otp';
 import useSearchParamsValues from '@/hooks/useSearchParamsValues';
-import { sendOTP } from '@/services/auth/otp/sendOTP';
+import { requestOTP } from '@/services/auth/otp/sendOTP';
 import { verifyOTP } from '@/services/auth/otp/verifyOTP';
 import {
   getDefaultDashboardRoute,
@@ -38,14 +38,17 @@ import { z } from 'zod';
 type FormValues = z.infer<typeof otpValidation>;
 
 const VerifyOTPForm = () => {
-  const [counter, setCounter] = useState(6); // 1 min timer
-  const { email, redirect } = useSearchParamsValues('email', 'redirect');
+  const [counter, setCounter] = useState(60); // 1 min timer
+  const { identifier, redirect } = useSearchParamsValues(
+    'identifier',
+    'redirect',
+  );
   const router = useRouter();
 
-  // Email no email received -> User can't visit this page
+  // Identifier check -> User can't visit this page without it
   useEffect(() => {
-    if (!email) forbidden();
-  }, [email]);
+    if (!identifier) forbidden();
+  }, [identifier]);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(otpValidation),
@@ -64,35 +67,36 @@ const VerifyOTPForm = () => {
 
   const onSubmit = async (values: FormValues) => {
     try {
-      if (!email) {
-        toast.error('Email Not Found..');
+      if (!identifier) {
+        toast.error('Identifier Not Found..');
         return;
       }
-      const formData = new FormData();
-      formData.append('otp', values.otp);
-      formData.append('email', email);
 
-      const res = await verifyOTP(formData);
+      const res = await verifyOTP({ identifier, otp: values.otp });
       if (!res.success) {
         toast.error(res.message);
-      }
-      if (res.success && 'user' in res) {
+      } else if (res.user) {
+        toast.success(res.message || 'Verified successfully');
         router.push(
           redirect || getDefaultDashboardRoute(res.user.role as UserRole),
         );
+      } else {
+        // This case might happen if OTP verified but user creation is pending (e.g. guest checkout)
+        // But for login/register, user should exist by now.
+        toast.success('OTP verified');
       }
     } catch (err: any) {
-      toast.error(err.message);
+      toast.error(err.message || 'Verification failed');
     }
   };
 
   const handleResend = async () => {
-    if (!email) return;
+    if (!identifier) return;
 
-    const res = await sendOTP(email);
+    const res = await requestOTP(identifier);
 
     if (res.success) {
-      toast.success(`OTP sent to ${email}`);
+      toast.success(`OTP sent to ${identifier}`);
       setCounter(60); // ✅ reset timer
     } else {
       toast.error(res.message || 'Error sending OTP');
@@ -110,8 +114,8 @@ const VerifyOTPForm = () => {
             Verify Your Account
           </CardTitle>
           <p className="text-muted-foreground text-center text-sm">
-            Enter the 6-digit code sent to your email to secure your Lumiere
-            Fashion profile.
+            Enter the 6-digit code sent to your email or phone to secure your
+            access.
           </p>
         </CardHeader>
 

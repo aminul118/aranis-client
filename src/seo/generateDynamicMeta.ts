@@ -25,7 +25,7 @@ export async function generateDynamicMeta(
     description:
       settings?.description ||
       fallbackDesc ||
-      'Lumiere Fashion - Premium contemporary apparel and accessories.',
+      'The Aranis - Premium contemporary apparel and accessories.',
     keywords: settings?.keywords || 'Lumiere Fashion, Clothing, Premium',
     websitePath: path,
     image: settings?.baseImage,

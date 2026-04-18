@@ -1,25 +1,20 @@
 'use server';
 
 import serverFetch from '@/lib/server-fetch';
-import { ActionError } from '@/lib/serverResponse';
 import { ApiResponse } from '@/types';
 
-const sendOTP = async (email: string | null) => {
+const requestOTP = async (identifier: string) => {
   try {
-    const payload = {
-      email,
-    };
-
-    const res = await serverFetch.post<ApiResponse<null>>('/otp/re-send', {
+    const res = await serverFetch.post<ApiResponse<null>>('/auth/request-otp', {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(payload),
+      body: JSON.stringify({ identifier }),
     });
     return res;
   } catch {
-    return ActionError(false, null, 'Wrong OTP');
+    return { success: false, message: 'Failed to request OTP' };
   }
 };
 
-export { sendOTP };
+export { requestOTP };
