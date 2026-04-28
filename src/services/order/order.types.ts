@@ -30,6 +30,9 @@ export interface IOrder {
   user: IUser;
   items: IOrderItem[];
   totalPrice: number;
+  subTotal?: number;
+  discount?: number;
+  couponCode?: string;
   status: OrderStatus;
   shippingAddress: string;
   paymentMethod: PaymentMethod;

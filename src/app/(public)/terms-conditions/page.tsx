@@ -8,7 +8,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return generateDynamicMeta(
     '/terms-conditions',
     'Terms & Conditions',
-    'Learn about the terms and conditions for using the Lumiere e-commerce platform.',
+    'Learn about the terms and conditions for using the Aranis e-commerce platform.',
   );
 }
 
@@ -47,7 +47,7 @@ const TermsConditionsPage = () => {
                 1. Introduction
               </h2>
               <p>
-                Welcome to Lumiere. By accessing or using our website, you agree
+                Welcome to Aranis. By accessing or using our website, you agree
                 to be bound by these Terms and Conditions and our Privacy
                 Policy. If you do not agree to all of these terms, please do not
                 use our services.
@@ -60,7 +60,7 @@ const TermsConditionsPage = () => {
               </h2>
               <p>
                 Permission is granted to temporarily download one copy of the
-                materials (information or software) on Lumiere's website for
+                materials (information or software) on Aranis's website for
                 personal, non-commercial transitory viewing only. This is the
                 grant of a license, not a transfer of title.
               </p>
@@ -72,7 +72,7 @@ const TermsConditionsPage = () => {
                 </li>
                 <li>
                   Attempt to decompile or reverse engineer any software
-                  contained on Lumiere's website;
+                  contained on Aranis's website;
                 </li>
                 <li>
                   Remove any copyright or other proprietary notations from the
@@ -86,8 +86,8 @@ const TermsConditionsPage = () => {
                 3. Disclaimer
               </h2>
               <p>
-                The materials on Lumiere's website are provided on an 'as is'
-                basis. Lumiere makes no warranties, expressed or implied, and
+                The materials on Aranis's website are provided on an 'as is'
+                basis. Aranis makes no warranties, expressed or implied, and
                 hereby disclaims and negates all other warranties including,
                 without limitation, implied warranties or conditions of
                 merchantability, fitness for a particular purpose, or
@@ -101,10 +101,10 @@ const TermsConditionsPage = () => {
                 4. Limitations
               </h2>
               <p>
-                In no event shall Lumiere or its suppliers be liable for any
+                In no event shall Aranis or its suppliers be liable for any
                 damages (including, without limitation, damages for loss of data
                 or profit, or due to business interruption) arising out of the
-                use or inability to use the materials on Lumiere's website.
+                use or inability to use the materials on Aranis's website.
               </p>
             </section>
 
@@ -113,10 +113,10 @@ const TermsConditionsPage = () => {
                 5. Accuracy of Materials
               </h2>
               <p>
-                The materials appearing on Lumiere's website could include
-                technical, typographical, or photographic errors. Lumiere does
+                The materials appearing on Aranis's website could include
+                technical, typographical, or photographic errors. Aranis does
                 not warrant that any of the materials on its website are
-                accurate, complete or current. Lumiere may make changes to the
+                accurate, complete or current. Aranis may make changes to the
                 materials contained on its website at any time without notice.
               </p>
             </section>
@@ -127,7 +127,7 @@ const TermsConditionsPage = () => {
               </h2>
               <p>
                 These terms and conditions are governed by and construed in
-                accordance with the laws of the jurisdiction in which Lumiere
+                accordance with the laws of the jurisdiction in which Aranis
                 operates, and you irrevocably submit to the exclusive
                 jurisdiction of the courts in that State or location.
               </p>

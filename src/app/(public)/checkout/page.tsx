@@ -31,7 +31,9 @@ import {
   Phone as PhoneIcon,
   ShieldAlert,
   ShieldCheck,
+  Tag,
   Truck,
+  X,
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -40,7 +42,17 @@ import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 const CheckoutPage = () => {
-  const { cart, total, subtotal, discount, clearCart } = useCart();
+  const {
+    cart,
+    total,
+    subtotal,
+    discount,
+    couponCode,
+    applyCoupon,
+    clearCart,
+  } = useCart();
+  const [couponInput, setCouponInput] = useState('');
+  const [isApplyingCoupon, setIsApplyingCoupon] = useState(false);
   const [user, setUser] = useState<IUser | null>(null);
   const [loading, setLoading] = useState(true);
   const [guestMethod, setGuestMethod] = useState<'email' | 'phone'>('email');
@@ -152,9 +164,13 @@ const CheckoutPage = () => {
         items: cart.map((item) => ({
           product: item._id as string,
           quantity: item.quantity,
-          price: item.price,
+          price:
+            item.salePrice && item.salePrice > 0 ? item.salePrice : item.price,
         })),
         totalPrice: total,
+        subTotal: subtotal,
+        discount: discount,
+        couponCode: couponCode,
         shippingAddress,
         paymentMethod,
       };
@@ -195,6 +211,26 @@ const CheckoutPage = () => {
     } catch (error) {
       toast.error('Verification failed');
       setSubmitting(false);
+    }
+  };
+
+  const handleApplyCoupon = async () => {
+    if (!couponInput.trim()) return;
+    setIsApplyingCoupon(true);
+    try {
+      const { validateCoupon } = await import('@/services/coupon/coupon');
+      const res = await validateCoupon(couponInput);
+      if (res.success && res.data) {
+        applyCoupon(res.data);
+        toast.success(`${res.data.discount}% Discount Applied!`);
+        setCouponInput('');
+      } else {
+        toast.error(res.message || 'Invalid Coupon Code');
+      }
+    } catch (error: any) {
+      toast.error(error?.message || 'Failed to apply coupon');
+    } finally {
+      setIsApplyingCoupon(false);
     }
   };
 
@@ -525,7 +561,7 @@ const CheckoutPage = () => {
               <div>
                 <h4 className="text-sm font-bold">Protected Transaction</h4>
                 <p className="text-muted-foreground text-xs">
-                  Your order is secured by Lumiere's elite encryption protocols
+                  Your order is secured by Aranis's elite encryption protocols
                 </p>
               </div>
             </div>
@@ -565,10 +601,54 @@ const CheckoutPage = () => {
                       </div>
                     </div>
                     <p className="text-sm font-bold">
-                      ৳{(item.price * item.quantity).toFixed(2)}
+                      ৳
+                      {(
+                        (item.salePrice && item.salePrice > 0
+                          ? item.salePrice
+                          : item.price) * item.quantity
+                      ).toFixed(2)}
                     </p>
                   </div>
                 ))}
+              </div>
+
+              {/* Coupon Section */}
+              <div className="border-border/30 mb-8 border-b pb-6">
+                <p className="text-muted-foreground mb-3 text-[10px] font-black tracking-[0.2em] uppercase">
+                  Apply Coupon
+                </p>
+                {couponCode ? (
+                  <div className="flex items-center justify-between rounded-xl border border-blue-500/20 bg-blue-500/5 px-4 py-3 text-sm font-bold text-blue-500">
+                    <span className="flex items-center gap-2">
+                      <Tag size={14} /> {couponCode}
+                    </span>
+                    <button
+                      onClick={() => applyCoupon(null)}
+                      className="text-blue-500/50 hover:text-blue-500"
+                    >
+                      <X size={16} />
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      placeholder="SAVE10"
+                      value={couponInput}
+                      onChange={(e) =>
+                        setCouponInput(e.target.value.toUpperCase())
+                      }
+                      className="bg-muted border-border text-foreground flex-1 rounded-xl border px-4 py-3 text-sm font-bold tracking-widest transition-all focus:border-blue-500/50 focus:outline-none"
+                    />
+                    <Button
+                      onClick={handleApplyCoupon}
+                      disabled={isApplyingCoupon}
+                      className="bg-blue-600 px-6 font-bold text-white hover:bg-blue-700 disabled:opacity-50"
+                    >
+                      {isApplyingCoupon ? '...' : 'Apply'}
+                    </Button>
+                  </div>
+                )}
               </div>
 
               <div className="space-y-4 pt-4">
@@ -581,7 +661,7 @@ const CheckoutPage = () => {
                 <div className="text-muted-foreground flex justify-between text-sm">
                   <span>Shipping</span>
                   <span className="text-[10px] font-bold tracking-widest text-emerald-500 uppercase">
-                    Lumiere Prime Free
+                    Aranis Prime Free
                   </span>
                 </div>
                 {discount > 0 && (

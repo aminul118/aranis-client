@@ -5,6 +5,7 @@ import WriteReviewModal from '@/components/modules/User/orders/WriteReviewModal'
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useCart } from '@/context/CartContext';
 import { getMyOrders } from '@/services/order/order';
 import { OrderStatus } from '@/services/order/order.types';
 import { IProduct } from '@/types';
@@ -17,6 +18,7 @@ import {
   Clock,
   MapPin,
   Package,
+  RefreshCcw,
   Search,
   ShoppingBag,
   Star,
@@ -24,7 +26,9 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 const getStatusIcon = (status: string) => {
   switch (status) {
@@ -33,6 +37,8 @@ const getStatusIcon = (status: string) => {
     case 'Processing':
       return <Package className="h-4 w-4" />;
     case 'Shipped':
+      return <Truck className="h-4 w-4" />;
+    case 'Courier':
       return <Truck className="h-4 w-4" />;
     case 'Delivered':
       return <CheckCircle2 className="h-4 w-4" />;
@@ -49,10 +55,14 @@ const getStatusColor = (status: string) => {
       return 'bg-blue-500/10 text-blue-500 border-blue-500/20';
     case 'Shipped':
       return 'bg-purple-500/10 text-purple-500 border-purple-500/20';
+    case 'Courier':
+      return 'bg-indigo-500/10 text-indigo-500 border-indigo-500/20';
     case 'Delivered':
       return 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20';
     case 'Cancelled':
       return 'bg-red-500/10 text-red-500 border-red-500/20';
+    case 'Rejected':
+      return 'bg-rose-500/10 text-rose-500 border-rose-500/20';
     default:
       return 'bg-muted text-muted-foreground';
   }
@@ -61,10 +71,25 @@ const getStatusColor = (status: string) => {
 import OrderListSkeleton from './_components/OrderListSkeleton';
 
 const UserOrdersPage = () => {
+  const router = useRouter();
+  const { addToCart } = useCart();
   const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [reviewOrder, setReviewOrder] = useState<any | null>(null);
+
+  const handleOrderAgain = (order: any) => {
+    order.items.forEach((item: any) => {
+      if (item.product) {
+        addToCart({
+          ...item.product,
+          quantity: item.quantity,
+        });
+      }
+    });
+    toast.success('Items added to cart!');
+    router.push('/cart');
+  };
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -272,16 +297,39 @@ const UserOrdersPage = () => {
                           </div>
                         </div>
 
-                        {/* Review button — only when delivered */}
-                        {isDelivered && (
+                        {/* Action buttons */}
+                        <div className="flex flex-wrap items-center gap-3">
                           <Button
-                            onClick={() => setReviewOrder(order)}
-                            className="shrink-0 gap-2 rounded-full bg-amber-500 px-6 font-bold text-white hover:bg-amber-600"
+                            asChild
+                            variant="outline"
+                            className="shrink-0 gap-2 rounded-full border-blue-500/50 px-6 font-bold text-blue-600 hover:bg-blue-50"
                           >
-                            <Star className="h-4 w-4" />
-                            Write a Review
+                            <Link href={`/track-order?id=${order._id}`}>
+                              <Truck className="h-4 w-4" />
+                              Detailed Tracking
+                            </Link>
                           </Button>
-                        )}
+
+                          <Button
+                            onClick={() => handleOrderAgain(order)}
+                            variant="outline"
+                            className="shrink-0 gap-2 rounded-full border-emerald-500/50 px-6 font-bold text-emerald-600 hover:bg-emerald-50"
+                          >
+                            <RefreshCcw className="h-4 w-4" />
+                            Order Again
+                          </Button>
+
+                          {/* Review button — only when delivered */}
+                          {isDelivered && (
+                            <Button
+                              onClick={() => setReviewOrder(order)}
+                              className="shrink-0 gap-2 rounded-full bg-amber-500 px-6 font-bold text-white hover:bg-amber-600"
+                            >
+                              <Star className="h-4 w-4" />
+                              Write a Review
+                            </Button>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </motion.div>

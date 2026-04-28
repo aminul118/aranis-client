@@ -49,14 +49,52 @@ const ProductImageGallery = ({
   const currentIdx = images.indexOf(selectedImage);
 
   return (
-    <div className="space-y-4 select-none">
+    <div className="flex flex-col-reverse gap-4 select-none lg:h-[700px] lg:flex-row">
+      {/* ── Thumbnail Strip (Left side on desktop, bottom on mobile) ── */}
+      {hasMultiple && (
+        <div
+          ref={thumbsRef}
+          className="scrollbar-none flex snap-x gap-3 overflow-x-auto px-1 py-2 lg:w-24 lg:snap-y lg:flex-col lg:overflow-y-auto"
+        >
+          {images.map((img, idx) => {
+            const active = selectedImage === img;
+            return (
+              <button
+                key={img + idx}
+                type="button"
+                aria-label={`View image ${idx + 1}`}
+                onClick={() => handleSelectImage(img)}
+                className={[
+                  'relative h-20 w-16 shrink-0 snap-start overflow-hidden rounded-2xl border-2 shadow-sm transition-all duration-300 lg:h-24 lg:w-full',
+                  active
+                    ? 'scale-105 border-blue-500 ring-4 shadow-blue-500/25 ring-blue-500/20'
+                    : 'border-border/40 opacity-55 hover:scale-[1.03] hover:border-blue-500/40 hover:opacity-100',
+                ].join(' ')}
+              >
+                <Image
+                  src={img}
+                  alt={`${productName} view ${idx + 1}`}
+                  fill
+                  draggable={false}
+                  className="pointer-events-none object-cover"
+                />
+                {/* Active overlay shimmer */}
+                {active && (
+                  <div className="absolute inset-0 bg-blue-500/10 backdrop-blur-[1px]" />
+                )}
+              </button>
+            );
+          })}
+        </div>
+      )}
+
       {/* ── Main Viewer ─────────────────────────────────────────────────── */}
       <div
         ref={containerRef}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         onMouseMove={handleMouseMove}
-        className="border-border/50 bg-secondary/30 relative aspect-square cursor-crosshair overflow-hidden rounded-4xl border backdrop-blur-sm md:aspect-4/5"
+        className="border-border/50 bg-secondary/30 relative min-h-[400px] flex-1 cursor-crosshair overflow-hidden rounded-4xl border backdrop-blur-sm"
         style={{ isolation: 'isolate' }}
       >
         {/* Crossfade switcher */}
@@ -120,44 +158,6 @@ const ProductImageGallery = ({
           </div>
         )}
       </div>
-
-      {/* ── Thumbnail Strip ──────────────────────────────────────────────── */}
-      {hasMultiple && (
-        <div
-          ref={thumbsRef}
-          className="scrollbar-none flex snap-x gap-3 overflow-x-auto px-1 py-2"
-        >
-          {images.map((img, idx) => {
-            const active = selectedImage === img;
-            return (
-              <button
-                key={img + idx}
-                type="button"
-                aria-label={`View image ${idx + 1}`}
-                onClick={() => handleSelectImage(img)}
-                className={[
-                  'relative h-24 w-20 shrink-0 snap-start overflow-hidden rounded-2xl border-2 shadow-sm transition-all duration-300 md:h-28 md:w-24',
-                  active
-                    ? 'scale-105 border-blue-500 ring-4 shadow-blue-500/25 ring-blue-500/20'
-                    : 'border-border/40 opacity-55 hover:scale-[1.03] hover:border-blue-500/40 hover:opacity-100',
-                ].join(' ')}
-              >
-                <Image
-                  src={img}
-                  alt={`${productName} view ${idx + 1}`}
-                  fill
-                  draggable={false}
-                  className="pointer-events-none object-cover"
-                />
-                {/* Active overlay shimmer */}
-                {active && (
-                  <div className="absolute inset-0 bg-blue-500/10 backdrop-blur-[1px]" />
-                )}
-              </button>
-            );
-          })}
-        </div>
-      )}
     </div>
   );
 };

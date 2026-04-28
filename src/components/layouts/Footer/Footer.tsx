@@ -126,7 +126,7 @@ const Footer = ({ socialLinks = [] }: FooterProps) => {
         <div className="mt-6 flex flex-col items-center justify-between gap-4 sm:flex-row">
           <p className="text-xs text-slate-500">
             © {new Date().getFullYear()}{' '}
-            <span className="text-slate-400">Lumiere Fashion</span>. All rights
+            <span className="text-slate-400">Aranis Fashion</span>. All rights
             reserved.
           </p>
 

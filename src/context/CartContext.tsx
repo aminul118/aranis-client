@@ -30,7 +30,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
 
   // Load cart from localStorage
   useEffect(() => {
-    const savedCart = localStorage.getItem('lumiere_cart');
+    const savedCart = localStorage.getItem('Aranis_cart');
     if (savedCart) {
       setCart(JSON.parse(savedCart));
     }
@@ -38,7 +38,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
 
   // Save cart to localStorage
   useEffect(() => {
-    localStorage.setItem('lumiere_cart', JSON.stringify(cart));
+    localStorage.setItem('Aranis_cart', JSON.stringify(cart));
   }, [cart]);
 
   const addToCart = (product: IProduct) => {
@@ -84,7 +84,10 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
   const subtotal = cart.reduce(
-    (sum, item) => sum + item.price * item.quantity,
+    (sum, item) =>
+      sum +
+      (item.salePrice && item.salePrice > 0 ? item.salePrice : item.price) *
+        item.quantity,
     0,
   );
   const discount = (subtotal * discountPercent) / 100;

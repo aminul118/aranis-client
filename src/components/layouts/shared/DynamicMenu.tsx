@@ -68,7 +68,7 @@ const DynamicMenu = ({ menuGroups, role, user }: DynamicMenuProps) => {
     handleSocketUpdate,
     user?._id,
     'new-notification',
-    role === 'ADMIN' ? ['admins'] : [],
+    role === 'ADMIN' || role === 'SUPER_ADMIN' ? ['admins'] : [],
   );
   useSocket(handleSocketUpdate, user?._id, 'newNotification');
   useSocket(handleSocketUpdate, user?._id, 'receive-message');
@@ -83,7 +83,9 @@ const DynamicMenu = ({ menuGroups, role, user }: DynamicMenuProps) => {
   // Filter groups by role — if a group has no `roles`, it's visible to everyone
   const visibleGroups = menuGroups.filter((group) => {
     if (!group.roles || group.roles.length === 0) return true;
-    return role ? group.roles.includes(role as UserRole) : false;
+    if (!role) return false;
+    const normalizedRole = role.toUpperCase();
+    return group.roles.includes(normalizedRole as UserRole);
   });
 
   return (
@@ -92,7 +94,9 @@ const DynamicMenu = ({ menuGroups, role, user }: DynamicMenuProps) => {
         // Filter items within the group too
         const visibleItems = group.menu.filter((item) => {
           if (!item.roles || item.roles.length === 0) return true;
-          return role ? item.roles.includes(role as UserRole) : false;
+          if (!role) return false;
+          const normalizedRole = role.toUpperCase();
+          return item.roles.includes(normalizedRole as UserRole);
         });
 
         if (visibleItems.length === 0) return null;
@@ -158,9 +162,11 @@ const DynamicMenu = ({ menuGroups, role, user }: DynamicMenuProps) => {
                             ?.filter((sub) => {
                               if (!sub.roles || sub.roles.length === 0)
                                 return true;
-                              return role
-                                ? sub.roles.includes(role as UserRole)
-                                : false;
+                              if (!role) return false;
+                              const normalizedRole = role.toUpperCase();
+                              return sub.roles.includes(
+                                normalizedRole as UserRole,
+                              );
                             })
                             .map((subItem, j) => {
                               const subActive = isLinkActive(subItem.url);

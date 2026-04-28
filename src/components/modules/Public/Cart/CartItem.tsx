@@ -35,9 +35,14 @@ const CartItem = ({ item, onUpdateQuantity, onRemove }: CartItemProps) => {
             <h3 className="text-foreground mb-1 text-xl font-bold transition-colors group-hover:text-blue-500">
               {item.name}
             </h3>
-            <p className="text-muted-foreground mb-4 text-sm">
-              {item.category}
-            </p>
+            <div className="mb-4 flex items-center gap-3">
+              <p className="text-muted-foreground text-sm">{item.category}</p>
+              {item.salePrice && item.salePrice > 0 && (
+                <span className="rounded-md bg-red-500 px-2 py-0.5 text-[10px] font-bold text-white uppercase">
+                  Sale
+                </span>
+              )}
+            </div>
           </div>
           <button
             onClick={() => onRemove(item._id as string)}
@@ -69,9 +74,22 @@ const CartItem = ({ item, onUpdateQuantity, onRemove }: CartItemProps) => {
               <Plus size={14} />
             </button>
           </div>
-          <p className="text-foreground text-xl font-bold">
-            ৳{(item.price * item.quantity).toFixed(2)}
-          </p>
+          <div className="text-right">
+            {item.salePrice && item.salePrice > 0 ? (
+              <div className="flex flex-col items-end">
+                <p className="text-foreground text-xl font-bold">
+                  ৳{(item.salePrice * item.quantity).toFixed(2)}
+                </p>
+                <p className="text-muted-foreground text-xs line-through">
+                  ৳{(item.price * item.quantity).toFixed(2)}
+                </p>
+              </div>
+            ) : (
+              <p className="text-foreground text-xl font-bold">
+                ৳{(item.price * item.quantity).toFixed(2)}
+              </p>
+            )}
+          </div>
         </div>
       </div>
     </motion.div>

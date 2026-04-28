@@ -115,7 +115,7 @@ export const TableElement = withHOC(
         isSelectingCell,
         marginLeft,
         props: tableProps,
-      } = useTableElement();
+      } = useTableElement() as any;
 
       const width = useResizableValue('width');
 

@@ -4,6 +4,11 @@ import { revalidate } from '@/lib/revalidate';
 import serverFetch from '@/lib/server-fetch';
 import { ApiResponse } from '@/types';
 
+export interface IVariant {
+  color: string;
+  images: string[];
+}
+
 export interface IProduct {
   _id?: string;
   name: string;
@@ -16,6 +21,7 @@ export interface IProduct {
   description: string;
   details: string | string[];
   color: string;
+  variants?: IVariant[];
   sizes: string[];
   featured: boolean;
   rating: number;
@@ -23,7 +29,11 @@ export interface IProduct {
   stock: number;
   buyPrice: number;
   salePrice?: number;
+  discountPercentage?: number;
+  isOffer?: boolean;
+  offerTag?: string;
   soldCount?: number;
+  videoUrl?: string;
   isDeleted?: boolean;
 }
 
@@ -98,10 +108,25 @@ const getBestSellingProducts = async () => {
   });
 };
 
+const updateProductBulk = async (ids: string[], data: Partial<IProduct>) => {
+  const res = await serverFetch.patch<ApiResponse<IProduct[]>>(
+    '/products/bulk-update',
+    {
+      body: JSON.stringify({ ids, data }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    },
+  );
+  revalidate('product');
+  return res;
+};
+
 export {
   deleteProduct,
   getBestSellingProducts,
   getProducts,
   getSingleProduct,
   getTopRatedProducts,
+  updateProductBulk,
 };

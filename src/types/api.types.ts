@@ -37,6 +37,7 @@ export interface IUser {
   isDeleted: boolean;
   isActive: string;
   isVerified: boolean;
+  hasPassword: boolean;
   auths: Auth[];
   createdAt: string;
   updatedAt: string;
@@ -168,4 +169,15 @@ export interface IStats {
       PENDING: number;
     };
   };
+}
+
+export interface ICoupon {
+  _id: string;
+  name: string;
+  code: string;
+  discount: number;
+  expiryDate: string;
+  isDeleted: boolean;
+  createdAt: string;
+  updatedAt: string;
 }

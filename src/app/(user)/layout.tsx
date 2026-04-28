@@ -28,5 +28,5 @@ const UserLayout = async ({ children }: Children) => {
 export default UserLayout;
 
 export const metadata: Metadata = {
-  title: 'My Portal | Lumiere',
+  title: 'My Portal | Aranis',
 };

@@ -27,8 +27,8 @@ export async function generateMetadata(): Promise<Metadata> {
 
   return generateMetaTags({
     title: shopNavItem
-      ? `${shopNavItem.title} | ${settings?.title || 'Lumiere Fashion'}`
-      : `Shop | ${settings?.title || 'Lumiere Fashion'}`,
+      ? `${shopNavItem.title} | ${settings?.title || 'Aranis Fashion'}`
+      : `Shop | ${settings?.title || 'Aranis Fashion'}`,
     description:
       settings?.description ||
       'Explore our curated collections of premium contemporary apparel.',

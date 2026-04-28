@@ -20,13 +20,13 @@ export async function generateDynamicMeta(
 
   return generateMetaTags({
     title: navItem
-      ? `${navItem.title} | ${settings?.title || 'Lumiere Fashion'}`
-      : `${fallbackTitle} | ${settings?.title || 'Lumiere Fashion'}`,
+      ? `${navItem.title} | ${settings?.title || 'Aranis Fashion'}`
+      : `${fallbackTitle} | ${settings?.title || 'Aranis Fashion'}`,
     description:
       settings?.description ||
       fallbackDesc ||
       'The Aranis - Premium contemporary apparel and accessories.',
-    keywords: settings?.keywords || 'Lumiere Fashion, Clothing, Premium',
+    keywords: settings?.keywords || 'Aranis Fashion, Clothing, Premium',
     websitePath: path,
     image: settings?.baseImage,
   });
@@ -117,11 +117,11 @@ export async function generateCategorizedMeta(
   }
 
   return generateMetaTags({
-    title: `${finalTitle} | ${settings?.title || 'Lumiere Fashion'}`,
+    title: `${finalTitle} | ${settings?.title || 'Aranis Fashion'}`,
     description:
       finalDesc ||
       settings?.description ||
-      `Explore our dynamic collection of ${finalTitle}. Premium quality apparel at Lumiere Fashion.`,
+      `Explore our dynamic collection of ${finalTitle}. Premium quality apparel at Aranis Fashion.`,
     keywords:
       finalKeywords ||
       `${settings?.keywords || ''}, ${slugs.join(', ')}`.trim(),

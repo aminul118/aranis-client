@@ -54,7 +54,7 @@ const ShopHeader = ({
           <h1 className="text-foreground mb-1 text-3xl font-black tracking-tighter md:text-4xl">
             {selectedCategory !== 'All'
               ? `${selectedCategory} ${selectedSubCategory} ${selectedType}`.trim()
-              : 'Lumiere Shop'}
+              : 'Aranis Shop'}
           </h1>
           <p className="text-muted-foreground text-xs font-medium">
             Discover excellence ({totalItems} items)

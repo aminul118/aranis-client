@@ -8,21 +8,21 @@ const HomeSEOContent = () => {
       title: "Best Women's Wear in Bangladesh",
       slug: 'Women',
       content:
-        "The Aranis is the most popular Women's Brand Shop in BD. Whether you are a professional, a student, or a fashion enthusiast, Lumiere has the perfect attire for you. Our collection of Ethnic Wear and Contemporary Western Wear is loved by all because we always bring the latest trends in Bangladesh. As the best women's fashion shop in BD, we prioritize your style and comfort. We bring the latest designer Salwar Kameez, Kurtis, and Sarees under budget for every customer - from daily wear to festive expert choices. Lumiere is considered the most trusted women's wear shop in BD, allowing you to buy the best apparel from top local and international styles. Along with the best brands, our stylists provide you with the best fashion decisions based on your needs and budget.",
+        "The Aranis is the most popular Women's Brand Shop in BD. Whether you are a professional, a student, or a fashion enthusiast, Aranis has the perfect attire for you. Our collection of Ethnic Wear and Contemporary Western Wear is loved by all because we always bring the latest trends in Bangladesh. As the best women's fashion shop in BD, we prioritize your style and comfort. We bring the latest designer Salwar Kameez, Kurtis, and Sarees under budget for every customer - from daily wear to festive expert choices. Aranis is considered the most trusted women's wear shop in BD, allowing you to buy the best apparel from top local and international styles. Along with the best brands, our stylists provide you with the best fashion decisions based on your needs and budget.",
       badge: 'Women',
     },
     {
       title: "Best Men's Fashion Collection in Bangladesh",
       slug: 'Men',
       content:
-        "Lumiere has the most comprehensive array of Men's Fashion. We offer top-of-the-line Suits, Blazers, Panjabis, and Casual Wear at Lumiere outlets, the trusted and most popular Men's shop in Bangladesh. Get your new formal attire or weekend casuals with a focus on premium fabric and perfect fit. You can always depend on Lumiere's fashion experts to curate the best wardrobe with pieces of your choice. Lumiere is Bangladesh's most reliable destination for premium men's tailoring and ready-to-wear essentials. Take your professional or social presence to the next level with a large collection of high-end Formal Wear and Streetwear from Lumiere.",
+        "Aranis has the most comprehensive array of Men's Fashion. We offer top-of-the-line Suits, Blazers, Panjabis, and Casual Wear at Aranis outlets, the trusted and most popular Men's shop in Bangladesh. Get your new formal attire or weekend casuals with a focus on premium fabric and perfect fit. You can always depend on Aranis's fashion experts to curate the best wardrobe with pieces of your choice. Aranis is Bangladesh's most reliable destination for premium men's tailoring and ready-to-wear essentials. Take your professional or social presence to the next level with a large collection of high-end Formal Wear and Streetwear from Aranis.",
       badge: 'Men',
     },
     {
       title: 'Best Activewear Shop In Bangladesh',
       slug: 'Activewear',
       content:
-        "We at Lumiere love an active lifestyle. Therefore, we aim to provide a holistic fitness experience with our specialized activewear line, 'Lumiere Active.' This specialized collection is designed with high-performance fabrics for gym, yoga, or outdoor sports. Our activewear shop in Bangladesh offers the broadest range of breathable leggings, moisture-wicking tees, and comfortable hoodies. Lumiere's largest activewear collection consists of sports bras, tracksuits, athletic socks, and high-performance base layers. We ensure you have the best gear from world-renowned athletic standards, tailoring our products for maximum durability and style.",
+        "We at Aranis love an active lifestyle. Therefore, we aim to provide a holistic fitness experience with our specialized activewear line, 'Aranis Active.' This specialized collection is designed with high-performance fabrics for gym, yoga, or outdoor sports. Our activewear shop in Bangladesh offers the broadest range of breathable leggings, moisture-wicking tees, and comfortable hoodies. Aranis's largest activewear collection consists of sports bras, tracksuits, athletic socks, and high-performance base layers. We ensure you have the best gear from world-renowned athletic standards, tailoring our products for maximum durability and style.",
       badge: 'Active',
     },
     {
@@ -36,14 +36,14 @@ const HomeSEOContent = () => {
       title: 'Largest Fashion Accessories Shop In Bangladesh',
       slug: 'Accessories',
       content:
-        'We bring in the most sought-after accessories at Lumiere. Only genuine and leading styles of Handbags, Jewelry, Belts, and Watches are available at our Accessory Shop. We are also concerned for creative professionals for whom we bring exciting statement pieces like Handcrafted Jewelry, Silk Scarves, and Premium Leather Belts from reputed artisans. Lumiere has established the largest fashion accessory shop in BD with the help of our mobile app and E-commerce website. Ease up your styling choices with daily lifestyle accessories from our shop, covering a wide range of contemporary and traditional designs.',
+        'We bring in the most sought-after accessories at Aranis. Only genuine and leading styles of Handbags, Jewelry, Belts, and Watches are available at our Accessory Shop. We are also concerned for creative professionals for whom we bring exciting statement pieces like Handcrafted Jewelry, Silk Scarves, and Premium Leather Belts from reputed artisans. Aranis has established the largest fashion accessory shop in BD with the help of our mobile app and E-commerce website. Ease up your styling choices with daily lifestyle accessories from our shop, covering a wide range of contemporary and traditional designs.',
       badge: 'Accessories',
     },
     {
       title: 'Top Footwear & Trend Collection',
       slug: 'Footwear',
       content:
-        'Offering extensive variety, comfort-focused designs, and home delivery service spanning the country, we are the top fashion destination in Bangladesh. Our footwear and trend collections are optimized for the modern user, allowing you to browse thousands of styles with ease. Lumiere is a one-stop solution for high-quality fashion in Bangladesh, providing an integrated experience across our app and E-commerce website.',
+        'Offering extensive variety, comfort-focused designs, and home delivery service spanning the country, we are the top fashion destination in Bangladesh. Our footwear and trend collections are optimized for the modern user, allowing you to browse thousands of styles with ease. Aranis is a one-stop solution for high-quality fashion in Bangladesh, providing an integrated experience across our app and E-commerce website.',
       badge: 'Footwear',
     },
   ];
@@ -85,14 +85,14 @@ const HomeSEOContent = () => {
         {/* Header - Storytelling Intro */}
         <header className="mb-24 flex flex-col items-center text-center md:mb-32">
           <span className="text-primary mb-6 flex items-center gap-2 rounded-full border border-blue-500/20 bg-blue-500/5 px-4 py-1.5 text-xs font-bold tracking-[0.2em] uppercase">
-            Story of Lumiere
+            Story of Aranis
           </span>
 
           <h2
             id="home-seo-title"
             className="text-foreground max-w-4xl text-4xl leading-[1.1] font-extrabold tracking-tight text-pretty md:text-6xl"
           >
-            Lumiere Fashion: Leading Premium Apparel & Online Fashion Shop in
+            Aranis Fashion: Leading Premium Apparel & Online Fashion Shop in
             Bangladesh
           </h2>
 
@@ -188,7 +188,7 @@ const HomeSEOContent = () => {
                 </h3>
                 <div className="text-muted-foreground space-y-6 text-lg leading-relaxed">
                   <p>
-                    Lumiere believes intensely in customer satisfaction. To meet
+                    Aranis believes intensely in customer satisfaction. To meet
                     the surging demand for{' '}
                     <Link
                       href="/shop"
@@ -199,7 +199,7 @@ const HomeSEOContent = () => {
                     , we launched our highly trusted E-Commerce platform.
                   </p>
                   <p>
-                    Lumiere is revolutionizing online shopping in Bangladesh,
+                    Aranis is revolutionizing online shopping in Bangladesh,
                     featuring a brilliant search engine that helps our valued
                     customers find their desired styles easily. Our platform
                     runs a variety of campaigns and exciting deals, bringing
@@ -239,7 +239,7 @@ const HomeSEOContent = () => {
             <div className="mt-20 flex flex-col items-center gap-6 border-t border-white/5 pt-12 text-center md:flex-row md:justify-between md:text-left">
               <p className="text-muted-foreground max-w-md text-sm">
                 As an organization strictly maintaining regulatory requirements,
-                Lumiere is committed to providing products and services of a
+                Aranis is committed to providing products and services of a
                 global standard.
               </p>
               <div className="flex flex-col gap-2">

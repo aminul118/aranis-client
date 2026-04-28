@@ -2,69 +2,49 @@
 
 import { revalidate } from '@/lib/revalidate';
 import serverFetch from '@/lib/server-fetch';
-import { ApiResponse } from '@/types';
+import { ApiResponse, ICoupon } from '@/types';
+export type { ICoupon } from '@/types';
 
-export interface ICoupon {
-  _id?: string;
-  name: string;
-  code: string;
-  discount: number;
-  expiryDate: string | Date;
-  isDeleted?: boolean;
-}
-
-const createCoupon = async (payload: ICoupon) => {
-  const res = await serverFetch.post<ApiResponse<ICoupon>>('/coupons', {
-    body: JSON.stringify(payload),
-    headers: {
-      'Content-Type': 'application/json',
+export const getCoupons = async (query?: Record<string, string>) => {
+  const params = new URLSearchParams(query);
+  return await serverFetch.get<ApiResponse<ICoupon[]>>(
+    `/coupon?${params.toString()}`,
+    {
+      next: { tags: ['COUPONS'] },
     },
-  });
-  revalidate('coupon');
-  return res;
-};
-
-const updateCoupon = async (payload: Partial<ICoupon>, id: string) => {
-  const res = await serverFetch.patch<ApiResponse<ICoupon>>(`/coupons/${id}`, {
-    body: JSON.stringify(payload),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-  revalidate('coupon');
-  return res;
-};
-
-const getCoupons = async (query: Record<string, string>) => {
-  return await serverFetch.get<ApiResponse<ICoupon[]>>('/coupons', {
-    query,
-    next: {
-      tags: ['coupon'],
-    },
-  });
-};
-
-const getSingleCoupon = async (id: string) => {
-  return await serverFetch.get<ApiResponse<ICoupon>>(`/coupons/${id}`);
-};
-
-const deleteCoupon = async (id: string) => {
-  const res = await serverFetch.delete<ApiResponse<ICoupon>>(`/coupons/${id}`);
-  revalidate('coupon');
-  return res;
-};
-
-const validateCoupon = async (code: string) => {
-  return await serverFetch.get<ApiResponse<ICoupon>>(
-    `/coupons/validate/${code}`,
   );
 };
 
-export {
-  createCoupon,
-  deleteCoupon,
-  getCoupons,
-  getSingleCoupon,
-  updateCoupon,
-  validateCoupon,
+export const createCoupon = async (data: Partial<ICoupon>) => {
+  const res = await serverFetch.post<ApiResponse<ICoupon>>('/coupon', {
+    body: JSON.stringify(data),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  revalidate('COUPONS');
+  return res;
+};
+
+export const updateCoupon = async (id: string, data: Partial<ICoupon>) => {
+  const res = await serverFetch.patch<ApiResponse<ICoupon>>(`/coupon/${id}`, {
+    body: JSON.stringify(data),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  revalidate('COUPONS');
+  return res;
+};
+
+export const deleteCoupon = async (id: string) => {
+  const res = await serverFetch.delete<ApiResponse<null>>(`/coupon/${id}`);
+  revalidate('COUPONS');
+  return res;
+};
+
+export const validateCoupon = async (code: string) => {
+  return await serverFetch.get<ApiResponse<ICoupon>>(
+    `/coupon/validate/${code}`,
+  );
 };

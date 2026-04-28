@@ -101,7 +101,7 @@ const CartSummary = ({
             <div className="flex gap-2">
               <input
                 type="text"
-                placeholder="LUMIERE10"
+                placeholder="SAVE10"
                 value={couponInput}
                 onChange={(e) => setCouponInput(e.target.value)}
                 className="border-border bg-muted text-foreground flex-1 rounded-xl border px-4 py-3 text-sm transition-colors focus:border-blue-500/50 focus:outline-none"

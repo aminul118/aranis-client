@@ -2,14 +2,17 @@
 
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/CartContext';
+import { useWishlist } from '@/context/WishlistContext';
 import { cn } from '@/lib/utils';
 import { IProduct } from '@/services/product/product';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ShoppingCart, Star } from 'lucide-react';
+import { Heart, ShoppingCart, Star } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
+
+import { useUser } from '@/context/UserContext';
 
 interface ProductCardProps {
   product: IProduct;
@@ -24,8 +27,11 @@ const ProductCard = ({
 }: ProductCardProps) => {
   const router = useRouter();
   const { addToCart } = useCart();
+  const { user } = useUser();
+  const { toggleWishlist, isInWishlist } = useWishlist();
 
   const isList = viewMode === 'list';
+  const wishlisted = isInWishlist(product._id as string);
 
   return (
     <motion.div
@@ -48,19 +54,21 @@ const ProductCard = ({
       >
         <AnimatePresence mode="wait">
           <Image
+            key="primary-image"
             src={product.image}
             alt={product.name}
             fill
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            className="object-cover transition-all duration-700 ease-in-out group-hover:scale-110"
           />
           {product.images?.find((img) => img !== product.image) && (
             <Image
+              key="secondary-image"
               src={
                 product.images.find((img) => img !== product.image) as string
               }
               alt={`${product.name} - Second View`}
               fill
-              className="object-cover opacity-0 transition-opacity delay-100 duration-700 group-hover:opacity-100"
+              className="object-cover opacity-0 transition-all duration-700 ease-in-out group-hover:scale-110 group-hover:opacity-100"
             />
           )}
         </AnimatePresence>
@@ -76,7 +84,31 @@ const ProductCard = ({
               OFF
             </span>
           )}
+          {product.isOffer && product.offerTag && (
+            <span className="rounded-md bg-blue-600 px-2.5 py-1 text-[10px] font-black tracking-widest text-white uppercase shadow-lg">
+              {product.offerTag}
+            </span>
+          )}
         </div>
+
+        {/* Wishlist Button */}
+        {user && (
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              toggleWishlist(product);
+            }}
+            className={cn(
+              'absolute top-4 right-4 z-20 flex h-9 w-9 items-center justify-center rounded-full border border-white/20 backdrop-blur-md transition-all duration-300',
+              wishlisted
+                ? 'border-none bg-red-500 text-white shadow-lg shadow-red-500/30'
+                : 'bg-black/20 text-white hover:bg-black/40',
+            )}
+          >
+            <Heart size={18} fill={wishlisted ? 'currentColor' : 'none'} />
+          </button>
+        )}
 
         {/* Overlay with Quick Add (Only Grid) */}
         {!isList && (
@@ -124,14 +156,20 @@ const ProductCard = ({
         <div className="mt-auto flex items-center justify-between">
           <div className="flex flex-col">
             {product.salePrice && product.salePrice > 0 ? (
-              <>
-                <span className="text-muted-foreground text-sm line-through">
-                  ৳{product.price.toFixed(2)}
-                </span>
+              <div className="flex flex-col gap-1">
+                <div className="flex items-center gap-2">
+                  <span className="text-muted-foreground text-xs line-through">
+                    ৳{product.price.toFixed(2)}
+                  </span>
+                  <span className="rounded-full bg-red-500/10 px-2 py-0.5 text-[10px] font-bold text-red-600">
+                    -{Math.round((1 - product.salePrice / product.price) * 100)}
+                    %
+                  </span>
+                </div>
                 <span className="text-2xl font-black text-blue-500">
                   ৳{product.salePrice.toFixed(2)}
                 </span>
-              </>
+              </div>
             ) : (
               <span className="text-foreground text-2xl font-bold">
                 ৳{product.price.toFixed(2)}

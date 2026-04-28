@@ -21,6 +21,9 @@ export interface IOrderPayload {
     price: number;
   }[];
   totalPrice: number;
+  subTotal: number;
+  discount: number;
+  couponCode?: string | null;
   shippingAddress: string;
   paymentMethod: 'COD' | 'CARD';
 }
@@ -75,10 +78,15 @@ const updateOrderStatus = async (id: string, status: OrderStatus) => {
   return res;
 };
 
+const trackOrder = async (id: string) => {
+  return await serverFetch.get<ApiResponse<IOrder>>(`/orders/track/${id}`);
+};
+
 export {
   createOrder,
   getAllOrders,
   getMyOrders,
   getSingleOrder,
+  trackOrder,
   updateOrderStatus,
 };

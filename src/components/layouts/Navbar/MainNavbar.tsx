@@ -1,8 +1,9 @@
 'use client';
 
 import { useCart } from '@/context/CartContext';
+import { useWishlist } from '@/context/WishlistContext';
 import { IUser } from '@/types';
-import { Clock, Gift, ShoppingCart, User } from 'lucide-react';
+import { Clock, Gift, Heart, ShoppingCart, Truck, User } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -17,6 +18,7 @@ interface MainNavbarProps {
 
 const MainNavbar = ({ user, logo }: MainNavbarProps) => {
   const { totalItems } = useCart();
+  const { wishlistCount } = useWishlist();
   const [searchQuery, setSearchQuery] = useState('');
   const router = useRouter();
 
@@ -52,6 +54,19 @@ const MainNavbar = ({ user, logo }: MainNavbarProps) => {
             </span>
           </Link>
 
+          {/* Track Order Button */}
+          <Link
+            href="/track-order"
+            className="group hidden items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 transition-all hover:bg-white/10 lg:flex"
+          >
+            <div className="rounded-full bg-blue-500/10 p-1 text-blue-500 transition-transform group-hover:scale-110">
+              <Truck size={14} />
+            </div>
+            <span className="text-[10px] font-black tracking-widest text-white uppercase italic">
+              Track Order
+            </span>
+          </Link>
+
           {/* Pre-Order Button */}
           <Link
             href="/pre-order"
@@ -62,6 +77,26 @@ const MainNavbar = ({ user, logo }: MainNavbarProps) => {
               Pre Order
             </span>
           </Link>
+
+          {/* Wishlist */}
+          {user && (
+            <Link
+              href="/wishlist"
+              className="group flex items-center gap-2 rounded-md border border-white/20 px-4 py-2 transition-colors hover:bg-white/5"
+            >
+              <div className="relative">
+                <Heart size={18} className="text-white" />
+                {wishlistCount > 0 && (
+                  <span className="absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center rounded-full border-2 border-black bg-red-600 text-[8px] font-bold text-white">
+                    {wishlistCount}
+                  </span>
+                )}
+              </div>
+              <span className="hidden text-[10px] font-bold tracking-widest text-white uppercase lg:inline">
+                Wishlist
+              </span>
+            </Link>
+          )}
 
           {/* Cart */}
           <Link

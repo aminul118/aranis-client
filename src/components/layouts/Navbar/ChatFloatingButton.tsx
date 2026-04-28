@@ -168,7 +168,7 @@ const ChatFloatingButton = ({ user }: ChatFloatingButtonProps) => {
                   )?.firstName?.[0] || 'A'}
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold">Lumiere Support</h3>
+                  <h3 className="text-sm font-bold">Aranis Support</h3>
                   <div className="flex items-center gap-1.5">
                     <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-green-500"></span>
                     <p className="text-[10px] text-gray-400">Online</p>

@@ -55,7 +55,7 @@ const ShopContent = ({ initialFilters }: ShopContentProps) => {
 
   // Load view mode from localStorage on mount
   useEffect(() => {
-    const savedView = localStorage.getItem('lumiere_shop_view') as
+    const savedView = localStorage.getItem('Aranis_shop_view') as
       | 'grid'
       | 'list';
 
@@ -125,7 +125,7 @@ const ShopContent = ({ initialFilters }: ShopContentProps) => {
       if (key === 'view') {
         const nextView = value as 'grid' | 'list';
         setViewMode(nextView);
-        localStorage.setItem('lumiere_shop_view', nextView);
+        localStorage.setItem('Aranis_shop_view', nextView);
         return; // Don't add to URL params
       }
 

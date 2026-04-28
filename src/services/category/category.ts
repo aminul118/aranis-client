@@ -18,7 +18,7 @@ export interface ICategory {
   isDeleted?: boolean;
 }
 
-const createCategory = async (payload: ICategory) => {
+export const createCategory = async (payload: ICategory) => {
   const res = await serverFetch.post<ApiResponse<ICategory>>('/categories', {
     body: JSON.stringify(payload),
     headers: {
@@ -29,7 +29,10 @@ const createCategory = async (payload: ICategory) => {
   return res;
 };
 
-const updateCategory = async (payload: Partial<ICategory>, id: string) => {
+export const updateCategory = async (
+  payload: Partial<ICategory>,
+  id: string,
+) => {
   const res = await serverFetch.patch<ApiResponse<ICategory>>(
     `/categories/${id}`,
     {
@@ -43,7 +46,7 @@ const updateCategory = async (payload: Partial<ICategory>, id: string) => {
   return res;
 };
 
-const getCategories = async (query: Record<string, string>) => {
+export const getCategories = async (query: Record<string, string>) => {
   return await serverFetch.get<ApiResponse<ICategory[]>>('/categories', {
     query,
     next: {
@@ -53,22 +56,14 @@ const getCategories = async (query: Record<string, string>) => {
   });
 };
 
-const getSingleCategory = async (id: string) => {
+export const getSingleCategory = async (id: string) => {
   return await serverFetch.get<ApiResponse<ICategory>>(`/categories/${id}`);
 };
 
-const deleteCategory = async (id: string) => {
+export const deleteCategory = async (id: string) => {
   const res = await serverFetch.delete<ApiResponse<ICategory>>(
     `/categories/${id}`,
   );
   revalidate('category');
   return res;
-};
-
-export {
-  createCategory,
-  deleteCategory,
-  getCategories,
-  getSingleCategory,
-  updateCategory,
 };

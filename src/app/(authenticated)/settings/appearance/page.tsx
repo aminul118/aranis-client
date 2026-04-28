@@ -8,5 +8,5 @@ export default function AppearanceSettingsPage() {
 }
 
 export const metadata: Metadata = {
-  title: 'Appearance Settings | Lumiere',
+  title: 'Appearance Settings | Aranis',
 };

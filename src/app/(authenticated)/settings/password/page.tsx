@@ -2,9 +2,9 @@ import ChangePasswordClient from '@/components/modules/Admin/settings/ChangePass
 import { Metadata } from 'next';
 
 export default function PasswordPage() {
-    return <ChangePasswordClient />;
+  return <ChangePasswordClient />;
 }
 
 export const metadata: Metadata = {
-    title: 'Change Password | Lumiere',
+  title: 'Change Password | Aranis',
 };

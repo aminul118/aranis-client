@@ -59,7 +59,7 @@ export async function generateMetadata(): Promise<Metadata> {
       'The Aranis offers a curated collection of premium clothing, blending contemporary design with timeless elegance.',
     keywords:
       settings?.keywords ||
-      'Lumiere Fashion, Premium Clothing, Luxury Apparel, Fashion E-commerce, Men Fashion, Women Fashion',
+      'Aranis Fashion, Premium Clothing, Luxury Apparel, Fashion E-commerce, Men Fashion, Women Fashion',
     websitePath: '/',
     image: settings?.baseImage,
   });

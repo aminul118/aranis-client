@@ -12,8 +12,8 @@ const contactDetails = [
   {
     icon: Mail,
     title: 'Email',
-    value: 'support@lumierefash.com',
-    href: 'mailto:support@lumierefash.com',
+    value: 'support@Aranisfash.com',
+    href: 'mailto:support@Aranisfash.com',
     color: 'text-blue-500',
     bg: 'bg-blue-500/10',
   },

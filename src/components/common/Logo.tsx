@@ -35,7 +35,7 @@ const Logo = async ({ className, logoUrl }: Props) => {
         src={src}
         height={80}
         width={180}
-        alt="Lumiere logo"
+        alt="Aranis logo"
         priority={true}
         className="object-contain"
       />

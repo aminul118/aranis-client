@@ -17,6 +17,7 @@ export type {
   Auth,
   IBlog,
   IContact,
+  ICoupon,
   IExperience,
   IInvoice,
   ILogin,
@@ -92,6 +93,7 @@ export interface IProduct {
   buyPrice: number;
   salePrice?: number;
   soldCount?: number;
+  videoUrl?: string;
   isDeleted?: boolean;
 }
 

@@ -16,11 +16,11 @@ export default ResetPasswordPage;
 
 // >> SEO Start
 export const metadata: Metadata = generateMetaTags({
-  title: 'Reset Password | Lumiere Fashion',
+  title: 'Reset Password | Aranis Fashion',
   description:
     'Set a new password for your The Aranis account to keep your data and preferences secure.',
   keywords:
-    'reset password, password recovery, Lumiere Fashion, secure account, fashion updates',
+    'reset password, password recovery, Aranis Fashion, secure account, fashion updates',
   image: '/seo/aminul-hero-ss.png',
   websitePath: '/reset-password',
 });

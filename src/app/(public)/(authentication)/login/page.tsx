@@ -17,7 +17,7 @@ const LoginPage = () => {
                   Login
                 </h1>
                 <p className="text-muted-foreground mt-2 text-sm">
-                  Welcome back to Lumiere Fashion. Please enter your details.
+                  Welcome back to Aranis Fashion. Please enter your details.
                 </p>
               </div>
               <LoginForm />

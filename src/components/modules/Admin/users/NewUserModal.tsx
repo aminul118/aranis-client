@@ -25,21 +25,21 @@ import { Input } from '@/components/ui/input';
 import Password from '@/components/ui/password';
 import useActionHandler from '@/hooks/useActionHandler';
 import { registerUserFromAdmin } from '@/services/user/register';
-import { registrationFormValidation } from '@/zod/auth';
+import { adminUserRegistrationValidation } from '@/zod/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { UserPlus, X } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-type FormValues = z.infer<typeof registrationFormValidation>;
+type FormValues = z.infer<typeof adminUserRegistrationValidation>;
 
 const NewUserModal = () => {
   const [open, setOpen] = useState(false);
   const { executePost } = useActionHandler();
 
   const form = useForm<FormValues>({
-    resolver: zodResolver(registrationFormValidation),
+    resolver: zodResolver(adminUserRegistrationValidation),
     defaultValues: {
       firstName: '',
       lastName: '',

@@ -7,7 +7,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return generateDynamicMeta(
     '/privacy-policy',
     'Privacy Policy',
-    'Review the privacy policy of Lumiere to understand how we protect your information.',
+    'Review the privacy policy of Aranis to understand how we protect your information.',
   );
 }
 
@@ -69,9 +69,9 @@ const PrivacyPolicyPage = () => {
                   How We Use Data
                 </h3>
                 <p className="text-sm">
-                  Lumiere uses the collected data for various purposes,
-                  including providing and maintaining our service, notifying you
-                  about changes, and providing customer support.
+                  Aranis uses the collected data for various purposes, including
+                  providing and maintaining our service, notifying you about
+                  changes, and providing customer support.
                 </p>
               </div>
               <div className="space-y-4">
@@ -91,7 +91,7 @@ const PrivacyPolicyPage = () => {
                 Your Rights
               </h2>
               <p>
-                As a user of Lumiere, you have the right to access, update, or
+                As a user of Aranis, you have the right to access, update, or
                 delete the personal information we have on you. You can do this
                 within your account settings or by contacting our support team.
               </p>
@@ -140,7 +140,7 @@ const PrivacyPolicyPage = () => {
               <ul className="list-none space-y-2 p-0">
                 <li className="flex items-center gap-2">
                   <span className="text-foreground font-bold">Email:</span>{' '}
-                  privacy@lumiere.com
+                  privacy@Aranis.com
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="text-foreground font-bold">Address:</span>{' '}

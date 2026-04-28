@@ -39,6 +39,8 @@ interface TableManageMentProps<T> {
   onDelete?: (row: T) => void;
   emptyMessage?: string;
   isRefreshing?: boolean;
+  selectedIds?: string[];
+  onSelectionChange?: (ids: string[]) => void;
 }
 
 /* =======================
@@ -53,6 +55,8 @@ function TableManageMent<T>({
   onDelete,
   emptyMessage = 'No records found.',
   isRefreshing = false,
+  selectedIds = [],
+  onSelectionChange,
 }: TableManageMentProps<T>) {
   const hasActions = Boolean(onView || onEdit || onDelete);
 
@@ -76,6 +80,27 @@ function TableManageMent<T>({
           {/* ===== Header ===== */}
           <TableHeader>
             <TableRow className="bg-muted">
+              {onSelectionChange && (
+                <TableHead className="w-[40px] px-4">
+                  <input
+                    type="checkbox"
+                    className="h-4 w-4 rounded border-gray-300 accent-blue-600"
+                    checked={
+                      safeData.length > 0 &&
+                      selectedIds.length === safeData.length
+                    }
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        onSelectionChange(
+                          safeData.map((item) => getRowKey(item)),
+                        );
+                      } else {
+                        onSelectionChange([]);
+                      }
+                    }}
+                  />
+                </TableHead>
+              )}
               {columns.map((column, index) => (
                 <TableHead key={index} className={column.className}>
                   {column.header}
@@ -101,7 +126,31 @@ function TableManageMent<T>({
               </TableRow>
             ) : (
               safeData.map((item, rowIndex) => (
-                <TableRow key={getRowKey(item)}>
+                <TableRow
+                  key={getRowKey(item)}
+                  className={
+                    selectedIds.includes(getRowKey(item)) ? 'bg-blue-50/30' : ''
+                  }
+                >
+                  {onSelectionChange && (
+                    <TableCell className="w-[40px] px-4">
+                      <input
+                        type="checkbox"
+                        className="h-4 w-4 rounded border-gray-300 accent-blue-600"
+                        checked={selectedIds.includes(getRowKey(item))}
+                        onChange={(e) => {
+                          const id = getRowKey(item);
+                          if (e.target.checked) {
+                            onSelectionChange([...selectedIds, id]);
+                          } else {
+                            onSelectionChange(
+                              selectedIds.filter((sid) => sid !== id),
+                            );
+                          }
+                        }}
+                      />
+                    </TableCell>
+                  )}
                   {columns.map((col, colIndex) => (
                     <TableCell key={colIndex} className={col.className}>
                       {typeof col.accessor === 'function'

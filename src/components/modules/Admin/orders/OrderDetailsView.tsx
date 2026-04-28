@@ -406,7 +406,7 @@ const OrderDetailsView = ({ order }: { order: IOrder }) => {
           <div className="flex items-start justify-between border-b-4 border-blue-600 pb-8">
             <div>
               <h1 className="text-4xl font-black tracking-tighter text-blue-600 uppercase">
-                LUMIERE
+                Aranis
               </h1>
               <p className="text-sm font-bold tracking-widest text-gray-500 uppercase">
                 Premium E-commerce
@@ -529,7 +529,7 @@ const OrderDetailsView = ({ order }: { order: IOrder }) => {
           {/* Footer */}
           <div className="space-y-2 pt-24 text-center">
             <p className="text-xs font-bold tracking-widest text-gray-400 uppercase">
-              Thank you for shopping with LUMIERE
+              Thank you for shopping with Aranis
             </p>
             <p className="text-[10px] text-gray-300">
               This is a computer generated invoice and does not require a

@@ -11,7 +11,7 @@ export interface IColor {
   isDeleted?: boolean;
 }
 
-const createColor = async (payload: IColor) => {
+export const createColor = async (payload: IColor) => {
   const res = await serverFetch.post<ApiResponse<IColor>>('/colors', {
     body: JSON.stringify(payload),
     headers: {
@@ -22,7 +22,7 @@ const createColor = async (payload: IColor) => {
   return res;
 };
 
-const updateColor = async (payload: Partial<IColor>, id: string) => {
+export const updateColor = async (payload: Partial<IColor>, id: string) => {
   const res = await serverFetch.patch<ApiResponse<IColor>>(`/colors/${id}`, {
     body: JSON.stringify(payload),
     headers: {
@@ -33,7 +33,7 @@ const updateColor = async (payload: Partial<IColor>, id: string) => {
   return res;
 };
 
-const getColors = async (query: Record<string, string>) => {
+export const getColors = async (query: Record<string, string>) => {
   return await serverFetch.get<ApiResponse<IColor[]>>('/colors', {
     query,
     next: {
@@ -42,14 +42,12 @@ const getColors = async (query: Record<string, string>) => {
   });
 };
 
-const getSingleColor = async (id: string) => {
+export const getSingleColor = async (id: string) => {
   return await serverFetch.get<ApiResponse<IColor>>(`/colors/${id}`);
 };
 
-const deleteColor = async (id: string) => {
+export const deleteColor = async (id: string) => {
   const res = await serverFetch.delete<ApiResponse<IColor>>(`/colors/${id}`);
   revalidate('color');
   return res;
 };
-
-export { createColor, deleteColor, getColors, getSingleColor, updateColor };

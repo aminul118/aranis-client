@@ -77,8 +77,25 @@ const assignUserRole = async (id: string, role: string) => {
   return res;
 };
 
+const changePassword = async (data: any) => {
+  const res = await serverFetch.post<ApiResponse<null>>(
+    '/user/change-password',
+    {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    },
+  );
+
+  revalidate('ME');
+
+  return res;
+};
+
 export {
   assignUserRole,
+  changePassword,
   getMe,
   getUserById,
   getUsers,
