@@ -1,12 +1,13 @@
 'use client';
 
-import ProductCard from '@/components/common/ProductCard';
 import { useWishlist } from '@/context/WishlistContext';
-import { Heart, ShoppingBag } from 'lucide-react';
+import { Heart, Minus, Plus, ShoppingBag, Trash2 } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 
 export default function WishlistPage() {
-  const { wishlist, wishlistCount } = useWishlist();
+  const { wishlist, wishlistCount, updateQuantity, removeFromWishlist } =
+    useWishlist();
 
   if (wishlistCount === 0) {
     return (
@@ -29,8 +30,18 @@ export default function WishlistPage() {
     );
   }
 
+  const handleDecrement = (id: string, currentQty: number) => {
+    if (currentQty > 1) {
+      updateQuantity(id, currentQty - 1);
+    }
+  };
+
+  const handleIncrement = (id: string, currentQty: number) => {
+    updateQuantity(id, currentQty + 1);
+  };
+
   return (
-    <div className="container mx-auto px-4 py-12">
+    <div className="container mx-auto max-w-5xl px-4 py-12">
       <div className="mb-12 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
         <div>
           <h1 className="flex items-center gap-3 text-4xl font-black tracking-tighter uppercase">
@@ -51,10 +62,82 @@ export default function WishlistPage() {
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {wishlist.map((item, index) => (
-          <ProductCard key={item._id} product={item.product} index={index} />
-        ))}
+      <div className="flex flex-col gap-6">
+        {wishlist.map((item) => {
+          const product = item.product;
+          const currentPrice = product.salePrice || product.price;
+          const qty = item.quantity || 1;
+
+          return (
+            <div
+              key={item._id}
+              className="border-border bg-card flex flex-col items-center gap-6 rounded-2xl border p-6 shadow-sm transition-all hover:shadow-md sm:flex-row"
+            >
+              <Link href={`/products/${product.slug}`} className="shrink-0">
+                <div className="bg-muted relative h-24 w-24 overflow-hidden rounded-xl">
+                  <Image
+                    src={product.images[0] || '/placeholder.png'}
+                    alt={product.name}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+              </Link>
+
+              <div className="flex flex-1 flex-col justify-center text-center sm:text-left">
+                <Link
+                  href={`/products/${product.slug}`}
+                  className="line-clamp-1 text-lg font-bold hover:underline"
+                >
+                  {product.name}
+                </Link>
+                <div className="mt-1 flex items-center justify-center gap-2 sm:justify-start">
+                  <span className="text-primary font-bold">
+                    ৳{currentPrice.toLocaleString()}
+                  </span>
+                  {product.salePrice && product.salePrice < product.price && (
+                    <span className="text-muted-foreground text-sm line-through">
+                      ৳{product.price.toLocaleString()}
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              <div className="flex items-center gap-6">
+                <div className="border-border bg-background flex items-center rounded-full border p-1">
+                  <button
+                    onClick={() => handleDecrement(item._id, qty)}
+                    disabled={qty <= 1}
+                    className="text-muted-foreground hover:bg-muted hover:text-foreground flex h-8 w-8 items-center justify-center rounded-full transition-colors disabled:opacity-50"
+                  >
+                    <Minus size={14} />
+                  </button>
+                  <span className="w-8 text-center text-sm font-bold">
+                    {qty}
+                  </span>
+                  <button
+                    onClick={() => handleIncrement(item._id, qty)}
+                    className="text-muted-foreground hover:bg-muted hover:text-foreground flex h-8 w-8 items-center justify-center rounded-full transition-colors"
+                  >
+                    <Plus size={14} />
+                  </button>
+                </div>
+
+                <div className="w-24 text-right text-lg font-black">
+                  ৳{(currentPrice * qty).toLocaleString()}
+                </div>
+
+                <button
+                  onClick={() => removeFromWishlist(item._id)}
+                  className="text-destructive/70 hover:bg-destructive/10 hover:text-destructive flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-colors"
+                  title="Remove from wishlist"
+                >
+                  <Trash2 size={20} />
+                </button>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

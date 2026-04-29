@@ -8,6 +8,7 @@ export interface IWishlistItem {
   _id: string;
   user: string;
   product: IProduct;
+  quantity: number;
   createdAt: string;
 }
 
@@ -35,6 +36,20 @@ export const getMyWishlist = async () => {
 
 export const removeFromWishlist = async (id: string) => {
   const res = await serverFetch.delete<ApiResponse<null>>(`/wishlist/${id}`);
+  revalidate('wishlist');
+  return res;
+};
+
+export const updateWishlistQuantity = async (id: string, quantity: number) => {
+  const res = await serverFetch.patch<ApiResponse<null>>(
+    `/wishlist/${id}/quantity`,
+    {
+      body: JSON.stringify({ quantity }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    },
+  );
   revalidate('wishlist');
   return res;
 };

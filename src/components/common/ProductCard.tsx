@@ -75,9 +75,6 @@ const ProductCard = ({
 
         {/* Badges */}
         <div className="absolute top-4 left-4 z-10 flex flex-col gap-2">
-          <span className="bg-card/90 text-card-foreground border-border rounded-md border px-2.5 py-1 text-[10px] font-bold tracking-widest uppercase backdrop-blur-md">
-            {product.category}
-          </span>
           {product.salePrice && product.salePrice > 0 && (
             <span className="rounded-md bg-red-500 px-2.5 py-1 text-[10px] font-bold tracking-widest text-white uppercase shadow-lg">
               Sale {Math.round((1 - product.salePrice / product.price) * 100)}%
@@ -118,7 +115,7 @@ const ProductCard = ({
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                addToCart(product as any);
+                addToCart(product);
                 router.push('/checkout');
               }}
               className="disabled:bg-muted disabled:text-muted-foreground translate-y-4 rounded-full bg-blue-600 font-bold text-white shadow-xl transition-transform duration-300 group-hover:translate-y-0 hover:bg-blue-700"
