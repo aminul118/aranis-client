@@ -31,10 +31,12 @@ const Navbar = ({
   user,
   navItems = [],
   logo,
+  siteSettings,
 }: {
   user: IUser | null;
   navItems?: NavMenu[];
   logo?: React.ReactNode;
+  siteSettings?: any;
 }) => {
   const { totalItems } = useCart();
   const { wishlistCount } = useWishlist();
@@ -70,7 +72,7 @@ const Navbar = ({
         scrolled ? 'shadow-lg' : '',
       )}
     >
-      <TopBar />
+      <TopBar siteSettings={siteSettings} />
       <div className="hidden lg:block">
         <MainNavbar user={user} logo={logo} />
         <Suspense

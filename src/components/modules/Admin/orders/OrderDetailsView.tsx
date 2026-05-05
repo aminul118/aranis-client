@@ -3,10 +3,11 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useUser } from '@/context/UserContext';
 import { cn } from '@/lib/utils';
 import { updateOrderStatus } from '@/services/order/order';
 import { IOrder, OrderStatus } from '@/services/order/order.types';
-import { IProduct } from '@/types';
+import { IProduct, Role } from '@/types';
 import {
   ArrowLeft,
   Calendar,
@@ -60,23 +61,28 @@ const STATUS_CONFIG: Record<
     bg: 'bg-red-500/10 border-red-500/20',
     label: 'Cancelled',
   },
+  [OrderStatus.REJECTED]: {
+    color: 'text-rose-600',
+    bg: 'bg-rose-500/10 border-rose-500/20',
+    label: 'Rejected',
+  },
+  [OrderStatus.RETURNED]: {
+    color: 'text-slate-600',
+    bg: 'bg-slate-500/10 border-slate-500/20',
+    label: 'Returned',
+  },
 };
 
-const ALL_STATUSES = [
-  OrderStatus.PENDING,
-  OrderStatus.PROCESSING,
-  OrderStatus.SHIPPED,
-  OrderStatus.COURIER,
-  OrderStatus.DELIVERED,
-  OrderStatus.CANCELLED,
-];
+const ALL_STATUSES = Object.values(OrderStatus);
 
 const OrderDetailsView = ({ order }: { order: IOrder }) => {
   const router = useRouter();
+  const { user } = useUser();
   const [currentStatus, setCurrentStatus] = useState<OrderStatus>(order.status);
   const [updating, setUpdating] = useState(false);
 
   const cfg = STATUS_CONFIG[currentStatus];
+  const isSuperAdmin = user?.role === Role.SUPER_ADMIN;
 
   const handleStatusChange = async (newStatus: OrderStatus) => {
     if (newStatus === currentStatus) return;
@@ -96,6 +102,12 @@ const OrderDetailsView = ({ order }: { order: IOrder }) => {
       setUpdating(false);
     }
   };
+
+  const sensitiveStatuses = [
+    OrderStatus.REJECTED,
+    OrderStatus.CANCELLED,
+    OrderStatus.RETURNED,
+  ];
 
   return (
     <div className="animate-in fade-in space-y-8 duration-500">
@@ -170,6 +182,10 @@ const OrderDetailsView = ({ order }: { order: IOrder }) => {
             {ALL_STATUSES.map((s) => {
               const sCfg = STATUS_CONFIG[s];
               const isActive = s === currentStatus;
+              const isSensitive = sensitiveStatuses.includes(s);
+
+              if (isSensitive && !isSuperAdmin) return null;
+
               return (
                 <button
                   key={s}

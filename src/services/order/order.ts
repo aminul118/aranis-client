@@ -82,8 +82,23 @@ const trackOrder = async (id: string) => {
   return await serverFetch.get<ApiResponse<IOrder>>(`/orders/track/${id}`);
 };
 
+const deleteOrderBulk = async (ids: string[]) => {
+  const res = await serverFetch.delete<ApiResponse<any>>(
+    '/orders/bulk-delete',
+    {
+      body: JSON.stringify({ ids }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    },
+  );
+  revalidate('order');
+  return res;
+};
+
 export {
   createOrder,
+  deleteOrderBulk,
   getAllOrders,
   getMyOrders,
   getSingleOrder,

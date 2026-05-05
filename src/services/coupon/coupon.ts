@@ -43,6 +43,20 @@ export const deleteCoupon = async (id: string) => {
   return res;
 };
 
+export const deleteCouponBulk = async (ids: string[]) => {
+  const res = await serverFetch.delete<ApiResponse<any>>(
+    '/coupon/bulk-delete',
+    {
+      body: JSON.stringify({ ids }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    },
+  );
+  revalidate('COUPONS');
+  return res;
+};
+
 export const validateCoupon = async (code: string) => {
   return await serverFetch.get<ApiResponse<ICoupon>>(
     `/coupon/validate/${code}`,

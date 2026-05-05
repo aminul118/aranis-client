@@ -39,3 +39,17 @@ export const resolveRestockRequest = async (id: string) => {
   revalidate('restock');
   return res;
 };
+
+export const deleteRestockRequestBulk = async (ids: string[]) => {
+  const res = await serverFetch.delete<ApiResponse<any>>(
+    '/restock-request/bulk-delete',
+    {
+      body: JSON.stringify({ ids }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    },
+  );
+  revalidate('restock');
+  return res;
+};

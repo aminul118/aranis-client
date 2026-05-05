@@ -76,7 +76,7 @@ export default function WishlistPage() {
               <Link href={`/products/${product.slug}`} className="shrink-0">
                 <div className="bg-muted relative h-24 w-24 overflow-hidden rounded-xl">
                   <Image
-                    src={product.images[0] || '/placeholder.png'}
+                    src={product.images?.[0] || '/placeholder.png'}
                     alt={product.name}
                     fill
                     className="object-cover"

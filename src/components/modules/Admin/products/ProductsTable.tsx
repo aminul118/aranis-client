@@ -2,9 +2,10 @@
 
 import TableManageMent from '@/components/common/table/TableManageMent';
 import { Button } from '@/components/ui/button';
-import { IProduct } from '@/services/product/product';
-import { Percent } from 'lucide-react';
+import { deleteProductBulk, IProduct } from '@/services/product/product';
+import { Percent, Trash2 } from 'lucide-react';
 import { useState } from 'react';
+import { toast } from 'sonner';
 import BulkDiscountDialog from './BulkDiscountDialog';
 import ProductsColumn from './ProductsColumn';
 
@@ -36,6 +37,28 @@ const ProductsTable = ({ products }: { products: IProduct[] }) => {
               className="rounded-xl bg-white text-[10px] font-black tracking-widest text-blue-600 uppercase hover:bg-blue-50"
             >
               <Percent size={14} className="mr-2" /> Apply Bulk Discount
+            </Button>
+            <Button
+              onClick={async () => {
+                if (
+                  confirm(
+                    `Are you sure you want to delete ${selectedIds.length} products?`,
+                  )
+                ) {
+                  try {
+                    const res = await deleteProductBulk(selectedIds);
+                    if (res.success) {
+                      toast.success('Products deleted successfully');
+                      setSelectedIds([]);
+                    }
+                  } catch (error) {
+                    toast.error('Failed to delete products');
+                  }
+                }
+              }}
+              className="rounded-xl bg-red-500 text-[10px] font-black tracking-widest text-white uppercase hover:bg-red-600"
+            >
+              <Trash2 size={14} className="mr-2" /> Delete Selected
             </Button>
             <Button
               variant="ghost"

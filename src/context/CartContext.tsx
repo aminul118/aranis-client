@@ -6,9 +6,22 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 
 interface CartContextType {
   cart: ICartItem[];
-  addToCart: (product: IProduct) => void;
-  removeFromCart: (id: string) => void;
-  updateQuantity: (id: string, quantity: number) => void;
+  addToCart: (
+    product: IProduct,
+    selectedColor?: string,
+    selectedSize?: string,
+  ) => void;
+  removeFromCart: (
+    id: string,
+    selectedColor?: string,
+    selectedSize?: string,
+  ) => void;
+  updateQuantity: (
+    id: string,
+    quantity: number,
+    selectedColor?: string,
+    selectedSize?: string,
+  ) => void;
   clearCart: () => void;
   totalItems: number;
   subtotal: number;
@@ -41,28 +54,66 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
     localStorage.setItem('Aranis_cart', JSON.stringify(cart));
   }, [cart]);
 
-  const addToCart = (product: IProduct) => {
+  const addToCart = (
+    product: IProduct,
+    selectedColor?: string,
+    selectedSize?: string,
+  ) => {
     setCart((prevCart) => {
-      const existingItem = prevCart.find((item) => item._id === product._id);
+      const existingItem = prevCart.find(
+        (item) =>
+          item._id === product._id &&
+          item.selectedColor === selectedColor &&
+          item.selectedSize === selectedSize,
+      );
       if (existingItem) {
         return prevCart.map((item) =>
-          item._id === product._id
+          item._id === product._id &&
+          item.selectedColor === selectedColor &&
+          item.selectedSize === selectedSize
             ? { ...item, quantity: item.quantity + 1 }
             : item,
         );
       }
-      return [...prevCart, { ...product, quantity: 1 }];
+      return [
+        ...prevCart,
+        { ...product, quantity: 1, selectedColor, selectedSize },
+      ];
     });
   };
 
-  const removeFromCart = (id: string) => {
-    setCart((prevCart) => prevCart.filter((item) => item._id !== id));
+  const removeFromCart = (
+    id: string,
+    selectedColor?: string,
+    selectedSize?: string,
+  ) => {
+    setCart((prevCart) =>
+      prevCart.filter(
+        (item) =>
+          !(
+            item._id === id &&
+            item.selectedColor === selectedColor &&
+            item.selectedSize === selectedSize
+          ),
+      ),
+    );
   };
 
-  const updateQuantity = (id: string, quantity: number) => {
+  const updateQuantity = (
+    id: string,
+    quantity: number,
+    selectedColor?: string,
+    selectedSize?: string,
+  ) => {
     if (quantity < 1) return;
     setCart((prevCart) =>
-      prevCart.map((item) => (item._id === id ? { ...item, quantity } : item)),
+      prevCart.map((item) =>
+        item._id === id &&
+        item.selectedColor === selectedColor &&
+        item.selectedSize === selectedSize
+          ? { ...item, quantity }
+          : item,
+      ),
     );
   };
 

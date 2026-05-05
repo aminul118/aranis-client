@@ -79,7 +79,7 @@ const NavSearch = () => {
   const handleClose = () => setOpen(false);
 
   const handleSeeMore = () => {
-    router.push(`/shop?search=${encodeURIComponent(query)}`);
+    router.push(`/shop?q=${encodeURIComponent(query)}`);
     handleClose();
   };
 
@@ -118,7 +118,7 @@ const NavSearch = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.15 }}
-              className="fixed inset-0 z-100 bg-black/60 backdrop-blur-sm"
+              className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm"
               onClick={handleClose}
             />
 
@@ -128,7 +128,7 @@ const NavSearch = () => {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.96, y: -20 }}
               transition={{ duration: 0.2, ease: 'easeOut' }}
-              className="fixed top-[10%] left-1/2 z-101 w-full max-w-xl -translate-x-1/2 px-4"
+              className="fixed top-[10%] left-1/2 z-[101] w-full max-w-xl -translate-x-1/2 px-4"
             >
               <div className="border-border bg-background/95 overflow-hidden rounded-2xl border shadow-2xl shadow-black/30 backdrop-blur-xl dark:border-white/5 dark:bg-[#111111]/95">
                 {/* Input row */}

@@ -4,9 +4,16 @@ import { revalidate } from '@/lib/revalidate';
 import serverFetch from '@/lib/server-fetch';
 import { ApiResponse } from '@/types';
 
+export interface IVariantSize {
+  size: string;
+  stock: number;
+}
+
 export interface IVariant {
   color: string;
   images: string[];
+  sizes: IVariantSize[];
+  sku?: string;
 }
 
 export interface IProduct {
@@ -26,7 +33,9 @@ export interface IProduct {
   featured: boolean;
   rating: number;
   slug: string;
+  sku?: string;
   stock: number;
+  sizeStock?: IVariantSize[];
   buyPrice: number;
   salePrice?: number;
   discountPercentage?: number;
@@ -66,7 +75,7 @@ const getProducts = async (query: Record<string, string>) => {
     query,
     next: {
       tags: ['product'],
-      revalidate: 3600, // Revalidate every hour
+      revalidate: 0, // Revalidate immediately
     },
   });
 };
@@ -75,7 +84,7 @@ const getSingleProduct = async (id: string) => {
   return await serverFetch.get<ApiResponse<IProduct>>(`/products/${id}`, {
     next: {
       tags: [`product-${id}`],
-      revalidate: 3600,
+      revalidate: 0,
     },
   });
 };
@@ -122,8 +131,23 @@ const updateProductBulk = async (ids: string[], data: Partial<IProduct>) => {
   return res;
 };
 
+const deleteProductBulk = async (ids: string[]) => {
+  const res = await serverFetch.delete<ApiResponse<any>>(
+    '/products/bulk-delete',
+    {
+      body: JSON.stringify({ ids }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    },
+  );
+  revalidate('product');
+  return res;
+};
+
 export {
   deleteProduct,
+  deleteProductBulk,
   getBestSellingProducts,
   getProducts,
   getSingleProduct,

@@ -18,6 +18,7 @@ export interface ISiteSetting {
   description?: string;
   keywords?: string;
   baseImage?: string;
+  activeOfferTag?: string;
 }
 
 const getSiteSettings = async () => {

@@ -67,3 +67,17 @@ export const deleteCategory = async (id: string) => {
   revalidate('category');
   return res;
 };
+
+export const deleteCategoryBulk = async (ids: string[]) => {
+  const res = await serverFetch.delete<ApiResponse<any>>(
+    '/categories/bulk-delete',
+    {
+      body: JSON.stringify({ ids }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    },
+  );
+  revalidate('category');
+  return res;
+};

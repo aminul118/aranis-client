@@ -3,7 +3,7 @@
 import { useCart } from '@/context/CartContext';
 import { useWishlist } from '@/context/WishlistContext';
 import { IUser } from '@/types';
-import { Clock, Gift, Heart, ShoppingCart, Truck, User } from 'lucide-react';
+import { Heart, ShoppingCart, User } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -41,43 +41,6 @@ const MainNavbar = ({ user, logo }: MainNavbarProps) => {
 
         {/* Action Buttons */}
         <div className="ml-auto flex items-center gap-2 lg:gap-4">
-          {/* Offer Button */}
-          <Link
-            href="/shop?featured=true"
-            className="group hidden items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 transition-all hover:bg-white/10 lg:flex"
-          >
-            <div className="rounded-full bg-yellow-500/10 p-1 text-yellow-500 transition-transform group-hover:scale-110">
-              <Gift size={14} />
-            </div>
-            <span className="text-[10px] font-black tracking-widest text-white uppercase italic">
-              Offer
-            </span>
-          </Link>
-
-          {/* Track Order Button */}
-          <Link
-            href="/track-order"
-            className="group hidden items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 transition-all hover:bg-white/10 lg:flex"
-          >
-            <div className="rounded-full bg-blue-500/10 p-1 text-blue-500 transition-transform group-hover:scale-110">
-              <Truck size={14} />
-            </div>
-            <span className="text-[10px] font-black tracking-widest text-white uppercase italic">
-              Track Order
-            </span>
-          </Link>
-
-          {/* Pre-Order Button */}
-          <Link
-            href="/pre-order"
-            className="hidden items-center gap-2 rounded-md border border-white/20 px-4 py-2 transition-colors hover:bg-white/5 lg:flex"
-          >
-            <Clock size={16} className="text-white/70" />
-            <span className="text-[10px] font-bold tracking-widest text-white uppercase">
-              Pre Order
-            </span>
-          </Link>
-
           {/* Wishlist */}
           {user && (
             <Link

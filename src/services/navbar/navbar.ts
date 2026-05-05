@@ -67,9 +67,24 @@ const deleteNavbar = async (id: string) => {
   return res;
 };
 
+const deleteNavbarBulk = async (ids: string[]) => {
+  const res = await serverFetch.delete<ApiResponse<any>>(
+    '/navbar/bulk-delete',
+    {
+      body: JSON.stringify({ ids }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    },
+  );
+  revalidate('navbar');
+  return res;
+};
+
 export {
   createNavbar,
   deleteNavbar,
+  deleteNavbarBulk,
   getNavbars,
   getSingleNavbar,
   updateNavbar,

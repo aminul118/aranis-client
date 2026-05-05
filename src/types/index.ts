@@ -73,6 +73,18 @@ export interface IModal {
   setOpen: (open: boolean) => void;
 }
 
+export interface IVariantSize {
+  size: string;
+  stock: number;
+}
+
+export interface IVariant {
+  color: string;
+  images: string[];
+  sizes: IVariantSize[];
+  sku?: string;
+}
+
 export interface IProduct {
   _id?: string;
   name: string;
@@ -85,11 +97,14 @@ export interface IProduct {
   description: string;
   details: string | string[];
   color: string;
+  variants?: IVariant[];
   sizes: string[];
   featured: boolean;
   rating: number;
   slug: string;
+  sku?: string;
   stock: number;
+  sizeStock?: IVariantSize[];
   buyPrice: number;
   salePrice?: number;
   soldCount?: number;
@@ -99,4 +114,6 @@ export interface IProduct {
 
 export interface ICartItem extends IProduct {
   quantity: number;
+  selectedColor?: string;
+  selectedSize?: string;
 }

@@ -93,9 +93,21 @@ const changePassword = async (data: any) => {
   return res;
 };
 
+const deleteUserBulk = async (ids: string[]) => {
+  const res = await serverFetch.delete<ApiResponse<any>>('/user/bulk-delete', {
+    body: JSON.stringify({ ids }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  revalidate('users');
+  return res;
+};
+
 export {
   assignUserRole,
   changePassword,
+  deleteUserBulk,
   getMe,
   getUserById,
   getUsers,

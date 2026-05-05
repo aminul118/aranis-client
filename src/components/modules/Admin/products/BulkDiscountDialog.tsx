@@ -12,9 +12,10 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { createOffer, getOffers, IOffer } from '@/services/offer/offer';
 import { updateProductBulk } from '@/services/product/product';
-import { Loader2 } from 'lucide-react';
-import { useState } from 'react';
+import { Loader2, Plus } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 interface BulkDiscountDialogProps {
@@ -32,8 +33,33 @@ const BulkDiscountDialog = ({
 }: BulkDiscountDialogProps) => {
   const [discount, setDiscount] = useState<string>('20');
   const [isOffer, setIsOffer] = useState<boolean>(true);
-  const [offerTag, setOfferTag] = useState<string>('Eid offer');
+  const [existingOffers, setExistingOffers] = useState<IOffer[]>([]);
+  const [selectedOfferTag, setSelectedOfferTag] = useState<string>('');
+  const [isCreatingNewOffer, setIsCreatingNewOffer] = useState(false);
+
+  // New Offer Fields
+  const [newOfferName, setNewOfferName] = useState('');
+  const [newOfferTag, setNewOfferTag] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const [expireTime, setExpireTime] = useState('22:00'); // 10 PM default
+
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      const fetchOffers = async () => {
+        const res = await getOffers();
+        if (res.success) {
+          setExistingOffers(res.data);
+          if (res.data.length > 0) {
+            setSelectedOfferTag(res.data[0].tag);
+          }
+        }
+      };
+      fetchOffers();
+    }
+  }, [isOpen]);
 
   const handleApply = async () => {
     const discountVal = Number(discount);
@@ -44,19 +70,38 @@ const BulkDiscountDialog = ({
 
     setLoading(true);
     try {
-      // For bulk update, we set discountPercentage, isOffer, and offerTag
-      // The salePrice calculation will be handled by the update logic if we pass it,
-      // but since it's bulk and prices vary, we might need to handle it per product.
-      // Wait, the backend updateMany is a simple $set.
-      // To handle salePrice = price * (1 - discount/100) for EACH product in updateMany is NOT possible with a simple $set.
-      // So we might need to send the payload to the backend and let the backend do a loop or use a more complex aggregation update.
+      let finalTag = selectedOfferTag;
 
-      // Actually, let's just send the discountPercentage and let the frontend/backend calculate it.
-      // If the backend doesn't handle dynamic calculation in updateMany, I should update the service.
+      if (isOffer && isCreatingNewOffer) {
+        // Create new offer first
+        if (!newOfferName || !newOfferTag || !startDate || !endDate) {
+          toast.error('Please fill all offer details');
+          setLoading(false);
+          return;
+        }
+
+        const startDateTime = new Date(startDate);
+        const endDateTime = new Date(`${endDate}T${expireTime}`);
+
+        const offerRes = await createOffer({
+          name: newOfferName,
+          tag: newOfferTag,
+          discountPercentage: discountVal,
+          startDate: startDateTime,
+          endDate: endDateTime,
+        });
+
+        if (!offerRes.success) {
+          toast.error(offerRes.message || 'Failed to create offer');
+          setLoading(false);
+          return;
+        }
+        finalTag = newOfferTag;
+      }
 
       const res = await updateProductBulk(selectedIds, {
-        isOffer,
-        offerTag,
+        isOffer: isOffer,
+        offerTag: isOffer ? finalTag : '',
         discountPercentage: discountVal,
       });
 
@@ -79,7 +124,7 @@ const BulkDiscountDialog = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle className="text-2xl font-black tracking-tight uppercase">
             Bulk Discount
@@ -88,59 +133,132 @@ const BulkDiscountDialog = ({
             Apply a discount to {selectedIds.length} selected products.
           </DialogDescription>
         </DialogHeader>
-        <div className="grid gap-6 py-4">
-          <div className="grid gap-2">
-            <Label
-              htmlFor="discount"
-              className="text-muted-foreground text-[10px] font-bold tracking-widest uppercase"
-            >
-              Discount Percentage (%)
-            </Label>
-            <Input
-              id="discount"
-              type="number"
-              value={discount}
-              onChange={(e) => setDiscount(e.target.value)}
-              placeholder="e.g. 20"
-              className="rounded-xl border-2 focus:border-blue-500"
-            />
-          </div>
-          <div className="flex items-center space-x-2 rounded-xl border border-dashed border-blue-500/30 bg-blue-50/30 p-4">
-            <Checkbox
-              id="isOffer"
-              checked={isOffer}
-              onCheckedChange={(checked) => setIsOffer(checked as boolean)}
-            />
-            <Label
-              htmlFor="isOffer"
-              className="text-sm leading-none font-bold peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-            >
-              Mark as Special Offer
-            </Label>
-          </div>
-          {isOffer && (
+
+        <div className="max-h-[60vh] overflow-y-auto pr-2">
+          <div className="grid gap-6 py-4">
             <div className="grid gap-2">
-              <Label
-                htmlFor="tag"
-                className="text-muted-foreground text-[10px] font-bold tracking-widest uppercase"
-              >
-                Offer Tag
+              <Label className="text-muted-foreground text-[10px] font-bold tracking-widest uppercase">
+                Discount Percentage (%)
               </Label>
-              <select
-                id="tag"
-                value={offerTag}
-                onChange={(e) => setOfferTag(e.target.value)}
-                className="border-input bg-background ring-offset-background flex h-10 w-full rounded-xl border-2 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
-              >
-                <option value="Pakistani dress">Pakistani Dress</option>
-                <option value="Indian dress">Indian Dress</option>
-                <option value="Eid offer">Eid Offer</option>
-                <option value="Normal discount">Normal Discount</option>
-              </select>
+              <Input
+                type="number"
+                value={discount}
+                onChange={(e) => setDiscount(e.target.value)}
+                placeholder="e.g. 20"
+                className="rounded-xl border-2 focus:border-blue-500"
+              />
             </div>
-          )}
+
+            <div className="flex items-center space-x-2 rounded-xl border border-dashed border-blue-500/30 bg-blue-50/30 p-4">
+              <Checkbox
+                id="isOffer"
+                checked={isOffer}
+                onCheckedChange={(checked) => setIsOffer(checked as boolean)}
+              />
+              <Label htmlFor="isOffer" className="text-sm font-bold">
+                Apply as Seasonal Offer (Shows on Offers Page)
+              </Label>
+            </div>
+
+            {isOffer && (
+              <div className="space-y-4 rounded-xl border border-gray-100 bg-gray-50/50 p-4 dark:border-white/5 dark:bg-white/5">
+                <div className="flex items-center justify-between">
+                  <Label className="text-[10px] font-bold tracking-widest uppercase">
+                    Select Offer Tag
+                  </Label>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setIsCreatingNewOffer(!isCreatingNewOffer)}
+                    className="text-[10px] font-bold text-blue-600 uppercase"
+                  >
+                    {isCreatingNewOffer ? (
+                      'Select Existing'
+                    ) : (
+                      <>
+                        <Plus size={12} className="mr-1" /> Create New
+                      </>
+                    )}
+                  </Button>
+                </div>
+
+                {!isCreatingNewOffer ? (
+                  <select
+                    value={selectedOfferTag}
+                    onChange={(e) => setSelectedOfferTag(e.target.value)}
+                    className="border-input bg-background flex h-10 w-full rounded-xl border-2 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+                  >
+                    <option value="">Select an offer</option>
+                    {existingOffers.map((o) => (
+                      <option key={o._id} value={o.tag}>
+                        {o.name} ({o.tag})
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label className="text-[10px] text-gray-500">
+                          Offer Name
+                        </Label>
+                        <Input
+                          placeholder="e.g. Eid Dhamaka"
+                          value={newOfferName}
+                          onChange={(e) => setNewOfferName(e.target.value)}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="text-[10px] text-gray-500">
+                          Tag Identifier
+                        </Label>
+                        <Input
+                          placeholder="e.g. eid-2024"
+                          value={newOfferTag}
+                          onChange={(e) => setNewOfferTag(e.target.value)}
+                        />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label className="text-[10px] text-gray-500">
+                          Start Date
+                        </Label>
+                        <Input
+                          type="date"
+                          value={startDate}
+                          onChange={(e) => setStartDate(e.target.value)}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="text-[10px] text-gray-500">
+                          End Date
+                        </Label>
+                        <Input
+                          type="date"
+                          value={endDate}
+                          onChange={(e) => setEndDate(e.target.value)}
+                        />
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-[10px] text-gray-500">
+                        Expiration Time (24h)
+                      </Label>
+                      <Input
+                        type="time"
+                        value={expireTime}
+                        onChange={(e) => setExpireTime(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
         </div>
-        <DialogFooter>
+
+        <DialogFooter className="border-t pt-4 dark:border-white/5">
           <Button
             variant="ghost"
             onClick={onClose}
@@ -152,7 +270,7 @@ const BulkDiscountDialog = ({
           <Button
             onClick={handleApply}
             disabled={loading}
-            className="rounded-xl bg-blue-600 px-8 text-[10px] font-black tracking-widest text-white uppercase hover:bg-blue-700"
+            className="rounded-xl bg-blue-600 px-8 text-[10px] font-black tracking-widest text-white uppercase shadow-lg shadow-blue-500/20 hover:bg-blue-700"
           >
             {loading ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />

@@ -3,24 +3,33 @@
 import HtmlContent from '@/components/rich-text/core/html-content';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useCart } from '@/context/CartContext';
 import { useWishlist } from '@/context/WishlistContext';
 import { cn } from '@/lib/utils';
-import { IProduct } from '@/services/product/product';
+import { IProduct, IVariantSize } from '@/services/product/product';
 import { createRestockRequest } from '@/services/restock/restock';
 import { motion } from 'framer-motion';
 import {
   BellRing,
   Check,
+  Copy,
+  Facebook,
   Heart,
+  MessageCircle,
   Share2,
   ShoppingCart,
   Star,
 } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import ProductImageGallery from './ProductImageGallery';
 import ReviewSection from './Reviews/ReviewSection';
@@ -40,6 +49,31 @@ const ProductDetailContent = ({ product }: ProductDetailContentProps) => {
   const isWishlisted = isInWishlist(product._id as string);
   const [selectedVariantIndex, setSelectedVariantIndex] = useState(-1);
   const [isRequesting, setIsRequesting] = useState(false);
+
+  // Auto-select available size when variant changes
+  useEffect(() => {
+    const getStockForSize = (size: string) => {
+      if (selectedVariantIndex >= 0) {
+        const variant = product.variants?.[selectedVariantIndex];
+        return (
+          variant?.sizes?.find((s: IVariantSize) => s.size === size)?.stock || 0
+        );
+      }
+      return (
+        product.sizeStock?.find((s: IVariantSize) => s.size === size)?.stock ||
+        0
+      );
+    };
+
+    if (getStockForSize(selectedSize) === 0) {
+      const availableSizes = product.sizes.filter(
+        (s: string) => getStockForSize(s) > 0,
+      );
+      if (availableSizes.length > 0) {
+        setSelectedSize(availableSizes[0]);
+      }
+    }
+  }, [selectedVariantIndex, product.variants, product.sizeStock]);
 
   const handleRestockRequest = async () => {
     try {
@@ -65,16 +99,7 @@ const ProductDetailContent = ({ product }: ProductDetailContentProps) => {
         ? product.color
         : product.variants?.[selectedVariantIndex].color;
 
-    addToCart({
-      ...(product as any),
-      color: selectedColor,
-      // If we want to use the variant's first image in the cart:
-      image:
-        selectedVariantIndex !== -1 &&
-        product.variants?.[selectedVariantIndex].images?.[0]
-          ? product.variants[selectedVariantIndex].images[0]
-          : product.image,
-    });
+    addToCart(product, selectedColor, selectedSize);
 
     if (shouldRedirect) {
       router.push('/checkout');
@@ -96,8 +121,49 @@ const ProductDetailContent = ({ product }: ProductDetailContentProps) => {
         Boolean,
       ) as string[]);
 
-  // Stock for product
-  const currentStock = product.stock;
+  // Stock for product (Size-aware)
+  const currentStock = (() => {
+    if (selectedVariantIndex >= 0) {
+      const variant = product.variants?.[selectedVariantIndex];
+      const sizeObj = variant?.sizes?.find(
+        (s: IVariantSize) => s.size === selectedSize,
+      );
+      return sizeObj ? sizeObj.stock : 0;
+    } else {
+      // Main product
+      const sizeObj = product.sizeStock?.find(
+        (s: IVariantSize) => s.size === selectedSize,
+      );
+      return sizeObj ? sizeObj.stock : product.stock; // Fallback to global stock if sizeStock not set
+    }
+  })();
+
+  const handleShare = (platform: 'facebook' | 'messenger' | 'copy') => {
+    if (typeof window === 'undefined') return;
+
+    const url = window.location.href;
+    const shareUrls = {
+      facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
+      messenger: `fb-messenger://share/?link=${encodeURIComponent(url)}`,
+    };
+
+    if (platform === 'copy') {
+      navigator.clipboard.writeText(url);
+      toast.success('Link copied to clipboard!');
+      return;
+    }
+
+    if (
+      platform === 'messenger' &&
+      !/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+    ) {
+      toast.info('Messenger sharing is best on mobile. Link copied instead!');
+      navigator.clipboard.writeText(url);
+      return;
+    }
+
+    window.open(shareUrls[platform as keyof typeof shareUrls], '_blank');
+  };
 
   return (
     <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-20">
@@ -162,9 +228,39 @@ const ProductDetailContent = ({ product }: ProductDetailContentProps) => {
                   />
                 </button>
               )}
-              <button className="border-border/50 text-muted-foreground hover:bg-muted rounded-full border p-2.5 transition-all">
-                <Share2 size={20} />
-              </button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="border-border/50 text-muted-foreground hover:bg-muted rounded-full border p-2.5 transition-all outline-none">
+                    <Share2 size={20} />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  align="end"
+                  className="border-border bg-card w-56 rounded-2xl p-2 shadow-2xl"
+                >
+                  <DropdownMenuItem
+                    onClick={() => handleShare('facebook')}
+                    className="flex cursor-pointer items-center gap-3 rounded-xl p-3 focus:bg-blue-500/10 focus:text-blue-600"
+                  >
+                    <Facebook size={18} />
+                    <span className="font-bold">Share on Facebook</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => handleShare('messenger')}
+                    className="flex cursor-pointer items-center gap-3 rounded-xl p-3 focus:bg-blue-500/10 focus:text-blue-600"
+                  >
+                    <MessageCircle size={18} />
+                    <span className="font-bold">Send in Messenger</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => handleShare('copy')}
+                    className="focus:bg-muted flex cursor-pointer items-center gap-3 rounded-xl p-3"
+                  >
+                    <Copy size={18} />
+                    <span className="font-bold">Copy Product Link</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
 
@@ -214,6 +310,15 @@ const ProductDetailContent = ({ product }: ProductDetailContentProps) => {
                 </p>
               )}
             </div>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <span className="text-muted-foreground text-xs font-black tracking-widest uppercase">
+              SKU:
+            </span>
+            <span className="text-foreground text-sm font-bold tracking-tight">
+              {currentVariant?.sku || product.sku || 'N/A'}
+            </span>
           </div>
 
           <div className="from-border/50 via-border h-px bg-linear-to-r to-transparent" />
@@ -327,20 +432,69 @@ const ProductDetailContent = ({ product }: ProductDetailContentProps) => {
                   Size Guide
                 </button>
               </div>
-              <div className="flex flex-wrap gap-2.5">
-                {product.sizes.map((size) => (
-                  <button
-                    key={size}
-                    onClick={() => setSelectedSize(size)}
-                    className={`min-w-16 rounded-2xl border px-5 py-3 font-black transition-all duration-300 ${
-                      selectedSize === size
-                        ? 'bg-foreground text-background border-foreground scale-105 shadow-lg'
-                        : 'border-border/50 bg-muted/30 text-muted-foreground hover:border-foreground/30'
-                    }`}
-                  >
-                    {size}
-                  </button>
-                ))}
+              <div className="flex flex-wrap gap-3">
+                {product.sizes.map((size) => {
+                  const sizeStock = (() => {
+                    if (selectedVariantIndex >= 0) {
+                      const variant = product.variants?.[selectedVariantIndex];
+                      const sizeObj = variant?.sizes?.find(
+                        (s: IVariantSize) => s.size === size,
+                      );
+                      return sizeObj ? sizeObj.stock : 0;
+                    } else {
+                      const sizeObj = product.sizeStock?.find(
+                        (s: IVariantSize) => s.size === size,
+                      );
+                      return sizeObj ? sizeObj.stock : 0;
+                    }
+                  })();
+
+                  return (
+                    <button
+                      key={size}
+                      onClick={() => setSelectedSize(size)}
+                      disabled={sizeStock === 0}
+                      className={cn(
+                        'group relative flex min-w-16 flex-col items-center justify-center gap-0.5 rounded-2xl border-2 px-5 py-3 transition-all duration-300',
+                        selectedSize === size
+                          ? 'border-blue-600 bg-blue-600 text-white shadow-xl shadow-blue-500/20'
+                          : sizeStock === 0
+                            ? 'border-border/30 bg-muted/20 cursor-not-allowed opacity-40'
+                            : 'border-border/50 bg-muted/30 text-muted-foreground hover:text-foreground hover:border-blue-500/30',
+                      )}
+                    >
+                      <span className="text-sm font-black tracking-widest uppercase">
+                        {size}
+                      </span>
+                      {sizeStock > 0 && (
+                        <span
+                          className={cn(
+                            'text-[9px] font-bold tracking-tighter opacity-70 transition-all',
+                            selectedSize === size
+                              ? 'text-white'
+                              : sizeStock < 5
+                                ? 'text-red-500'
+                                : 'text-muted-foreground',
+                          )}
+                        >
+                          {sizeStock < 10
+                            ? `${sizeStock} Left`
+                            : `${sizeStock} In Stock`}
+                        </span>
+                      )}
+                      {sizeStock === 0 && (
+                        <span className="text-[9px] font-bold tracking-tighter text-red-500/60">
+                          Sold Out
+                        </span>
+                      )}
+                      {selectedSize === size && (
+                        <div className="absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-blue-500 text-white shadow-lg ring-2 ring-white">
+                          <Check className="h-2.5 w-2.5" strokeWidth={4} />
+                        </div>
+                      )}
+                    </button>
+                  );
+                })}
               </div>
             </div>
           </div>

@@ -76,6 +76,18 @@ const deleteHeroBanner = async (id: string) => {
   return res;
 };
 
+const deleteHeroBannerBulk = async (ids: string[]) => {
+  const res = await serverFetch.delete<ApiResponse<any>>(
+    '/hero-banners/bulk-delete',
+    {
+      body: JSON.stringify({ ids }),
+      headers: { 'Content-Type': 'application/json' },
+    },
+  );
+  revalidate('hero-banners');
+  return res;
+};
+
 // ─── Mini Banner ─────────────────────────────────────────────────────────────
 
 const getMiniBanners = async (query: Record<string, string> = {}) => {
@@ -121,11 +133,25 @@ const deleteMiniBanner = async (id: string) => {
   return res;
 };
 
+const deleteMiniBannerBulk = async (ids: string[]) => {
+  const res = await serverFetch.delete<ApiResponse<any>>(
+    '/mini-banners/bulk-delete',
+    {
+      body: JSON.stringify({ ids }),
+      headers: { 'Content-Type': 'application/json' },
+    },
+  );
+  revalidate('mini-banners');
+  return res;
+};
+
 export {
   createHeroBanner,
   createMiniBanner,
   deleteHeroBanner,
+  deleteHeroBannerBulk,
   deleteMiniBanner,
+  deleteMiniBannerBulk,
   getHeroBanners,
   getMiniBanners,
   getSingleHeroBanner,

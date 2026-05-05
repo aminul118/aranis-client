@@ -7,6 +7,8 @@ export enum OrderStatus {
   COURIER = 'Courier',
   DELIVERED = 'Delivered',
   CANCELLED = 'Cancelled',
+  REJECTED = 'Rejected',
+  RETURNED = 'Returned',
 }
 
 export enum PaymentStatus {
@@ -23,6 +25,8 @@ export interface IOrderItem {
   product: string | IProduct;
   quantity: number;
   price: number;
+  color?: string;
+  size?: string;
 }
 
 export interface IOrder {
@@ -38,6 +42,8 @@ export interface IOrder {
   paymentMethod: PaymentMethod;
   paymentStatus: PaymentStatus;
   isDeleted?: boolean;
+  rejectionNote?: string;
+  isStockDecremented?: boolean;
   createdAt?: string;
   updatedAt?: string;
 }

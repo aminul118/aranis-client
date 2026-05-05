@@ -2,7 +2,7 @@
 
 import { useCart } from '@/context/CartContext';
 import { cn } from '@/lib/utils';
-import { FileHeart, Gift, MapPin, User } from 'lucide-react';
+import { Gift, MapPin, User } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -23,11 +23,7 @@ const MobileBottomNav = () => {
       href: '/profile',
       icon: User,
     },
-    {
-      label: 'PRE-ORDER',
-      href: '/pre-order',
-      icon: FileHeart,
-    },
+
     {
       label: 'LOCATION',
       href: '/location',

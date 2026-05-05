@@ -25,10 +25,22 @@ export const productSchema = z.object({
     .array(
       z.object({
         color: z.string().min(1, 'Variant color is required'),
+        sizes: z
+          .array(
+            z.object({
+              size: z.string().min(1, 'Size is required'),
+              stock: z.coerce
+                .number()
+                .min(0, 'Stock cannot be negative')
+                .default(0),
+            }),
+          )
+          .default([]),
         images: z
           .array(z.union([z.string(), z.any()]))
           .optional()
           .default([]),
+        sku: z.string().optional(),
       }),
     )
     .optional()
@@ -36,6 +48,7 @@ export const productSchema = z.object({
   sizes: z.array(z.string()).min(1, 'At least one size is required'),
   featured: z.boolean().default(false),
   rating: z.coerce.number().min(0).max(5).default(0),
+  sku: z.string().optional(),
   videoUrl: z.string().url('Invalid URL').optional().or(z.literal('')),
 });
 

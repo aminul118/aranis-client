@@ -86,6 +86,11 @@ const ProductCard = ({
               {product.offerTag}
             </span>
           )}
+          {product.stock < 1 && (
+            <span className="rounded-md bg-gray-900 px-2.5 py-1 text-[10px] font-black tracking-widest text-white uppercase shadow-lg">
+              Out of Stock
+            </span>
+          )}
         </div>
 
         {/* Wishlist Button */}
@@ -175,6 +180,7 @@ const ProductCard = ({
           </div>
           <Button
             size="sm"
+            disabled={product.stock < 1}
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
@@ -183,7 +189,7 @@ const ProductCard = ({
             }}
             className="rounded-full bg-blue-600 px-6 font-bold text-white shadow-lg shadow-blue-500/20 hover:bg-blue-700"
           >
-            Add
+            {product.stock < 1 ? 'Out' : 'Add'}
           </Button>
         </div>
       </div>

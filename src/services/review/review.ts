@@ -43,4 +43,23 @@ const checkReviewEligibility = async (productId: string) => {
   );
 };
 
-export { checkReviewEligibility, createReview, getProductReviews };
+const deleteReviewBulk = async (ids: string[]) => {
+  const res = await serverFetch.delete<ApiResponse<any>>(
+    '/reviews/bulk-delete',
+    {
+      body: JSON.stringify({ ids }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    },
+  );
+  revalidate('product');
+  return res;
+};
+
+export {
+  checkReviewEligibility,
+  createReview,
+  deleteReviewBulk,
+  getProductReviews,
+};

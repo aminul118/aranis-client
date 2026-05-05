@@ -51,3 +51,17 @@ export const deleteColor = async (id: string) => {
   revalidate('color');
   return res;
 };
+
+export const deleteColorBulk = async (ids: string[]) => {
+  const res = await serverFetch.delete<ApiResponse<any>>(
+    '/colors/bulk-delete',
+    {
+      body: JSON.stringify({ ids }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    },
+  );
+  revalidate('color');
+  return res;
+};

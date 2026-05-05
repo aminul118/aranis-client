@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react';
 const CategoryBar = () => {
   const pathname = usePathname();
   const [navItems, setNavItems] = useState<INavItem[]>([]);
+  const [activeOffers, setActiveOffers] = useState<any[]>([]);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const pathSegments = pathname.split('/').filter(Boolean);
   const currentCategorySlug = pathSegments[0];
@@ -27,7 +28,17 @@ const CategoryBar = () => {
         setNavItems(sortedItems);
       }
     };
+
+    const fetchActiveOffers = async () => {
+      // Import getOffers from offer service
+      const res = await fetch('/api/v1/offers').then((r) => r.json());
+      if (res?.success) {
+        setActiveOffers(res.data);
+      }
+    };
+
     fetchNav();
+    fetchActiveOffers();
   }, []);
 
   return (
@@ -75,11 +86,22 @@ const CategoryBar = () => {
                   {/* Mega Menu Dropdown */}
                   {hasSubItems && hoveredItem === item._id && (
                     <div className="animate-in fade-in slide-in-from-top-2 dark:bg-background absolute top-full left-0 z-100 grid w-[500px] grid-cols-2 gap-8 border border-gray-100 bg-white p-6 shadow-2xl duration-200 dark:border-white/5">
-                      {item.subItems?.map((sub) => {
-                        const subCategorySlug = toUrlSlug(sub.title);
+                      {(item.title === 'Offers' && activeOffers.length > 0
+                        ? activeOffers.map((o) => ({
+                            title: o.name,
+                            tag: o.tag,
+                            items: [],
+                          }))
+                        : item.subItems || []
+                      ).map((sub: any) => {
+                        const subCategorySlug = sub.tag
+                          ? sub.tag
+                          : toUrlSlug(sub.title);
                         const isSubActive =
                           isCategoryActive &&
-                          currentSubCategorySlug === subCategorySlug;
+                          (sub.tag
+                            ? pathname.includes(sub.tag)
+                            : currentSubCategorySlug === subCategorySlug);
 
                         const TitleContent = (
                           <h3
@@ -95,22 +117,34 @@ const CategoryBar = () => {
                         );
 
                         return (
-                          <div key={sub.title} className="flex flex-col gap-3">
-                            {sub.href ? (
+                          <div
+                            key={sub.tag || sub.title}
+                            className="flex flex-col gap-3"
+                          >
+                            {sub.tag ? (
+                              <Link href={`/offers?tag=${sub.tag}`}>
+                                {TitleContent}
+                              </Link>
+                            ) : sub.href ? (
                               <Link href={sub.href}>{TitleContent}</Link>
                             ) : (
                               TitleContent
                             )}
                             <div className="flex flex-col gap-2">
-                              {sub.items.map((subItem) => {
+                              {sub.items.map((subItem: string) => {
                                 const itemSlug = toUrlSlug(subItem);
                                 const isItemActive =
                                   isSubActive && currentItemSlug === itemSlug;
+                                const isOffersCategory =
+                                  categorySlug === 'offers';
+                                const itemHref = isOffersCategory
+                                  ? `/offers?tag=${encodeURIComponent(subItem)}`
+                                  : `/${categorySlug}/${subCategorySlug}/${itemSlug}`;
 
                                 return (
                                   <Link
                                     key={subItem}
-                                    href={`/${categorySlug}/${subCategorySlug}/${itemSlug}`}
+                                    href={itemHref}
                                     className={cn(
                                       'text-xs font-bold transition-colors',
                                       isItemActive
@@ -131,79 +165,6 @@ const CategoryBar = () => {
                 </div>
               );
             })}
-
-            {/* Static Offers Menu */}
-            <div
-              className="group relative h-full"
-              onMouseEnter={() => setHoveredItem('offers-static')}
-              onMouseLeave={() => setHoveredItem(null)}
-            >
-              <Link
-                href="/offers"
-                className={cn(
-                  'relative flex h-full items-center gap-2 px-4 py-4 text-[10px] font-black tracking-widest whitespace-nowrap uppercase transition-all',
-                  pathname === '/offers' || hoveredItem === 'offers-static'
-                    ? 'text-blue-600'
-                    : 'text-gray-600 hover:text-blue-600 dark:text-gray-400',
-                )}
-              >
-                <span>Offers</span>
-                <ChevronDown
-                  size={10}
-                  className={cn(
-                    'ml-1 transition-transform',
-                    hoveredItem === 'offers-static' && 'rotate-180',
-                  )}
-                />
-                {(pathname === '/offers' ||
-                  hoveredItem === 'offers-static') && (
-                  <div className="absolute right-0 bottom-0 left-0 z-10 h-0.5 bg-blue-600" />
-                )}
-              </Link>
-
-              {hoveredItem === 'offers-static' && (
-                <div className="animate-in fade-in slide-in-from-top-2 dark:bg-background absolute top-full left-0 z-100 grid w-[400px] grid-cols-2 gap-8 border border-gray-100 bg-white p-6 shadow-2xl duration-200 dark:border-white/5">
-                  <div className="flex flex-col gap-3">
-                    <h3 className="border-blue-50 pb-2 text-[11px] font-black tracking-tighter text-blue-600 uppercase dark:border-blue-900/30 dark:text-blue-400">
-                      Collection Offers
-                    </h3>
-                    <div className="flex flex-col gap-2">
-                      <Link
-                        href="/offers?tag=Pakistani dress"
-                        className="text-xs font-bold text-gray-500 transition-colors hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
-                      >
-                        Pakistani Dress
-                      </Link>
-                      <Link
-                        href="/offers?tag=Indian dress"
-                        className="text-xs font-bold text-gray-500 transition-colors hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
-                      >
-                        Indian Dress
-                      </Link>
-                    </div>
-                  </div>
-                  <div className="flex flex-col gap-3">
-                    <h3 className="border-blue-50 pb-2 text-[11px] font-black tracking-tighter text-blue-600 uppercase dark:border-blue-900/30 dark:text-blue-400">
-                      Special Deals
-                    </h3>
-                    <div className="flex flex-col gap-2">
-                      <Link
-                        href="/offers?tag=Eid offer"
-                        className="text-xs font-bold text-gray-500 transition-colors hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
-                      >
-                        Eid Offer
-                      </Link>
-                      <Link
-                        href="/offers?tag=Normal discount"
-                        className="text-xs font-bold text-gray-500 transition-colors hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
-                      >
-                        Normal Discount
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
           </div>
         </div>
       </div>

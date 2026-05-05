@@ -15,8 +15,10 @@ const AdminHeader = ({ user }: { user: IUser }) => {
 
   const fetchStats = useCallback(async () => {
     try {
-      const { data } = await getAdminStats();
-      setPendingOrders(data.orderStatusDistribution.Pending || 0);
+      const res = await getAdminStats();
+      if (res?.success && res.data?.orderStatusDistribution) {
+        setPendingOrders(res.data.orderStatusDistribution.Pending || 0);
+      }
     } catch (error) {
       console.error('Failed to fetch stats for notifications:', error);
     }

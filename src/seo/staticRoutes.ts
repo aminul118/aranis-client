@@ -26,16 +26,7 @@ export const staticRoutes: Routes[] = [
     changeFrequency: 'monthly',
     priority: 0.7,
   },
-  {
-    url: 'emi',
-    changeFrequency: 'monthly',
-    priority: 0.6,
-  },
-  {
-    url: 'pre-order',
-    changeFrequency: 'daily',
-    priority: 0.8,
-  },
+
   {
     url: 'location',
     changeFrequency: 'monthly',

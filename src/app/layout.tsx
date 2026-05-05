@@ -1,11 +1,7 @@
 import TopLoadingBar from '@/components/common/loader/TopLoadingBar';
-import { TooltipProvider } from '@/components/ui/tooltip';
 import envVars from '@/config/env.config';
 import fonts from '@/config/fonts.config';
-import { CartProvider } from '@/context/CartContext';
-import { UserProvider } from '@/context/UserContext';
-import { WishlistProvider } from '@/context/WishlistContext';
-import ThemeProvider from '@/providers/ThemeProvider';
+import { Providers } from '@/providers/Providers';
 import generateMetaTags from '@/seo/generateMetaTags';
 import { getSiteSettings } from '@/services/settings/settings';
 import '@/styles/custom.css';
@@ -13,7 +9,6 @@ import '@/styles/globals.css';
 import { Children } from '@/types';
 import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
 import { Metadata } from 'next';
-import { Toaster } from 'sonner';
 
 export const dynamic = 'force-dynamic';
 
@@ -23,21 +18,7 @@ const MainLayout = ({ children }: Children) => {
       <GoogleAnalytics gaId={envVars.analytics.googleAnalytics} />
       <body className={fonts.spaceGrotesk.className} suppressHydrationWarning>
         <TopLoadingBar />
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <UserProvider>
-            <CartProvider>
-              <WishlistProvider>
-                <TooltipProvider>{children}</TooltipProvider>
-              </WishlistProvider>
-            </CartProvider>
-          </UserProvider>
-          <Toaster position="top-right" richColors theme="dark" />
-        </ThemeProvider>
+        <Providers>{children}</Providers>
       </body>
       <GoogleTagManager gtmId={envVars.analytics.googleTagManagerId} />
     </html>

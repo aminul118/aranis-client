@@ -166,6 +166,8 @@ const CheckoutPage = () => {
           quantity: item.quantity,
           price:
             item.salePrice && item.salePrice > 0 ? item.salePrice : item.price,
+          color: item.selectedColor,
+          size: item.selectedSize,
         })),
         totalPrice: total,
         subTotal: subtotal,
