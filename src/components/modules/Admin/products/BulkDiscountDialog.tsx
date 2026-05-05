@@ -137,7 +137,7 @@ const BulkDiscountDialog = ({
         <div className="max-h-[60vh] overflow-y-auto pr-2">
           <div className="grid gap-6 py-4">
             <div className="grid gap-2">
-              <Label className="text-muted-foreground text-[10px] font-bold tracking-widest uppercase">
+              <Label className="text-[10px] font-bold tracking-widest text-blue-700 uppercase">
                 Discount Percentage (%)
               </Label>
               <Input
@@ -163,7 +163,7 @@ const BulkDiscountDialog = ({
             {isOffer && (
               <div className="space-y-4 rounded-xl border border-gray-100 bg-gray-50/50 p-4 dark:border-white/5 dark:bg-white/5">
                 <div className="flex items-center justify-between">
-                  <Label className="text-[10px] font-bold tracking-widest uppercase">
+                  <Label className="text-[10px] font-bold tracking-widest text-blue-700 uppercase">
                     Select Offer Tag
                   </Label>
                   <Button
@@ -199,7 +199,7 @@ const BulkDiscountDialog = ({
                   <div className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label className="text-[10px] text-gray-500">
+                        <Label className="text-[10px] font-bold text-gray-700 uppercase">
                           Offer Name
                         </Label>
                         <Input
@@ -209,7 +209,7 @@ const BulkDiscountDialog = ({
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label className="text-[10px] text-gray-500">
+                        <Label className="text-[10px] font-bold text-gray-700 uppercase">
                           Tag Identifier
                         </Label>
                         <Input
@@ -221,7 +221,7 @@ const BulkDiscountDialog = ({
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label className="text-[10px] text-gray-500">
+                        <Label className="text-[10px] font-bold text-gray-700 uppercase">
                           Start Date
                         </Label>
                         <Input
@@ -231,7 +231,7 @@ const BulkDiscountDialog = ({
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label className="text-[10px] text-gray-500">
+                        <Label className="text-[10px] font-bold text-gray-700 uppercase">
                           End Date
                         </Label>
                         <Input
@@ -242,7 +242,7 @@ const BulkDiscountDialog = ({
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <Label className="text-[10px] text-gray-500">
+                      <Label className="text-[10px] font-bold text-gray-700 uppercase">
                         Expiration Time (24h)
                       </Label>
                       <Input

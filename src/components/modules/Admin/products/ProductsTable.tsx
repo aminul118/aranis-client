@@ -1,11 +1,11 @@
 'use client';
 
+import DeleteConfirmation from '@/components/common/actions/DeleteConfirmation';
 import TableManageMent from '@/components/common/table/TableManageMent';
 import { Button } from '@/components/ui/button';
 import { deleteProductBulk, IProduct } from '@/services/product/product';
 import { Percent, Trash2 } from 'lucide-react';
 import { useState } from 'react';
-import { toast } from 'sonner';
 import BulkDiscountDialog from './BulkDiscountDialog';
 import ProductsColumn from './ProductsColumn';
 
@@ -34,32 +34,22 @@ const ProductsTable = ({ products }: { products: IProduct[] }) => {
           <div className="flex gap-2">
             <Button
               onClick={() => setIsBulkDialogOpen(true)}
-              className="rounded-xl bg-white text-[10px] font-black tracking-widest text-blue-600 uppercase hover:bg-blue-50"
+              className="rounded-xl border-none bg-amber-400 text-[10px] font-black tracking-widest text-amber-950 uppercase shadow-lg shadow-amber-500/20 hover:bg-amber-300"
             >
               <Percent size={14} className="mr-2" /> Apply Bulk Discount
             </Button>
-            <Button
-              onClick={async () => {
-                if (
-                  confirm(
-                    `Are you sure you want to delete ${selectedIds.length} products?`,
-                  )
-                ) {
-                  try {
-                    const res = await deleteProductBulk(selectedIds);
-                    if (res.success) {
-                      toast.success('Products deleted successfully');
-                      setSelectedIds([]);
-                    }
-                  } catch (error) {
-                    toast.error('Failed to delete products');
-                  }
-                }
-              }}
-              className="rounded-xl bg-red-500 text-[10px] font-black tracking-widest text-white uppercase hover:bg-red-600"
+
+            <DeleteConfirmation
+              onConfirm={() => deleteProductBulk(selectedIds)}
+              onSuccess={() => setSelectedIds([])}
+              title="Delete Selected Products?"
+              description={`Are you sure you want to delete ${selectedIds.length} products? This action cannot be undone.`}
             >
-              <Trash2 size={14} className="mr-2" /> Delete Selected
-            </Button>
+              <Button className="rounded-xl border-none bg-red-500 text-[10px] font-black tracking-widest text-white uppercase shadow-lg shadow-red-500/20 hover:bg-red-600">
+                <Trash2 size={14} className="mr-2" /> Delete Selected
+              </Button>
+            </DeleteConfirmation>
+
             <Button
               variant="ghost"
               onClick={() => setSelectedIds([])}

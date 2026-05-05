@@ -19,10 +19,19 @@ import Tooltip from '../Tooltip';
 
 interface IDeleteConfirmation {
   onConfirm: () => Promise<any>;
+  onSuccess?: () => void;
   children?: ReactNode;
+  title?: string;
+  description?: string;
 }
 
-const DeleteConfirmation = ({ children, onConfirm }: IDeleteConfirmation) => {
+const DeleteConfirmation = ({
+  children,
+  onConfirm,
+  onSuccess,
+  title = 'Are you absolutely sure?',
+  description = 'This action cannot be undone. This will permanently delete and remove your data from our servers.',
+}: IDeleteConfirmation) => {
   const { executePost, isPending } = useActionHandler();
   const [open, setOpen] = useState(false);
 
@@ -34,6 +43,7 @@ const DeleteConfirmation = ({ children, onConfirm }: IDeleteConfirmation) => {
         message: 'Deleted successfully',
         onSuccess: () => {
           setOpen(false); //  close dialog after success
+          if (onSuccess) onSuccess();
         },
       },
       errorMessage: 'Failed to delete.',
@@ -60,11 +70,8 @@ const DeleteConfirmation = ({ children, onConfirm }: IDeleteConfirmation) => {
 
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-          <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete and
-            remove your data from our servers.
-          </AlertDialogDescription>
+          <AlertDialogTitle>{title}</AlertDialogTitle>
+          <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
 
         <AlertDialogFooter>
@@ -72,6 +79,7 @@ const DeleteConfirmation = ({ children, onConfirm }: IDeleteConfirmation) => {
 
           <AlertDialogAction
             disabled={isPending}
+            className="bg-red-600 text-white hover:bg-red-700 dark:bg-red-600 dark:hover:bg-red-700"
             onClick={(e) => {
               e.preventDefault(); //  prevent auto-close
               handleDelete();
