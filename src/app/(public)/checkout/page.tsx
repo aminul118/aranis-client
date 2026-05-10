@@ -79,17 +79,13 @@ const CheckoutPage = () => {
         const { data } = await getMe();
         if (data) {
           setUser(data);
-          // For now, default to the first address if available
           if (data.addresses && data.addresses.length > 0) {
             setAddressInput(data.addresses[0].address);
           }
           setPhoneInput(data.phone || '');
-        } else {
-          router.push('/login?redirect=checkout');
         }
       } catch (error) {
-        // Redirect to login if user is not authenticated
-        router.push('/login?redirect=checkout');
+        // Guest user - stay on page
       } finally {
         setLoading(false);
       }
