@@ -35,7 +35,30 @@ const serverFetchHelper = async <T>(
       if (contentType && contentType.includes('application/json')) {
         return (await res.json()) as T;
       }
-      throw new Error(`Execution failed with status: ${res.status}`);
+
+      let errorMessage = 'An unexpected error occurred. Please try again.';
+      switch (res.status) {
+        case 500:
+          errorMessage = 'Internal Server Error. Please try again later.';
+          break;
+        case 502:
+          errorMessage =
+            'Server is temporarily unavailable. Please try again later.';
+          break;
+        case 503:
+          errorMessage = 'Service is unavailable. Please try again later.';
+          break;
+        case 504:
+          errorMessage = 'Server timeout. Please try again later.';
+          break;
+        case 404:
+          errorMessage = 'Requested resource not found.';
+          break;
+        default:
+          errorMessage = `Request failed (Status: ${res.status}). Please try again.`;
+      }
+
+      throw new Error(errorMessage);
     }
 
     return (await res.json()) as T;
