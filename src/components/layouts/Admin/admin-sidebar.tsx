@@ -11,7 +11,7 @@ import Menu from './Menu';
 
 const AdminSidebar = ({ user, logoUrl }: { user: IUser; logoUrl?: string }) => {
   return (
-    <Sidebar collapsible="icon" className="bg-black! text-white!">
+    <Sidebar collapsible="offcanvas" className="bg-black! text-white!">
       {/* Header */}
       <SidebarHeader>
         <div className="flex items-center gap-2 px-4 py-4">

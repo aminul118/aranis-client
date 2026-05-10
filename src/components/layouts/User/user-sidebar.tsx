@@ -11,7 +11,7 @@ import Menu from './Menu';
 
 const UserSidebar = async ({ user }: { user: IUser }) => {
   return (
-    <Sidebar collapsible="icon" className="bg-black! text-white!">
+    <Sidebar collapsible="offcanvas" className="bg-black! text-white!">
       <SidebarHeader>
         <div className="flex items-center gap-2 px-4 py-4">
           <Logo />

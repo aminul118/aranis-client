@@ -84,10 +84,12 @@ const CheckoutPage = () => {
             setAddressInput(data.addresses[0].address);
           }
           setPhoneInput(data.phone || '');
+        } else {
+          router.push('/login?redirect=checkout');
         }
       } catch (error) {
-        // User is not logged in, which is fine for guest checkout
-        console.log('Guest checkout mode');
+        // Redirect to login if user is not authenticated
+        router.push('/login?redirect=checkout');
       } finally {
         setLoading(false);
       }

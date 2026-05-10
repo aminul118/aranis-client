@@ -73,7 +73,19 @@ const LoginForm = () => {
         });
         if (res.success) {
           toast.success('Logged in successfully');
-          window.location.href = redirect ? `/${redirect}` : '/';
+          if (redirect) {
+            window.location.href = `/${redirect}`;
+          } else {
+            // Fetch user to determine role
+            const { getMe } = await import('@/services/user/users');
+            const userRes = await getMe();
+            const role = userRes.data?.role;
+            if (role === 'ADMIN' || role === 'SUPER_ADMIN') {
+              window.location.href = '/admin';
+            } else {
+              window.location.href = '/user';
+            }
+          }
         } else {
           setAlert({
             type: 'error',

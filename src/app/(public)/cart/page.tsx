@@ -5,6 +5,8 @@ import CartSummary from '@/components/modules/Public/Cart/CartSummary';
 import EmptyCart from '@/components/modules/Public/Cart/EmptyCart';
 import { useCart } from '@/context/CartContext';
 import { AnimatePresence } from 'framer-motion';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 const CartPage = () => {
   const {
@@ -18,6 +20,34 @@ const CartPage = () => {
     couponCode,
     applyCoupon,
   } = useCart();
+
+  const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const { getMe } = await import('@/services/user/users');
+        const res = await getMe();
+        if (!res.data) {
+          router.push('/login?redirect=cart');
+        } else {
+          setIsLoading(false);
+        }
+      } catch (error) {
+        router.push('/login?redirect=cart');
+      }
+    };
+    checkAuth();
+  }, [router]);
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center pt-32 pb-16">
+        <div className="h-12 w-12 animate-spin rounded-full border-t-2 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
 
   if (cart.length === 0) {
     return (
