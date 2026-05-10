@@ -189,16 +189,23 @@ const CheckoutPage = () => {
 
       const res = await createOrder(orderPayload);
       if (res.success) {
-        toast.success('Order placed successfully!');
         setIsSuccess(true);
         clearCart();
-        router.push('/user/orders');
+        toast.success('Order placed successfully!', {
+          description: 'Redirecting to your orders...',
+          duration: 5000,
+        });
+
+        // Short delay to let the user see the success state
+        setTimeout(() => {
+          router.push('/user/orders');
+        }, 3000);
       } else {
         toast.error(res.message || 'Failed to place order');
+        setSubmitting(false);
       }
     } catch (error) {
       toast.error('Something went wrong during order placement');
-    } finally {
       setSubmitting(false);
     }
   };
@@ -328,6 +335,43 @@ const CheckoutPage = () => {
             </Button>
             <Button asChild variant="outline" className="rounded-full px-8">
               <Link href="/">Back to Homepage</Link>
+            </Button>
+          </div>
+        </motion.div>
+      </div>
+    );
+  }
+
+  if (isSuccess) {
+    return (
+      <div className="bg-background flex min-h-screen items-center justify-center pt-32 pb-24">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          className="mx-4 w-full max-w-lg text-center"
+        >
+          <div className="relative mx-auto mb-8 h-24 w-24">
+            <div className="absolute inset-0 animate-ping rounded-full bg-emerald-500/10" />
+            <div className="relative flex h-24 w-24 items-center justify-center rounded-full bg-emerald-500 text-white">
+              <CheckCircle2 className="h-12 w-12" />
+            </div>
+          </div>
+          <h1 className="mb-3 text-4xl font-black tracking-tighter">
+            Order <span className="text-emerald-500">Confirmed!</span>
+          </h1>
+          <p className="text-muted-foreground mb-8 leading-relaxed">
+            Thank you for shopping with Aranis. Your order has been placed
+            successfully and is now being processed.
+          </p>
+          <div className="flex flex-col justify-center gap-3 sm:flex-row">
+            <Button
+              asChild
+              className="rounded-full bg-emerald-500 px-8 font-bold text-white hover:bg-emerald-600"
+            >
+              <Link href="/user/orders">View Your Orders</Link>
+            </Button>
+            <Button asChild variant="outline" className="rounded-full px-8">
+              <Link href="/">Return Home</Link>
             </Button>
           </div>
         </motion.div>
