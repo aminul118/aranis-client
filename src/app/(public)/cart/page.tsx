@@ -6,7 +6,7 @@ import EmptyCart from '@/components/modules/Public/Cart/EmptyCart';
 import { useCart } from '@/context/CartContext';
 import { AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 const CartPage = () => {
   const {
@@ -21,25 +21,8 @@ const CartPage = () => {
     applyCoupon,
   } = useCart();
 
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const { getMe } = await import('@/services/user/users');
-        const res = await getMe();
-        if (!res.data) {
-          router.push('/login?redirect=cart');
-        } else {
-          setIsLoading(false);
-        }
-      } catch (error) {
-        router.push('/login?redirect=cart');
-      }
-    };
-    checkAuth();
-  }, [router]);
 
   if (isLoading) {
     return (
