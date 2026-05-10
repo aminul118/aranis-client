@@ -70,8 +70,19 @@ const CheckoutPage = () => {
   });
   const [showOTPModal, setShowOTPModal] = useState(false);
   const [otp, setOtp] = useState('');
+  const [resendTimer, setResendTimer] = useState(0);
 
   const router = useRouter();
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (resendTimer > 0) {
+      timer = setInterval(() => {
+        setResendTimer((prev) => prev - 1);
+      }, 1000);
+    }
+    return () => clearInterval(timer);
+  }, [resendTimer]);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -135,6 +146,7 @@ const CheckoutPage = () => {
         const res = await registerWithOTP(payload);
         if (res.success) {
           setShowOTPModal(true);
+          setResendTimer(60);
           toast.success(`Verification code sent to your ${guestMethod}`);
         } else {
           toast.error(res.message || 'Failed to initiate guest registration');
@@ -210,6 +222,31 @@ const CheckoutPage = () => {
       }
     } catch (error) {
       toast.error('Verification failed');
+      setSubmitting(false);
+    }
+  };
+
+  const handleResendOTP = async () => {
+    if (resendTimer > 0) return;
+    setSubmitting(true);
+    try {
+      const payload = {
+        firstName: guestInfo.firstName,
+        lastName: guestInfo.lastName,
+        email: guestMethod === 'email' ? guestInfo.emailOrPhone : undefined,
+        phone: guestMethod === 'phone' ? guestInfo.emailOrPhone : undefined,
+      };
+      const res = await registerWithOTP(payload);
+      if (res.success) {
+        setResendTimer(60);
+        setOtp('');
+        toast.success('New code sent!');
+      } else {
+        toast.error(res.message || 'Failed to resend code');
+      }
+    } catch (error) {
+      toast.error('Resend failed');
+    } finally {
       setSubmitting(false);
     }
   };
@@ -737,6 +774,26 @@ const CheckoutPage = () => {
             >
               {submitting ? 'Verifying...' : 'Verify & Place Order'}
             </Button>
+
+            <div className="flex flex-col items-center gap-2 pt-2">
+              <p className="text-muted-foreground text-xs">
+                Didn't receive the code?
+              </p>
+              <button
+                onClick={handleResendOTP}
+                disabled={submitting || resendTimer > 0}
+                className={cn(
+                  'text-sm font-bold transition-colors',
+                  resendTimer > 0
+                    ? 'text-muted-foreground cursor-not-allowed'
+                    : 'text-blue-600 underline hover:text-blue-700',
+                )}
+              >
+                {resendTimer > 0
+                  ? `Resend available in ${resendTimer}s`
+                  : 'Resend Code Now'}
+              </button>
+            </div>
           </div>
         </DialogContent>
       </Dialog>
