@@ -14,46 +14,40 @@ import SingleImageUploader from '@/components/ui/single-image-uploader';
 import { Switch } from '@/components/ui/switch';
 import useActionHandler from '@/hooks/useActionHandler';
 import {
-  createMiniBanner,
-  IMiniBanner,
-  updateMiniBanner,
-} from '@/services/hero-banner/hero-banner';
+  createPopupBanner,
+  IPopupBanner,
+  updatePopupBanner,
+} from '@/services/popup-banner/popup-banner';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ImageIcon, Plus, Save } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-const miniBannerSchema = z.object({
+const popupBannerSchema = z.object({
   image: z.string().min(1, 'Image is required'),
-  label: z.string().optional().or(z.literal('')),
+  link: z.string().optional().or(z.literal('')),
   title: z.string().optional().or(z.literal('')),
-  href: z.string().optional().or(z.literal('')),
-  accent: z.string().optional().or(z.literal('')),
-  order: z.coerce.number().default(0),
   isActive: z.boolean().default(true),
 });
 
-type FormValues = z.infer<typeof miniBannerSchema>;
+type FormValues = z.infer<typeof popupBannerSchema>;
 
 interface Props {
-  banner?: IMiniBanner;
+  banner?: IPopupBanner;
 }
 
-const MiniBannerForm = ({ banner }: Props) => {
+const PopupBannerForm = ({ banner }: Props) => {
   const router = useRouter();
   const { executePost } = useActionHandler();
   const isEdit = !!banner;
 
   const form = useForm<FormValues>({
-    resolver: zodResolver(miniBannerSchema) as any,
+    resolver: zodResolver(popupBannerSchema) as any,
     defaultValues: {
       image: banner?.image || '',
-      label: banner?.label || '',
+      link: banner?.link || '/offers',
       title: banner?.title || '',
-      href: banner?.href || '/shop',
-      accent: banner?.accent || 'from-purple-600/80 to-indigo-800/90',
-      order: banner?.order ?? 0,
       isActive: banner?.isActive ?? true,
     },
   });
@@ -62,26 +56,26 @@ const MiniBannerForm = ({ banner }: Props) => {
     if (isEdit && banner) {
       await executePost({
         action: () =>
-          updateMiniBanner(values as IMiniBanner, banner._id as string),
+          updatePopupBanner(values as IPopupBanner, banner._id as string),
         success: {
           onSuccess: () => {
-            router.push('/admin/mini-banners');
+            router.push('/admin/popup-banners');
             router.refresh();
           },
-          loadingText: 'Updating mini banner...',
-          message: 'Mini banner updated successfully',
+          loadingText: 'Updating popup banner...',
+          message: 'Popup banner updated successfully',
         },
       });
     } else {
       await executePost({
-        action: () => createMiniBanner(values as IMiniBanner),
+        action: () => createPopupBanner(values as IPopupBanner),
         success: {
           onSuccess: () => {
-            router.push('/admin/mini-banners');
+            router.push('/admin/popup-banners');
             router.refresh();
           },
-          loadingText: 'Creating mini banner...',
-          message: 'Mini banner created successfully',
+          loadingText: 'Creating popup banner...',
+          message: 'Popup banner created successfully',
         },
       });
     }
@@ -98,6 +92,7 @@ const MiniBannerForm = ({ banner }: Props) => {
             <FormItem>
               <FormLabel className="flex items-center gap-2">
                 <ImageIcon className="h-4 w-4" /> Banner Image
+                <span className="text-red-500">*</span>
               </FormLabel>
               <FormControl>
                 <SingleImageUploader
@@ -105,6 +100,9 @@ const MiniBannerForm = ({ banner }: Props) => {
                   onChange={(file) => field.onChange(file)}
                 />
               </FormControl>
+              <p className="text-muted-foreground mt-1 text-xs">
+                This image will appear as a popup when users visit the website.
+              </p>
               <FormMessage />
             </FormItem>
           )}
@@ -113,12 +111,12 @@ const MiniBannerForm = ({ banner }: Props) => {
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           <FormField
             control={form.control}
-            name="label"
+            name="title"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Small Label</FormLabel>
+                <FormLabel>Title (optional)</FormLabel>
                 <FormControl>
-                  <Input placeholder="e.g. Featured Picks" {...field} />
+                  <Input placeholder="e.g. Eid Special Offers" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -126,66 +124,24 @@ const MiniBannerForm = ({ banner }: Props) => {
           />
           <FormField
             control={form.control}
-            name="order"
+            name="link"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Display Order</FormLabel>
+                <FormLabel>Link / Destination URL</FormLabel>
                 <FormControl>
-                  <Input type="number" {...field} />
+                  <Input
+                    placeholder="/offers or /shop?featured=true"
+                    {...field}
+                  />
                 </FormControl>
+                <p className="text-muted-foreground mt-1 text-xs">
+                  Clicking the popup will redirect to this URL.
+                </p>
                 <FormMessage />
               </FormItem>
             )}
           />
         </div>
-
-        <FormField
-          control={form.control}
-          name="title"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Title</FormLabel>
-              <FormControl>
-                <Input placeholder="e.g. Staff Favourites" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="href"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Link (URL)</FormLabel>
-              <FormControl>
-                <Input placeholder="/shop?featured=true" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="accent"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Accent Gradient (Tailwind)</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="from-purple-600/80 to-indigo-800/90"
-                  {...field}
-                />
-              </FormControl>
-              <p className="text-muted-foreground mt-1 text-xs">
-                Applied as an overlay gradient on the banner image.
-              </p>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
 
         <FormField
           control={form.control}
@@ -195,7 +151,7 @@ const MiniBannerForm = ({ banner }: Props) => {
               <div>
                 <FormLabel>Active</FormLabel>
                 <p className="text-muted-foreground text-xs">
-                  Show this mini banner on the home page.
+                  Only one active popup will be shown to visitors at a time.
                 </p>
               </div>
               <FormControl>
@@ -211,7 +167,7 @@ const MiniBannerForm = ({ banner }: Props) => {
         <div className="flex justify-end pt-4">
           <SubmitButton
             loading={form.formState.isSubmitting}
-            text={isEdit ? 'Update Mini Banner' : 'Create Mini Banner'}
+            text={isEdit ? 'Update Popup Banner' : 'Create Popup Banner'}
             loadingEffect
             icon={
               isEdit ? (
@@ -227,4 +183,4 @@ const MiniBannerForm = ({ banner }: Props) => {
   );
 };
 
-export default MiniBannerForm;
+export default PopupBannerForm;

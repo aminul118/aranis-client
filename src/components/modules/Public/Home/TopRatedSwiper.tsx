@@ -13,8 +13,8 @@ const TopRatedSwiper = ({ products }: { products: IProduct[] }) => {
   return (
     <Swiper
       modules={[Navigation, Autoplay]}
-      spaceBetween={30}
-      slidesPerView={1}
+      spaceBetween={12}
+      slidesPerView={2}
       navigation
       autoplay={{ delay: 5000, disableOnInteraction: false }}
       breakpoints={{

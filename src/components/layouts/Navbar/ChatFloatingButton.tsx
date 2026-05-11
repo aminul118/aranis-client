@@ -150,7 +150,7 @@ const ChatFloatingButton = ({ user }: ChatFloatingButtonProps) => {
   if (!user) return null;
 
   return (
-    <div className="fixed right-6 bottom-6 z-50">
+    <div className="fixed right-4 bottom-24 z-50 lg:right-6 lg:bottom-6">
       <AnimatePresence>
         {isOpen && (
           <motion.div

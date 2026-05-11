@@ -4,7 +4,7 @@ export const productSchema = z.object({
   name: z.string().min(1, 'Name is required'),
   category: z.string().min(1, 'Category is required'),
   subCategory: z.string().min(1, 'Sub Category is required'),
-  type: z.string().min(1, 'Type is required'),
+  type: z.string().optional(),
   price: z.coerce.number().positive('Price must be positive'),
   image: z.union([z.string(), z.any()]).optional(),
   images: z

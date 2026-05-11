@@ -3,7 +3,7 @@
 import { useCart } from '@/context/CartContext';
 import { useWishlist } from '@/context/WishlistContext';
 import { IUser } from '@/types';
-import { Heart, ShoppingCart, User } from 'lucide-react';
+import { Gift, Heart, ShoppingCart, User } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -60,6 +60,17 @@ const MainNavbar = ({ user, logo }: MainNavbarProps) => {
               </span>
             </Link>
           )}
+
+          {/* Offers */}
+          <Link
+            href="/offers"
+            className="group flex items-center gap-2 rounded-md border border-orange-500/40 bg-orange-500/10 px-4 py-2 text-orange-400 transition-colors hover:bg-orange-500/20"
+          >
+            <Gift size={18} />
+            <span className="hidden text-[10px] font-black tracking-widest uppercase md:inline">
+              Offers
+            </span>
+          </Link>
 
           {/* Cart */}
           <Link

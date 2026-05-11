@@ -55,7 +55,7 @@ const ShopSkeleton = () => {
 
           {/* Main Content Skeleton */}
           <main className="flex-1">
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:gap-8 xl:grid-cols-3 2xl:grid-cols-4">
+            <div className="grid grid-cols-2 gap-6 md:grid-cols-3 md:gap-8 xl:grid-cols-3 2xl:grid-cols-4">
               {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
                 <ProductCardSkeleton key={i} viewMode="grid" />
               ))}

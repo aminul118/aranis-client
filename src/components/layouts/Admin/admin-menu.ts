@@ -6,6 +6,7 @@ import {
   Layers,
   LayoutDashboard,
   Lock,
+  Megaphone,
   Menu as MenuIcon,
   MessageCircle,
   Package,
@@ -49,6 +50,7 @@ const adminSidebarMenu: MenuGroup[] = [
       { name: 'Colors', url: '/admin/colors', icon: Palette },
       { name: 'Hero Banners', url: '/admin/hero-banners', icon: ImageIcon },
       { name: 'Mini Banners', url: '/admin/mini-banners', icon: ImageIcon },
+      { name: 'Popup Banner', url: '/admin/popup-banners', icon: Megaphone },
     ],
   },
   {

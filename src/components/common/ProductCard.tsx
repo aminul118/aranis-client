@@ -2,6 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/CartContext';
+import { useUser } from '@/context/UserContext';
 import { useWishlist } from '@/context/WishlistContext';
 import { cn } from '@/lib/utils';
 import { IProduct } from '@/services/product/product';
@@ -11,8 +12,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-
-import { useUser } from '@/context/UserContext';
 
 interface ProductCardProps {
   product: IProduct;
@@ -132,7 +131,9 @@ const ProductCard = ({
         )}
       </Link>
 
-      <div className={cn('flex flex-1 flex-col', isList ? 'py-2' : 'p-6')}>
+      <div
+        className={cn('flex flex-1 flex-col', isList ? 'py-2' : 'p-3 sm:p-6')}
+      >
         <div className="mb-2 flex items-start justify-between">
           <span className="text-muted-foreground text-[10px] font-bold tracking-widest uppercase">
             {product.subCategory}

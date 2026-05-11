@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/input-otp';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { useCart } from '@/context/CartContext';
+import { cn } from '@/lib/utils';
 import { verifyOTP } from '@/services/auth/otp/verifyOTP';
 import { registerWithOTP } from '@/services/auth/register';
 import { createOrder } from '@/services/order/order';

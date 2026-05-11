@@ -48,7 +48,7 @@ const OffersPage = async ({ searchParams }: Props) => {
         </div>
 
         {products && products.length > 0 ? (
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
+          <div className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
             {products.map((product, index) => (
               <ProductCard key={product._id} product={product} index={index} />
             ))}

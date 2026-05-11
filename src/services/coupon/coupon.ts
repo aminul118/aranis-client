@@ -16,7 +16,7 @@ export const getCoupons = async (query?: Record<string, string>) => {
 };
 
 export const createCoupon = async (data: Partial<ICoupon>) => {
-  const res = await serverFetch.post<ApiResponse<ICoupon>>('/coupon', {
+  const res = await serverFetch.post<ApiResponse<ICoupon>>('/coupons', {
     body: JSON.stringify(data),
     headers: {
       'Content-Type': 'application/json',
@@ -27,7 +27,7 @@ export const createCoupon = async (data: Partial<ICoupon>) => {
 };
 
 export const updateCoupon = async (id: string, data: Partial<ICoupon>) => {
-  const res = await serverFetch.patch<ApiResponse<ICoupon>>(`/coupon/${id}`, {
+  const res = await serverFetch.patch<ApiResponse<ICoupon>>(`/coupons/${id}`, {
     body: JSON.stringify(data),
     headers: {
       'Content-Type': 'application/json',
@@ -38,14 +38,14 @@ export const updateCoupon = async (id: string, data: Partial<ICoupon>) => {
 };
 
 export const deleteCoupon = async (id: string) => {
-  const res = await serverFetch.delete<ApiResponse<null>>(`/coupon/${id}`);
+  const res = await serverFetch.delete<ApiResponse<null>>(`/coupons/${id}`);
   revalidate('COUPONS');
   return res;
 };
 
 export const deleteCouponBulk = async (ids: string[]) => {
   const res = await serverFetch.delete<ApiResponse<any>>(
-    '/coupon/bulk-delete',
+    '/coupons/bulk-delete',
     {
       body: JSON.stringify({ ids }),
       headers: {
@@ -59,6 +59,6 @@ export const deleteCouponBulk = async (ids: string[]) => {
 
 export const validateCoupon = async (code: string) => {
   return await serverFetch.get<ApiResponse<ICoupon>>(
-    `/coupon/validate/${code}`,
+    `/coupons/validate/${code}`,
   );
 };

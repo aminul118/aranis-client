@@ -38,7 +38,7 @@ export default function ShopLoadingSkeleton() {
 
           {/* Product Grid Skeleton */}
           <main className="flex-1">
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:gap-8 xl:grid-cols-3 2xl:grid-cols-4">
+            <div className="grid grid-cols-2 gap-6 md:grid-cols-3 md:gap-8 xl:grid-cols-3 2xl:grid-cols-4">
               {Array.from({ length: 8 }).map((_, i) => (
                 <ProductCardSkeleton key={i} viewMode="grid" />
               ))}
