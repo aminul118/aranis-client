@@ -115,11 +115,19 @@ const ProductDetailContent = ({ product }: ProductDetailContentProps) => {
   const currentVariant =
     selectedVariantIndex >= 0 ? product.variants?.[selectedVariantIndex] : null;
 
-  const allImages = currentVariant
-    ? (currentVariant.images || []).slice(0, 6)
-    : (Array.from(new Set([product.image, ...(product.images || [])])).filter(
-        Boolean,
-      ) as string[]);
+  const allImages = (
+    currentVariant
+      ? (currentVariant.images || []).slice(0, 6)
+      : Array.from(new Set([product.image, ...(product.images || [])]))
+  )
+    .filter(
+      (img) => img && typeof img === 'string' && img !== '[]' && img !== '',
+    )
+    .map((img) =>
+      (img as string).startsWith('/') || (img as string).startsWith('http')
+        ? img
+        : 'https://placehold.co/600x800?text=No+Image',
+    );
 
   // Stock for product (Size-aware)
   const currentStock = (() => {
@@ -449,6 +457,8 @@ const ProductDetailContent = ({ product }: ProductDetailContentProps) => {
                     }
                   })();
 
+                  if (sizeStock === 0) return null;
+
                   return (
                     <button
                       key={size}
@@ -466,27 +476,6 @@ const ProductDetailContent = ({ product }: ProductDetailContentProps) => {
                       <span className="text-sm font-black tracking-widest uppercase">
                         {size}
                       </span>
-                      {sizeStock > 0 && (
-                        <span
-                          className={cn(
-                            'text-[9px] font-bold tracking-tighter opacity-70 transition-all',
-                            selectedSize === size
-                              ? 'text-white'
-                              : sizeStock < 5
-                                ? 'text-red-500'
-                                : 'text-muted-foreground',
-                          )}
-                        >
-                          {sizeStock < 10
-                            ? `${sizeStock} Left`
-                            : `${sizeStock} In Stock`}
-                        </span>
-                      )}
-                      {sizeStock === 0 && (
-                        <span className="text-[9px] font-bold tracking-tighter text-red-500/60">
-                          Sold Out
-                        </span>
-                      )}
                       {selectedSize === size && (
                         <div className="absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-blue-500 text-white shadow-lg ring-2 ring-white">
                           <Check className="h-2.5 w-2.5" strokeWidth={4} />
@@ -537,11 +526,7 @@ const ProductDetailContent = ({ product }: ProductDetailContentProps) => {
                 <div
                   className={`h-1.5 w-1.5 rounded-full ${currentStock > 0 ? 'bg-emerald-500' : 'bg-red-500'}`}
                 />
-                {currentStock > 0
-                  ? currentStock < 10
-                    ? `Only ${currentStock} Left!`
-                    : 'In Stock'
-                  : 'Out of Stock'}
+                {currentStock > 0 ? 'In Stock' : 'Out of Stock'}
               </div>
               <div className="text-muted-foreground flex items-center gap-2 text-[10px] font-black tracking-tighter uppercase">
                 <div className="h-1.5 w-1.5 rounded-full bg-blue-500" />

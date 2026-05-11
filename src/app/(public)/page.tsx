@@ -25,6 +25,9 @@ const HomePage = async () => {
         mainSlides={heroBannersRes?.data}
         miniBanners={miniBannersRes?.data}
       />
+      <Suspense fallback={<ProductGridSkeleton title="Most Wanted Items" />}>
+        <BestSellingProducts />
+      </Suspense>
       <Suspense
         fallback={
           <ProductGridSkeleton
@@ -37,9 +40,6 @@ const HomePage = async () => {
       </Suspense>
       <Suspense fallback={<ProductGridSkeleton title="The Highest Rating" />}>
         <TopRatedProducts />
-      </Suspense>
-      <Suspense fallback={<ProductGridSkeleton title="Most Wanted Now" />}>
-        <BestSellingProducts />
       </Suspense>
       <HomeSEOContent />
     </>

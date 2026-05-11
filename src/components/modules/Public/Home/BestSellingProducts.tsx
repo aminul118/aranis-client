@@ -22,10 +22,11 @@ const BestSellingProducts = async () => {
               </span>
             </div>
             <h2 className="text-foreground mb-4 text-3xl font-black tracking-tighter md:text-5xl">
-              Most <span className="text-primary">Wanted</span> Now
+              Most <span className="text-primary">Wanted</span> Items
             </h2>
             <p className="text-muted-foreground text-lg">
-              The products everyone is talking about
+              Our most popular pieces based on what customers are buying right
+              now
             </p>
           </div>
           <Button

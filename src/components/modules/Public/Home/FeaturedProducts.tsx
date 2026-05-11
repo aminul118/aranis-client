@@ -1,3 +1,4 @@
+import Grid from '@/components/common/Grid';
 import ProductCard from '@/components/common/ProductCard';
 import { Button } from '@/components/ui/button';
 import { getProducts } from '@/services/product/product';
@@ -31,11 +32,11 @@ const FeaturedProducts = async () => {
           </Button>
         </AnimatedSection>
 
-        <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4">
+        <Grid cols={4}>
           {featuredItems.map((product, index) => (
             <ProductCard key={product._id} product={product} index={index} />
           ))}
-        </div>
+        </Grid>
       </div>
     </section>
   );

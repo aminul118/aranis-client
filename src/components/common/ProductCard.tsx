@@ -7,9 +7,8 @@ import { useWishlist } from '@/context/WishlistContext';
 import { cn } from '@/lib/utils';
 import { IProduct } from '@/services/product/product';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Heart, ShoppingCart, Star } from 'lucide-react';
+import { Heart, ShoppingCart } from 'lucide-react';
 import Image from 'next/image';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
@@ -32,6 +31,24 @@ const ProductCard = ({
   const isList = viewMode === 'list';
   const wishlisted = isInWishlist(product._id as string);
 
+  const getValidImage = (src: any) => {
+    if (
+      !src ||
+      typeof src !== 'string' ||
+      src === '[]' ||
+      src === 'null' ||
+      src === ''
+    ) {
+      return 'https://placehold.co/600x800?text=No+Image';
+    }
+    return src;
+  };
+
+  const primaryImage = getValidImage(product.image);
+  const secondaryImage = product.images?.find(
+    (img) => img !== product.image && img !== '[]' && img !== '',
+  );
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -40,12 +57,12 @@ const ProductCard = ({
       transition={{ delay: index * 0.1, duration: 0.5 }}
       layout
       className={cn(
-        'group bg-card/40 border-border overflow-hidden rounded-3xl border transition-all hover:border-blue-500/20',
+        'group bg-card/40 border-border cursor-pointer overflow-hidden rounded-3xl border transition-all hover:border-blue-500/20',
         isList && 'flex flex-col gap-6 p-4 sm:flex-row',
       )}
+      onClick={() => router.push(`/products/${product.slug || product._id}`)}
     >
-      <Link
-        href={`/products/${product.slug || product._id}`}
+      <div
         className={cn(
           'relative block overflow-hidden',
           isList ? 'aspect-square w-full rounded-2xl sm:w-48' : 'aspect-4/5',
@@ -54,17 +71,15 @@ const ProductCard = ({
         <AnimatePresence mode="wait">
           <Image
             key="primary-image"
-            src={product.image}
+            src={primaryImage}
             alt={product.name}
             fill
             className="object-cover transition-all duration-700 ease-in-out group-hover:scale-110"
           />
-          {product.images?.find((img) => img !== product.image) && (
+          {secondaryImage && (
             <Image
               key="secondary-image"
-              src={
-                product.images.find((img) => img !== product.image) as string
-              }
+              src={secondaryImage}
               alt={`${product.name} - Second View`}
               fill
               className="object-cover opacity-0 transition-all duration-700 ease-in-out group-hover:scale-110 group-hover:opacity-100"
@@ -129,7 +144,7 @@ const ProductCard = ({
             </Button>
           </div>
         )}
-      </Link>
+      </div>
 
       <div
         className={cn('flex flex-1 flex-col', isList ? 'py-2' : 'p-3 sm:p-6')}
@@ -138,17 +153,11 @@ const ProductCard = ({
           <span className="text-muted-foreground text-[10px] font-bold tracking-widest uppercase">
             {product.subCategory}
           </span>
-          <div className="flex items-center gap-1 text-xs text-amber-500">
-            <Star size={12} fill="currentColor" />
-            <span>{product.rating.toFixed(1)}</span>
-          </div>
         </div>
 
-        <Link href={`/products/${product.slug || product._id}`}>
-          <h3 className="text-foreground mb-2 truncate text-xl font-bold capitalize transition-colors group-hover:text-blue-500">
-            {product.name}
-          </h3>
-        </Link>
+        <h3 className="text-foreground mb-2 truncate text-xl font-bold capitalize transition-colors group-hover:text-blue-500">
+          {product.name}
+        </h3>
 
         {isList && (
           <p className="text-muted-foreground mb-6 line-clamp-2 flex-1 text-sm">

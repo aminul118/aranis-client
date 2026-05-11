@@ -36,7 +36,7 @@ import { addProductSchema, updateProductSchema } from '@/zod/product';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Check, Plus, Save, Trash2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { Suspense, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import QuickAddCategory from '../categories/QuickAddCategory';
 import QuickAddColor from '../colors/QuickAddColor';
@@ -714,12 +714,10 @@ const ProductForm = ({ product, categories, colors }: Props) => {
             <FormItem>
               <FormLabel>Description</FormLabel>
               <FormControl>
-                <Suspense fallback={<div>Loading editor…</div>}>
-                  <PlateRichEditor
-                    value={field.value}
-                    onChange={field.onChange}
-                  />
-                </Suspense>
+                <PlateRichEditor
+                  value={field.value}
+                  onChange={field.onChange}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -733,12 +731,10 @@ const ProductForm = ({ product, categories, colors }: Props) => {
             <FormItem>
               <FormLabel>Product Details</FormLabel>
               <FormControl>
-                <Suspense fallback={<div>Loading editor…</div>}>
-                  <PlateRichEditor
-                    value={field.value}
-                    onChange={field.onChange}
-                  />
-                </Suspense>
+                <PlateRichEditor
+                  value={field.value}
+                  onChange={field.onChange}
+                />
               </FormControl>
               <FormDescription>
                 Use headings, lists, and formatting to design your product

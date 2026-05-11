@@ -12,6 +12,14 @@ interface CartItemProps {
 }
 
 const CartItem = ({ item, onUpdateQuantity, onRemove }: CartItemProps) => {
+  const imageSrc =
+    item.image &&
+    typeof item.image === 'string' &&
+    item.image !== '[]' &&
+    item.image !== ''
+      ? item.image
+      : 'https://placehold.co/600x800?text=No+Image';
+
   return (
     <motion.div
       layout
@@ -22,7 +30,7 @@ const CartItem = ({ item, onUpdateQuantity, onRemove }: CartItemProps) => {
     >
       <div className="bg-muted relative aspect-square w-full shrink-0 overflow-hidden rounded-2xl sm:w-32">
         <Image
-          src={item.image}
+          src={imageSrc}
           alt={item.name}
           fill
           className="object-cover transition-transform duration-500 group-hover:scale-105"
