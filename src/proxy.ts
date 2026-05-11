@@ -19,13 +19,20 @@ export async function proxy(req: NextRequest) {
   const isAuthPage = isAuthRoute(pathname);
   const routeOwner = getRouteOwner(pathname);
 
+  console.log(`[Middleware] Path: ${pathname}, Owner: ${routeOwner}`);
+
   // 1) First try with current access token
   let user = await getVerifiedUser(req);
   let response = NextResponse.next();
 
   // Helper for redirection
-  const redirectTo = (path: string) =>
-    NextResponse.redirect(new URL(path, origin));
+  const redirectTo = (path: string) => {
+    const url = new URL(path, origin);
+    if (path === '/login' && pathname !== '/') {
+      url.searchParams.set('redirect', pathname);
+    }
+    return NextResponse.redirect(url);
+  };
 
   // 2) If access is invalid but refresh exists -> refresh once (avoid doing this on auth pages)
   if (!user && !isAuthPage) {
