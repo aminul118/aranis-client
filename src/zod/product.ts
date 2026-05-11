@@ -6,7 +6,12 @@ export const productSchema = z.object({
   subCategory: z.string().optional(),
   type: z.string().optional(),
   price: z.coerce.number().positive('Price must be positive'),
-  image: z.union([z.string(), z.any()]).optional(),
+  image: z
+    .union([z.string(), z.any()])
+    .refine(
+      (val) => val !== undefined && val !== null,
+      'Main product image is required',
+    ),
   images: z
     .array(z.union([z.string(), z.any()]))
     .optional()

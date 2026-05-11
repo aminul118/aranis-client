@@ -295,20 +295,20 @@ const ProductForm = ({ product, categories, colors }: Props) => {
     formData.append('description', data.description);
     formData.append('details', data.details || '');
     formData.append('category', data.category);
-    formData.append('subCategory', data.subCategory);
-    formData.append('type', data.type);
-    formData.append('slug', data.slug);
+    formData.append('subCategory', data.subCategory || '');
+    formData.append('type', data.type || '');
+    formData.append('slug', data.slug || '');
     formData.append('featured', String(data.featured));
     formData.append('rating', String(data.rating));
     formData.append('isOffer', String(data.isOffer));
-    formData.append('offerTag', data.offerTag);
+    formData.append('offerTag', data.offerTag || '');
     formData.append('discountPercentage', String(data.discountPercentage));
     formData.append('videoUrl', data.videoUrl || '');
 
     // Arrays (Stringify for backend to parse)
     formData.append('color', data.color);
     formData.append('sizes', JSON.stringify(data.sizes || []));
-    formData.append('sku', data.sku);
+    formData.append('sku', data.sku || '');
     formData.append(
       'sizeStock',
       JSON.stringify(
