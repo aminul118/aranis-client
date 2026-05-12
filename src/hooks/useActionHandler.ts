@@ -60,7 +60,18 @@ const useActionHandler = () => {
         return true;
       }
 
-      toast.error(res?.message || errorMessage, { id: toastId });
+      if (
+        res?.errorSources &&
+        Array.isArray(res.errorSources) &&
+        res.errorSources.length > 0
+      ) {
+        const errorDetails = res.errorSources
+          .map((e: any) => e.message)
+          .join(', ');
+        toast.error(`${res.message}: ${errorDetails}`, { id: toastId });
+      } else {
+        toast.error(res?.message || errorMessage, { id: toastId });
+      }
       return false;
     } catch (error: unknown) {
       logger.error('ACTION ERROR:', error);

@@ -49,17 +49,6 @@ const CartSummary = ({
         <h2 className="text-foreground mb-6 text-2xl font-bold">Summary</h2>
 
         <div className="mb-8 flex flex-col gap-4">
-          <div className="text-muted-foreground flex justify-between">
-            <span>Subtotal</span>
-            <span className="text-foreground font-medium">
-              ৳{subtotal.toFixed(2)}
-            </span>
-          </div>
-          <div className="text-muted-foreground flex justify-between">
-            <span>Shipping</span>
-            <span className="font-medium text-emerald-500">Free</span>
-          </div>
-
           {couponCode && (
             <div className="text-muted-foreground flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -72,12 +61,13 @@ const CartSummary = ({
             </div>
           )}
 
-          <div className="bg-border my-2 h-px" />
-
-          <div className="text-foreground flex justify-between text-xl font-bold">
-            <span>Total</span>
+          <div className="text-foreground flex justify-between text-2xl font-black tracking-tighter">
+            <span>Bag Total</span>
             <span>৳{total.toFixed(2)}</span>
           </div>
+          <p className="text-muted-foreground text-[10px] italic">
+            * Shipping and taxes calculated at checkout
+          </p>
         </div>
 
         {/* Coupon Section */}

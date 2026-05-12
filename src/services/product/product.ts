@@ -117,6 +117,16 @@ const getBestSellingProducts = async () => {
   });
 };
 
+const getNewArrivals = async () => {
+  return await serverFetch.get<ApiResponse<IProduct[]>>('/products', {
+    query: { sort: '-createdAt', limit: '12' },
+    next: {
+      tags: ['product', 'new-arrivals'],
+      revalidate: 3600,
+    },
+  });
+};
+
 const updateProductBulk = async (ids: string[], data: Partial<IProduct>) => {
   const res = await serverFetch.patch<ApiResponse<IProduct[]>>(
     '/products/bulk-update',
@@ -149,6 +159,7 @@ export {
   deleteProduct,
   deleteProductBulk,
   getBestSellingProducts,
+  getNewArrivals,
   getProducts,
   getSingleProduct,
   getTopRatedProducts,

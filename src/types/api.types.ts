@@ -10,12 +10,19 @@ export interface IMeta {
   total: number;
   totalPage: number;
 }
+
+export interface IErrorSources {
+  path: string | number;
+  message: string;
+}
+
 export interface ApiResponse<T> {
   message: string;
   statusCode: number;
   success: boolean;
   data: T;
   meta?: IMeta;
+  errorSources?: IErrorSources[];
 }
 
 export interface IUserAddress {

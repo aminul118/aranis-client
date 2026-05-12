@@ -3,7 +3,7 @@ import FeaturedProducts from '@/components/modules/Public/Home/FeaturedProducts'
 import HeroBanner from '@/components/modules/Public/Home/HeroBanner';
 import HomeSEOContent from '@/components/modules/Public/Home/HomeSEOContent';
 import { ProductGridSkeleton } from '@/components/modules/Public/Home/HomeSkeletons';
-import TopRatedProducts from '@/components/modules/Public/Home/TopRatedProducts';
+import NewArrivals from '@/components/modules/Public/Home/NewArrivals';
 import generateMetaTags from '@/seo/generateMetaTags';
 import {
   getHeroBanners,
@@ -25,6 +25,9 @@ const HomePage = async () => {
         mainSlides={heroBannersRes?.data}
         miniBanners={miniBannersRes?.data}
       />
+      <Suspense fallback={<ProductGridSkeleton title="New Arrivals" />}>
+        <NewArrivals />
+      </Suspense>
       <Suspense fallback={<ProductGridSkeleton title="Most Wanted Items" />}>
         <BestSellingProducts />
       </Suspense>
@@ -37,9 +40,6 @@ const HomePage = async () => {
         }
       >
         <FeaturedProducts />
-      </Suspense>
-      <Suspense fallback={<ProductGridSkeleton title="The Highest Rating" />}>
-        <TopRatedProducts />
       </Suspense>
       <HomeSEOContent />
     </>

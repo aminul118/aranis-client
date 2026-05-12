@@ -51,6 +51,15 @@ export const productSchema = z.object({
     .optional()
     .default([]),
   sizes: z.array(z.string()).min(1, 'At least one size is required'),
+  sizeStock: z
+    .array(
+      z.object({
+        size: z.string().min(1, 'Size is required'),
+        stock: z.coerce.number().min(0, 'Stock cannot be negative').default(0),
+      }),
+    )
+    .optional()
+    .default([]),
   featured: z.boolean().default(false),
   rating: z.coerce.number().min(0).max(5).default(0),
   sku: z.string().optional(),

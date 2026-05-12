@@ -57,24 +57,27 @@ const ProductCard = ({
       transition={{ delay: index * 0.1, duration: 0.5 }}
       layout
       className={cn(
-        'group bg-card/40 border-border cursor-pointer overflow-hidden rounded-3xl border transition-all hover:border-blue-500/20',
-        isList && 'flex flex-col gap-6 p-4 sm:flex-row',
+        'group bg-card/30 border-border/50 cursor-pointer overflow-hidden rounded-[2rem] border transition-all duration-500 hover:border-blue-500/30 hover:shadow-[0_20px_50px_rgba(59,130,246,0.1)]',
+        isList && 'flex flex-col gap-8 p-5 sm:flex-row',
       )}
       onClick={() => router.push(`/products/${product.slug || product._id}`)}
     >
       <div
         className={cn(
           'relative block overflow-hidden',
-          isList ? 'aspect-square w-full rounded-2xl sm:w-48' : 'aspect-4/5',
+          isList
+            ? 'aspect-square w-full rounded-2xl sm:w-56'
+            : 'aspect-[4/5] w-full',
         )}
       >
         <AnimatePresence mode="wait">
+          <div className="absolute inset-0 z-0 bg-slate-900/10 transition-colors group-hover:bg-transparent" />
           <Image
             key="primary-image"
             src={primaryImage}
             alt={product.name}
             fill
-            className="object-cover transition-all duration-700 ease-in-out group-hover:scale-110"
+            className="object-cover transition-all duration-1000 ease-in-out group-hover:scale-110"
           />
           {secondaryImage && (
             <Image
@@ -82,32 +85,31 @@ const ProductCard = ({
               src={secondaryImage}
               alt={`${product.name} - Second View`}
               fill
-              className="object-cover opacity-0 transition-all duration-700 ease-in-out group-hover:scale-110 group-hover:opacity-100"
+              className="object-cover opacity-0 transition-all duration-1000 ease-in-out group-hover:scale-110 group-hover:opacity-100"
             />
           )}
         </AnimatePresence>
 
-        {/* Badges */}
+        {/* Badges - Floating Pill Style */}
         <div className="absolute top-4 left-4 z-10 flex flex-col gap-2">
           {product.salePrice && product.salePrice > 0 && (
-            <span className="rounded-md bg-red-500 px-2.5 py-1 text-[10px] font-bold tracking-widest text-white uppercase shadow-lg">
-              Sale {Math.round((1 - product.salePrice / product.price) * 100)}%
-              OFF
+            <span className="rounded-full bg-red-500/90 px-3 py-1 text-[10px] font-black tracking-widest text-white uppercase shadow-lg shadow-red-500/20 backdrop-blur-md">
+              {Math.round((1 - product.salePrice / product.price) * 100)}% OFF
             </span>
           )}
           {product.isOffer && product.offerTag && (
-            <span className="rounded-md bg-blue-600 px-2.5 py-1 text-[10px] font-black tracking-widest text-white uppercase shadow-lg">
+            <span className="rounded-full bg-blue-600/90 px-3 py-1 text-[10px] font-black tracking-widest text-white uppercase shadow-lg shadow-blue-500/20 backdrop-blur-md">
               {product.offerTag}
             </span>
           )}
           {product.stock < 1 && (
-            <span className="rounded-md bg-gray-900 px-2.5 py-1 text-[10px] font-black tracking-widest text-white uppercase shadow-lg">
+            <span className="rounded-full bg-slate-900/90 px-3 py-1 text-[10px] font-black tracking-widest text-white uppercase shadow-lg backdrop-blur-md">
               Out of Stock
             </span>
           )}
         </div>
 
-        {/* Wishlist Button */}
+        {/* Wishlist Button - Glassmorphism */}
         {user && (
           <button
             onClick={(e) => {
@@ -116,90 +118,80 @@ const ProductCard = ({
               toggleWishlist(product);
             }}
             className={cn(
-              'absolute top-4 right-4 z-20 flex h-9 w-9 items-center justify-center rounded-full border border-white/20 backdrop-blur-md transition-all duration-300',
+              'absolute top-4 right-4 z-20 flex h-10 w-10 items-center justify-center rounded-full border border-white/10 backdrop-blur-xl transition-all duration-500',
               wishlisted
-                ? 'border-none bg-red-500 text-white shadow-lg shadow-red-500/30'
-                : 'bg-black/20 text-white hover:bg-black/40',
+                ? 'scale-110 border-none bg-red-500 text-white shadow-xl shadow-red-500/40'
+                : 'bg-white/10 text-white hover:scale-110 hover:border-white/30 hover:bg-white/20',
             )}
           >
-            <Heart size={18} fill={wishlisted ? 'currentColor' : 'none'} />
+            <Heart
+              size={20}
+              className="transition-transform duration-300 group-active:scale-90"
+              fill={wishlisted ? 'currentColor' : 'none'}
+            />
           </button>
-        )}
-
-        {/* Overlay with Quick Add (Only Grid) */}
-        {!isList && (
-          <div className="bg-background/40 pointer-events-none absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:pointer-events-auto group-hover:opacity-100">
-            <Button
-              disabled={product.stock < 1}
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                addToCart(product);
-                router.push('/checkout');
-              }}
-              className="disabled:bg-muted disabled:text-muted-foreground translate-y-4 rounded-full bg-blue-600 font-bold text-white shadow-xl transition-transform duration-300 group-hover:translate-y-0 hover:bg-blue-700"
-            >
-              {product.stock < 1 ? 'Out of Stock' : 'Buy Now'}{' '}
-              <ShoppingCart size={16} className="ml-2" />
-            </Button>
-          </div>
         )}
       </div>
 
       <div
-        className={cn('flex flex-1 flex-col', isList ? 'py-2' : 'p-3 sm:p-6')}
+        className={cn(
+          'flex flex-1 flex-col',
+          isList ? 'py-4' : 'px-5 pt-5 pb-6 sm:px-7 sm:pt-6 sm:pb-8',
+        )}
       >
-        <div className="mb-2 flex items-start justify-between">
-          <span className="text-muted-foreground text-[10px] font-bold tracking-widest uppercase">
-            {product.subCategory}
-          </span>
-        </div>
-
-        <h3 className="text-foreground mb-2 truncate text-xl font-bold capitalize transition-colors group-hover:text-blue-500">
+        <h3 className="text-foreground mb-3 line-clamp-2 min-h-[3.5rem] text-xl leading-tight font-black capitalize transition-colors duration-300 group-hover:text-blue-500">
           {product.name}
         </h3>
 
         {isList && (
-          <p className="text-muted-foreground mb-6 line-clamp-2 flex-1 text-sm">
+          <p className="text-muted-foreground mb-8 line-clamp-3 flex-1 text-sm leading-relaxed">
             {product.description}
           </p>
         )}
 
-        <div className="mt-auto flex items-center justify-between">
+        <div className="mt-auto flex items-end justify-between gap-4">
           <div className="flex flex-col">
             {product.salePrice && product.salePrice > 0 ? (
-              <div className="flex flex-col gap-1">
-                <div className="flex items-center gap-2">
-                  <span className="text-muted-foreground text-xs line-through">
-                    ৳{product.price.toFixed(2)}
+              <div className="flex flex-col">
+                <div className="mb-1 flex items-center gap-2">
+                  <span className="text-muted-foreground text-sm font-medium line-through decoration-red-500/50">
+                    ৳{product.price.toLocaleString()}
                   </span>
-                  <span className="rounded-full bg-red-500/10 px-2 py-0.5 text-[10px] font-bold text-red-600">
+                  <span className="text-[10px] font-black text-red-500">
                     -{Math.round((1 - product.salePrice / product.price) * 100)}
                     %
                   </span>
                 </div>
-                <span className="text-2xl font-black text-blue-500">
-                  ৳{product.salePrice.toFixed(2)}
+                <span className="text-3xl font-black tracking-tighter text-blue-500 sm:text-4xl">
+                  ৳{product.salePrice.toLocaleString()}
                 </span>
               </div>
             ) : (
-              <span className="text-foreground text-2xl font-bold">
-                ৳{product.price.toFixed(2)}
+              <span className="text-foreground text-3xl font-black tracking-tighter sm:text-4xl">
+                ৳{product.price.toLocaleString()}
               </span>
             )}
           </div>
+
           <Button
-            size="sm"
+            size="icon"
             disabled={product.stock < 1}
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
               addToCart(product as any);
-              toast.success(`${product.name} added to cart!`);
+              toast.success(`${product.name} added to cart!`, {
+                icon: <ShoppingCart className="text-blue-500" size={16} />,
+                className:
+                  'rounded-2xl border-white/10 bg-slate-900/90 backdrop-blur-xl text-white font-bold',
+              });
             }}
-            className="rounded-full bg-blue-600 px-6 font-bold text-white shadow-lg shadow-blue-500/20 hover:bg-blue-700"
+            className={cn(
+              'h-12 w-12 rounded-2xl bg-blue-600 p-0 text-white shadow-xl shadow-blue-500/30 transition-all duration-300 hover:bg-blue-700 hover:shadow-blue-500/50 active:scale-95 sm:h-14 sm:w-14',
+              product.stock < 1 && 'bg-slate-800 shadow-none',
+            )}
           >
-            {product.stock < 1 ? 'Out' : 'Add'}
+            <ShoppingCart size={22} />
           </Button>
         </div>
       </div>

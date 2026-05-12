@@ -385,14 +385,16 @@ const OrderDetailsView = ({ order }: { order: IOrder }) => {
                   </div>
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-muted-foreground">Shipping</span>
-                    <span className="font-bold text-green-500">FREE</span>
+                    <span className="font-bold text-blue-500">
+                      ৳{(order.shippingCharge || 0).toFixed(2)}
+                    </span>
                   </div>
                   <div className="border-border/40 flex items-center justify-between border-t pt-3">
                     <span className="text-sm font-black tracking-widest uppercase">
                       Grand Total
                     </span>
-                    <span className="text-2xl font-black text-blue-500">
-                      ৳{order.totalPrice.toFixed(2)}
+                    <span className="text-xl font-black tracking-tighter">
+                      ৳{order.totalPrice.toLocaleString()}
                     </span>
                   </div>
                 </div>

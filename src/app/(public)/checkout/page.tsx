@@ -72,6 +72,12 @@ const CheckoutPage = () => {
   const [showOTPModal, setShowOTPModal] = useState(false);
   const [otp, setOtp] = useState('');
   const [resendTimer, setResendTimer] = useState(0);
+  const [shippingLocation, setShippingLocation] = useState<
+    'inside' | 'outside'
+  >('inside');
+
+  const shippingCharge = shippingLocation === 'inside' ? 60 : 120;
+  const finalTotal = total + shippingCharge;
 
   const router = useRouter();
 
@@ -180,9 +186,10 @@ const CheckoutPage = () => {
           color: item.selectedColor,
           size: item.selectedSize,
         })),
-        totalPrice: total,
+        totalPrice: finalTotal,
         subTotal: subtotal,
         discount: discount,
+        shippingCharge,
         couponCode: couponCode,
         shippingAddress,
         paymentMethod,
@@ -408,6 +415,53 @@ const CheckoutPage = () => {
                   <Truck size={20} />
                 </div>
                 <h2 className="text-xl font-bold">Shipping Information</h2>
+              </div>
+
+              {/* Delivery Location Selection */}
+              <div className="mb-8 space-y-4">
+                <label className="text-muted-foreground text-xs font-black tracking-widest uppercase">
+                  Select Delivery Location
+                </label>
+                <RadioGroup
+                  defaultValue="inside"
+                  className="grid grid-cols-1 gap-4 sm:grid-cols-2"
+                  onValueChange={(val) =>
+                    setShippingLocation(val as 'inside' | 'outside')
+                  }
+                >
+                  <div>
+                    <RadioGroupItem
+                      value="inside"
+                      id="inside-dhaka"
+                      className="peer sr-only"
+                    />
+                    <label
+                      htmlFor="inside-dhaka"
+                      className={`flex cursor-pointer flex-col items-center justify-between rounded-2xl border-2 p-4 transition-all ${shippingLocation === 'inside' ? 'border-blue-600 bg-blue-500/5 text-blue-600' : 'border-border bg-card hover:bg-muted/50 text-muted-foreground'}`}
+                    >
+                      <div className="flex w-full items-center justify-between">
+                        <span className="text-sm font-bold">Inside Dhaka</span>
+                        <span className="text-sm font-black">৳60</span>
+                      </div>
+                    </label>
+                  </div>
+                  <div>
+                    <RadioGroupItem
+                      value="outside"
+                      id="outside-dhaka"
+                      className="peer sr-only"
+                    />
+                    <label
+                      htmlFor="outside-dhaka"
+                      className={`flex cursor-pointer flex-col items-center justify-between rounded-2xl border-2 p-4 transition-all ${shippingLocation === 'outside' ? 'border-blue-600 bg-blue-500/5 text-blue-600' : 'border-border bg-card hover:bg-muted/50 text-muted-foreground'}`}
+                    >
+                      <div className="flex w-full items-center justify-between">
+                        <span className="text-sm font-bold">Outside Dhaka</span>
+                        <span className="text-sm font-black">৳120</span>
+                      </div>
+                    </label>
+                  </div>
+                </RadioGroup>
               </div>
 
               {user ? (
@@ -742,8 +796,8 @@ const CheckoutPage = () => {
                 </div>
                 <div className="text-muted-foreground flex justify-between text-sm">
                   <span>Shipping</span>
-                  <span className="text-[10px] font-bold tracking-widest text-emerald-500 uppercase">
-                    Aranis Prime Free
+                  <span className="text-foreground font-bold text-blue-500">
+                    ৳{shippingCharge}
                   </span>
                 </div>
                 {discount > 0 && (
@@ -758,7 +812,7 @@ const CheckoutPage = () => {
                     Total Due
                   </span>
                   <span className="text-foreground text-3xl font-black tracking-tighter">
-                    ৳{total.toFixed(2)}
+                    ৳{finalTotal.toFixed(2)}
                   </span>
                 </div>
               </div>

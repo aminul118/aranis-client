@@ -290,7 +290,18 @@ const ProductForm = ({ product, categories, colors }: Props) => {
     formData.append('name', data.name);
     formData.append('price', String(data.price));
     formData.append('buyPrice', String(data.buyPrice));
-    formData.append('stock', String(data.stock));
+    // Re-calculate total stock to ensure accuracy before submission
+    let totalStock = 0;
+    (data.sizeStock || []).forEach((s) => {
+      totalStock += Number(s.stock) || 0;
+    });
+    (data.variants || []).forEach((v) => {
+      (v.sizes || []).forEach((s) => {
+        totalStock += Number(s.stock) || 0;
+      });
+    });
+
+    formData.append('stock', String(totalStock));
     formData.append('salePrice', String(data.salePrice));
     formData.append('description', data.description);
     formData.append('details', data.details || '');
