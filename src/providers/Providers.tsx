@@ -26,7 +26,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
           </CartProvider>
         </UserProvider>
       </DndProvider>
-      <Toaster position="top-right" richColors theme="system" />
+      <Toaster position="bottom-right" richColors theme="system" />
     </ThemeProvider>
   );
 }

@@ -44,24 +44,22 @@ const getSingleHeroBanner = async (id: string) => {
   return await serverFetch.get<ApiResponse<IHeroBanner>>(`/hero-banners/${id}`);
 };
 
-const createHeroBanner = async (payload: IHeroBanner) => {
+const createHeroBanner = async (payload: FormData) => {
   const res = await serverFetch.post<ApiResponse<IHeroBanner>>(
     '/hero-banners',
     {
-      body: JSON.stringify(payload),
-      headers: { 'Content-Type': 'application/json' },
+      body: payload,
     },
   );
   revalidate('hero-banners');
   return res;
 };
 
-const updateHeroBanner = async (payload: Partial<IHeroBanner>, id: string) => {
+const updateHeroBanner = async (payload: FormData, id: string) => {
   const res = await serverFetch.patch<ApiResponse<IHeroBanner>>(
     `/hero-banners/${id}`,
     {
-      body: JSON.stringify(payload),
-      headers: { 'Content-Type': 'application/json' },
+      body: payload,
     },
   );
   revalidate('hero-banners');
@@ -101,24 +99,22 @@ const getSingleMiniBanner = async (id: string) => {
   return await serverFetch.get<ApiResponse<IMiniBanner>>(`/mini-banners/${id}`);
 };
 
-const createMiniBanner = async (payload: IMiniBanner) => {
+const createMiniBanner = async (payload: FormData) => {
   const res = await serverFetch.post<ApiResponse<IMiniBanner>>(
     '/mini-banners',
     {
-      body: JSON.stringify(payload),
-      headers: { 'Content-Type': 'application/json' },
+      body: payload,
     },
   );
   revalidate('mini-banners');
   return res;
 };
 
-const updateMiniBanner = async (payload: Partial<IMiniBanner>, id: string) => {
+const updateMiniBanner = async (payload: FormData, id: string) => {
   const res = await serverFetch.patch<ApiResponse<IMiniBanner>>(
     `/mini-banners/${id}`,
     {
-      body: JSON.stringify(payload),
-      headers: { 'Content-Type': 'application/json' },
+      body: payload,
     },
   );
   revalidate('mini-banners');

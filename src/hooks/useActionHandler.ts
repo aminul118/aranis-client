@@ -66,7 +66,7 @@ const useActionHandler = () => {
         res.errorSources.length > 0
       ) {
         const errorDetails = res.errorSources
-          .map((e: any) => e.message)
+          .map((e: any) => `${e.path}: ${e.message}`)
           .join(', ');
         toast.error(`${res.message}: ${errorDetails}`, { id: toastId });
       } else {

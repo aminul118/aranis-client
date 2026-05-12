@@ -108,27 +108,25 @@ const ProductCard = ({
         </div>
 
         {/* Wishlist - Heart floating with soft glow */}
-        {user && (
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              toggleWishlist(product);
-            }}
-            className={cn(
-              'absolute top-4 right-4 z-20 flex h-9 w-9 items-center justify-center rounded-full transition-all duration-500 active:scale-90',
-              wishlisted
-                ? 'bg-red-500 text-white shadow-[0_8px_20px_rgba(239,68,68,0.4)]'
-                : 'bg-white/90 text-zinc-900 shadow-sm hover:bg-white dark:bg-zinc-900/90 dark:text-white dark:hover:bg-zinc-800',
-            )}
-          >
-            <Heart
-              size={16}
-              className="transition-all duration-300"
-              fill={wishlisted ? 'currentColor' : 'none'}
-            />
-          </button>
-        )}
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleWishlist(product);
+          }}
+          className={cn(
+            'absolute top-4 right-4 z-20 flex h-9 w-9 items-center justify-center rounded-full transition-all duration-500 active:scale-90',
+            wishlisted
+              ? 'bg-red-500 text-white shadow-[0_8px_20px_rgba(239,68,68,0.4)]'
+              : 'bg-white/90 text-zinc-900 shadow-sm hover:bg-white dark:bg-zinc-900/90 dark:text-white dark:hover:bg-zinc-800',
+          )}
+        >
+          <Heart
+            size={16}
+            className="transition-all duration-300"
+            fill={wishlisted ? 'currentColor' : 'none'}
+          />
+        </button>
       </div>
 
       {/* Content */}

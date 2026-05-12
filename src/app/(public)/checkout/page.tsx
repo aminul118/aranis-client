@@ -56,7 +56,7 @@ const CheckoutPage = () => {
   const [isApplyingCoupon, setIsApplyingCoupon] = useState(false);
   const [user, setUser] = useState<IUser | null>(null);
   const [loading, setLoading] = useState(true);
-  const [guestMethod, setGuestMethod] = useState<'email' | 'phone'>('email');
+  const [guestMethod, setGuestMethod] = useState<'email' | 'phone'>('phone');
   const [paymentMethod, setPaymentMethod] = useState<'COD' | 'CARD'>('COD');
   const [submitting, setSubmitting] = useState(false);
   const [isEditingAddress, setIsEditingAddress] = useState(false);
@@ -68,6 +68,7 @@ const CheckoutPage = () => {
     lastName: '',
     emailOrPhone: '',
     address: '',
+    phone: '',
   });
   const [showOTPModal, setShowOTPModal] = useState(false);
   const [otp, setOtp] = useState('');
@@ -76,7 +77,7 @@ const CheckoutPage = () => {
     'inside' | 'outside'
   >('inside');
 
-  const shippingCharge = shippingLocation === 'inside' ? 60 : 120;
+  const shippingCharge = shippingLocation === 'inside' ? 70 : 150;
   const finalTotal = total + shippingCharge;
 
   const router = useRouter();
@@ -135,7 +136,8 @@ const CheckoutPage = () => {
         !guestInfo.firstName ||
         !guestInfo.lastName ||
         !guestInfo.emailOrPhone ||
-        !guestInfo.address
+        !guestInfo.address ||
+        (guestMethod === 'email' && !guestInfo.phone)
       ) {
         toast.error('Please fill in all details for guest checkout');
         return;
@@ -146,7 +148,8 @@ const CheckoutPage = () => {
           firstName: guestInfo.firstName,
           lastName: guestInfo.lastName,
           email: guestMethod === 'email' ? guestInfo.emailOrPhone : undefined,
-          phone: guestMethod === 'phone' ? guestInfo.emailOrPhone : undefined,
+          phone:
+            guestMethod === 'phone' ? guestInfo.emailOrPhone : guestInfo.phone,
           addresses: [{ title: 'Home', address: guestInfo.address }],
         };
 
@@ -441,7 +444,7 @@ const CheckoutPage = () => {
                     >
                       <div className="flex w-full items-center justify-between">
                         <span className="text-sm font-bold">Inside Dhaka</span>
-                        <span className="text-sm font-black">৳60</span>
+                        <span className="text-sm font-black">৳70</span>
                       </div>
                     </label>
                   </div>
@@ -457,7 +460,7 @@ const CheckoutPage = () => {
                     >
                       <div className="flex w-full items-center justify-between">
                         <span className="text-sm font-bold">Outside Dhaka</span>
-                        <span className="text-sm font-black">৳120</span>
+                        <span className="text-sm font-black">৳150</span>
                       </div>
                     </label>
                   </div>
@@ -562,7 +565,7 @@ const CheckoutPage = () => {
                       Verify with
                     </label>
                     <RadioGroup
-                      defaultValue="email"
+                      defaultValue="phone"
                       className="mb-6 grid grid-cols-2 gap-4"
                       onValueChange={(val) =>
                         setGuestMethod(val as 'email' | 'phone')
@@ -598,27 +601,48 @@ const CheckoutPage = () => {
                       </div>
                     </RadioGroup>
 
-                    <div className="space-y-2">
-                      <label className="text-muted-foreground text-xs font-black tracking-widest uppercase">
-                        {guestMethod === 'email'
-                          ? 'Email Address'
-                          : 'Phone Number'}
-                      </label>
-                      <input
-                        type={guestMethod === 'email' ? 'email' : 'tel'}
-                        placeholder={
-                          guestMethod === 'email'
-                            ? 'you@example.com'
-                            : '01XXXXXXXXX'
-                        }
-                        className="bg-muted/50 border-border w-full rounded-xl border p-4 transition-all outline-none focus:border-blue-500/50"
-                        onChange={(e) =>
-                          setGuestInfo({
-                            ...guestInfo,
-                            emailOrPhone: e.target.value,
-                          })
-                        }
-                      />
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                      <div className="space-y-2">
+                        <label className="text-muted-foreground text-xs font-black tracking-widest uppercase">
+                          {guestMethod === 'email'
+                            ? 'Email for Verification'
+                            : 'Phone Number for Verification'}
+                        </label>
+                        <input
+                          type={guestMethod === 'email' ? 'email' : 'tel'}
+                          placeholder={
+                            guestMethod === 'email'
+                              ? 'you@example.com'
+                              : '01XXXXXXXXX'
+                          }
+                          className="bg-muted/50 border-border w-full rounded-xl border p-4 transition-all outline-none focus:border-blue-500/50"
+                          onChange={(e) =>
+                            setGuestInfo({
+                              ...guestInfo,
+                              emailOrPhone: e.target.value,
+                            })
+                          }
+                        />
+                      </div>
+
+                      {guestMethod === 'email' && (
+                        <div className="space-y-2">
+                          <label className="text-muted-foreground text-xs font-black tracking-widest uppercase">
+                            Phone Number
+                          </label>
+                          <input
+                            type="tel"
+                            placeholder="01XXXXXXXXX"
+                            className="bg-muted/50 border-border w-full rounded-xl border p-4 transition-all outline-none focus:border-blue-500/50"
+                            onChange={(e) =>
+                              setGuestInfo({
+                                ...guestInfo,
+                                phone: e.target.value,
+                              })
+                            }
+                          />
+                        </div>
+                      )}
                     </div>
                   </div>
                   <div className="space-y-2">

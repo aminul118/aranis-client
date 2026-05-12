@@ -17,11 +17,24 @@ const serverFetchHelper = async <T>(
   const makeRequest = async () => {
     const accessToken = await getCookie('accessToken');
 
+    const finalHeaders: any = {
+      ...(accessToken
+        ? {
+            Cookie: `accessToken=${accessToken}`,
+            Authorization: accessToken,
+          }
+        : {}),
+      ...headers,
+    };
+
+    // If the body is FormData, let fetch handle the Content-Type (with boundary)
+    if (rest.body instanceof FormData) {
+      delete finalHeaders['Content-Type'];
+      delete finalHeaders['content-type'];
+    }
+
     return fetch(url, {
-      headers: {
-        ...(accessToken ? { Cookie: `accessToken=${accessToken}` } : {}),
-        ...headers,
-      },
+      headers: finalHeaders,
       ...rest,
     });
   };
@@ -31,9 +44,12 @@ const serverFetchHelper = async <T>(
     const res = await makeRequest();
 
     const contentType = res.headers.get('content-type');
+    const isJson = contentType && contentType.includes('application/json');
+
     if (!res.ok) {
-      if (contentType && contentType.includes('application/json')) {
-        return (await res.json()) as T;
+      if (isJson) {
+        const errorData = await res.json();
+        return errorData as T;
       }
 
       let errorMessage = 'An unexpected error occurred. Please try again.';
@@ -61,9 +77,21 @@ const serverFetchHelper = async <T>(
       throw new Error(errorMessage);
     }
 
-    return (await res.json()) as T;
+    if (isJson) {
+      return (await res.json()) as T;
+    }
+
+    return {
+      success: true,
+      message: 'Success',
+      data: null,
+    } as any as T;
   } catch (error: any) {
-    console.error('Fetch Error:', error);
+    console.error('Fetch Error Detail:', {
+      url,
+      method: options.method,
+      error: error.message,
+    });
     return {
       success: false,
       message: error.message || 'Something went wrong',

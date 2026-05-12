@@ -223,17 +223,15 @@ const ProductDetailContent = ({ product }: ProductDetailContentProps) => {
               Premium {product.category}
             </Badge>
             <div className="flex items-center gap-4">
-              {user && (
-                <button
-                  onClick={() => toggleWishlist(product)}
-                  className={`border-border/50 hover:bg-muted rounded-full border p-2.5 transition-all ${isWishlisted ? 'bg-red-50 text-red-500' : 'text-muted-foreground'}`}
-                >
-                  <Heart
-                    size={20}
-                    fill={isWishlisted ? 'currentColor' : 'none'}
-                  />
-                </button>
-              )}
+              <button
+                onClick={() => toggleWishlist(product)}
+                className={`border-border/50 hover:bg-muted rounded-full border p-2.5 transition-all ${isWishlisted ? 'bg-red-50 text-red-500' : 'text-muted-foreground'}`}
+              >
+                <Heart
+                  size={20}
+                  fill={isWishlisted ? 'currentColor' : 'none'}
+                />
+              </button>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button className="border-border/50 text-muted-foreground hover:bg-muted rounded-full border p-2.5 transition-all outline-none">

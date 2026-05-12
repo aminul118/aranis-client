@@ -25,7 +25,16 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 const heroBannerSchema = z.object({
-  image: z.string().min(1, 'Image is required'),
+  image: z
+    .any()
+    .refine(
+      (val) =>
+        val &&
+        (typeof val === 'string' ||
+          val instanceof File ||
+          (typeof val === 'object' && val !== null)),
+      'Image is required',
+    ),
   tag: z.string().optional().or(z.literal('')),
   title: z.string().optional().or(z.literal('')),
   subtitle: z.string().optional().or(z.literal('')),
@@ -65,10 +74,20 @@ const HeroBannerForm = ({ banner }: Props) => {
   });
 
   const onSubmit = async (values: FormValues) => {
+    const formData = new FormData();
+    Object.entries(values).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        if (value instanceof File) {
+          formData.append(key, value);
+        } else {
+          formData.append(key, String(value));
+        }
+      }
+    });
+
     if (isEdit && banner) {
       await executePost({
-        action: () =>
-          updateHeroBanner(values as IHeroBanner, banner._id as string),
+        action: () => updateHeroBanner(formData, banner._id as string),
         success: {
           onSuccess: () => {
             router.push('/admin/hero-banners');
@@ -80,7 +99,7 @@ const HeroBannerForm = ({ banner }: Props) => {
       });
     } else {
       await executePost({
-        action: () => createHeroBanner(values as IHeroBanner),
+        action: () => createHeroBanner(formData),
         success: {
           onSuccess: () => {
             router.push('/admin/hero-banners');
