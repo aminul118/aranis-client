@@ -40,6 +40,7 @@ export interface IProduct {
   discountPercentage?: number;
   isOffer?: boolean;
   offerTag?: string;
+  rating?: number;
   soldCount?: number;
   videoUrl?: string;
   isDeleted?: boolean;
@@ -116,6 +117,16 @@ const getNewArrivals = async () => {
   });
 };
 
+const getTopRatedProducts = async () => {
+  return await serverFetch.get<ApiResponse<IProduct[]>>('/products', {
+    query: { sort: '-rating', limit: '12' },
+    next: {
+      tags: ['product', 'top-rated'],
+      revalidate: 0,
+    },
+  });
+};
+
 const updateProductBulk = async (ids: string[], data: Partial<IProduct>) => {
   const res = await serverFetch.patch<ApiResponse<IProduct[]>>(
     '/products/bulk-update',
@@ -151,5 +162,6 @@ export {
   getNewArrivals,
   getProducts,
   getSingleProduct,
+  getTopRatedProducts,
   updateProductBulk,
 };
