@@ -75,6 +75,7 @@
     "@uploadthing/react": "7.3.3",
     "ai": "5.0.28",
     "class-variance-authority": "^0.7.1",
+    "cloudinary": "^2.10.0",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
     "cookie": "^1.1.1",

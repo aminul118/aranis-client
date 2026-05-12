@@ -2,6 +2,7 @@
 
 import generateQueryUrl from '@/lib/generateQueryUrl';
 import { getCookie } from '@/lib/jwt';
+import { logger } from '@/lib/logger';
 
 export type FetchOptions = RequestInit & {
   query?: Record<string, string>;
@@ -87,7 +88,7 @@ const serverFetchHelper = async <T>(
       data: null,
     } as any as T;
   } catch (error: any) {
-    console.error('Fetch Error Detail:', {
+    logger.error('Fetch Error Detail:', {
       url,
       method: options.method,
       error: error.message,

@@ -132,14 +132,22 @@ const CheckoutPage = () => {
 
     if (!user) {
       // Guest checkout flow
+      // For phone method: emailOrPhone IS the phone. For email method: need separate phone field.
+      const guestContactPhone =
+        guestMethod === 'phone' ? guestInfo.emailOrPhone : guestInfo.phone;
+
       if (
         !guestInfo.firstName ||
         !guestInfo.lastName ||
         !guestInfo.emailOrPhone ||
         !guestInfo.address ||
-        (guestMethod === 'email' && !guestInfo.phone)
+        !guestContactPhone
       ) {
-        toast.error('Please fill in all details for guest checkout');
+        toast.error(
+          guestMethod === 'phone'
+            ? 'Please fill in all required fields including your phone number'
+            : 'Please fill in all fields. A phone number is required for courier contact.',
+        );
         return;
       }
       setSubmitting(true);
@@ -170,15 +178,20 @@ const CheckoutPage = () => {
     }
 
     if (!addressInput || !phoneInput) {
-      toast.error('Please provide shipping address and phone number');
+      toast.error(
+        'Please provide a shipping address and phone number for delivery contact',
+      );
       return;
     }
 
     setSubmitting(true);
-    await executeOrderPlacement(addressInput);
+    await executeOrderPlacement(addressInput, phoneInput);
   };
 
-  const executeOrderPlacement = async (shippingAddress: string) => {
+  const executeOrderPlacement = async (
+    shippingAddress: string,
+    contactPhone?: string,
+  ) => {
     try {
       const orderPayload = {
         items: cart.map((item) => ({
@@ -195,6 +208,7 @@ const CheckoutPage = () => {
         shippingCharge,
         couponCode: couponCode,
         shippingAddress,
+        contactPhone: contactPhone || phoneInput,
         paymentMethod,
       };
 
@@ -233,7 +247,10 @@ const CheckoutPage = () => {
         setUser(res.user);
         setShowOTPModal(false);
         toast.success('Account verified! Finalizing order...');
-        await executeOrderPlacement(guestInfo.address);
+        // For phone-verified guests, phone = emailOrPhone; for email guests, phone = guestInfo.phone
+        const contactPhone =
+          guestMethod === 'phone' ? guestInfo.emailOrPhone : guestInfo.phone;
+        await executeOrderPlacement(guestInfo.address, contactPhone);
       } else {
         toast.error(res.message || 'Invalid OTP');
         setSubmitting(false);
@@ -625,11 +642,27 @@ const CheckoutPage = () => {
                         />
                       </div>
 
-                      {guestMethod === 'email' && (
-                        <div className="space-y-2">
-                          <label className="text-muted-foreground text-xs font-black tracking-widest uppercase">
-                            Phone Number
-                          </label>
+                      <div className="space-y-2">
+                        <label className="text-muted-foreground text-xs font-black tracking-widest uppercase">
+                          Phone Number <span className="text-red-500">*</span>
+                          {guestMethod === 'phone' && (
+                            <span className="text-muted-foreground font-normal normal-case">
+                              {' '}
+                              (same as above)
+                            </span>
+                          )}
+                        </label>
+                        {guestMethod === 'phone' ? (
+                          <div className="bg-muted/30 border-border flex items-center gap-2 rounded-xl border p-4 text-sm">
+                            <PhoneIcon
+                              size={14}
+                              className="shrink-0 text-blue-500"
+                            />
+                            <span className="text-muted-foreground">
+                              {guestInfo.emailOrPhone || 'Enter phone above'}
+                            </span>
+                          </div>
+                        ) : (
                           <input
                             type="tel"
                             placeholder="01XXXXXXXXX"
@@ -641,8 +674,8 @@ const CheckoutPage = () => {
                               })
                             }
                           />
-                        </div>
-                      )}
+                        )}
+                      </div>
                     </div>
                   </div>
                   <div className="space-y-2">

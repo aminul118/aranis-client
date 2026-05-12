@@ -275,6 +275,22 @@ const OrderDetailsView = ({ order }: { order: IOrder }) => {
                   </p>
                 </div>
               </div>
+              {order.contactPhone && (
+                <div className="flex items-start gap-3">
+                  <Phone className="mt-1 text-emerald-500" size={16} />
+                  <div>
+                    <p className="text-muted-foreground mb-0.5 text-[10px] font-black tracking-widest uppercase">
+                      Courier Contact Phone
+                    </p>
+                    <a
+                      href={`tel:${order.contactPhone}`}
+                      className="text-sm font-bold text-emerald-600 hover:underline"
+                    >
+                      {order.contactPhone}
+                    </a>
+                  </div>
+                </div>
+              )}
             </div>
           </CardContent>
         </Card>
@@ -458,6 +474,14 @@ const OrderDetailsView = ({ order }: { order: IOrder }) => {
               <div className="text-sm leading-relaxed font-bold">
                 {order.shippingAddress}
               </div>
+              {order.contactPhone && (
+                <div className="mt-1 text-sm text-gray-500">
+                  <span className="font-bold text-gray-700">
+                    Contact Phone:
+                  </span>{' '}
+                  {order.contactPhone}
+                </div>
+              )}
               <div className="mt-2 text-sm text-gray-500">
                 <span className="font-bold text-gray-700">Payment:</span>{' '}
                 {order.paymentMethod}

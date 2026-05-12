@@ -278,13 +278,67 @@ const ProductForm = ({ product, categories, colors }: Props) => {
   const types = selectedSubCategory?.items || [];
 
   const onSubmit = async (data: FormValues) => {
-    const formData = new FormData();
+    // ── Step 1: Upload all images directly from browser → Cloudinary ──────
+    // Key fix: Browser → Cloudinary (1 hop) instead of Browser → Next.js
+    // → Express → Cloudinary (3 hops). All uploads run in parallel.
+    const { uploadToCloudinary, uploadManyToCloudinary } = await import(
+      '@/lib/cloudinary-upload'
+    );
 
-    // Basic fields
-    formData.append('name', data.name);
-    formData.append('price', String(data.price));
-    formData.append('buyPrice', String(data.buyPrice));
-    // Re-calculate total stock to ensure accuracy before submission
+    // Main product image
+    let imageUrl: string | undefined;
+    if ((data.image as any) instanceof File) {
+      imageUrl = await uploadToCloudinary(data.image as unknown as File);
+    } else if (typeof data.image === 'string' && data.image) {
+      imageUrl = data.image;
+    }
+
+    // Gallery images — upload new Files in parallel, keep existing URLs
+    const galleryFiles: File[] = [];
+    const galleryExistingUrls: string[] = [];
+    (data.images || []).forEach((item: any) => {
+      if (typeof item === 'string') galleryExistingUrls.push(item);
+      else if (item instanceof File) galleryFiles.push(item);
+    });
+    const newGalleryUrls =
+      galleryFiles.length > 0 ? await uploadManyToCloudinary(galleryFiles) : [];
+    const allGalleryUrls = [...galleryExistingUrls, ...newGalleryUrls];
+
+    // Variant images — upload new Files per variant concurrently
+    const variantFileMap: { vIdx: number; files: File[] }[] = [];
+    (data.variants || []).forEach((variant, vIdx) => {
+      const files: File[] = (variant.images || []).filter(
+        (img: any) => img instanceof File,
+      ) as File[];
+      if (files.length > 0) variantFileMap.push({ vIdx, files });
+    });
+    const variantUploadResults = await Promise.all(
+      variantFileMap.map(async ({ vIdx, files }) => ({
+        vIdx,
+        urls: await uploadManyToCloudinary(files),
+      })),
+    );
+    const variantNewUrlsMap = new Map(
+      variantUploadResults.map(({ vIdx, urls }) => [vIdx, urls]),
+    );
+
+    // Build variants with resolved URLs only (no File objects)
+    const variantsData: any[] = (data.variants || []).map((variant, vIdx) => {
+      const existingUrls = (variant.images || []).filter(
+        (img: any) => typeof img === 'string',
+      ) as string[];
+      return {
+        color: variant.color,
+        sizes: (variant.sizes || []).map((s) => ({
+          size: s.size,
+          stock: Number(s.stock) || 0,
+        })),
+        images: [...existingUrls, ...(variantNewUrlsMap.get(vIdx) || [])],
+        sku: variant.sku,
+      };
+    });
+
+    // ── Step 2: Build FormData with URLs only (no File objects) ───────────
     let totalStock = 0;
     (data.sizeStock || []).forEach((s) => {
       totalStock += Number(s.stock) || 0;
@@ -295,6 +349,10 @@ const ProductForm = ({ product, categories, colors }: Props) => {
       });
     });
 
+    const formData = new FormData();
+    formData.append('name', data.name);
+    formData.append('price', String(data.price));
+    formData.append('buyPrice', String(data.buyPrice));
     formData.append('stock', String(totalStock));
     formData.append('salePrice', String(data.salePrice));
     formData.append('description', data.description);
@@ -308,8 +366,6 @@ const ProductForm = ({ product, categories, colors }: Props) => {
     formData.append('offerTag', data.offerTag || '');
     formData.append('discountPercentage', String(data.discountPercentage));
     formData.append('videoUrl', data.videoUrl || '');
-
-    // Arrays (Stringify for backend to parse)
     formData.append('color', data.color);
     formData.append('sizes', JSON.stringify(data.sizes || []));
     formData.append('sku', data.sku || '');
@@ -322,49 +378,11 @@ const ProductForm = ({ product, categories, colors }: Props) => {
         })),
       ),
     );
-
-    // Single Image
-    if ((data.image as any) instanceof File) {
-      formData.append('image', data.image as any);
-    } else if (typeof data.image === 'string') {
-      formData.append('image', data.image);
-    }
-
-    // Gallery Images (General)
-    const existingGalleryUrls: string[] = [];
-    (data.images || []).forEach((item: any) => {
-      if (typeof item === 'string') {
-        existingGalleryUrls.push(item);
-      } else if (item instanceof File) {
-        formData.append('images', item);
-      }
-    });
-    formData.append('images', JSON.stringify(existingGalleryUrls));
-
-    // Variants Handling
-    const variantsData: any[] = [];
-    (data.variants || []).forEach((variant, vIdx) => {
-      const variantObj = {
-        color: variant.color,
-        sizes: (variant.sizes || []).map((s) => ({
-          size: s.size,
-          stock: Number(s.stock) || 0,
-        })),
-        images: [] as string[],
-        sku: variant.sku,
-      };
-
-      (variant.images || []).forEach((img: any) => {
-        if (typeof img === 'string') {
-          variantObj.images.push(img);
-        } else if (img instanceof File) {
-          formData.append(`variants[${vIdx}][images]`, img);
-        }
-      });
-      variantsData.push(variantObj);
-    });
+    if (imageUrl) formData.append('image', imageUrl);
+    formData.append('images', JSON.stringify(allGalleryUrls));
     formData.append('variants', JSON.stringify(variantsData));
 
+    // ── Step 3: Send to Express (URLs only — fast, no files) ──────────────
     if (isEdit && product) {
       await executePost({
         action: () => updateProduct(formData as any, product._id as string),
