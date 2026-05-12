@@ -16,10 +16,10 @@ const FeaturedProducts = async () => {
       <div className="container mx-auto px-4">
         <AnimatedSection className="mb-16 flex flex-col items-end justify-between gap-6 md:flex-row">
           <div>
-            <h2 className="text-foreground mb-4 text-3xl font-bold md:text-4xl">
-              Featured Excellence
+            <h2 className="text-foreground mb-4 text-2xl font-black tracking-tighter md:text-4xl">
+              Featured <span className="text-primary">Excellence</span>
             </h2>
-            <p className="text-muted-foreground">
+            <p className="text-muted-foreground text-base">
               Our hand-picked selections for this season
             </p>
           </div>

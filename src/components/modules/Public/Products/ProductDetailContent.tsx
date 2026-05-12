@@ -272,20 +272,20 @@ const ProductDetailContent = ({ product }: ProductDetailContentProps) => {
 
           {/* Title & Price */}
           <div>
-            <h1 className="text-foreground mb-6 text-4xl leading-[1.1] font-black tracking-tight capitalize md:text-5xl lg:text-6xl">
+            <h1 className="text-foreground mb-6 text-3xl leading-[1.2] font-black tracking-tight capitalize md:text-4xl lg:text-5xl">
               {product.name}
             </h1>
             <div className="flex items-center gap-6">
               {product.salePrice && product.salePrice > 0 ? (
                 <div className="flex items-baseline gap-4">
-                  <span className="text-5xl font-black tracking-tighter text-blue-500">
+                  <span className="text-3xl font-black tracking-tighter text-blue-500 md:text-4xl">
                     ৳{product.salePrice.toFixed(2)}
                   </span>
                   <div className="flex flex-col">
-                    <span className="text-muted-foreground/40 text-xl font-medium italic line-through">
+                    <span className="text-muted-foreground/40 text-lg font-medium italic line-through md:text-xl">
                       ৳{product.price.toFixed(2)}
                     </span>
-                    <span className="w-fit rounded-full bg-red-500/10 px-3 py-1 text-xs font-black text-red-600 uppercase">
+                    <span className="w-fit rounded-full bg-red-500/10 px-3 py-1 text-[10px] font-black text-red-600 uppercase">
                       {Math.round(
                         (1 - product.salePrice / product.price) * 100,
                       )}
@@ -294,7 +294,7 @@ const ProductDetailContent = ({ product }: ProductDetailContentProps) => {
                   </div>
                 </div>
               ) : (
-                <p className="text-foreground text-5xl font-black tracking-tighter">
+                <p className="text-foreground text-3xl font-black tracking-tighter md:text-4xl">
                   ৳{product.price.toFixed(2)}
                 </p>
               )}
@@ -477,10 +477,10 @@ const ProductDetailContent = ({ product }: ProductDetailContentProps) => {
                   onClick={handleRestockRequest}
                   disabled={isRequesting}
                   size="lg"
-                  className="flex-1 rounded-3xl bg-blue-600 py-8 text-xl font-black text-white shadow-xl shadow-blue-500/20 transition-all hover:bg-blue-700 active:scale-[0.98]"
+                  className="flex-1 rounded-3xl bg-blue-600 py-7 text-lg font-black text-white shadow-xl shadow-blue-500/20 transition-all hover:bg-blue-700 active:scale-[0.98]"
                 >
-                  <BellRing className="mr-3 h-6 w-6" />{' '}
-                  {isRequesting ? 'Requesting...' : 'Notify Me When Available'}
+                  <BellRing className="mr-2 h-5 w-5" />{' '}
+                  {isRequesting ? 'Requesting...' : 'Notify Me'}
                 </Button>
               ) : (
                 <>
@@ -488,14 +488,14 @@ const ProductDetailContent = ({ product }: ProductDetailContentProps) => {
                     onClick={() => handleAddToCart(false)}
                     size="lg"
                     variant="outline"
-                    className="flex-1 rounded-3xl border-2 border-blue-600 py-8 text-xl font-black text-blue-600 transition-all hover:bg-blue-50 active:scale-[0.98]"
+                    className="flex-1 rounded-3xl border-2 border-blue-600 py-7 text-lg font-black text-blue-600 transition-all hover:bg-blue-50 active:scale-[0.98]"
                   >
-                    Add to Cart <ShoppingCart className="ml-3 h-6 w-6" />
+                    Add to Cart <ShoppingCart className="ml-2 h-5 w-5" />
                   </Button>
                   <Button
                     onClick={() => handleAddToCart(true)}
                     size="lg"
-                    className="flex-1 rounded-3xl bg-blue-600 py-8 text-xl font-black text-white shadow-xl shadow-blue-500/20 transition-all hover:bg-blue-700 active:scale-[0.98]"
+                    className="flex-1 rounded-3xl bg-blue-600 py-7 text-lg font-black text-white shadow-xl shadow-blue-500/20 transition-all hover:bg-blue-700 active:scale-[0.98]"
                   >
                     Buy Now
                   </Button>
@@ -526,27 +526,27 @@ const ProductDetailContent = ({ product }: ProductDetailContentProps) => {
               <TabsList className="mb-8 flex w-full justify-start gap-4 overflow-x-auto rounded-none border-b bg-transparent p-0">
                 <TabsTrigger
                   value="description"
-                  className="text-muted-foreground data-[state=active]:border-foreground data-[state=active]:text-foreground rounded-none border-b-2 border-transparent px-4 py-3 font-bold tracking-widest uppercase data-[state=active]:bg-transparent data-[state=active]:shadow-none"
+                  className="text-muted-foreground data-[state=active]:border-foreground data-[state=active]:text-foreground rounded-none border-b-2 border-transparent px-4 py-3 text-[10px] font-black tracking-widest uppercase data-[state=active]:bg-transparent data-[state=active]:shadow-none"
                 >
                   Description
                 </TabsTrigger>
                 {product.videoUrl && (
                   <TabsTrigger
                     value="video"
-                    className="text-muted-foreground data-[state=active]:border-foreground data-[state=active]:text-foreground rounded-none border-b-2 border-transparent px-4 py-3 font-bold tracking-widest uppercase data-[state=active]:bg-transparent data-[state=active]:shadow-none"
+                    className="text-muted-foreground data-[state=active]:border-foreground data-[state=active]:text-foreground rounded-none border-b-2 border-transparent px-4 py-3 text-[10px] font-black tracking-widest uppercase data-[state=active]:bg-transparent data-[state=active]:shadow-none"
                   >
                     Product Video
                   </TabsTrigger>
                 )}
                 <TabsTrigger
                   value="refund"
-                  className="text-muted-foreground data-[state=active]:border-foreground data-[state=active]:text-foreground rounded-none border-b-2 border-transparent px-4 py-3 font-bold tracking-widest uppercase data-[state=active]:bg-transparent data-[state=active]:shadow-none"
+                  className="text-muted-foreground data-[state=active]:border-foreground data-[state=active]:text-foreground rounded-none border-b-2 border-transparent px-4 py-3 text-[10px] font-black tracking-widest uppercase data-[state=active]:bg-transparent data-[state=active]:shadow-none"
                 >
                   Refund Policy
                 </TabsTrigger>
                 <TabsTrigger
                   value="return"
-                  className="text-muted-foreground data-[state=active]:border-foreground data-[state=active]:text-foreground rounded-none border-b-2 border-transparent px-4 py-3 font-bold tracking-widest uppercase data-[state=active]:bg-transparent data-[state=active]:shadow-none"
+                  className="text-muted-foreground data-[state=active]:border-foreground data-[state=active]:text-foreground rounded-none border-b-2 border-transparent px-4 py-3 text-[10px] font-black tracking-widest uppercase data-[state=active]:bg-transparent data-[state=active]:shadow-none"
                 >
                   Return Policy
                 </TabsTrigger>

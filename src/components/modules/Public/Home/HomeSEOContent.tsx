@@ -71,10 +71,7 @@ const HomeSEOContent = () => {
   };
 
   return (
-    <section
-      aria-labelledby="home-seo-title"
-      className="relative overflow-hidden border-t border-white/5 py-24 md:py-32"
-    >
+    <section aria-labelledby="home-seo-title" className="sr-only">
       {/* FAQ Schema */}
       <script
         type="application/ld+json"

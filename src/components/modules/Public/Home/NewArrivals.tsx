@@ -21,10 +21,10 @@ const NewArrivals = async () => {
                 Just Landed
               </span>
             </div>
-            <h2 className="text-foreground mb-4 text-3xl font-black tracking-tighter md:text-5xl">
+            <h2 className="text-foreground mb-4 text-2xl font-black tracking-tighter md:text-4xl">
               New <span className="text-primary">Arrivals</span>
             </h2>
-            <p className="text-muted-foreground text-lg">
+            <p className="text-muted-foreground text-base">
               Explore our latest collection of premium contemporary apparel
             </p>
           </div>

@@ -60,15 +60,15 @@ const ProductCard = ({
         ease: [0.16, 1, 0.3, 1],
       }}
       className={cn(
-        'group relative cursor-pointer overflow-hidden rounded-[2.5rem] bg-white p-3 transition-all duration-700 hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.15)] dark:bg-zinc-900/50 dark:hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.4)]',
-        isList && 'flex flex-row gap-8 sm:p-5',
+        'group relative cursor-pointer overflow-hidden bg-white transition-all duration-700 hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.15)] dark:bg-zinc-900/50 dark:hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.4)]',
+        isList && 'flex flex-row gap-8',
       )}
       onClick={() => router.push(`/products/${product.slug || product._id}`)}
     >
       {/* Image Container */}
       <div
         className={cn(
-          'relative overflow-hidden rounded-[2rem] bg-zinc-100 dark:bg-zinc-800',
+          'relative overflow-hidden bg-zinc-100 dark:bg-zinc-800',
           isList
             ? 'aspect-square w-40 shrink-0 sm:w-64'
             : 'aspect-[3.8/5] w-full',
