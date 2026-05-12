@@ -15,27 +15,48 @@ const ProductCardSkeleton = ({
   return (
     <div
       className={cn(
-        'bg-card/40 border-border overflow-hidden rounded-3xl border transition-all',
-        isList && 'flex flex-col gap-6 p-4 sm:flex-row',
+        'group relative overflow-hidden bg-white dark:bg-zinc-900/50',
+        isList && 'flex flex-row gap-8',
       )}
     >
+      {/* Image Container Skeleton */}
       <div
         className={cn(
-          'relative block overflow-hidden',
-          isList ? 'aspect-square w-full rounded-2xl sm:w-48' : 'aspect-4/5',
+          'relative overflow-hidden bg-zinc-100 dark:bg-zinc-800',
+          isList
+            ? 'aspect-square w-40 shrink-0 sm:w-64'
+            : 'aspect-[3.8/5] w-full',
         )}
       >
         <Skeleton className="h-full w-full" />
+
+        {/* Wishlist Button Skeleton */}
+        <div className="absolute top-4 right-4 z-20">
+          <Skeleton className="h-9 w-9 rounded-full" />
+        </div>
       </div>
 
-      <div className={cn('flex flex-1 flex-col', isList ? 'py-2' : 'p-6')}>
-        <div className="mb-4 flex items-start justify-between">
+      {/* Content Skeleton */}
+      <div
+        className={cn(
+          'flex flex-1 flex-col',
+          isList ? 'py-4 pr-4' : 'p-5 pt-4',
+        )}
+      >
+        {/* Category & Dots Skeleton */}
+        <div className="mb-3 flex items-center justify-between">
           <Skeleton className="h-3 w-20" />
-          <Skeleton className="h-3 w-10" />
+          <div className="flex gap-0.5">
+            {[1, 2, 3, 4, 5].map((s) => (
+              <Skeleton key={s} className="h-1 w-1 rounded-full" />
+            ))}
+          </div>
         </div>
 
-        <Skeleton className="mb-4 h-6 w-3/4" />
+        {/* Title Skeleton */}
+        <Skeleton className="mb-4 h-5 w-3/4" />
 
+        {/* List Mode Description */}
         {isList && (
           <div className="mb-6 space-y-2">
             <Skeleton className="h-3 w-full" />
@@ -43,12 +64,14 @@ const ProductCardSkeleton = ({
           </div>
         )}
 
-        <div className="mt-auto flex items-center justify-between">
+        {/* Bottom Bar: Price & Button */}
+        <div className="mt-auto flex items-center justify-between gap-3">
           <div className="flex flex-col gap-2">
-            <Skeleton className="h-3 w-16" />
             <Skeleton className="h-6 w-24" />
           </div>
-          <Skeleton className="h-10 w-20 rounded-full" />
+
+          {/* Add to Cart Button Skeleton */}
+          <Skeleton className="h-10 w-10 rounded-full" />
         </div>
       </div>
     </div>
