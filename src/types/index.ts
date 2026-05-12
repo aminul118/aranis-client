@@ -100,7 +100,6 @@ export interface IProduct {
   variants?: IVariant[];
   sizes: string[];
   featured: boolean;
-  rating: number;
   slug: string;
   sku?: string;
   stock: number;

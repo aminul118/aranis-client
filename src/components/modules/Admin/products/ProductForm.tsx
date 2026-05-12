@@ -44,8 +44,8 @@ import QuickAddColor from '../colors/QuickAddColor';
 type FormValues = {
   name: string;
   category: string;
-  subCategory: string;
-  type: string;
+  subCategory?: string;
+  type?: string;
   price: number | string;
   salePrice: number | string;
   buyPrice: number | string;
@@ -65,7 +65,6 @@ type FormValues = {
   }[];
   sizes: string[];
   featured: boolean;
-  rating: number | string;
   isOffer: boolean;
   offerTag: string;
   discountPercentage: number | string;
@@ -117,7 +116,6 @@ const ProductForm = ({ product, categories, colors }: Props) => {
         })) || [],
       sizes: product?.sizes || [],
       featured: product?.featured || false,
-      rating: product?.rating || 0,
       isOffer: product?.isOffer || false,
       offerTag: product?.offerTag || '',
       discountPercentage: product?.discountPercentage || 0,
@@ -153,7 +151,6 @@ const ProductForm = ({ product, categories, colors }: Props) => {
           })) || [],
         sizes: product.sizes || [],
         featured: product.featured || false,
-        rating: product.rating || 0,
         isOffer: product.isOffer || false,
         offerTag: product.offerTag || '',
         discountPercentage: product.discountPercentage || 0,
@@ -306,11 +303,10 @@ const ProductForm = ({ product, categories, colors }: Props) => {
     formData.append('description', data.description);
     formData.append('details', data.details || '');
     formData.append('category', data.category);
-    formData.append('subCategory', data.subCategory || '');
-    formData.append('type', data.type || '');
+    if (data.subCategory) formData.append('subCategory', data.subCategory);
+    if (data.type) formData.append('type', data.type);
     formData.append('slug', data.slug || '');
     formData.append('featured', String(data.featured));
-    formData.append('rating', String(data.rating));
     formData.append('isOffer', String(data.isOffer));
     formData.append('offerTag', data.offerTag || '');
     formData.append('discountPercentage', String(data.discountPercentage));

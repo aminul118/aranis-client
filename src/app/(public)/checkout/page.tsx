@@ -515,7 +515,14 @@ const CheckoutPage = () => {
                   </div>
                 </div>
               ) : (
-                <div className="space-y-4">
+                <div className="space-y-6">
+                  <div className="border-border border-b pb-4">
+                    <h3 className="text-lg font-bold">Checkout as Guest</h3>
+                    <p className="text-muted-foreground text-xs">
+                      Enter your details below to create an account and complete
+                      your order.
+                    </p>
+                  </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <label className="text-muted-foreground text-xs font-black tracking-widest uppercase">

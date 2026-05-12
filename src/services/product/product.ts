@@ -31,7 +31,6 @@ export interface IProduct {
   variants?: IVariant[];
   sizes: string[];
   featured: boolean;
-  rating: number;
   slug: string;
   sku?: string;
   stock: number;
@@ -97,22 +96,12 @@ const deleteProduct = async (id: string) => {
   return res;
 };
 
-const getTopRatedProducts = async () => {
-  return await serverFetch.get<ApiResponse<IProduct[]>>('/products', {
-    query: { sort: '-rating', limit: '12' },
-    next: {
-      tags: ['product', 'top-rated'],
-      revalidate: 3600,
-    },
-  });
-};
-
 const getBestSellingProducts = async () => {
   return await serverFetch.get<ApiResponse<IProduct[]>>('/products', {
     query: { sort: '-soldCount', limit: '12' },
     next: {
       tags: ['product', 'best-selling'],
-      revalidate: 3600,
+      revalidate: 0,
     },
   });
 };
@@ -122,7 +111,7 @@ const getNewArrivals = async () => {
     query: { sort: '-createdAt', limit: '12' },
     next: {
       tags: ['product', 'new-arrivals'],
-      revalidate: 3600,
+      revalidate: 0,
     },
   });
 };
@@ -162,6 +151,5 @@ export {
   getNewArrivals,
   getProducts,
   getSingleProduct,
-  getTopRatedProducts,
   updateProductBulk,
 };

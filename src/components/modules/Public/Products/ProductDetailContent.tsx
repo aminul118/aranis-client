@@ -25,14 +25,12 @@ import {
   MessageCircle,
   Share2,
   ShoppingCart,
-  Star,
 } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import ProductImageGallery from './ProductImageGallery';
-import ReviewSection from './Reviews/ReviewSection';
 
 interface ProductDetailContentProps {
   product: IProduct;
@@ -277,23 +275,6 @@ const ProductDetailContent = ({ product }: ProductDetailContentProps) => {
             <h1 className="text-foreground mb-6 text-4xl leading-[1.1] font-black tracking-tight capitalize md:text-5xl lg:text-6xl">
               {product.name}
             </h1>
-            <div className="mb-4 flex items-center gap-3">
-              <div className="flex text-amber-500">
-                {[...Array(5)].map((_, i) => (
-                  <Star
-                    key={i}
-                    size={18}
-                    fill={
-                      i < Math.floor(product.rating) ? 'currentColor' : 'none'
-                    }
-                  />
-                ))}
-              </div>
-              <span className="text-muted-foreground text-sm font-bold">
-                ({product.rating} Rating)
-              </span>
-            </div>
-
             <div className="flex items-center gap-6">
               {product.salePrice && product.salePrice > 0 ? (
                 <div className="flex items-baseline gap-4">
@@ -690,11 +671,6 @@ const ProductDetailContent = ({ product }: ProductDetailContentProps) => {
             </Tabs>
           </div>
         </motion.div>
-      </div>
-
-      {/* Full Width Review Section */}
-      <div className="mt-20 lg:col-span-12">
-        <ReviewSection productId={product._id as string} />
       </div>
     </div>
   );

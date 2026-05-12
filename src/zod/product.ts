@@ -3,9 +3,12 @@ import { z } from 'zod';
 export const productSchema = z.object({
   name: z.string().min(1, 'Name is required'),
   category: z.string().min(1, 'Category is required'),
-  subCategory: z.string().optional(),
-  type: z.string().optional(),
-  price: z.coerce.number().positive('Price must be positive'),
+  subCategory: z.string().optional().nullable().or(z.literal('')),
+  type: z.string().optional().nullable().or(z.literal('')),
+  price: z.coerce
+    .number()
+    .min(0, 'Price cannot be negative')
+    .refine((val) => val > 0, 'Price must be greater than 0'),
   image: z
     .union([z.string(), z.any()])
     .refine(
@@ -19,10 +22,20 @@ export const productSchema = z.object({
   description: z.string().min(1, 'Description is required'),
   details: z.string().default(''),
   slug: z.string().optional(),
-  buyPrice: z.coerce.number().positive('Buy price must be positive'),
+  buyPrice: z.coerce
+    .number()
+    .min(0, 'Buy price cannot be negative')
+    .refine((val) => val > 0, 'Buy price must be greater than 0'),
   stock: z.coerce.number().min(0, 'Stock cannot be negative'),
-  salePrice: z.coerce.number().optional().default(0),
-  discountPercentage: z.coerce.number().optional().default(0),
+  salePrice: z.coerce
+    .number()
+    .min(0, 'Sale price cannot be negative')
+    .default(0),
+  discountPercentage: z.coerce
+    .number()
+    .min(0, 'Discount cannot be negative')
+    .max(100, 'Discount cannot exceed 100%')
+    .default(0),
   isOffer: z.boolean().optional().default(false),
   offerTag: z.string().optional(),
   color: z.string().min(1, 'Color is required'),
@@ -61,7 +74,6 @@ export const productSchema = z.object({
     .optional()
     .default([]),
   featured: z.boolean().default(false),
-  rating: z.coerce.number().min(0).max(5).default(0),
   sku: z.string().optional(),
   videoUrl: z.string().url('Invalid URL').optional().or(z.literal('')),
 });

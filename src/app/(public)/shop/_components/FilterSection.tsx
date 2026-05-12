@@ -59,7 +59,6 @@ const FilterSection = ({
     { label: 'Newest First', value: 'Newest' },
     { label: 'Price: Low-High', value: 'price' },
     { label: 'Price: High-Low', value: '-price' },
-    { label: 'Top Rated', value: '-rating' },
   ];
 
   return (

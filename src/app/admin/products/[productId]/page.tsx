@@ -13,7 +13,6 @@ import {
   Pencil,
   Ruler,
   ShoppingCart,
-  Star,
   Tag,
   TrendingUp,
 } from 'lucide-react';
@@ -195,12 +194,6 @@ export default async function ProductDetailPage({ params }: Props) {
               label="Stock"
               value={product.stock}
               color="blue"
-            />
-            <StatCard
-              icon={<Star />}
-              label="Rating"
-              value={product.rating?.toFixed(1) ?? '—'}
-              color="amber"
             />
             <StatCard
               icon={<ShoppingCart />}

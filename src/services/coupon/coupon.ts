@@ -8,7 +8,7 @@ export type { ICoupon } from '@/types';
 export const getCoupons = async (query?: Record<string, string>) => {
   const params = new URLSearchParams(query);
   return await serverFetch.get<ApiResponse<ICoupon[]>>(
-    `/coupon?${params.toString()}`,
+    `/coupons?${params.toString()}`,
     {
       next: { tags: ['COUPONS'] },
     },

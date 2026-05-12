@@ -180,12 +180,6 @@ const ShopHeader = ({
               >
                 Price: High-Low
               </SelectItem>
-              <SelectItem
-                value="-rating"
-                className="font-bold focus:bg-white/10 focus:text-white"
-              >
-                Top Rated
-              </SelectItem>
             </SelectContent>
           </Select>
         </div>
