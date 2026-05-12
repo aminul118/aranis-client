@@ -5,7 +5,7 @@ import { useCart } from '@/context/CartContext';
 import { useUser } from '@/context/UserContext';
 import { useWishlist } from '@/context/WishlistContext';
 import { cn } from '@/lib/utils';
-import { IProduct } from '@/services/product/product';
+import { IProduct } from '@/types';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Heart, ShoppingCart } from 'lucide-react';
 import Image from 'next/image';

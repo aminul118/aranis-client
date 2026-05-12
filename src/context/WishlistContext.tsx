@@ -1,6 +1,5 @@
 'use client';
 
-import { IProduct } from '@/services/product/product';
 import {
   getMyWishlist,
   IWishlistItem,
@@ -8,6 +7,7 @@ import {
   toggleWishlist as toggleWishlistService,
   updateWishlistQuantity,
 } from '@/services/wishlist/wishlist';
+import { IProduct } from '@/types';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 

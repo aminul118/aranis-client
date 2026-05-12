@@ -4,7 +4,7 @@ import ProductCard from '@/components/common/ProductCard';
 import ProductCardSkeleton from '@/components/common/loader/ProductCardSkeleton';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { IProduct } from '@/services/product/product';
+import { IProduct } from '@/types';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 

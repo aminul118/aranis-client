@@ -1,7 +1,7 @@
 'use client';
 
 import ProductCard from '@/components/common/ProductCard';
-import { IProduct } from '@/services/product/product';
+import { IProduct } from '@/types';
 import { Autoplay, Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 

@@ -106,6 +106,10 @@ export interface IProduct {
   sizeStock?: IVariantSize[];
   buyPrice: number;
   salePrice?: number;
+  discountPercentage?: number;
+  isOffer?: boolean;
+  offerTag?: string;
+  rating?: number;
   soldCount?: number;
   videoUrl?: string;
   isDeleted?: boolean;

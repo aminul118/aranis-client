@@ -2,49 +2,7 @@
 
 import { revalidate } from '@/lib/revalidate';
 import serverFetch from '@/lib/server-fetch';
-import { ApiResponse } from '@/types';
-
-export interface IVariantSize {
-  size: string;
-  stock: number;
-}
-
-export interface IVariant {
-  color: string;
-  images: string[];
-  sizes: IVariantSize[];
-  sku?: string;
-}
-
-export interface IProduct {
-  _id?: string;
-  name: string;
-  category: string;
-  subCategory: string;
-  type: string;
-  price: number;
-  image: string;
-  images?: string[];
-  description: string;
-  details: string | string[];
-  color: string;
-  variants?: IVariant[];
-  sizes: string[];
-  featured: boolean;
-  slug: string;
-  sku?: string;
-  stock: number;
-  sizeStock?: IVariantSize[];
-  buyPrice: number;
-  salePrice?: number;
-  discountPercentage?: number;
-  isOffer?: boolean;
-  offerTag?: string;
-  rating?: number;
-  soldCount?: number;
-  videoUrl?: string;
-  isDeleted?: boolean;
-}
+import type { ApiResponse, IProduct } from '@/types';
 
 export const createProduct = async (
   payload: FormData,

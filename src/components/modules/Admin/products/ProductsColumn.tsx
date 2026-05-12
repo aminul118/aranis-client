@@ -1,5 +1,5 @@
 import { Column } from '@/components/common/table/TableManageMent';
-import { IProduct } from '@/services/product/product';
+import { IProduct } from '@/types';
 import Image from 'next/image';
 import Link from 'next/link';
 import ProductActions from './ProductActions';

@@ -13,8 +13,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useCart } from '@/context/CartContext';
 import { useWishlist } from '@/context/WishlistContext';
 import { cn } from '@/lib/utils';
-import { IProduct, IVariantSize } from '@/services/product/product';
 import { createRestockRequest } from '@/services/restock/restock';
+import { IProduct, IVariantSize } from '@/types';
 import { motion } from 'framer-motion';
 import {
   BellRing,

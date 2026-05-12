@@ -27,11 +27,8 @@ import useActionHandler from '@/hooks/useActionHandler';
 import { cn } from '@/lib/utils';
 import { ICategory } from '@/services/category/category';
 import { IColor } from '@/services/color/color';
-import {
-  createProduct,
-  IProduct,
-  updateProduct,
-} from '@/services/product/product';
+import { createProduct, updateProduct } from '@/services/product/product';
+import { IProduct } from '@/types';
 import { addProductSchema, updateProductSchema } from '@/zod/product';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Check, Plus, Save, Trash2 } from 'lucide-react';

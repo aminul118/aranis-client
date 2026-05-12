@@ -6,8 +6,8 @@ import { generateShopPath } from '@/lib/url-slugs';
 import { cn } from '@/lib/utils';
 import { getCategories, ICategory } from '@/services/category/category';
 import { getColors, IColor } from '@/services/color/color';
-import { getProducts, IProduct } from '@/services/product/product';
-import { IMeta } from '@/types';
+import { getProducts } from '@/services/product/product';
+import { IMeta, IProduct } from '@/types';
 import { useRouter, useSearchParams } from 'next/navigation';
 import {
   useEffect,

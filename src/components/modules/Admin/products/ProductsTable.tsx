@@ -3,7 +3,8 @@
 import DeleteConfirmation from '@/components/common/actions/DeleteConfirmation';
 import TableManageMent from '@/components/common/table/TableManageMent';
 import { Button } from '@/components/ui/button';
-import { deleteProductBulk, IProduct } from '@/services/product/product';
+import { deleteProductBulk } from '@/services/product/product';
+import { IProduct } from '@/types';
 import { Percent, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import BulkDiscountDialog from './BulkDiscountDialog';
