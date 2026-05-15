@@ -1,13 +1,16 @@
 'use client';
 
+import { useCart } from '@/context/CartContext';
 import { useWishlist } from '@/context/WishlistContext';
 import { Heart, Minus, Plus, ShoppingBag, Trash2 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { toast } from 'sonner';
 
 export default function WishlistPage() {
   const { wishlist, wishlistCount, updateQuantity, removeFromWishlist } =
     useWishlist();
+  const { addToCart } = useCart();
 
   if (wishlistCount === 0) {
     return (
@@ -127,13 +130,26 @@ export default function WishlistPage() {
                   ৳{(currentPrice * qty).toLocaleString()}
                 </div>
 
-                <button
-                  onClick={() => removeFromWishlist(item._id)}
-                  className="text-destructive/70 hover:bg-destructive/10 hover:text-destructive flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-colors"
-                  title="Remove from wishlist"
-                >
-                  <Trash2 size={20} />
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => {
+                      addToCart(product, undefined, product.sizes?.[0]);
+                      toast.success(`"${product.name}" added to cart`);
+                    }}
+                    className="flex h-10 items-center gap-2 rounded-full bg-blue-600 px-4 text-xs font-bold text-white transition-colors hover:bg-blue-700"
+                  >
+                    <ShoppingBag size={14} />
+                    <span className="hidden sm:inline">Add to Cart</span>
+                  </button>
+
+                  <button
+                    onClick={() => removeFromWishlist(item._id)}
+                    className="text-destructive/70 hover:bg-destructive/10 hover:text-destructive flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-colors"
+                    title="Remove from wishlist"
+                  >
+                    <Trash2 size={20} />
+                  </button>
+                </div>
               </div>
             </div>
           );

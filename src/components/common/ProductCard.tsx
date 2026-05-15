@@ -95,9 +95,10 @@ const ProductCard = ({
 
         {/* Floating Badges */}
         <div className="absolute top-4 left-4 z-10 flex flex-col gap-1.5">
-          {product.salePrice && product.salePrice > 0 && (
+          {(product.salePrice ?? 0) > 0 && (
             <div className="rounded-full bg-white/90 px-2.5 py-1 text-[9px] font-black tracking-tight text-red-500 uppercase shadow-sm backdrop-blur-sm dark:bg-black/80">
-              {Math.round((1 - product.salePrice / product.price) * 100)}% OFF
+              {Math.round((1 - (product.salePrice ?? 0) / product.price) * 100)}
+              % OFF
             </div>
           )}
           {product.isOffer && product.offerTag && (
@@ -140,14 +141,6 @@ const ProductCard = ({
           <p className="text-muted-foreground/60 text-[10px] font-bold tracking-[0.15em] uppercase">
             {product.category || 'Collection'}
           </p>
-          <div className="flex gap-0.5">
-            {[1, 2, 3, 4, 5].map((s) => (
-              <div
-                key={s}
-                className="h-1 w-1 rounded-full bg-zinc-200 dark:bg-zinc-800"
-              />
-            ))}
-          </div>
         </div>
 
         <h3 className="mb-3 line-clamp-1 text-sm font-bold tracking-tight text-zinc-900 transition-colors group-hover:text-blue-500 dark:text-white">
@@ -162,10 +155,10 @@ const ProductCard = ({
 
         <div className="mt-auto flex items-center justify-between gap-3">
           <div className="flex flex-col">
-            {product.salePrice && product.salePrice > 0 ? (
+            {(product.salePrice ?? 0) > 0 || product.isOffer ? (
               <div className="flex items-baseline gap-2">
                 <span className="text-lg font-black tracking-tight text-zinc-900 dark:text-white">
-                  ৳{product.salePrice.toLocaleString()}
+                  ৳{(product.salePrice ?? product.price).toLocaleString()}
                 </span>
                 <span className="text-muted-foreground/50 text-[11px] font-medium line-through">
                   ৳{product.price.toLocaleString()}

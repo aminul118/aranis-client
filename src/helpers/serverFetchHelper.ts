@@ -91,12 +91,13 @@ const serverFetchHelper = async <T>(
     logger.error('Fetch Error Detail:', {
       url,
       method: options.method,
-      error: error.message,
+      message: error?.message || 'No message available',
+      error: error,
     });
     return {
       success: false,
-      message: error.message || 'Something went wrong',
-      statusCode: error.status || 500,
+      message: error?.message || 'Something went wrong',
+      statusCode: error?.status || 500,
     } as T;
   }
 };

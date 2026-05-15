@@ -1,4 +1,3 @@
-import React from 'react';
 export type { MenuGroup } from './admin-menu';
 
 export type { MetaConfig, MetaProps, Routes } from './meta.types';
@@ -26,41 +25,6 @@ export type {
   IStats,
   IUser,
 } from './api.types';
-
-export type TAbout = {
-  title: string;
-  paragraphs: string[];
-  list?: string[];
-  techStack?: {
-    icon?: React.ElementType;
-    title: string;
-    items: string[];
-    color?: string;
-  }[];
-  timeline?: {
-    year: string;
-    title: string;
-    description: string;
-  }[];
-  icon?: React.ElementType;
-};
-
-export type THobby = {
-  icon: React.ElementType;
-  label: string;
-};
-
-export interface IProjects {
-  id: number;
-  project_name: string;
-  portal_img?: string;
-  project_img: string;
-  liveLink: string;
-  github?: string;
-  about: string;
-  features: string[];
-  tech: string[];
-}
 
 export enum Role {
   ADMIN = 'ADMIN',

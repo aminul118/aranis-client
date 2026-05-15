@@ -43,14 +43,8 @@ const ProductCardSkeleton = ({
           isList ? 'py-4 pr-4' : 'p-5 pt-4',
         )}
       >
-        {/* Category & Dots Skeleton */}
         <div className="mb-3 flex items-center justify-between">
           <Skeleton className="h-3 w-20" />
-          <div className="flex gap-0.5">
-            {[1, 2, 3, 4, 5].map((s) => (
-              <Skeleton key={s} className="h-1 w-1 rounded-full" />
-            ))}
-          </div>
         </div>
 
         {/* Title Skeleton */}

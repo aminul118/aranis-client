@@ -133,11 +133,10 @@ const Footer = ({ socialLinks = [] }: FooterProps) => {
           <ThemeToggle />
 
           <p className="hidden items-center gap-1.5 text-xs text-slate-500 lg:flex">
-            Delevoped by
-            <Link href="https://github.com/aminul-dev">
-              <span className="font-medium text-slate-400">Aminul Islam</span>
+            Developed by
+            <Link target="_blank" href="https://rangdhanuit.com">
+              <span className="font-medium text-slate-400">Rangdhanu IT</span>
             </Link>
-            using
           </p>
         </div>
       </div>

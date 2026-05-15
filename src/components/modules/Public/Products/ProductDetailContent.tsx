@@ -180,9 +180,12 @@ const ProductDetailContent = ({ product }: ProductDetailContentProps) => {
           images={allImages}
           productName={product.name}
           saleBadge={
-            product.salePrice && product.salePrice > 0 ? (
+            (product.salePrice ?? 0) > 0 ? (
               <Badge className="rounded-full border-none bg-red-500 px-4 py-1.5 text-sm font-black text-white shadow-xl shadow-red-500/30">
-                {Math.round((1 - product.salePrice / product.price) * 100)}% OFF
+                {Math.round(
+                  (1 - (product.salePrice ?? 0) / product.price) * 100,
+                )}
+                % OFF
               </Badge>
             ) : undefined
           }
@@ -274,21 +277,23 @@ const ProductDetailContent = ({ product }: ProductDetailContentProps) => {
               {product.name}
             </h1>
             <div className="flex items-center gap-6">
-              {product.salePrice && product.salePrice > 0 ? (
+              {(product.salePrice ?? 0) > 0 || product.isOffer ? (
                 <div className="flex items-baseline gap-4">
                   <span className="text-3xl font-black tracking-tighter text-blue-500 md:text-4xl">
-                    ৳{product.salePrice.toFixed(2)}
+                    ৳{(product.salePrice ?? product.price).toFixed(2)}
                   </span>
                   <div className="flex flex-col">
                     <span className="text-muted-foreground/40 text-lg font-medium italic line-through md:text-xl">
                       ৳{product.price.toFixed(2)}
                     </span>
-                    <span className="w-fit rounded-full bg-red-500/10 px-3 py-1 text-[10px] font-black text-red-600 uppercase">
-                      {Math.round(
-                        (1 - product.salePrice / product.price) * 100,
-                      )}
-                      % OFF
-                    </span>
+                    {(product.salePrice ?? 0) > 0 && (
+                      <span className="w-fit rounded-full bg-red-500/10 px-3 py-1 text-[10px] font-black text-red-600 uppercase">
+                        {Math.round(
+                          (1 - (product.salePrice ?? 0) / product.price) * 100,
+                        )}
+                        % OFF
+                      </span>
+                    )}
                   </div>
                 </div>
               ) : (

@@ -21,7 +21,7 @@ export const toggleWishlist = async (productId: string) => {
       'Content-Type': 'application/json',
     },
   });
-  revalidate('wishlist');
+  await revalidate('wishlist');
   return res;
 };
 
@@ -36,7 +36,7 @@ export const getMyWishlist = async () => {
 
 export const removeFromWishlist = async (id: string) => {
   const res = await serverFetch.delete<ApiResponse<null>>(`/wishlist/${id}`);
-  revalidate('wishlist');
+  await revalidate('wishlist');
   return res;
 };
 
@@ -50,6 +50,6 @@ export const updateWishlistQuantity = async (id: string, quantity: number) => {
       },
     },
   );
-  revalidate('wishlist');
+  await revalidate('wishlist');
   return res;
 };
