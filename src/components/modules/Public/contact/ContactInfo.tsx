@@ -12,15 +12,15 @@ const contactDetails = [
   {
     icon: Mail,
     title: 'Email',
-    value: 'support@Aranisfash.com',
-    href: 'mailto:support@Aranisfash.com',
+    value: 'support@thearanis.com',
+    href: 'mailto:support@thearanis.com',
     color: 'text-blue-500',
     bg: 'bg-blue-500/10',
   },
   {
     icon: MapPin,
     title: 'Headquarters',
-    value: 'Banani, Dhaka, Bangladesh',
+    value: 'Jigatola, Dhanmondi, Dhaka, Bangladesh',
     href: null,
     color: 'text-purple-500',
     bg: 'bg-purple-500/10',
