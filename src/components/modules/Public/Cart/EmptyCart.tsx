@@ -2,35 +2,45 @@
 
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
-import { ArrowRight, ShoppingBag } from 'lucide-react';
+import { ShoppingBag } from 'lucide-react';
 import Link from 'next/link';
 
 const EmptyCart = () => {
   return (
-    <div className="flex flex-col items-center justify-center px-4 text-center">
+    <div className="flex flex-col items-center justify-center px-4 py-20 text-center">
       <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="border-border bg-card/50 flex w-full max-w-md flex-col items-center rounded-3xl border p-12"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="flex flex-col items-center"
       >
-        <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-blue-500/10 text-blue-500">
-          <ShoppingBag size={40} />
-        </div>
-        <h1 className="text-foreground mb-4 text-3xl font-bold">
-          Your bag is empty
+        <motion.div
+          animate={{
+            y: [0, -10, 0],
+          }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            ease: 'easeInOut',
+          }}
+          className="mb-8 flex h-24 w-24 items-center justify-center rounded-full bg-blue-50/80 text-blue-400 dark:bg-blue-900/20"
+        >
+          <ShoppingBag size={48} strokeWidth={1.5} />
+        </motion.div>
+
+        <h1 className="text-foreground mb-3 text-3xl font-bold tracking-tight">
+          Your bag feels a bit light
         </h1>
-        <p className="text-muted-foreground mb-8 leading-relaxed">
-          Looks like you haven't added anything to your bag yet. Start exploring
-          our latest collections to find your signature style.
+
+        <p className="text-muted-foreground mb-10 max-w-[280px] text-base leading-relaxed">
+          Looks like you haven't picked anything yet. Let's find something
+          special!
         </p>
+
         <Button
           asChild
-          size="lg"
-          className="rounded-full bg-blue-600 px-8 py-6 font-bold hover:bg-blue-700"
+          className="h-14 rounded-2xl bg-blue-600 px-10 text-sm font-bold text-white transition-all hover:bg-blue-700 active:scale-95"
         >
-          <Link href="/">
-            Shop Now <ArrowRight className="ml-2 h-4 w-4" />
-          </Link>
+          <Link href="/">Go Shopping</Link>
         </Button>
       </motion.div>
     </div>

@@ -12,10 +12,11 @@ import {
   useScroll,
 } from 'framer-motion';
 import { Fade as Hamburger } from 'hamburger-react';
-import { ChevronDown, Clock, Heart, ShoppingCart, X } from 'lucide-react';
+import { ChevronDown, Clock, X } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { Dispatch, SetStateAction, Suspense, useState } from 'react';
+import NotificationBell from '../shared/NotificationBell';
 import CategoryBar from './CategoryBar';
 import MainNavbar from './MainNavbar';
 import NavSearch from './NavSearch';
@@ -87,24 +88,7 @@ const Navbar = ({
         <div className="origin-left scale-75">{logo}</div>
         <div className="flex items-center gap-4">
           <NavSearch />
-          {user && (
-            <Link href="/wishlist" className="relative text-white">
-              <Heart size={20} />
-              {wishlistCount > 0 && (
-                <span className="absolute -top-2 -right-2 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-red-600 text-[8px]">
-                  {wishlistCount}
-                </span>
-              )}
-            </Link>
-          )}
-          <Link href="/cart" className="relative text-white">
-            <ShoppingCart size={20} />
-            {totalItems > 0 && (
-              <span className="absolute -top-2 -right-2 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-blue-600 text-[8px]">
-                {totalItems}
-              </span>
-            )}
-          </Link>
+          {user && <NotificationBell user={user} />}
           <Hamburger
             toggled={menuOpen}
             toggle={setMenuOpen}

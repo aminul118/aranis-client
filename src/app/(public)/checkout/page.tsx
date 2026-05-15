@@ -27,9 +27,7 @@ import {
   CheckCircle2,
   CreditCard,
   Home,
-  Mail,
   MapPin,
-  Phone as PhoneIcon,
   ShieldAlert,
   ShieldCheck,
   Tag,
@@ -376,29 +374,34 @@ const CheckoutPage = () => {
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          className="mx-4 w-full max-w-lg text-center"
+          className="bg-card/40 mx-4 w-full max-w-xl overflow-hidden rounded-[48px] border border-emerald-500/10 p-12 text-center shadow-2xl shadow-emerald-500/10 backdrop-blur-3xl"
         >
-          <div className="relative mx-auto mb-8 h-24 w-24">
-            <div className="absolute inset-0 animate-ping rounded-full bg-emerald-500/10" />
-            <div className="relative flex h-24 w-24 items-center justify-center rounded-full bg-emerald-500 text-white">
-              <CheckCircle2 className="h-12 w-12" />
+          <div className="relative mx-auto mb-10 h-32 w-32">
+            <div className="absolute inset-0 animate-ping rounded-full bg-emerald-500/20" />
+            <div className="relative flex h-32 w-32 items-center justify-center rounded-full bg-emerald-500 text-white shadow-xl shadow-emerald-500/40">
+              <CheckCircle2 className="h-16 w-16" />
             </div>
           </div>
-          <h1 className="mb-3 text-4xl font-black tracking-tighter">
-            Order <span className="text-emerald-500">Confirmed!</span>
+          <h1 className="mb-4 text-5xl font-black tracking-tighter uppercase italic">
+            Order <span className="text-emerald-500">Confirmed</span>
           </h1>
-          <p className="text-muted-foreground mb-8 leading-relaxed">
+          <p className="text-muted-foreground/60 mb-10 text-lg leading-relaxed font-medium">
             Thank you for shopping with Aranis. Your order has been placed
-            successfully and is now being processed.
+            successfully and is now being processed. We'll notify you when it's
+            shipped!
           </p>
-          <div className="flex flex-col justify-center gap-3 sm:flex-row">
+          <div className="flex flex-col justify-center gap-4 sm:flex-row">
             <Button
               asChild
-              className="rounded-full bg-emerald-500 px-8 font-bold text-white hover:bg-emerald-600"
+              className="h-14 rounded-full bg-emerald-500 px-10 text-base font-black tracking-widest text-white uppercase shadow-lg shadow-emerald-500/25 transition-all hover:scale-105 hover:bg-emerald-600 active:scale-95"
             >
               <Link href="/user/orders">View Your Orders</Link>
             </Button>
-            <Button asChild variant="outline" className="rounded-full px-8">
+            <Button
+              asChild
+              variant="outline"
+              className="border-border bg-card/50 hover:bg-muted h-14 rounded-full px-10 text-base font-black tracking-widest uppercase transition-all active:scale-95"
+            >
               <Link href="/">Return Home</Link>
             </Button>
           </div>
@@ -410,15 +413,21 @@ const CheckoutPage = () => {
   return (
     <div className="bg-background min-h-screen pt-32 pb-24">
       <div className="container mx-auto max-w-6xl px-4">
-        <div className="mb-12 flex items-center gap-4">
-          <Button asChild variant="ghost" size="sm" className="rounded-full">
-            <Link href="/cart">
-              <ArrowLeft className="mr-2 h-4 w-4" /> Back to Bag
-            </Link>
-          </Button>
-          <h1 className="text-foreground text-4xl font-black tracking-tighter">
-            Finalize <span className="text-blue-600">Order</span>
-          </h1>
+        <div className="mb-16 flex flex-col items-start gap-4 md:flex-row md:items-center">
+          <Link
+            href="/cart"
+            className="bg-card/50 border-border hover:bg-muted flex h-12 w-12 items-center justify-center rounded-full border transition-all active:scale-90"
+          >
+            <ArrowLeft className="h-5 w-5" />
+          </Link>
+          <div>
+            <h1 className="text-foreground text-5xl font-black tracking-tighter uppercase italic">
+              Secure <span className="text-blue-600">Checkout</span>
+            </h1>
+            <p className="text-muted-foreground/60 text-sm font-medium">
+              Complete your order with Aranis elite protection
+            </p>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-12">
@@ -578,103 +587,24 @@ const CheckoutPage = () => {
                     </div>
                   </div>
                   <div className="space-y-4 pt-4">
-                    <label className="text-muted-foreground mb-2 block text-xs font-black tracking-widest uppercase">
-                      Verify with
-                    </label>
-                    <RadioGroup
-                      defaultValue="phone"
-                      className="mb-6 grid grid-cols-2 gap-4"
-                      onValueChange={(val) =>
-                        setGuestMethod(val as 'email' | 'phone')
-                      }
-                    >
-                      <div>
-                        <RadioGroupItem
-                          value="email"
-                          id="guest-email"
-                          className="peer sr-only"
-                        />
-                        <label
-                          htmlFor="guest-email"
-                          className={`flex cursor-pointer flex-col items-center justify-between rounded-2xl border-2 p-4 transition-all ${guestMethod === 'email' ? 'border-blue-600 bg-blue-500/5 text-blue-600' : 'border-border bg-card hover:bg-muted/50 text-muted-foreground'}`}
-                        >
-                          <Mail className="mb-2 h-5 w-5" />
-                          <span className="text-xs font-bold">Email</span>
-                        </label>
-                      </div>
-                      <div>
-                        <RadioGroupItem
-                          value="phone"
-                          id="guest-phone"
-                          className="peer sr-only"
-                        />
-                        <label
-                          htmlFor="guest-phone"
-                          className={`flex cursor-pointer flex-col items-center justify-between rounded-2xl border-2 p-4 transition-all ${guestMethod === 'phone' ? 'border-blue-600 bg-blue-500/5 text-blue-600' : 'border-border bg-card hover:bg-muted/50 text-muted-foreground'}`}
-                        >
-                          <PhoneIcon className="mb-2 h-5 w-5" />
-                          <span className="text-xs font-bold">Phone</span>
-                        </label>
-                      </div>
-                    </RadioGroup>
-
-                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    <div className="grid grid-cols-1">
                       <div className="space-y-2">
                         <label className="text-muted-foreground text-xs font-black tracking-widest uppercase">
-                          {guestMethod === 'email'
-                            ? 'Email for Verification'
-                            : 'Phone Number for Verification'}
+                          Contact Phone Number (for Verification & Delivery){' '}
+                          <span className="text-red-500">*</span>
                         </label>
                         <input
-                          type={guestMethod === 'email' ? 'email' : 'tel'}
-                          placeholder={
-                            guestMethod === 'email'
-                              ? 'you@example.com'
-                              : '01XXXXXXXXX'
-                          }
+                          type="tel"
+                          placeholder="01XXXXXXXXX"
                           className="bg-muted/50 border-border w-full rounded-xl border p-4 transition-all outline-none focus:border-blue-500/50"
                           onChange={(e) =>
                             setGuestInfo({
                               ...guestInfo,
                               emailOrPhone: e.target.value,
+                              phone: e.target.value,
                             })
                           }
                         />
-                      </div>
-
-                      <div className="space-y-2">
-                        <label className="text-muted-foreground text-xs font-black tracking-widest uppercase">
-                          Phone Number <span className="text-red-500">*</span>
-                          {guestMethod === 'phone' && (
-                            <span className="text-muted-foreground font-normal normal-case">
-                              {' '}
-                              (same as above)
-                            </span>
-                          )}
-                        </label>
-                        {guestMethod === 'phone' ? (
-                          <div className="bg-muted/30 border-border flex items-center gap-2 rounded-xl border p-4 text-sm">
-                            <PhoneIcon
-                              size={14}
-                              className="shrink-0 text-blue-500"
-                            />
-                            <span className="text-muted-foreground">
-                              {guestInfo.emailOrPhone || 'Enter phone above'}
-                            </span>
-                          </div>
-                        ) : (
-                          <input
-                            type="tel"
-                            placeholder="01XXXXXXXXX"
-                            className="bg-muted/50 border-border w-full rounded-xl border p-4 transition-all outline-none focus:border-blue-500/50"
-                            onChange={(e) =>
-                              setGuestInfo({
-                                ...guestInfo,
-                                phone: e.target.value,
-                              })
-                            }
-                          />
-                        )}
                       </div>
                     </div>
                   </div>
@@ -772,111 +702,124 @@ const CheckoutPage = () => {
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="bg-card/50 border-border rounded-3xl border p-8 shadow-2xl shadow-blue-500/5"
+              className="border-border bg-card/40 relative overflow-hidden rounded-[40px] border p-8 backdrop-blur-2xl transition-all hover:border-blue-500/20"
             >
-              <h3 className="mb-8 text-2xl font-bold">Summary</h3>
+              <div className="absolute -top-24 -right-24 h-48 w-48 rounded-full bg-blue-500/5 blur-3xl" />
+
+              <h3 className="mb-8 text-2xl font-black tracking-tighter uppercase italic">
+                Order Summary
+              </h3>
 
               <div className="mb-8 space-y-4">
                 {cart.map((item) => (
                   <div
                     key={item._id}
-                    className="border-border/30 flex items-center justify-between border-b py-3 last:border-0"
+                    className="group border-border/30 flex items-center justify-between border-b pb-4 last:border-0 last:pb-0"
                   >
                     <div className="flex items-center gap-4">
-                      <div className="bg-muted relative h-12 w-12 overflow-hidden rounded-lg">
+                      <div className="bg-muted relative h-14 w-14 overflow-hidden rounded-xl">
                         <Image
                           src={item.image}
                           alt={item.name}
                           fill
-                          className="object-cover"
+                          className="object-cover transition-transform group-hover:scale-110"
                         />
                       </div>
-                      <div>
-                        <p className="max-w-[150px] truncate text-sm leading-tight font-bold">
+                      <div className="space-y-1">
+                        <p className="max-w-[150px] truncate text-sm font-black tracking-tight">
                           {item.name}
                         </p>
-                        <p className="text-muted-foreground text-xs italic">
-                          Qty: {item.quantity}
-                        </p>
+                        <div className="flex items-center gap-2">
+                          <span className="bg-muted/50 text-muted-foreground/60 rounded-md px-2 py-0.5 text-[10px] font-black uppercase">
+                            Qty: {item.quantity}
+                          </span>
+                          {item.selectedSize && (
+                            <span className="text-muted-foreground/40 text-[10px] font-bold">
+                              Size: {item.selectedSize}
+                            </span>
+                          )}
+                        </div>
                       </div>
                     </div>
-                    <p className="text-sm font-bold">
+                    <p className="text-sm font-black">
                       ৳
                       {(
                         (item.salePrice && item.salePrice > 0
                           ? item.salePrice
                           : item.price) * item.quantity
-                      ).toFixed(2)}
+                      ).toLocaleString()}
                     </p>
                   </div>
                 ))}
               </div>
 
               {/* Coupon Section */}
-              <div className="border-border/30 mb-8 border-b pb-6">
-                <p className="text-muted-foreground mb-3 text-[10px] font-black tracking-[0.2em] uppercase">
-                  Apply Coupon
+              <div className="mb-10 space-y-4">
+                <p className="text-muted-foreground/60 text-[10px] font-black tracking-widest uppercase">
+                  Promotion Code
                 </p>
                 {couponCode ? (
-                  <div className="flex items-center justify-between rounded-xl border border-blue-500/20 bg-blue-500/5 px-4 py-3 text-sm font-bold text-blue-500">
+                  <div className="flex items-center justify-between rounded-2xl border border-blue-500/20 bg-blue-500/5 px-4 py-4 text-sm font-bold text-blue-600 transition-all hover:bg-blue-500/10">
                     <span className="flex items-center gap-2">
-                      <Tag size={14} /> {couponCode}
+                      <Tag size={16} className="animate-bounce" /> {couponCode}
                     </span>
                     <button
                       onClick={() => applyCoupon(null)}
-                      className="text-blue-500/50 hover:text-blue-500"
+                      className="text-blue-500/40 transition-colors hover:text-red-500"
                     >
-                      <X size={16} />
+                      <X size={18} />
                     </button>
                   </div>
                 ) : (
-                  <div className="flex gap-2">
+                  <div className="relative flex gap-2">
                     <input
                       type="text"
-                      placeholder="SAVE10"
+                      placeholder="ENTER CODE"
                       value={couponInput}
                       onChange={(e) =>
                         setCouponInput(e.target.value.toUpperCase())
                       }
-                      className="bg-muted border-border text-foreground flex-1 rounded-xl border px-4 py-3 text-sm font-bold tracking-widest transition-all focus:border-blue-500/50 focus:outline-none"
+                      className="border-border bg-muted/50 text-foreground focus:bg-background w-full rounded-2xl border px-5 py-4 text-xs font-black tracking-widest transition-all focus:border-blue-500/50 focus:outline-none"
                     />
-                    <Button
+                    <button
                       onClick={handleApplyCoupon}
                       disabled={isApplyingCoupon}
-                      className="bg-blue-600 px-6 font-bold text-white hover:bg-blue-700 disabled:opacity-50"
+                      className="absolute top-2 right-2 bottom-2 rounded-xl bg-blue-600 px-6 text-[10px] font-black text-white transition-all hover:bg-blue-700 active:scale-95 disabled:opacity-50"
                     >
-                      {isApplyingCoupon ? '...' : 'Apply'}
-                    </Button>
+                      {isApplyingCoupon ? '...' : 'APPLY'}
+                    </button>
                   </div>
                 )}
               </div>
 
-              <div className="space-y-4 pt-4">
-                <div className="text-muted-foreground flex justify-between text-sm">
+              <div className="border-border/30 space-y-4 border-t pt-8">
+                <div className="text-muted-foreground flex justify-between text-sm font-medium">
                   <span>Subtotal</span>
-                  <span className="text-foreground font-bold">
-                    ৳{subtotal.toFixed(2)}
+                  <span className="text-foreground font-black">
+                    ৳{subtotal.toLocaleString()}
                   </span>
                 </div>
-                <div className="text-muted-foreground flex justify-between text-sm">
-                  <span>Shipping</span>
-                  <span className="text-foreground font-bold text-blue-500">
-                    ৳{shippingCharge}
+                <div className="text-muted-foreground flex justify-between text-sm font-medium">
+                  <span>Delivery Charge</span>
+                  <span className="font-black text-blue-600">
+                    +৳{shippingCharge}
                   </span>
                 </div>
                 {discount > 0 && (
-                  <div className="flex justify-between text-sm font-bold text-blue-500">
-                    <span>Discount</span>
-                    <span>-৳{discount.toFixed(2)}</span>
+                  <div className="flex justify-between text-sm font-black text-emerald-500">
+                    <span>Voucher Discount</span>
+                    <span>-৳{discount.toLocaleString()}</span>
                   </div>
                 )}
-                <div className="bg-border h-px pt-2" />
-                <div className="flex items-center justify-between pt-2">
-                  <span className="text-xl font-black tracking-tighter italic">
+
+                <div className="via-border/40 h-px w-full bg-linear-to-r from-transparent to-transparent pt-2" />
+
+                <div className="flex items-baseline justify-between pt-2">
+                  <span className="text-lg font-black tracking-tighter uppercase italic">
                     Total Due
                   </span>
-                  <span className="text-foreground text-3xl font-black tracking-tighter">
-                    ৳{finalTotal.toFixed(2)}
+                  <span className="text-4xl font-black tracking-tighter text-blue-600">
+                    ৳{finalTotal.toLocaleString()}
                   </span>
                 </div>
               </div>
@@ -884,11 +827,9 @@ const CheckoutPage = () => {
               <Button
                 onClick={handlePlaceOrder}
                 disabled={submitting}
-                className="mt-10 w-full rounded-full bg-blue-600 py-8 text-xl font-black shadow-xl shadow-blue-500/20 transition-all hover:bg-blue-700 active:scale-95"
+                className="mt-10 h-16 w-full rounded-full bg-linear-to-r from-blue-600 to-indigo-700 text-lg font-black tracking-widest uppercase shadow-xl shadow-blue-500/25 transition-all hover:scale-[1.02] hover:shadow-blue-500/40 active:scale-95 disabled:opacity-50"
               >
-                {submitting
-                  ? 'Authenticating Order...'
-                  : 'Confirm & Place Order'}
+                {submitting ? 'Processing...' : 'Complete Order'}
               </Button>
             </motion.div>
           </div>
@@ -897,65 +838,87 @@ const CheckoutPage = () => {
 
       {/* OTP Verification Modal */}
       <Dialog open={showOTPModal} onOpenChange={setShowOTPModal}>
-        <DialogContent className="bg-card border-border sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="text-center text-xl font-bold">
-              Verify Your Identity
+        <DialogContent className="border-border bg-card/40 max-w-[400px] overflow-hidden rounded-[40px] p-10 backdrop-blur-3xl">
+          <div className="absolute -top-12 -right-12 h-32 w-32 rounded-full bg-blue-500/10 blur-2xl" />
+
+          <DialogHeader className="relative z-10">
+            <DialogTitle className="text-center text-3xl font-black tracking-tighter uppercase italic">
+              Verify <span className="text-blue-600">Identity</span>
             </DialogTitle>
-            <p className="text-muted-foreground mt-2 text-center text-sm">
-              Enter the 6-digit code sent to{' '}
-              <span className="text-foreground font-bold">
+            <p className="text-muted-foreground/60 mt-4 text-center text-sm leading-relaxed font-medium">
+              We've sent a 6-digit code to <br />
+              <span className="text-foreground font-black tracking-tight">
                 {guestInfo.emailOrPhone}
-              </span>{' '}
-              to finalize your order.
+              </span>
             </p>
           </DialogHeader>
-          <div className="flex flex-col items-center gap-8 py-6">
+
+          <div className="relative z-10 flex flex-col items-center gap-10 py-8">
             <InputOTP
               maxLength={6}
               value={otp}
               onChange={(val) => setOtp(val)}
-              className="gap-2"
+              className="gap-3"
             >
-              <InputOTPGroup>
-                <InputOTPSlot index={0} />
-                <InputOTPSlot index={1} />
-                <InputOTPSlot index={2} />
+              <InputOTPGroup className="gap-2">
+                <InputOTPSlot
+                  index={0}
+                  className="border-border bg-background/50 focus:bg-background h-14 w-12 rounded-xl border-2 text-xl font-black transition-all focus:border-blue-600"
+                />
+                <InputOTPSlot
+                  index={1}
+                  className="border-border bg-background/50 focus:bg-background h-14 w-12 rounded-xl border-2 text-xl font-black transition-all focus:border-blue-600"
+                />
+                <InputOTPSlot
+                  index={2}
+                  className="border-border bg-background/50 focus:bg-background h-14 w-12 rounded-xl border-2 text-xl font-black transition-all focus:border-blue-600"
+                />
               </InputOTPGroup>
-              <InputOTPSeparator />
-              <InputOTPGroup>
-                <InputOTPSlot index={3} />
-                <InputOTPSlot index={4} />
-                <InputOTPSlot index={5} />
+              <InputOTPSeparator className="text-muted-foreground/20" />
+              <InputOTPGroup className="gap-2">
+                <InputOTPSlot
+                  index={3}
+                  className="border-border bg-background/50 focus:bg-background h-14 w-12 rounded-xl border-2 text-xl font-black transition-all focus:border-blue-600"
+                />
+                <InputOTPSlot
+                  index={4}
+                  className="border-border bg-background/50 focus:bg-background h-14 w-12 rounded-xl border-2 text-xl font-black transition-all focus:border-blue-600"
+                />
+                <InputOTPSlot
+                  index={5}
+                  className="border-border bg-background/50 focus:bg-background h-14 w-12 rounded-xl border-2 text-xl font-black transition-all focus:border-blue-600"
+                />
               </InputOTPGroup>
             </InputOTP>
 
-            <Button
-              onClick={handleVerifyOTP}
-              disabled={submitting || otp.length !== 6}
-              className="w-full rounded-full bg-blue-600 py-6 font-bold hover:bg-blue-700"
-            >
-              {submitting ? 'Verifying...' : 'Verify & Place Order'}
-            </Button>
-
-            <div className="flex flex-col items-center gap-2 pt-2">
-              <p className="text-muted-foreground text-xs">
-                Didn't receive the code?
-              </p>
-              <button
-                onClick={handleResendOTP}
-                disabled={submitting || resendTimer > 0}
-                className={cn(
-                  'text-sm font-bold transition-colors',
-                  resendTimer > 0
-                    ? 'text-muted-foreground cursor-not-allowed'
-                    : 'text-blue-600 underline hover:text-blue-700',
-                )}
+            <div className="w-full space-y-6">
+              <Button
+                onClick={handleVerifyOTP}
+                disabled={submitting || otp.length !== 6}
+                className="h-16 w-full rounded-full bg-linear-to-r from-blue-600 to-indigo-700 text-base font-black tracking-widest text-white uppercase shadow-xl shadow-blue-500/25 transition-all hover:scale-[1.02] hover:shadow-blue-500/40 active:scale-95 disabled:opacity-50"
               >
-                {resendTimer > 0
-                  ? `Resend available in ${resendTimer}s`
-                  : 'Resend Code Now'}
-              </button>
+                {submitting ? 'Verifying...' : 'Verify & Place Order'}
+              </Button>
+
+              <div className="flex flex-col items-center gap-3">
+                <p className="text-muted-foreground/40 text-[10px] font-black tracking-widest uppercase">
+                  Didn't receive the code?
+                </p>
+                <button
+                  onClick={handleResendOTP}
+                  disabled={submitting || resendTimer > 0}
+                  className={cn(
+                    'text-sm font-black tracking-tighter uppercase italic transition-all',
+                    resendTimer > 0
+                      ? 'text-muted-foreground/40 cursor-not-allowed'
+                      : 'text-blue-600 hover:scale-105 hover:text-blue-700 active:scale-95',
+                  )}
+                >
+                  {resendTimer > 0
+                    ? `Resend in ${resendTimer}s`
+                    : 'Resend Code Now'}
+                </button>
+              </div>
             </div>
           </div>
         </DialogContent>

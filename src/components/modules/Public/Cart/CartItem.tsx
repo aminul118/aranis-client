@@ -26,77 +26,97 @@ const CartItem = ({ item, onUpdateQuantity, onRemove }: CartItemProps) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.95 }}
-      className="group border-border bg-card/50 flex flex-col gap-6 rounded-3xl border p-6 transition-colors hover:border-blue-500/20 sm:flex-row"
+      className="group border-border bg-card/40 relative flex flex-col gap-6 overflow-hidden rounded-[32px] border p-5 backdrop-blur-xl transition-all hover:border-blue-500/30 hover:shadow-2xl hover:shadow-blue-500/5 sm:flex-row"
     >
-      <div className="bg-muted relative aspect-square w-full shrink-0 overflow-hidden rounded-2xl sm:w-32">
+      {/* Product Image */}
+      <div className="bg-muted relative aspect-[4/5] w-full shrink-0 overflow-hidden rounded-2xl sm:w-32">
         <Image
           src={imageSrc}
           alt={item.name}
           fill
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
+          className="object-cover transition-transform duration-700 group-hover:scale-110"
         />
+        {item.salePrice && item.salePrice > 0 && (
+          <div className="absolute top-2 left-2 rounded-full bg-red-500 px-2.5 py-1 text-[9px] font-black text-white uppercase shadow-lg shadow-red-500/20">
+            Sale
+          </div>
+        )}
       </div>
 
-      <div className="flex flex-1 flex-col justify-between pt-2 pb-1">
-        <div className="flex items-start justify-between">
-          <div>
-            <h3 className="text-foreground mb-1 text-xl font-bold transition-colors group-hover:text-blue-500">
+      <div className="flex flex-1 flex-col justify-between py-1">
+        <div className="flex items-start justify-between gap-4">
+          <div className="space-y-1">
+            <h3 className="text-foreground text-xl font-black tracking-tight transition-colors group-hover:text-blue-600">
               {item.name}
             </h3>
-            <div className="mb-4 flex items-center gap-3">
-              <p className="text-muted-foreground text-sm">{item.category}</p>
-              {item.salePrice && item.salePrice > 0 && (
-                <span className="rounded-md bg-red-500 px-2 py-0.5 text-[10px] font-bold text-white uppercase">
-                  Sale
-                </span>
+            <div className="flex items-center gap-2">
+              <span className="text-muted-foreground/60 text-xs font-bold tracking-widest uppercase">
+                {item.category}
+              </span>
+              {(item.selectedColor || item.selectedSize) && (
+                <div className="flex gap-2">
+                  <span className="bg-border h-4 w-px" />
+                  <span className="text-muted-foreground/80 text-[10px] font-bold">
+                    {item.selectedSize}{' '}
+                    {item.selectedColor && `• ${item.selectedColor}`}
+                  </span>
+                </div>
               )}
             </div>
           </div>
           <button
             onClick={() => onRemove(item._id as string)}
-            className="text-muted-foreground p-2 transition-colors hover:text-red-500"
+            className="text-muted-foreground/30 flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-all hover:bg-red-500/10 hover:text-red-500 active:scale-90"
           >
-            <Trash2 size={20} />
+            <Trash2 size={18} />
           </button>
         </div>
 
-        <div className="flex items-center justify-between">
-          <div className="border-border bg-muted/50 flex items-center gap-4 rounded-full border p-1">
+        <div className="mt-6 flex items-center justify-between gap-4 sm:mt-0">
+          {/* Quantity Controls */}
+          <div className="bg-muted/30 border-border flex items-center gap-4 rounded-full border p-1 backdrop-blur-sm">
             <button
               onClick={() =>
                 onUpdateQuantity(item._id as string, item.quantity - 1)
               }
-              className="text-muted-foreground hover:bg-muted flex h-8 w-8 items-center justify-center rounded-full transition-colors"
+              disabled={item.quantity <= 1}
+              className="text-muted-foreground hover:bg-background hover:text-foreground flex h-8 w-8 items-center justify-center rounded-full shadow-xs transition-all disabled:opacity-30"
             >
               <Minus size={14} />
             </button>
-            <span className="text-foreground w-4 text-center text-sm font-bold">
+            <span className="text-foreground min-w-[20px] text-center text-sm font-black">
               {item.quantity}
             </span>
             <button
               onClick={() =>
                 onUpdateQuantity(item._id as string, item.quantity + 1)
               }
-              className="text-muted-foreground hover:bg-muted flex h-8 w-8 items-center justify-center rounded-full transition-colors"
+              className="text-muted-foreground hover:bg-background hover:text-foreground flex h-8 w-8 items-center justify-center rounded-full shadow-xs transition-all"
             >
               <Plus size={14} />
             </button>
           </div>
-          <div className="text-right">
-            {item.salePrice && item.salePrice > 0 ? (
-              <div className="flex flex-col items-end">
-                <p className="text-foreground text-xl font-bold">
-                  ৳{(item.salePrice * item.quantity).toFixed(2)}
-                </p>
-                <p className="text-muted-foreground text-xs line-through">
-                  ৳{(item.price * item.quantity).toFixed(2)}
-                </p>
-              </div>
-            ) : (
-              <p className="text-foreground text-xl font-bold">
-                ৳{(item.price * item.quantity).toFixed(2)}
-              </p>
-            )}
+
+          {/* Pricing */}
+          <div className="flex flex-col items-end">
+            <div className="flex items-baseline gap-2">
+              {item.salePrice && item.salePrice > 0 && (
+                <span className="text-muted-foreground/40 text-sm font-medium line-through">
+                  ৳{(item.price * item.quantity).toLocaleString()}
+                </span>
+              )}
+              <span className="text-foreground text-2xl font-black tracking-tighter">
+                ৳
+                {(
+                  (item.salePrice && item.salePrice > 0
+                    ? item.salePrice
+                    : item.price) * item.quantity
+                ).toLocaleString()}
+              </span>
+            </div>
+            <p className="text-muted-foreground/40 text-[10px] font-bold tracking-wider uppercase">
+              Total Price
+            </p>
           </div>
         </div>
       </div>

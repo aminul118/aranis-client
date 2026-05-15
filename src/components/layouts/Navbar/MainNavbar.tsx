@@ -41,6 +41,17 @@ const MainNavbar = ({ user, logo }: MainNavbarProps) => {
 
         {/* Action Buttons */}
         <div className="ml-auto flex items-center gap-2 lg:gap-4">
+          {/* Offers */}
+          <Link
+            href="/offers"
+            className="group flex items-center gap-2 rounded-md border border-orange-500/40 bg-orange-500/10 px-4 py-2 text-orange-400 transition-colors hover:bg-orange-500/20"
+          >
+            <Gift size={18} />
+            <span className="hidden text-[10px] font-black tracking-widest uppercase md:inline">
+              Offers
+            </span>
+          </Link>
+
           {/* Wishlist */}
           {user && (
             <Link
@@ -60,17 +71,6 @@ const MainNavbar = ({ user, logo }: MainNavbarProps) => {
               </span>
             </Link>
           )}
-
-          {/* Offers */}
-          <Link
-            href="/offers"
-            className="group flex items-center gap-2 rounded-md border border-orange-500/40 bg-orange-500/10 px-4 py-2 text-orange-400 transition-colors hover:bg-orange-500/20"
-          >
-            <Gift size={18} />
-            <span className="hidden text-[10px] font-black tracking-widest uppercase md:inline">
-              Offers
-            </span>
-          </Link>
 
           {/* Cart */}
           <Link
@@ -93,7 +93,7 @@ const MainNavbar = ({ user, logo }: MainNavbarProps) => {
           {/* User / Login */}
           <div className="flex items-center gap-3">
             {user && (
-              <div className="mr-2 hidden lg:block">
+              <div className="mr-1 lg:mr-2">
                 <NotificationBell user={user} />
               </div>
             )}

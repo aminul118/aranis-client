@@ -1,29 +1,38 @@
 'use client';
 
 import { useCart } from '@/context/CartContext';
+import { useWishlist } from '@/context/WishlistContext';
 import { cn } from '@/lib/utils';
-import { Gift, MapPin, User } from 'lucide-react';
+import { Gift, Heart, MapPin, ShoppingCart } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 const MobileBottomNav = () => {
   const pathname = usePathname();
   const { totalItems } = useCart();
+  const { wishlistCount } = useWishlist();
 
   const navItems = [
     {
       label: 'OFFER',
-      href: '/shop?featured=true',
+      href: '/offers',
       icon: Gift,
       color: 'text-orange-400',
     },
-
     {
-      label: 'PROFILE',
-      href: '/profile',
-      icon: User,
+      label: 'WISHLIST',
+      href: '/wishlist',
+      icon: Heart,
+      count: wishlistCount,
+      badgeColor: 'bg-red-600',
     },
-
+    {
+      label: 'CART',
+      href: '/cart',
+      icon: ShoppingCart,
+      count: totalItems,
+      badgeColor: 'bg-blue-600',
+    },
     {
       label: 'LOCATION',
       href: '/location',
@@ -56,6 +65,16 @@ const MobileBottomNav = () => {
                     item.color,
                   )}
                 />
+                {(item.count ?? 0) > 0 && (
+                  <span
+                    className={cn(
+                      'absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center rounded-full border-2 border-white text-[8px] font-bold text-white dark:border-[#0a0a0a]',
+                      item.badgeColor,
+                    )}
+                  >
+                    {item.count}
+                  </span>
+                )}
               </div>
               <span className="text-[9px] font-black tracking-tighter uppercase">
                 {item.label}

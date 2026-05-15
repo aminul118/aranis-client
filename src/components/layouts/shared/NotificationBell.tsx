@@ -10,6 +10,7 @@ import {
   markAsRead,
 } from '@/services/notification/notification';
 import { Bell } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -100,19 +101,63 @@ const NotificationBell = ({ user }: Props) => {
     setNotifications([]);
   };
 
+  const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
+
+  const handleBellClick = () => {
+    if (window.innerWidth < 1024) {
+      router.push('/notifications');
+    } else {
+      setIsOpen(!isOpen);
+    }
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        isOpen &&
+        !(event.target as Element).closest('.notification-container')
+      ) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isOpen]);
+
   const unreadCount = notifications.filter((n) => !n.isRead).length;
 
   return (
-    <div className="group hover:bg-accent relative cursor-pointer rounded-full p-2 transition-colors">
-      <Bell className="text-muted-foreground group-hover:text-primary h-5 w-5 transition-colors" />
-      {unreadCount > 0 && (
-        <span className="absolute top-1 right-1 flex h-4 w-4 animate-pulse items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white transition-all">
-          {unreadCount > 99 ? '99+' : unreadCount}
-        </span>
-      )}
+    <div className="notification-container relative">
+      <div
+        onClick={handleBellClick}
+        className={cn(
+          'hover:bg-accent relative cursor-pointer rounded-full p-2 transition-colors',
+          isOpen && 'bg-accent',
+        )}
+      >
+        <Bell
+          className={cn(
+            'h-5 w-5 transition-colors',
+            isOpen ? 'text-primary' : 'text-zinc-400 group-hover:text-white',
+          )}
+        />
+        {unreadCount > 0 && (
+          <span className="absolute top-1 right-1 flex h-4 w-4 animate-pulse items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white transition-all">
+            {unreadCount > 99 ? '99+' : unreadCount}
+          </span>
+        )}
+      </div>
 
       {/* Notifications Dropdown */}
-      <div className="bg-popover invisible absolute top-full right-0 z-50 mt-2 w-80 origin-top-right rounded-xl border p-4 opacity-0 shadow-xl transition-all duration-300 group-hover:visible group-hover:opacity-100">
+      <div
+        className={cn(
+          'bg-popover absolute top-full right-0 z-50 mt-2 w-80 origin-top-right rounded-xl border p-4 shadow-xl transition-all duration-300',
+          isOpen
+            ? 'visible translate-y-0 opacity-100'
+            : 'pointer-events-none invisible -translate-y-2 opacity-0',
+        )}
+      >
         <div className="mb-2 flex items-center justify-between border-b pb-2">
           <div className="flex items-center gap-2">
             <h4 className="text-sm font-bold">Notifications</h4>
@@ -125,7 +170,10 @@ const NotificationBell = ({ user }: Props) => {
           <div className="flex gap-2">
             {notifications.some((n) => !n.isRead) && (
               <button
-                onClick={handleMarkAllAsRead}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleMarkAllAsRead();
+                }}
                 className="text-primary text-[10px] hover:underline"
               >
                 Mark all read
@@ -133,7 +181,10 @@ const NotificationBell = ({ user }: Props) => {
             )}
             {notifications.length > 0 && (
               <button
-                onClick={handleClearAllInternal}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleClearAllInternal();
+                }}
                 className="text-muted-foreground hover:text-destructive text-[10px] hover:underline"
               >
                 Clear all
@@ -146,7 +197,10 @@ const NotificationBell = ({ user }: Props) => {
             notifications.map((notif) => (
               <div
                 key={notif._id}
-                onClick={() => !notif.isRead && handleMarkAsRead(notif._id)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (!notif.isRead) handleMarkAsRead(notif._id);
+                }}
                 className={cn(
                   'flex cursor-pointer items-start gap-3 rounded-lg p-2 transition-colors',
                   notif.isRead

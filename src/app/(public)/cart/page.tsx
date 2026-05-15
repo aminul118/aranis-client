@@ -43,12 +43,17 @@ const CartPage = () => {
   return (
     <div className="bg-background min-h-screen pt-32 pb-24">
       <div className="container mx-auto px-4">
-        <h1 className="text-foreground mb-12 flex items-center gap-4 text-4xl font-bold">
-          Shopping Bag{' '}
-          <span className="text-muted-foreground text-lg font-normal">
-            ({cart.length} items)
-          </span>
-        </h1>
+        <div className="mb-16">
+          <h1 className="flex items-center gap-4 text-5xl font-black tracking-tighter uppercase italic">
+            Shopping Bag
+            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600/10 text-sm font-black tracking-normal text-blue-600 backdrop-blur-sm">
+              {cart.length}
+            </span>
+          </h1>
+          <p className="text-muted-foreground/60 mt-2 text-lg font-medium">
+            Review your selection and proceed to secure checkout.
+          </p>
+        </div>
 
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-3">
           {/* Cart Items List */}

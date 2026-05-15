@@ -150,14 +150,14 @@ const ChatFloatingButton = ({ user }: ChatFloatingButtonProps) => {
   if (!user) return null;
 
   return (
-    <div className="fixed right-4 bottom-24 z-50 lg:right-6 lg:bottom-6">
+    <div className="fixed right-4 bottom-[calc(4rem+env(safe-area-inset-bottom)+1rem)] z-50 lg:right-6 lg:bottom-6">
       <AnimatePresence>
         {isOpen && (
           <motion.div
             initial={{ opacity: 0, scale: 0.8, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8, y: 20 }}
-            className="absolute right-0 bottom-20 flex h-[500px] w-[350px] flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-2xl sm:h-[600px] sm:w-[400px] dark:border-white/10 dark:bg-[#111111]"
+            className="absolute right-0 bottom-16 flex h-[70vh] w-[calc(100vw-2rem)] max-w-[350px] flex-col overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-2xl sm:h-[600px] sm:max-w-[400px] dark:border-white/10 dark:bg-[#111111]"
           >
             {/* Header */}
             <div className="flex items-center justify-between border-b border-white/10 bg-[#111111] p-4 text-white dark:bg-black">
