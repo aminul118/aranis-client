@@ -41,7 +41,10 @@ const RootLayout = async ({ children }: Children) => {
       <ChatFloatingButton user={user as any} />
       <GlobalOfferModal />
       <MobileBottomNav />
-      <Footer socialLinks={siteSettings?.socialLinks} />
+      <Footer
+        socialLinks={siteSettings?.socialLinks}
+        navItems={sortedNavItems as any}
+      />
     </main>
   );
 };

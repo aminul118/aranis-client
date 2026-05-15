@@ -1,30 +1,16 @@
 import AminulLogo from '@/components/common/Logo';
 import SocialLinks from '@/components/modules/Public/Home/SocialLinks';
+import { INavItem } from '@/services/navbar/navbar';
 import { ISocialLink } from '@/services/settings/settings';
 import Link from 'next/link';
 import ThemeToggle from './ThemeToggle';
 
-const quickLinks = [
-  { title: 'Shop All', href: '/shop' },
-  { title: 'New Arrivals', href: '/new-arrivals' },
-  { title: 'Men', href: '/men' },
-  { title: 'Women', href: '/women' },
-  { title: 'Accessories', href: '/accessories' },
-];
-
-const customerServiceLinks = [
-  { title: 'My Account', href: '/user/my-profile' },
-  { title: 'Track Order', href: '/track-order' },
-  { title: 'Terms & Conditions', href: '/terms-conditions' },
-  { title: 'Privacy Policy', href: '/privacy-policy' },
-  { title: 'Help Center', href: '/help' },
-];
-
 interface FooterProps {
   socialLinks?: ISocialLink[];
+  navItems?: INavItem[];
 }
 
-const Footer = ({ socialLinks = [] }: FooterProps) => {
+const Footer = ({ socialLinks = [], navItems = [] }: FooterProps) => {
   return (
     <footer className="relative overflow-hidden bg-slate-900">
       {/* Top gradient line */}
@@ -52,13 +38,13 @@ const Footer = ({ socialLinks = [] }: FooterProps) => {
             <SocialLinks links={socialLinks} />
           </div>
 
-          {/* Quick Links */}
+          {/* Quick Links (from Navbar) */}
           <div>
             <h3 className="mb-5 text-sm font-semibold tracking-wider text-white uppercase">
               Quick Links
             </h3>
             <ul className="space-y-3">
-              {quickLinks.map(({ title, href }) => (
+              {navItems.map(({ title, href }) => (
                 <li key={title}>
                   <Link
                     href={href}
@@ -78,7 +64,13 @@ const Footer = ({ socialLinks = [] }: FooterProps) => {
               Customer Service
             </h3>
             <ul className="space-y-3">
-              {customerServiceLinks.map(({ title, href }) => (
+              {[
+                { title: 'Track Order', href: '/track-order' },
+                { title: 'Offers', href: '/offers' },
+                { title: 'Wishlist', href: '/wishlist' },
+                { title: 'My Account', href: '/user/my-profile' },
+                { title: 'Privacy Policy', href: '/privacy-policy' },
+              ].map(({ title, href }) => (
                 <li key={title}>
                   <Link
                     href={href}
