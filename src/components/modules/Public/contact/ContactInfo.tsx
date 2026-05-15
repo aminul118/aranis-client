@@ -4,8 +4,8 @@ const contactDetails = [
   {
     icon: Phone,
     title: 'Phone',
-    value: '01633501122',
-    href: 'tel:01633501122',
+    value: '+880 1886-877730',
+    href: 'tel:+880 1886-877730',
     color: 'text-green-500',
     bg: 'bg-green-500/10',
   },

@@ -40,7 +40,7 @@ const TopBar = ({ siteSettings }: { siteSettings?: any }) => {
         <div className="flex items-center gap-6">
           <div className="flex items-center gap-2">
             <Phone size={14} className="text-gray-400 dark:text-gray-600" />
-            <span>01633501122</span>
+            <span>+880 1886-877730</span>
           </div>
         </div>
 

@@ -5,7 +5,7 @@ const locations = [
   {
     name: 'Main Branch - Banani',
     address: 'Block E, Road 11, Banani, Dhaka 1213',
-    phone: '01633501122',
+    phone: '+880 1886-877730',
     hours: '10:00 AM - 10:00 PM',
   },
   {
