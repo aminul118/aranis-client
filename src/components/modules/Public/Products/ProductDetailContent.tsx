@@ -82,6 +82,18 @@ const ProductDetailContent = ({ product }: ProductDetailContentProps) => {
   }, [selectedVariantIndex, product.variants, product.sizeStock]);
 
   const handleRestockRequest = async () => {
+    if (!user) {
+      toast.error('Authentication Required', {
+        description:
+          'Please login to request a restock. We will notify you via email.',
+        action: {
+          label: 'Login',
+          onClick: () => router.push('/login'),
+        },
+      });
+      return;
+    }
+
     try {
       setIsRequesting(true);
       const res = await createRestockRequest(product._id as string);
@@ -92,7 +104,7 @@ const ProductDetailContent = ({ product }: ProductDetailContentProps) => {
         });
       }
     } catch (error) {
-      toast.error('Please login to request restock');
+      toast.error('Something went wrong');
     } finally {
       setIsRequesting(false);
     }
@@ -132,7 +144,7 @@ const ProductDetailContent = ({ product }: ProductDetailContentProps) => {
     .map((img) =>
       (img as string).startsWith('/') || (img as string).startsWith('http')
         ? img
-        : 'https://placehold.co/600x800?text=No+Image',
+        : '/placeholder.jpg',
     );
 
   // Stock for product (Size-aware)

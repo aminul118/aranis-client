@@ -50,16 +50,24 @@ const BulkDiscountDialog = ({
     if (isOpen) {
       const fetchOffers = async () => {
         const res = await getOffers();
-        if (res.success) {
+        if (res.success && res.data.length > 0) {
           setExistingOffers(res.data);
-          if (res.data.length > 0) {
-            setSelectedOfferTag(res.data[0].tag);
-          }
+          // Auto-select first offer and set its discount
+          setSelectedOfferTag(res.data[0].tag);
+          setDiscount(String(res.data[0].discountPercentage));
         }
       };
       fetchOffers();
     }
   }, [isOpen]);
+
+  const handleExistingOfferChange = (tag: string) => {
+    setSelectedOfferTag(tag);
+    const offer = existingOffers.find((o) => o.tag === tag);
+    if (offer) {
+      setDiscount(String(offer.discountPercentage));
+    }
+  };
 
   const handleApply = async () => {
     const discountVal = Number(discount);
@@ -185,7 +193,7 @@ const BulkDiscountDialog = ({
                 {!isCreatingNewOffer ? (
                   <select
                     value={selectedOfferTag}
-                    onChange={(e) => setSelectedOfferTag(e.target.value)}
+                    onChange={(e) => handleExistingOfferChange(e.target.value)}
                     className="border-input bg-background flex h-10 w-full rounded-xl border-2 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
                   >
                     <option value="">Select an offer</option>

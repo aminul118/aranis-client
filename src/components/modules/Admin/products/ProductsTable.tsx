@@ -3,14 +3,25 @@
 import DeleteConfirmation from '@/components/common/actions/DeleteConfirmation';
 import TableManageMent from '@/components/common/table/TableManageMent';
 import { Button } from '@/components/ui/button';
+import { ICategory } from '@/services/category/category';
+import { IColor } from '@/services/color/color';
+import { IOffer } from '@/services/offer/offer';
 import { deleteProductBulk } from '@/services/product/product';
-import { IProduct } from '@/types';
+import { IProduct, ISizeGuide } from '@/types';
 import { Percent, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import BulkDiscountDialog from './BulkDiscountDialog';
 import ProductsColumn from './ProductsColumn';
 
-const ProductsTable = ({ products }: { products: IProduct[] }) => {
+interface Props {
+  products: IProduct[];
+  categories: ICategory[];
+  colors: IColor[];
+  sizeGuides: ISizeGuide[];
+  offers: IOffer[];
+}
+
+const ProductsTable = ({ products }: Props) => {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [isBulkDialogOpen, setIsBulkDialogOpen] = useState(false);
 

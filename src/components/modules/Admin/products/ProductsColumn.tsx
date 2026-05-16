@@ -116,6 +116,15 @@ const StockBadge = ({ product }: { product: IProduct }) => {
 
 const ProductsColumn: Column<IProduct>[] = [
   {
+    header: 'SI',
+    accessor: (row, index, globalIndex) => (
+      <span className="text-muted-foreground text-xs font-bold">
+        {globalIndex}
+      </span>
+    ),
+    className: 'w-[50px]',
+  },
+  {
     header: 'Product',
     accessor: (p) => (
       <Link

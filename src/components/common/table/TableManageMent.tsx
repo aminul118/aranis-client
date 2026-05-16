@@ -197,7 +197,11 @@ function TableManageMent<T>(props: TableManageMentProps<T>) {
             {safeData.length === 0 ? (
               <TableRow>
                 <TableCell
-                  colSpan={columns.length + (hasActions ? 1 : 0)}
+                  colSpan={
+                    columns.length +
+                    (hasActions ? 1 : 0) +
+                    (onSelectionChange ? 1 : 0)
+                  }
                   className="text-muted-foreground py-8 text-center"
                 >
                   {emptyMessage}

@@ -3,37 +3,57 @@ import ClientTableWrapper from '@/components/common/wrapper/ClientTableWrapper';
 import ProductsTable from '@/components/modules/Admin/products/ProductsTable';
 import { Button } from '@/components/ui/button';
 import cleanSearchParams from '@/lib/cleanSearchParams';
+import { getCategories } from '@/services/category/category';
+import { getColors } from '@/services/color/color';
+import { getOffers } from '@/services/offer/offer';
 import { getProducts } from '@/services/product/product';
+import { getAllSizeGuides } from '@/services/size-guide/size-guide';
 import { SearchParams } from '@/types';
 import { Plus } from 'lucide-react';
 import { Metadata } from 'next';
 import Link from 'next/link';
 
 const ProductPage = async ({ searchParams }: SearchParams) => {
-    const params = await cleanSearchParams(searchParams);
-    const { data, meta } = await getProducts(params);
-    return (
-        <>
-            <ClientTableWrapper tableTitle="Products" meta={meta} action={<Actions />}>
-                <TableFilters />
-                <ProductsTable products={data} />
-            </ClientTableWrapper>
-        </>
-    );
+  const params = await cleanSearchParams(searchParams);
+  const [productsRes, categoriesRes, colorsRes, sizeGuidesRes, offersRes] =
+    await Promise.all([
+      getProducts(params),
+      getCategories({}),
+      getColors({}),
+      getAllSizeGuides(),
+      getOffers({}),
+    ]);
+
+  return (
+    <ClientTableWrapper
+      tableTitle="Products"
+      meta={productsRes.meta}
+      action={<Actions />}
+    >
+      <TableFilters />
+      <ProductsTable
+        products={productsRes.data || []}
+        categories={categoriesRes.data || []}
+        colors={colorsRes.data || []}
+        sizeGuides={sizeGuidesRes.data || []}
+        offers={offersRes.data || []}
+      />
+    </ClientTableWrapper>
+  );
 };
 
 export default ProductPage;
 
 const Actions = () => {
-    return (
-        <Link href="/admin/products/create">
-            <Button>
-                <Plus className="mr-2 h-4 w-4" /> Add Product
-            </Button>
-        </Link>
-    );
+  return (
+    <Link href="/admin/products/create">
+      <Button className="rounded-full bg-blue-600 px-6 font-black text-white hover:bg-blue-700">
+        <Plus className="mr-2 h-4 w-4" /> Add Product
+      </Button>
+    </Link>
+  );
 };
 
 export const metadata: Metadata = {
-    title: 'Products | Admin Portal',
+  title: 'Products | Admin Portal',
 };

@@ -5,6 +5,12 @@ import PlateRichEditor from '@/components/rich-text/core/rich-editor';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import {
   Form,
   FormControl,
   FormDescription,
@@ -26,16 +32,19 @@ import useActionHandler from '@/hooks/useActionHandler';
 import { cn } from '@/lib/utils';
 import { ICategory } from '@/services/category/category';
 import { IColor } from '@/services/color/color';
+import { IOffer } from '@/services/offer/offer';
 import { createProduct, updateProduct } from '@/services/product/product';
 import { IProduct, ISizeGuide } from '@/types';
 import { addProductSchema, updateProductSchema } from '@/zod/product';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Check, Plus, Save, Trash2 } from 'lucide-react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import QuickAddCategory from '../categories/QuickAddCategory';
 import QuickAddColor from '../colors/QuickAddColor';
+import QuickAddOffer from './QuickAddOffer';
 
 type FormValues = {
   name: string;
@@ -79,13 +88,23 @@ interface Props {
   categories: ICategory[];
   colors: IColor[];
   sizeGuides: ISizeGuide[];
+  offers: IOffer[];
+  onSuccess?: () => void;
 }
 
-const ProductForm = ({ product, categories, colors, sizeGuides }: Props) => {
+const ProductForm = ({
+  product,
+  categories,
+  colors,
+  sizeGuides,
+  offers,
+  onSuccess,
+}: Props) => {
   const router = useRouter();
   const { executePost } = useActionHandler();
   const [localCategories, setLocalCategories] = useState(categories);
   const [localColors, setLocalColors] = useState(colors);
+  const [localOffers, setLocalOffers] = useState(offers);
   const isEdit = !!product;
   const schema = isEdit ? updateProductSchema : addProductSchema;
 
@@ -126,6 +145,11 @@ const ProductForm = ({ product, categories, colors, sizeGuides }: Props) => {
         '',
     },
   });
+
+  const [isSizeGuidePreviewOpen, setIsSizeGuidePreviewOpen] = useState(false);
+  const [selectedSizeGuideImage, setSelectedSizeGuideImage] = useState<
+    string | null
+  >(null);
 
   // Ensure form is populated when product data is available (for Edit mode)
   useEffect(() => {
@@ -393,6 +417,7 @@ const ProductForm = ({ product, categories, colors, sizeGuides }: Props) => {
           onSuccess: () => {
             router.push('/admin/products');
             router.refresh();
+            onSuccess?.();
           },
           loadingText: 'Product updating...',
           message: 'Product updated successfully',
@@ -405,6 +430,7 @@ const ProductForm = ({ product, categories, colors, sizeGuides }: Props) => {
           onSuccess: () => {
             router.push('/admin/products');
             router.refresh();
+            onSuccess?.();
           },
           loadingText: 'Product adding...',
           message: 'Product added successfully',
@@ -416,20 +442,27 @@ const ProductForm = ({ product, categories, colors, sizeGuides }: Props) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-sm font-bold tracking-widest text-blue-600 uppercase">
+                Product Name
+              </FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="e.g. Premium Silk Pakistani Suit"
+                  className="text-lg font-bold"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <div className="grid grid-cols-1 gap-6 md:grid-cols-4">
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Product Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="e.g. Classic Silk Shirt" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
           <FormField
             control={form.control}
             name="sku"
@@ -521,7 +554,21 @@ const ProductForm = ({ product, categories, colors, sizeGuides }: Props) => {
                   name="offerTag"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Offer Tag</FormLabel>
+                      <div className="flex items-center justify-between">
+                        <FormLabel>Offer Tag</FormLabel>
+                        <QuickAddOffer
+                          onSuccess={(newOffer) => {
+                            setLocalOffers((prev) => [...prev, newOffer]);
+                            form.setValue('offerTag', newOffer.tag);
+                            if (!form.watch('discountPercentage')) {
+                              form.setValue(
+                                'discountPercentage',
+                                newOffer.discountPercentage,
+                              );
+                            }
+                          }}
+                        />
+                      </div>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
@@ -532,16 +579,12 @@ const ProductForm = ({ product, categories, colors, sizeGuides }: Props) => {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="Pakistani dress">
-                            Pakistani Dress
-                          </SelectItem>
-                          <SelectItem value="Eid offer">Eid Offer</SelectItem>
-                          <SelectItem value="Durgapuja offer">
-                            Durgapuja Offer
-                          </SelectItem>
-                          <SelectItem value="Winter sale">
-                            Winter Sale
-                          </SelectItem>
+                          <SelectItem value="none">None</SelectItem>
+                          {localOffers.map((o) => (
+                            <SelectItem key={o._id} value={o.tag}>
+                              {o.name} ({o.tag})
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                       <FormMessage />
@@ -623,33 +666,62 @@ const ProductForm = ({ product, categories, colors, sizeGuides }: Props) => {
           <FormField
             control={form.control}
             name="sizeGuide"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Size Guide</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select Size Guide" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="none">None</SelectItem>
-                    {sizeGuides.map((sg) => (
-                      <SelectItem key={sg._id} value={sg._id}>
-                        {sg.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormDescription>
-                  Select a size guide to show on the product details page.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
+            render={({ field }) => {
+              const selectedSg = sizeGuides.find(
+                (sg) => sg._id === field.value,
+              );
+              return (
+                <FormItem>
+                  <FormLabel>Size Guide</FormLabel>
+                  <div className="flex items-start gap-4">
+                    <div className="flex-1 space-y-2">
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select Size Guide" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="none">None</SelectItem>
+                          {sizeGuides.map((sg) => (
+                            <SelectItem key={sg._id} value={sg._id}>
+                              {sg.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormDescription>
+                        Select a size guide to show on the product details page.
+                      </FormDescription>
+                    </div>
+
+                    {selectedSg?.image && (
+                      <div
+                        className="bg-muted border-border/50 group relative h-20 w-20 shrink-0 cursor-zoom-in overflow-hidden rounded-xl border transition-all duration-300 hover:scale-105"
+                        onClick={() => {
+                          setSelectedSizeGuideImage(selectedSg.image);
+                          setIsSizeGuidePreviewOpen(true);
+                        }}
+                      >
+                        <Image
+                          src={selectedSg.image}
+                          alt="Size Guide Preview"
+                          fill
+                          className="object-cover transition-transform duration-500 group-hover:scale-110"
+                        />
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
+                          <Plus className="h-5 w-5 text-white" />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
           />
         </div>
 
@@ -1195,6 +1267,27 @@ const ProductForm = ({ product, categories, colors, sizeGuides }: Props) => {
           />
         </div>
       </form>
+
+      {/* Size Guide Image Preview Modal */}
+      <Dialog
+        open={isSizeGuidePreviewOpen}
+        onOpenChange={setIsSizeGuidePreviewOpen}
+      >
+        <DialogContent className="border-none bg-transparent p-0 shadow-none sm:max-w-[800px]">
+          <DialogHeader className="sr-only">
+            <DialogTitle>Size Guide Preview</DialogTitle>
+          </DialogHeader>
+          <div className="relative flex h-full w-full items-center justify-center">
+            {selectedSizeGuideImage && (
+              <img
+                src={selectedSizeGuideImage}
+                alt="Size Guide Full Preview"
+                className="max-h-[90vh] max-w-full rounded-xl object-contain shadow-2xl"
+              />
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </Form>
   );
 };

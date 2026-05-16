@@ -22,8 +22,22 @@ export const createOffer = async (payload: Partial<IOffer>) => {
   });
 };
 
-export const getOffers = async () => {
-  return await serverFetch.get<ApiResponse<IOffer[]>>('/offers');
+export const getOffers = async (params: Record<string, any> = {}) => {
+  const query = new URLSearchParams(params).toString();
+  return await serverFetch.get<ApiResponse<IOffer[]>>(`/offers?${query}`);
+};
+
+export const updateOffer = async (id: string, payload: Partial<IOffer>) => {
+  return await serverFetch.patch<ApiResponse<IOffer>>(`/offers/${id}`, {
+    body: JSON.stringify(payload),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+};
+
+export const deleteOffer = async (id: string) => {
+  return await serverFetch.delete<ApiResponse<any>>(`/offers/${id}`);
 };
 
 export const applyOffer = async (tag: string, productIds: string[]) => {
@@ -34,6 +48,16 @@ export const applyOffer = async (tag: string, productIds: string[]) => {
     },
   });
 };
+
+export const applyOfferToAll = async (tag: string) => {
+  return await serverFetch.post<ApiResponse<any>>('/offers/apply-all', {
+    body: JSON.stringify({ tag }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+};
+
 export const getActiveOffer = async () => {
   return await serverFetch.get<ApiResponse<IOffer>>('/offers/active');
 };
