@@ -17,9 +17,10 @@ const RefreshButton = ({
   showLabel = true,
 }: RefreshButtonProps) => {
   const router = useRouter();
-  const { startTransition, isPending } = useTransition();
+  const { startTransition, isPending, setPendingAction } = useTransition();
 
   const handleRefresh = () => {
+    setPendingAction('Refreshing');
     startTransition(() => {
       router.refresh();
     });

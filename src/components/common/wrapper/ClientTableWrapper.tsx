@@ -4,9 +4,12 @@ import GradientTitle from '@/components/ui/gradientTitle';
 import { TransitionContext } from '@/context/useTransition';
 import { cn } from '@/lib/utils';
 import { IMeta } from '@/types';
-import { ReactNode, useTransition } from 'react';
-import CenterSpinner from '../loader/CenterSpinner';
+import NProgress from 'nprogress';
+import { ReactNode, useEffect, useState, useTransition } from 'react';
 import TablePagination from '../table/TablePagination';
+
+// Configure NProgress
+NProgress.configure({ showSpinner: false });
 
 interface Props {
   tableTitle: string;
@@ -27,12 +30,23 @@ const ClientTableWrapper = ({
   children,
   meta,
   className,
-  loader = <CenterSpinner />,
 }: Props) => {
   const [isPending, startTransition] = useTransition();
+  const [pendingAction, setPendingAction] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (isPending) {
+      NProgress.start();
+    } else {
+      NProgress.done();
+      setPendingAction(null); // Clear action when finished
+    }
+  }, [isPending]);
 
   return (
-    <TransitionContext.Provider value={{ startTransition, isPending }}>
+    <TransitionContext.Provider
+      value={{ startTransition, isPending, pendingAction, setPendingAction }}
+    >
       <section className={cn('relative mx-auto w-11/12 py-8', className)}>
         <div className="flex justify-between gap-6">
           <div className="mb-12 flex justify-start">

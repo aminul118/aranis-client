@@ -17,13 +17,14 @@ import {
   Users,
 } from 'lucide-react';
 import DashboardCharts from '../Dashboard/DashboardCharts';
+import StatsSkeleton from './StatsSkeleton';
 
 interface StatsProps {
   stats: IStats;
 }
 
 const Stats = ({ stats }: StatsProps) => {
-  if (!stats) return null;
+  if (!stats) return <StatsSkeleton />;
 
   const {
     totalRevenue = 0,

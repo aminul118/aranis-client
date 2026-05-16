@@ -27,7 +27,7 @@ const PageLimit = ({
 }: PageLimitProps) => {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const { startTransition, isPending } = useTransition();
+  const { startTransition, isPending, setPendingAction } = useTransition();
 
   // current limit or fallback
   const limit = searchParams.get('limit') ?? '10';
@@ -38,6 +38,7 @@ const PageLimit = ({
     params.set('limit', newLimit);
     params.set('page', '1'); // reset page when limit changes
 
+    setPendingAction('Limiting');
     startTransition(() => {
       router.push(`?${params.toString()}`);
     });

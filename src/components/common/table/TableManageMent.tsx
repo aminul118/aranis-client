@@ -80,7 +80,8 @@ function TableManageMent<T>(props: TableManageMentProps<T>) {
 
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { isPending, startTransition } = useTransition();
+  const { isPending, startTransition, pendingAction, setPendingAction } =
+    useTransition();
 
   const page = props.page ?? (Number(searchParams.get('page')) || 1);
   const limit = props.limit ?? (Number(searchParams.get('limit')) || 10);
@@ -105,6 +106,7 @@ function TableManageMent<T>(props: TableManageMentProps<T>) {
     }
     params.set('page', '1');
 
+    setPendingAction('Sorting');
     startTransition(() => {
       router.push(`?${params.toString()}`);
     });
@@ -148,13 +150,7 @@ function TableManageMent<T>(props: TableManageMentProps<T>) {
               className="bg-background/40 pointer-events-none absolute inset-0 z-50 flex items-center justify-center backdrop-blur-xs"
             >
               <TableLoader
-                text={
-                  isRefreshing
-                    ? 'Refreshing'
-                    : searchParams.get('sort')
-                      ? 'Sorting'
-                      : 'Syncing'
-                }
+                text={isRefreshing ? 'Refreshing' : pendingAction || 'Syncing'}
               />
             </motion.div>
           )}
@@ -168,6 +164,7 @@ function TableManageMent<T>(props: TableManageMentProps<T>) {
               : 'opacity-100 grayscale-0',
           )}
         >
+          {/* ... rest of the table ... */}
           {/* ===== Header ===== */}
           <TableHeader>
             <TableRow className="bg-muted">

@@ -1,3 +1,5 @@
+'use client';
+
 import { Skeleton } from '@/components/ui/skeleton';
 import {
   Table,
@@ -9,131 +11,71 @@ import {
 } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
 
-interface ColumnConfig {
-  width?: string;
-  height?: string;
-  rounded?: string;
-}
-
 interface TableSkeletonProps {
-  tableColumns?: ColumnConfig[];
+  columns?: number;
   rows?: number;
-  hasFilter?: boolean;
-  hasPagination?: boolean;
-  filterColumns?: ColumnConfig[];
+  hasSelection?: boolean;
+  hasActions?: boolean;
   className?: string;
 }
 
 const TableSkeleton = ({
-  tableColumns = [
-    { width: '6', height: '4' },
-    { width: '10', height: '10', rounded: 'rounded-full' },
-    { width: '24', height: '4' },
-    { width: '40', height: '4' },
-    { width: '16', height: '4' },
-    { width: '20', height: '6', rounded: 'rounded-md' },
-    { width: '28', height: '4' },
-    { width: '8', height: '8', rounded: 'rounded-md' },
-  ],
-  filterColumns = [
-    { width: '20', height: '10' },
-    { width: '32', height: '10' },
-    { width: '20', height: '10' },
-    { width: '20', height: '10' },
-  ],
-  rows = 10,
-  hasFilter = false,
-  hasPagination = false,
+  columns = 5,
+  rows = 5,
+  hasSelection = true,
+  hasActions = true,
   className,
 }: TableSkeletonProps) => {
   return (
-    <section
-      className={cn('mx-auto w-11/12 overflow-x-hidden py-8', className)}
-    >
-      {/* Title */}
-      <Skeleton className="mb-8 h-10 w-96 rounded-md" />
-
-      {/* -------- FILTERS -------- */}
-      {hasFilter && <Filters filterColumns={filterColumns} />}
-
-      {/* -------- TABLE -------- */}
-      <Table>
-        {/* Header */}
-        <TableHeader className="bg-muted">
-          <TableRow>
-            {tableColumns.map((col, idx) => (
-              <TableHead key={idx}>
-                <Skeleton
-                  className={`h-${col.height || '4'} w-${
-                    col.width || '20'
-                  } ${col.rounded ?? 'rounded-md'}`}
-                />
-              </TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
-
-        {/* Body */}
-        <TableBody>
-          {Array.from({ length: rows }).map((_, rowIndex) => (
-            <TableRow key={rowIndex}>
-              {tableColumns.map((col, colIndex) => (
-                <TableCell key={colIndex}>
-                  <Skeleton
-                    className={`h-${col.height || '4'} w-${
-                      col.width || '20'
-                    } ${col.rounded ?? 'rounded-md'}`}
-                  />
-                </TableCell>
+    <div className={cn('w-full space-y-4', className)}>
+      <div className="border-border/50 bg-card/50 overflow-hidden rounded-xl border shadow-sm backdrop-blur-sm">
+        <Table>
+          <TableHeader>
+            <TableRow className="bg-muted/50">
+              {hasSelection && (
+                <TableHead className="w-[40px] px-4">
+                  <Skeleton className="h-4 w-4 rounded" />
+                </TableHead>
+              )}
+              {Array.from({ length: columns }).map((_, idx) => (
+                <TableHead key={idx}>
+                  <Skeleton className="h-4 w-24 rounded" />
+                </TableHead>
               ))}
+              {hasActions && (
+                <TableHead className="w-[70px] text-center">
+                  <Skeleton className="mx-auto h-4 w-12 rounded" />
+                </TableHead>
+              )}
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-
-      {/* -------- PAGINATION -------- */}
-      {hasPagination && <PaginationSkeleton />}
-    </section>
-  );
-};
-
-/* ---------------- Filters ---------------- */
-const Filters = ({ filterColumns }: { filterColumns: ColumnConfig[] }) => {
-  return (
-    <div className="mb-6 flex flex-wrap items-center justify-between gap-2">
-      {/* Search */}
-      <Skeleton className="h-10 w-64 rounded-md" />
-
-      {/* Right actions */}
-      <div className="flex flex-wrap items-center gap-2">
-        {filterColumns.map((col, index) => (
-          <Skeleton
-            key={index}
-            className={`h-${col.height || '10'} w-${
-              col.width || '20'
-            } ${col.rounded ?? 'rounded-md'}`}
-          />
-        ))}
-      </div>
-    </div>
-  );
-};
-
-/* ---------------- PAGINATION ---------------- */
-const PaginationSkeleton = () => {
-  return (
-    <div className="mt-4 flex flex-col items-center gap-4 lg:flex-row lg:justify-between">
-      <Skeleton className="h-10 w-40 rounded-md" />
-
-      <div className="flex items-center gap-4">
-        <Skeleton className="h-5 w-32 rounded-md" />
-
-        <div className="flex items-center gap-2">
-          <Skeleton className="h-9 w-9 rounded-md" />
-          <Skeleton className="h-9 w-9 rounded-md" />
-          <Skeleton className="h-9 w-9 rounded-md" />
-          <Skeleton className="h-9 w-9 rounded-md" />
-        </div>
+          </TableHeader>
+          <TableBody>
+            {Array.from({ length: rows }).map((_, rowIndex) => (
+              <TableRow key={rowIndex} className="border-border/50">
+                {hasSelection && (
+                  <TableCell className="w-[40px] px-4">
+                    <Skeleton className="h-4 w-4 rounded" />
+                  </TableCell>
+                )}
+                {Array.from({ length: columns }).map((_, colIndex) => (
+                  <TableCell key={colIndex}>
+                    <Skeleton
+                      className={cn(
+                        'h-4 rounded',
+                        rowIndex % 2 === 0 ? 'w-24' : 'w-32',
+                      )}
+                    />
+                  </TableCell>
+                ))}
+                {hasActions && (
+                  <TableCell className="text-center">
+                    <Skeleton className="mx-auto h-8 w-8 rounded-full" />
+                  </TableCell>
+                )}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       </div>
     </div>
   );

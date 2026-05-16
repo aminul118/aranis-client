@@ -11,9 +11,10 @@ interface Props {
 const ClearAllFilter = ({ className }: Props) => {
   const router = useRouter();
   const pathname = usePathname();
-  const { isPending, startTransition } = useTransition();
+  const { isPending, startTransition, setPendingAction } = useTransition();
 
   const handleClear = () => {
+    setPendingAction('Clearing');
     startTransition(() => {
       router.push(pathname);
     });
