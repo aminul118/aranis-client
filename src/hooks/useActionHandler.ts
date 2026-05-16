@@ -65,10 +65,27 @@ const useActionHandler = () => {
         Array.isArray(res.errorSources) &&
         res.errorSources.length > 0
       ) {
-        const errorDetails = res.errorSources
-          .map((e: any) => `${e.path}: ${e.message}`)
-          .join(', ');
-        toast.error(`${res.message}: ${errorDetails}`, { id: toastId });
+        // Create a more readable error message
+        const errorMessages = res.errorSources.map((e: any) => e.message);
+
+        // If multiple errors, show them as a bulleted list or just the first few
+        if (errorMessages.length > 1) {
+          const limit = 5;
+          const showList = errorMessages.slice(0, limit).join('\n• ');
+          const remaining =
+            errorMessages.length > limit
+              ? `\n...and ${errorMessages.length - limit} more`
+              : '';
+          toast.error(
+            `Please correct the following:\n• ${showList}${remaining}`,
+            {
+              id: toastId,
+              duration: 6000,
+            },
+          );
+        } else {
+          toast.error(errorMessages[0], { id: toastId });
+        }
       } else {
         toast.error(res?.message || errorMessage, { id: toastId });
       }

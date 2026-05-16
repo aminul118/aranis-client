@@ -1,11 +1,15 @@
 import Contact from '@/components/modules/Public/contact/Contact';
 import { generateDynamicMeta } from '@/seo/generateDynamicMeta';
+import { getSiteSettings } from '@/services/settings/settings';
 import { Metadata } from 'next';
 
-const ContactPage = () => {
+const ContactPage = async () => {
+  const settingsRes = await getSiteSettings();
+  const settings = settingsRes?.data;
+
   return (
     <>
-      <Contact />
+      <Contact settings={settings} />
     </>
   );
 };

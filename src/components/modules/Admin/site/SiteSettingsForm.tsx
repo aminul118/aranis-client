@@ -16,13 +16,21 @@ import useActionHandler from '@/hooks/useActionHandler';
 import { ISiteSetting, updateSiteSettings } from '@/services/settings/settings';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
+  CheckCircle2,
   Facebook,
   Globe,
+  Info,
   Instagram,
+  Layout,
   Linkedin,
+  Mail,
+  MapPin,
   MessageCircle,
+  Phone,
   Save,
+  Search,
   Send,
+  Share2,
   Twitter,
   Youtube,
 } from 'lucide-react';
@@ -30,12 +38,19 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Textarea } from '@/components/ui/textarea';
+
 const siteSettingSchema = z.object({
   logo: z.any().optional(),
   title: z.string().optional(),
   description: z.string().optional(),
   keywords: z.string().optional(),
   baseImage: z.any().optional(),
+  activeOfferTag: z.string().optional(),
+  contactNumber: z.string().optional(),
+  email: z.string().email('Invalid email address').or(z.literal('')),
+  location: z.string().optional(),
   socialLinks: z.array(
     z.object({
       platform: z.string(),
@@ -52,7 +67,7 @@ interface Props {
 }
 
 const platformIcons: Record<string, any> = {
-  Facebook: Facebook,
+  Facebook,
   WhatsApp: MessageCircle,
   Telegram: Send,
   LinkedIn: Linkedin,
@@ -74,6 +89,10 @@ const SiteSettingsForm = ({ settings }: Props) => {
       description: settings.description || '',
       keywords: settings.keywords || '',
       baseImage: settings.baseImage || '',
+      activeOfferTag: settings.activeOfferTag || '',
+      contactNumber: settings.contactNumber || '',
+      email: settings.email || '',
+      location: settings.location || '',
       socialLinks: settings.socialLinks || [
         { platform: 'Facebook', url: '', isActive: true },
         { platform: 'WhatsApp', url: '', isActive: true },
@@ -88,7 +107,19 @@ const SiteSettingsForm = ({ settings }: Props) => {
   });
 
   const onSubmit = async (values: FormValues) => {
+    // eslint-disable-next-line no-console
+    console.log('SITE SETTINGS FORM SUBMIT VALUES:', values);
     const formData = new FormData();
+
+    // Text fields should be appended before files for reliable multer parsing
+    formData.append('title', values.title || '');
+    formData.append('description', values.description || '');
+    formData.append('keywords', values.keywords || '');
+    formData.append('activeOfferTag', values.activeOfferTag || '');
+    formData.append('contactNumber', values.contactNumber || '');
+    formData.append('email', values.email || '');
+    formData.append('location', values.location || '');
+    formData.append('socialLinks', JSON.stringify(values.socialLinks));
 
     if (values.logo instanceof File) {
       formData.append('logo', values.logo);
@@ -102,16 +133,11 @@ const SiteSettingsForm = ({ settings }: Props) => {
       formData.append('baseImage', values.baseImage);
     }
 
-    formData.append('title', values.title || '');
-    formData.append('description', values.description || '');
-    formData.append('keywords', values.keywords || '');
-    formData.append('socialLinks', JSON.stringify(values.socialLinks));
-
     await executePost({
       action: () => updateSiteSettings(formData),
       success: {
-        loadingText: 'Updating site settings...',
-        message: 'Site settings updated successfully',
+        loadingText: 'Synchronizing site configuration...',
+        message: 'Site settings have been optimized and saved',
         onSuccess: () => {
           router.refresh();
         },
@@ -121,161 +147,158 @@ const SiteSettingsForm = ({ settings }: Props) => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        {/* Logo Section */}
-        <div className="space-y-4 rounded-3xl border-none bg-[#151722] p-8 shadow-2xl transition-all hover:scale-[1.01]">
-          <h3 className="flex items-center gap-3 text-xl font-black tracking-tight text-white">
-            <div className="rounded-xl bg-blue-500/10 p-2.5">
-              <Globe className="h-5 w-5 text-blue-400" />
-            </div>
-            Branding
-          </h3>
-          <FormField
-            control={form.control}
-            name="logo"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Website Logo</FormLabel>
-                <FormControl>
-                  <SingleImageUploader
-                    defaultValue={field.value}
-                    onChange={(file) => field.onChange(file)}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-12">
+        <Tabs defaultValue="branding" className="w-full">
+          <TabsList className="mb-12 flex h-auto w-fit gap-2 rounded-2xl bg-white/5 p-1.5 backdrop-blur-md">
+            <TabsTrigger
+              value="branding"
+              className="flex items-center gap-2 rounded-xl px-6 py-2.5 text-xs font-black tracking-widest uppercase transition-all data-[state=active]:bg-blue-600 data-[state=active]:text-white"
+            >
+              <Layout className="h-4 w-4" /> Branding
+            </TabsTrigger>
+            <TabsTrigger
+              value="seo"
+              className="flex items-center gap-2 rounded-xl px-6 py-2.5 text-xs font-black tracking-widest uppercase transition-all data-[state=active]:bg-emerald-600 data-[state=active]:text-white"
+            >
+              <Search className="h-4 w-4" /> SEO
+            </TabsTrigger>
+            <TabsTrigger
+              value="contact"
+              className="flex items-center gap-2 rounded-xl px-6 py-2.5 text-xs font-black tracking-widest uppercase transition-all data-[state=active]:bg-amber-600 data-[state=active]:text-white"
+            >
+              <Phone className="h-4 w-4" /> Contact
+            </TabsTrigger>
+            <TabsTrigger
+              value="social"
+              className="flex items-center gap-2 rounded-xl px-6 py-2.5 text-xs font-black tracking-widest uppercase transition-all data-[state=active]:bg-purple-600 data-[state=active]:text-white"
+            >
+              <Share2 className="h-4 w-4" /> Social
+            </TabsTrigger>
+          </TabsList>
 
-        {/* SEO Configuration Section */}
-        <div className="space-y-4 rounded-3xl border-none bg-[#151722] p-8 shadow-2xl transition-all hover:scale-[1.01]">
-          <h3 className="flex items-center gap-3 text-xl font-black tracking-tight text-white">
-            <div className="rounded-xl bg-emerald-500/10 p-2.5">
-              <Globe className="h-5 w-5 text-emerald-400" />
-            </div>
-            SEO Configuration
-          </h3>
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            <FormField
-              control={form.control}
-              name="title"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-muted-foreground text-xs font-black tracking-widest uppercase">
-                    Site Title (SEO)
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="e.g. The Aranis | Premium Contemporary Clothing"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="keywords"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-muted-foreground text-xs font-black tracking-widest uppercase">
-                    SEO Keywords
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="e.g. Fashion, Luxury, Apparel"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <FormField
-            control={form.control}
-            name="description"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-muted-foreground text-xs font-black tracking-widest uppercase">
-                  SEO Description
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Enter meta description for search engines..."
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="baseImage"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-muted-foreground text-xs font-black tracking-widest uppercase">
-                  Social Share Image (OG Image)
-                </FormLabel>
-                <FormControl>
-                  <SingleImageUploader
-                    defaultValue={field.value}
-                    onChange={(file) => field.onChange(file)}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-
-        {/* Social Links Section */}
-        <div className="space-y-4 rounded-3xl border-none p-8 shadow-2xl transition-all hover:scale-[1.01]">
-          <h3 className="flex items-center gap-3 text-xl font-black tracking-tight text-white">
-            <div className="rounded-xl bg-purple-500/10 p-2.5">
-              <Globe className="h-5 w-5 text-purple-400" />
-            </div>
-            Social Media Links
-          </h3>
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            {form.getValues('socialLinks').map((link, index) => {
-              const Icon = platformIcons[link.platform] || Globe;
-              return (
-                <div
-                  key={link.platform}
-                  className="space-y-4 rounded-2xl p-6 transition-colors"
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="text-muted-foreground flex items-center gap-2 text-sm font-black tracking-wider uppercase">
-                      <Icon className="h-4 w-4" /> {link.platform}
-                    </div>
-                    <FormField
-                      control={form.control}
-                      name={`socialLinks.${index}.isActive`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormControl>
-                            <Switch
-                              checked={field.value}
-                              onCheckedChange={field.onChange}
-                              className="scale-75"
-                            />
-                          </FormControl>
-                        </FormItem>
-                      )}
-                    />
+          {/* Branding Tab */}
+          <TabsContent value="branding" className="space-y-8 outline-none">
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+              <div className="group relative rounded-[32px] border border-white/5 bg-zinc-900/50 p-10 transition-all hover:bg-zinc-900">
+                <div className="mb-6 flex items-center gap-4">
+                  <div className="rounded-2xl bg-blue-500/10 p-4 text-blue-400">
+                    <Layout className="h-6 w-6" />
                   </div>
+                  <div>
+                    <h4 className="text-xl font-black tracking-tight text-white uppercase italic">
+                      Identity Logo
+                    </h4>
+                    <p className="text-xs font-medium tracking-widest text-zinc-500 uppercase">
+                      Main website branding asset
+                    </p>
+                  </div>
+                </div>
+                <FormField
+                  control={form.control}
+                  name="logo"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <SingleImageUploader
+                          defaultValue={field.value}
+                          onChange={(file) => field.onChange(file)}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className="flex flex-col justify-center space-y-6 rounded-[32px] bg-blue-600/5 p-10 ring-1 ring-blue-500/10">
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-600 text-white shadow-xl shadow-blue-600/20">
+                  <Info className="h-6 w-6" />
+                </div>
+                <h4 className="text-2xl font-black tracking-tighter text-white italic">
+                  Branding Guidelines
+                </h4>
+                <ul className="space-y-3">
+                  {[
+                    'Use high-resolution PNG or SVG',
+                    'Ensure logo is clear on dark/light backgrounds',
+                    'Maintain a minimum height of 40px',
+                  ].map((text) => (
+                    <li
+                      key={text}
+                      className="flex items-start gap-3 text-sm font-medium text-zinc-400"
+                    >
+                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-blue-500" />
+                      {text}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </TabsContent>
+
+          {/* SEO Tab */}
+          <TabsContent value="seo" className="space-y-8 outline-none">
+            <div className="space-y-10">
+              <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+                <div className="space-y-8 rounded-[32px] border border-white/5 bg-zinc-900/50 p-10">
+                  <div className="flex items-center gap-4">
+                    <div className="rounded-2xl bg-emerald-500/10 p-4 text-emerald-400">
+                      <Search className="h-6 w-6" />
+                    </div>
+                    <h4 className="text-xl font-black tracking-tight text-white uppercase italic">
+                      Core Metadata
+                    </h4>
+                  </div>
+
                   <FormField
                     control={form.control}
-                    name={`socialLinks.${index}.url`}
+                    name="title"
                     render={({ field }) => (
                       <FormItem>
+                        <FormLabel className="text-[10px] font-black tracking-[0.2em] text-emerald-500 uppercase">
+                          Site Meta Title
+                        </FormLabel>
                         <FormControl>
                           <Input
-                            placeholder={`https://${link.platform.toLowerCase()}.com/...`}
+                            className="h-12 rounded-xl border-white/5 bg-white/5 font-bold focus:border-emerald-500/50"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="keywords"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-[10px] font-black tracking-[0.2em] text-emerald-500 uppercase">
+                          Global Keywords
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            className="h-12 rounded-xl border-white/5 bg-white/5 font-bold focus:border-emerald-500/50"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="activeOfferTag"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-[10px] font-black tracking-[0.2em] text-emerald-500 uppercase">
+                          Active Offer Tag (e.g. Eid Offer)
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            className="h-12 rounded-xl border-white/5 bg-white/5 font-bold focus:border-emerald-500/50"
                             {...field}
                           />
                         </FormControl>
@@ -284,17 +307,225 @@ const SiteSettingsForm = ({ settings }: Props) => {
                     )}
                   />
                 </div>
-              );
-            })}
-          </div>
-        </div>
 
-        <div className="flex justify-end">
+                <div className="space-y-8 rounded-[32px] border border-white/5 bg-zinc-900/50 p-10">
+                  <div className="flex items-center gap-4">
+                    <div className="rounded-2xl bg-purple-500/10 p-4 text-purple-400">
+                      <Share2 className="h-6 w-6" />
+                    </div>
+                    <h4 className="text-xl font-black tracking-tight text-white uppercase italic">
+                      Social Visibility
+                    </h4>
+                  </div>
+
+                  <FormField
+                    control={form.control}
+                    name="baseImage"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-[10px] font-black tracking-[0.2em] text-purple-500 uppercase">
+                          OG Share Image
+                        </FormLabel>
+                        <FormControl>
+                          <SingleImageUploader
+                            defaultValue={field.value}
+                            onChange={(file) => field.onChange(file)}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
+
+              <div className="rounded-[32px] border border-white/5 bg-zinc-900/50 p-10">
+                <FormField
+                  control={form.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-[10px] font-black tracking-[0.2em] text-emerald-500 uppercase">
+                        Global Meta Description
+                      </FormLabel>
+                      <FormControl>
+                        <Textarea
+                          rows={4}
+                          className="rounded-2xl border-white/5 bg-white/5 font-medium focus:border-emerald-500/50"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
+          </TabsContent>
+
+          {/* Contact Tab */}
+          <TabsContent value="contact" className="space-y-8 outline-none">
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+              {/* Phone Card */}
+              <div className="space-y-6 rounded-[32px] border border-white/5 bg-zinc-900/50 p-8 transition-all hover:bg-zinc-900">
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-500/10 text-amber-400">
+                  <Phone className="h-6 w-6" />
+                </div>
+                <FormField
+                  control={form.control}
+                  name="contactNumber"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-[10px] font-black tracking-[0.2em] text-amber-500 uppercase">
+                        Public Contact
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="+880 1XXX-XXXXXX"
+                          className="h-12 border-white/5 bg-white/5 font-bold focus:border-amber-500/50"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              {/* Email Card */}
+              <div className="space-y-6 rounded-[32px] border border-white/5 bg-zinc-900/50 p-8 transition-all hover:bg-zinc-900">
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-500/10 text-blue-400">
+                  <Mail className="h-6 w-6" />
+                </div>
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-[10px] font-black tracking-[0.2em] text-blue-500 uppercase">
+                        Official Email
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="hello@aranis.com"
+                          className="h-12 border-white/5 bg-white/5 font-bold focus:border-blue-500/50"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              {/* Location Card */}
+              <div className="space-y-6 rounded-[32px] border border-white/5 bg-zinc-900/50 p-8 transition-all hover:bg-zinc-900">
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-500/10 text-emerald-400">
+                  <MapPin className="h-6 w-6" />
+                </div>
+                <FormField
+                  control={form.control}
+                  name="location"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-[10px] font-black tracking-[0.2em] text-emerald-500 uppercase">
+                        Store Address
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Dhaka, Bangladesh"
+                          className="h-12 border-white/5 bg-white/5 font-bold focus:border-emerald-500/50"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
+          </TabsContent>
+
+          {/* Social Tab */}
+          <TabsContent value="social" className="outline-none">
+            <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+              {form.getValues('socialLinks').map((link, index) => {
+                const Icon = platformIcons[link.platform] || Globe;
+                return (
+                  <div
+                    key={link.platform}
+                    className="group relative flex flex-col justify-between overflow-hidden rounded-[28px] border border-white/5 bg-zinc-900/40 p-8 transition-all hover:bg-zinc-900 hover:shadow-2xl"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/5 text-zinc-400 transition-all group-hover:bg-purple-600/10 group-hover:text-purple-400">
+                          <Icon className="h-6 w-6" />
+                        </div>
+                        <span className="text-sm font-black tracking-widest text-zinc-400 uppercase transition-colors group-hover:text-white">
+                          {link.platform}
+                        </span>
+                      </div>
+                      <FormField
+                        control={form.control}
+                        name={`socialLinks.${index}.isActive`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormControl>
+                              <Switch
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                                className="data-[state=checked]:bg-purple-600"
+                              />
+                            </FormControl>
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
+                    <div className="mt-8">
+                      <FormField
+                        control={form.control}
+                        name={`socialLinks.${index}.url`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormControl>
+                              <div className="relative">
+                                <Input
+                                  placeholder={`https://${link.platform.toLowerCase()}.com/thearanis`}
+                                  className="h-12 border-white/5 bg-black/40 pl-4 font-bold text-zinc-300 placeholder:text-zinc-700 focus:border-purple-500/50 focus:ring-purple-500/10"
+                                  {...field}
+                                />
+                                <div className="absolute top-1/2 right-3 -translate-y-1/2 opacity-0 transition-opacity group-hover:opacity-100">
+                                  <Share2 className="h-4 w-4 text-purple-600" />
+                                </div>
+                              </div>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </TabsContent>
+        </Tabs>
+
+        {/* Global Action Bar */}
+        <div className="mt-12 flex items-center justify-between border-t border-white/5 pt-12">
+          <div className="flex items-center gap-4 rounded-2xl bg-white/5 px-6 py-3">
+            <div className="flex h-2 w-2 animate-pulse rounded-full bg-emerald-500" />
+            <p className="text-[10px] font-black tracking-[0.2em] text-zinc-500 uppercase">
+              Live synchronization active
+            </p>
+          </div>
           <SubmitButton
             loading={form.formState.isSubmitting}
-            text="Save Changes"
+            text="Sync Changes"
             loadingEffect
-            icon={<Save className="h-4 w-4" />}
+            icon={<Save className="h-5 w-5" />}
+            className="h-14 rounded-2xl bg-blue-600 px-12 text-sm font-black tracking-[0.2em] uppercase italic transition-all hover:bg-blue-700 hover:shadow-2xl hover:shadow-blue-600/20 active:scale-95"
           />
         </div>
       </form>

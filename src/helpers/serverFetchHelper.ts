@@ -28,6 +28,11 @@ const serverFetchHelper = async <T>(
       ...headers,
     };
 
+    // Automatically set Content-Type to application/json if body is present and not FormData
+    if (rest.body && !(rest.body instanceof FormData)) {
+      finalHeaders['Content-Type'] = 'application/json';
+    }
+
     // If the body is FormData, let fetch handle the Content-Type (with boundary)
     if (rest.body instanceof FormData) {
       delete finalHeaders['Content-Type'];

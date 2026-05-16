@@ -36,14 +36,16 @@ const RootLayout = async ({ children }: Children) => {
         user={user as any}
         navItems={sortedNavItems as any}
         logo={<Logo className="text-white" />}
+        siteSettings={siteSettings}
       />
       <div className="grow pt-[60px] lg:pt-[176px]">{children}</div>
-      <ChatFloatingButton user={user as any} />
+      <ChatFloatingButton user={user as any} siteSettings={siteSettings} />
       <GlobalOfferModal />
       <MobileBottomNav />
       <Footer
         socialLinks={siteSettings?.socialLinks}
         navItems={sortedNavItems as any}
+        siteSettings={siteSettings}
       />
     </main>
   );

@@ -1,6 +1,6 @@
 'use client';
 
-import { Gift, LucideIcon, Phone } from 'lucide-react';
+import { Gift, LucideIcon, Mail, Phone } from 'lucide-react';
 import Link from 'next/link';
 
 type LinkItem = {
@@ -40,8 +40,14 @@ const TopBar = ({ siteSettings }: { siteSettings?: any }) => {
         <div className="flex items-center gap-6">
           <div className="flex items-center gap-2">
             <Phone size={14} className="text-gray-400 dark:text-gray-600" />
-            <span>+880 1886-877730</span>
+            <span>{siteSettings?.contactNumber || '+880 1886-877730'}</span>
           </div>
+          {siteSettings?.email && (
+            <div className="flex items-center gap-2">
+              <Mail size={14} className="text-gray-400 dark:text-gray-600" />
+              <span>{siteSettings.email}</span>
+            </div>
+          )}
         </div>
 
         {/* Right Side Dynamic Links */}

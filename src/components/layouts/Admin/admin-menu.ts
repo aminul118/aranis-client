@@ -6,6 +6,7 @@ import {
   Layers,
   LayoutDashboard,
   Lock,
+  MapPin,
   Megaphone,
   Menu as MenuIcon,
   MessageCircle,
@@ -47,6 +48,7 @@ const adminSidebarMenu: MenuGroup[] = [
     roles: ['SUPER_ADMIN', 'ADMIN'] as UserRole[],
     menu: [
       { name: 'Site Settings', url: '/admin/site', icon: Globe },
+      { name: 'Outlet Locations', url: '/admin/locations', icon: MapPin },
       { name: 'Navbar', url: '/admin/navbar', icon: MenuIcon },
       { name: 'Categories', url: '/admin/categories', icon: Layers },
       { name: 'Colors', url: '/admin/colors', icon: Palette },

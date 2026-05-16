@@ -1,8 +1,13 @@
 import SectionHeading from '@/components/ui/SectionHeading';
+import { ISiteSetting } from '@/services/settings/settings';
 import ContactForm from './ContactForm';
 import ContactInfo from './ContactInfo';
 
-const Contact = () => {
+interface Props {
+  settings?: ISiteSetting;
+}
+
+const Contact = ({ settings }: Props) => {
   return (
     <section
       className="bg-background relative overflow-hidden py-20 lg:py-32"
@@ -24,7 +29,7 @@ const Contact = () => {
         <div className="mx-auto flex flex-col justify-between gap-8 lg:flex-row lg:gap-12">
           {/* Left Column: Contact Info */}
           <div className="w-full space-y-8">
-            <ContactInfo />
+            <ContactInfo settings={settings} />
           </div>
 
           {/* Right Column: Contact Form */}

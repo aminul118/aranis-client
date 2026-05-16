@@ -1,33 +1,42 @@
+import { ISiteSetting } from '@/services/settings/settings';
 import { Mail, MapPin, Phone } from 'lucide-react';
 
-const contactDetails = [
-  {
-    icon: Phone,
-    title: 'Phone',
-    value: '+880 1886-877730',
-    href: 'tel:+880 1886-877730',
-    color: 'text-green-500',
-    bg: 'bg-green-500/10',
-  },
-  {
-    icon: Mail,
-    title: 'Email',
-    value: 'support@thearanis.com',
-    href: 'mailto:support@thearanis.com',
-    color: 'text-blue-500',
-    bg: 'bg-blue-500/10',
-  },
-  {
-    icon: MapPin,
-    title: 'Headquarters',
-    value: 'Jigatola, Dhanmondi, Dhaka, Bangladesh',
-    href: null,
-    color: 'text-purple-500',
-    bg: 'bg-purple-500/10',
-  },
-];
+interface Props {
+  settings?: ISiteSetting;
+}
 
-const ContactInfo = () => {
+const ContactInfo = ({ settings }: Props) => {
+  const contactDetails = [
+    {
+      icon: Phone,
+      title: 'Phone',
+      value: settings?.contactNumber || '+880 1886-877730',
+      href: settings?.contactNumber
+        ? `tel:${settings.contactNumber}`
+        : 'tel:+8801886877730',
+      color: 'text-green-500',
+      bg: 'bg-green-500/10',
+    },
+    {
+      icon: Mail,
+      title: 'Email',
+      value: settings?.email || 'support@thearanis.com',
+      href: settings?.email
+        ? `mailto:${settings.email}`
+        : 'mailto:support@thearanis.com',
+      color: 'text-blue-500',
+      bg: 'bg-blue-500/10',
+    },
+    {
+      icon: MapPin,
+      title: 'Headquarters',
+      value: settings?.location || 'Jigatola, Dhanmondi, Dhaka, Bangladesh',
+      href: null,
+      color: 'text-purple-500',
+      bg: 'bg-purple-500/10',
+    },
+  ];
+
   return (
     <div className="flex h-full max-w-xl flex-col justify-center">
       <div className="space-y-6">

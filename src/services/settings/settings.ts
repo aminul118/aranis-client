@@ -19,6 +19,9 @@ export interface ISiteSetting {
   keywords?: string;
   baseImage?: string;
   activeOfferTag?: string;
+  contactNumber?: string;
+  email?: string;
+  location?: string;
 }
 
 const getSiteSettings = async () => {
@@ -34,6 +37,12 @@ const updateSiteSettings = async (
   payload: Partial<ISiteSetting> | FormData,
 ) => {
   const isFormData = payload instanceof FormData;
+
+  // eslint-disable-next-line no-console
+  console.log(
+    'UPDATE SITE SETTINGS ACTION RECEIVED:',
+    isFormData ? 'FormData Object' : payload,
+  );
 
   const res = await serverFetch.patch<ApiResponse<ISiteSetting>>(
     '/site-settings',
