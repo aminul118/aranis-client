@@ -41,16 +41,7 @@ const ClientTableWrapper = ({
           {action}
         </div>
         <>{filters}</>
-        <div className="relative">
-          <div className={cn(isPending && 'opacity-20')}>{children}</div>
-
-          {/* Centered Loader OVER content */}
-          {isPending && (
-            <div className="absolute inset-0 z-50 flex items-center justify-center">
-              {loader}
-            </div>
-          )}
-        </div>
+        <div className="relative">{children}</div>
 
         {/* Pagination */}
         {meta && <TablePagination meta={meta} />}

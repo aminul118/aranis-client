@@ -36,7 +36,7 @@ const RefreshButton = ({
           showLabel ? 'mr-2' : ''
         }`}
       />
-      {showLabel && 'Refresh'}
+      {showLabel && (isPending ? 'Refreshing...' : 'Refresh')}
     </Button>
   );
 };

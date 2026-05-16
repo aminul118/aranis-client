@@ -15,19 +15,21 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { useTransition } from '@/context/useTransition';
 import { cn } from '@/lib/utils';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
   ArrowDown,
   ArrowUp,
   ArrowUpDown,
   Edit,
   Eye,
-  Loader2,
   MoreHorizontal,
   Trash,
 } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { ReactNode, useTransition } from 'react';
+import { ReactNode } from 'react';
+import TableLoader from '../loader/TableLoader';
 
 /* =======================
    Column Type
@@ -78,7 +80,7 @@ function TableManageMent<T>(props: TableManageMentProps<T>) {
 
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [isPending, startTransition] = useTransition();
+  const { isPending, startTransition } = useTransition();
 
   const page = props.page ?? (Number(searchParams.get('page')) || 1);
   const limit = props.limit ?? (Number(searchParams.get('limit')) || 10);
@@ -119,20 +121,53 @@ function TableManageMent<T>(props: TableManageMentProps<T>) {
   /*  SAFETY: always work with array */
   const safeData: T[] = Array.isArray(data) ? data : [];
 
+  const isLoading = isRefreshing || isPending;
+
   return (
     <section>
-      <div className="relative rounded-lg">
-        {/* ===== Refresh Overlay ===== */}
-        {isRefreshing && (
-          <div className="bg-background/50 absolute inset-0 z-10 flex items-center justify-center backdrop-blur-sm">
-            <div className="flex flex-col items-center gap-2">
-              <Loader2 className="text-primary h-6 w-6 animate-spin" />
-              <p className="text-muted-foreground text-sm">Refreshing...</p>
-            </div>
-          </div>
-        )}
+      <div className="border-border/50 bg-card/50 relative overflow-hidden rounded-xl border shadow-sm backdrop-blur-sm transition-all duration-500">
+        {/* Loading Progress Bar */}
+        <AnimatePresence mode="wait">
+          {isLoading && (
+            <motion.div
+              initial={{ width: '0%', opacity: 0 }}
+              animate={{ width: '100%', opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute top-0 right-0 left-0 z-60 h-0.5 bg-gradient-to-r from-blue-500 via-indigo-500 to-sky-500"
+            />
+          )}
+        </AnimatePresence>
 
-        <Table>
+        {/* ===== Loading Overlay ===== */}
+        <AnimatePresence>
+          {isLoading && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="bg-background/40 pointer-events-none absolute inset-0 z-50 flex items-center justify-center backdrop-blur-xs"
+            >
+              <TableLoader
+                text={
+                  isRefreshing
+                    ? 'Refreshing'
+                    : searchParams.get('sort')
+                      ? 'Sorting'
+                      : 'Syncing'
+                }
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <Table
+          className={cn(
+            'transition-all duration-500 ease-in-out',
+            isLoading
+              ? 'pointer-events-none opacity-40 grayscale-[0.2]'
+              : 'opacity-100 grayscale-0',
+          )}
+        >
           {/* ===== Header ===== */}
           <TableHeader>
             <TableRow className="bg-muted">

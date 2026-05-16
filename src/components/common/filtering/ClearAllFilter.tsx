@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { useTransition } from '@/context/useTransition';
 import { cn } from '@/lib/utils';
+import { Loader2, XCircle } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 
 interface Props {
@@ -22,9 +23,23 @@ const ClearAllFilter = ({ className }: Props) => {
     <Button
       disabled={isPending}
       onClick={handleClear}
-      className={cn('w-full md:w-auto', className)}
+      variant="outline"
+      className={cn(
+        'w-full border-blue-100 bg-blue-50/50 font-bold text-blue-600 hover:bg-blue-100 md:w-auto',
+        className,
+      )}
     >
-      Clear Filter
+      {isPending ? (
+        <>
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          Clearing...
+        </>
+      ) : (
+        <>
+          <XCircle className="mr-2 h-4 w-4" />
+          Clear Filter
+        </>
+      )}
     </Button>
   );
 };
