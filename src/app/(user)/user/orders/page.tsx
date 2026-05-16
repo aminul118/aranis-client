@@ -182,7 +182,7 @@ const UserOrdersPage = () => {
                   .map((item: any) => ({
                     productId: item.product._id,
                     productName: item.product.name,
-                    productImage: item.product.image,
+                    productImage: item.product.thumbnails?.[0],
                   }));
 
                 return (
@@ -244,9 +244,9 @@ const UserOrdersPage = () => {
                             className="flex items-center gap-6"
                           >
                             <div className="bg-muted border-border/50 relative h-16 w-16 shrink-0 overflow-hidden rounded-xl border">
-                              {item.product?.image ? (
+                              {item.product?.thumbnail ? (
                                 <Image
-                                  src={item.product.image}
+                                  src={item.product.thumbnails?.[0]}
                                   alt={item.product.name}
                                   fill
                                   className="object-cover"
@@ -351,7 +351,7 @@ const UserOrdersPage = () => {
                 .map((item: any) => ({
                   productId: item.product._id,
                   productName: item.product.name,
-                  productImage: item.product.image,
+                  productImage: item.product.thumbnails?.[0],
                 }))
             : []
         }

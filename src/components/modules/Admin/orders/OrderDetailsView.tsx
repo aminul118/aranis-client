@@ -328,7 +328,7 @@ const OrderDetailsView = ({ order }: { order: IOrder }) => {
                             <div className="flex items-center gap-4">
                               <div className="bg-muted border-border/50 relative h-12 w-12 shrink-0 overflow-hidden rounded-lg border">
                                 <Image
-                                  src={product.image}
+                                  src={product.thumbnails?.[0]}
                                   alt={product.name}
                                   fill
                                   className="object-cover transition-transform duration-500 group-hover:scale-110"
@@ -508,7 +508,7 @@ const OrderDetailsView = ({ order }: { order: IOrder }) => {
                     <td className="py-6">
                       <div className="relative h-12 w-12 overflow-hidden rounded border border-gray-100">
                         <Image
-                          src={product.image}
+                          src={product.thumbnails?.[0]}
                           alt={product.name}
                           fill
                           className="object-cover"

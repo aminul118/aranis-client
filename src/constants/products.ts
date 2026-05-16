@@ -67,7 +67,7 @@ const generateProducts = (): IProduct[] => {
             type,
             price: Math.floor(Math.random() * (500 - 50 + 1) + 50),
             rating: Number((Math.random() * (5 - 4) + 4).toFixed(1)),
-            image: catImg[i % catImg.length],
+            thumbnails: [catImg[i % catImg.length]],
             description: `A premium ${type.toLowerCase()} ${subCategory.toLowerCase()} designed for maximum comfort and style. Part of our exclusive Aranis collection.`,
             details: [
               'High-quality sustainable materials',

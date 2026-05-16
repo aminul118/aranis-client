@@ -124,7 +124,7 @@ const ProductsColumn: Column<IProduct>[] = [
       >
         <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-md border border-white/10">
           <Image
-            src={(p.image as string) || '/placeholder.png'}
+            src={(p.thumbnails?.[0] as string) || '/placeholder.png'}
             alt={p.name}
             fill
             className="object-cover"

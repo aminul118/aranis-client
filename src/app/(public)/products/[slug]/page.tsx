@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: product.description.replace(/<[^>]*>/g, '').slice(0, 160),
       images: [
         {
-          url: product.image,
+          url: product.thumbnails?.[0],
           width: 800,
           height: 1000,
           alt: product.name,

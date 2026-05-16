@@ -13,11 +13,11 @@ interface CartItemProps {
 
 const CartItem = ({ item, onUpdateQuantity, onRemove }: CartItemProps) => {
   const imageSrc =
-    item.image &&
-    typeof item.image === 'string' &&
-    item.image !== '[]' &&
-    item.image !== ''
-      ? item.image
+    item.thumbnails?.[0] &&
+    typeof item.thumbnails[0] === 'string' &&
+    item.thumbnails[0] !== '[]' &&
+    item.thumbnails[0] !== ''
+      ? item.thumbnails[0]
       : 'https://placehold.co/600x800?text=No+Image';
 
   return (

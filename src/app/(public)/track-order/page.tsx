@@ -222,7 +222,7 @@ export default function TrackOrderPage() {
                       <div key={idx} className="flex items-center gap-4">
                         <div className="border-border relative h-16 w-14 overflow-hidden rounded-xl border">
                           <Image
-                            src={item.product.image}
+                            src={item.product.thumbnails?.[0]}
                             alt={item.product.name}
                             fill
                             className="object-cover"

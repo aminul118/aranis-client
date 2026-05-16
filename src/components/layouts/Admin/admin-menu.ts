@@ -11,6 +11,7 @@ import {
   MessageCircle,
   Package,
   Palette,
+  Ruler,
   ShoppingCart,
   TicketPercent,
   User,
@@ -51,6 +52,7 @@ const adminSidebarMenu: MenuGroup[] = [
       { name: 'Hero Banners', url: '/admin/hero-banners', icon: ImageIcon },
       { name: 'Mini Banners', url: '/admin/mini-banners', icon: ImageIcon },
       { name: 'Popup Banner', url: '/admin/popup-banners', icon: Megaphone },
+      { name: 'Size Guides', url: '/admin/size-guides', icon: Ruler },
     ],
   },
   {

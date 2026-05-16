@@ -13,7 +13,7 @@ interface SearchProduct {
   _id: string;
   name: string;
   slug: string;
-  image: string;
+  thumbnails: string[];
   price: number;
   category: string;
 }
@@ -207,7 +207,7 @@ const NavSearch = () => {
                           {/* Product Image */}
                           <div className="bg-muted border-border relative h-14 w-14 shrink-0 overflow-hidden rounded-xl border dark:border-white/5 dark:bg-white/5">
                             <Image
-                              src={product.image}
+                              src={product.thumbnails?.[0]}
                               alt={product.name}
                               fill
                               className="object-cover"

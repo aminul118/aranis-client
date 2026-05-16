@@ -4,6 +4,13 @@ import HtmlContent from '@/components/rich-text/core/html-content';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -23,6 +30,7 @@ import {
   Facebook,
   Heart,
   MessageCircle,
+  Ruler,
   Share2,
   ShoppingCart,
 } from 'lucide-react';
@@ -115,8 +123,8 @@ const ProductDetailContent = ({ product }: ProductDetailContentProps) => {
 
   const allImages = (
     currentVariant
-      ? (currentVariant.images || []).slice(0, 6)
-      : Array.from(new Set([product.image, ...(product.images || [])]))
+      ? (currentVariant.thumbnails || []).slice(0, 6)
+      : (product.thumbnails || []).slice(0, 6)
   )
     .filter(
       (img) => img && typeof img === 'string' && img !== '[]' && img !== '',
@@ -177,7 +185,7 @@ const ProductDetailContent = ({ product }: ProductDetailContentProps) => {
       <div className="space-y-12 lg:col-span-5">
         <ProductImageGallery
           key={selectedVariantIndex} // Force re-render of gallery when variant changes
-          images={allImages}
+          thumbnails={allImages}
           productName={product.name}
           saleBadge={
             (product.salePrice ?? 0) > 0 ? (
@@ -345,7 +353,7 @@ const ProductDetailContent = ({ product }: ProductDetailContentProps) => {
                     )}
                   >
                     <Image
-                      src={product.image}
+                      src={product.thumbnails?.[0] || '/placeholder.png'}
                       alt={product.color}
                       fill
                       className="object-cover transition-transform duration-700 group-hover:scale-110"
@@ -384,7 +392,7 @@ const ProductDetailContent = ({ product }: ProductDetailContentProps) => {
                       )}
                     >
                       <Image
-                        src={variant.images?.[0] || product.image}
+                        src={variant.thumbnails?.[0] || product.thumbnails?.[0]}
                         alt={variant.color}
                         fill
                         className="object-cover transition-transform duration-700 group-hover:scale-110"
@@ -420,9 +428,45 @@ const ProductDetailContent = ({ product }: ProductDetailContentProps) => {
                 <h3 className="text-foreground text-sm font-black tracking-widest uppercase">
                   Select Size
                 </h3>
-                <button className="text-xs font-bold text-blue-500 hover:underline">
-                  Size Guide
-                </button>
+                {product.sizeGuide && (
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <button className="group flex items-center gap-1.5 text-xs font-bold text-blue-500 transition-colors hover:text-blue-600">
+                        <Ruler
+                          size={14}
+                          className="transition-transform group-hover:rotate-12"
+                        />
+                        Size Guide
+                      </button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-3xl overflow-hidden rounded-3xl border-none bg-white/95 p-0 backdrop-blur-xl dark:bg-zinc-900/95">
+                      <DialogHeader className="p-6 pb-0">
+                        <DialogTitle className="flex items-center gap-2 text-2xl font-black tracking-tight">
+                          <Ruler className="text-blue-500" />
+                          {(product.sizeGuide as any).name || 'Size Guide'}
+                        </DialogTitle>
+                      </DialogHeader>
+                      <div className="relative aspect-[4/5] w-full p-6">
+                        <div className="relative h-full w-full overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950">
+                          <Image
+                            src={(product.sizeGuide as any).image}
+                            alt={
+                              (product.sizeGuide as any).name || 'Size Guide'
+                            }
+                            fill
+                            className="object-contain p-4"
+                            priority
+                          />
+                        </div>
+                      </div>
+                      <div className="flex justify-center border-t border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-950">
+                        <p className="text-[10px] font-bold tracking-widest text-zinc-400 uppercase">
+                          Scroll to zoom • Measurements are in inches
+                        </p>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
+                )}
               </div>
               <div className="flex flex-wrap gap-3">
                 {product.sizes.map((size) => {

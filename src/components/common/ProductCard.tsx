@@ -44,10 +44,8 @@ const ProductCard = ({
     return src;
   };
 
-  const primaryImage = getValidImage(product.image);
-  const secondaryImage = product.images?.find(
-    (img) => img !== product.image && img !== '[]' && img !== '',
-  );
+  const primaryThumbnail = getValidImage(product.thumbnails?.[0]);
+  const secondaryThumbnail = getValidImage(product.thumbnails?.[1]);
 
   return (
     <motion.div
@@ -77,15 +75,15 @@ const ProductCard = ({
         <AnimatePresence mode="wait">
           <Image
             key="primary-image"
-            src={primaryImage}
+            src={primaryThumbnail}
             alt={product.name}
             fill
             className="object-cover transition-transform duration-1000 ease-out group-hover:scale-110"
           />
-          {secondaryImage && (
+          {secondaryThumbnail && (
             <Image
               key="secondary-image"
-              src={secondaryImage}
+              src={secondaryThumbnail}
               alt={`${product.name} - View 2`}
               fill
               className="object-cover opacity-0 transition-all duration-1000 ease-out group-hover:scale-110 group-hover:opacity-100"

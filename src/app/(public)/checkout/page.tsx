@@ -719,7 +719,7 @@ const CheckoutPage = () => {
                     <div className="flex items-center gap-4">
                       <div className="bg-muted relative h-14 w-14 overflow-hidden rounded-xl">
                         <Image
-                          src={item.image}
+                          src={item.thumbnails?.[0]}
                           alt={item.name}
                           fill
                           className="object-cover transition-transform group-hover:scale-110"

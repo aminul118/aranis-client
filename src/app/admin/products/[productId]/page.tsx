@@ -127,9 +127,9 @@ export default async function ProductDetailPage({ params }: Props) {
           {/* Image */}
           <Card className="border-border/40 overflow-hidden">
             <div className="bg-muted relative aspect-square w-full">
-              {product.image ? (
+              {product.thumbnails?.[0] ? (
                 <Image
-                  src={product.image}
+                  src={product.thumbnails?.[0]}
                   alt={product.name}
                   fill
                   className="object-cover"

@@ -22,13 +22,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import SingleImageUploader from '@/components/ui/single-image-uploader';
 import useActionHandler from '@/hooks/useActionHandler';
 import { cn } from '@/lib/utils';
 import { ICategory } from '@/services/category/category';
 import { IColor } from '@/services/color/color';
 import { createProduct, updateProduct } from '@/services/product/product';
-import { IProduct } from '@/types';
+import { IProduct, ISizeGuide } from '@/types';
 import { addProductSchema, updateProductSchema } from '@/zod/product';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Check, Plus, Save, Trash2 } from 'lucide-react';
@@ -57,7 +56,7 @@ type FormValues = {
       size: string;
       stock: number | string;
     }[];
-    images: (string | File)[];
+    thumbnails: (string | File)[];
     sku: string;
   }[];
   sizes: string[];
@@ -65,23 +64,24 @@ type FormValues = {
   isOffer: boolean;
   offerTag: string;
   discountPercentage: number | string;
-  image?: any;
   sizeStock: {
     size: string;
     stock: number | string;
   }[];
-  images: (string | File)[];
+  thumbnails: (string | File)[];
   sku: string;
   videoUrl: string;
+  sizeGuide: string;
 };
 
 interface Props {
   product?: IProduct;
   categories: ICategory[];
   colors: IColor[];
+  sizeGuides: ISizeGuide[];
 }
 
-const ProductForm = ({ product, categories, colors }: Props) => {
+const ProductForm = ({ product, categories, colors, sizeGuides }: Props) => {
   const router = useRouter();
   const { executePost } = useActionHandler();
   const [localCategories, setLocalCategories] = useState(categories);
@@ -117,9 +117,13 @@ const ProductForm = ({ product, categories, colors }: Props) => {
       offerTag: product?.offerTag || '',
       discountPercentage: product?.discountPercentage || 0,
       sizeStock: product?.sizeStock || [],
-      images: product?.images || [],
+      thumbnails: product?.thumbnails || [],
       sku: product?.sku || '',
       videoUrl: product?.videoUrl || '',
+      sizeGuide:
+        (product?.sizeGuide as any)?._id ||
+        (product?.sizeGuide as string) ||
+        '',
     },
   });
 
@@ -152,9 +156,13 @@ const ProductForm = ({ product, categories, colors }: Props) => {
         offerTag: product.offerTag || '',
         discountPercentage: product.discountPercentage || 0,
         sizeStock: product.sizeStock || [],
-        images: product.images || [],
+        thumbnails: product.thumbnails || [],
         sku: product.sku || '',
         videoUrl: product.videoUrl || '',
+        sizeGuide:
+          (product.sizeGuide as any)?._id ||
+          (product.sizeGuide as string) ||
+          '',
       });
     }
   }, [product, form]);
@@ -285,18 +293,10 @@ const ProductForm = ({ product, categories, colors }: Props) => {
       '@/lib/cloudinary-upload'
     );
 
-    // Main product image
-    let imageUrl: string | undefined;
-    if ((data.image as any) instanceof File) {
-      imageUrl = await uploadToCloudinary(data.image as unknown as File);
-    } else if (typeof data.image === 'string' && data.image) {
-      imageUrl = data.image;
-    }
-
-    // Gallery images — upload new Files in parallel, keep existing URLs
+    // Gallery thumbnails — upload new Files in parallel, keep existing URLs
     const galleryFiles: File[] = [];
     const galleryExistingUrls: string[] = [];
-    (data.images || []).forEach((item: any) => {
+    (data.thumbnails || []).forEach((item: any) => {
       if (typeof item === 'string') galleryExistingUrls.push(item);
       else if (item instanceof File) galleryFiles.push(item);
     });
@@ -304,10 +304,10 @@ const ProductForm = ({ product, categories, colors }: Props) => {
       galleryFiles.length > 0 ? await uploadManyToCloudinary(galleryFiles) : [];
     const allGalleryUrls = [...galleryExistingUrls, ...newGalleryUrls];
 
-    // Variant images — upload new Files per variant concurrently
+    // Variant thumbnails — upload new Files per variant concurrently
     const variantFileMap: { vIdx: number; files: File[] }[] = [];
     (data.variants || []).forEach((variant, vIdx) => {
-      const files: File[] = (variant.images || []).filter(
+      const files: File[] = (variant.thumbnails || []).filter(
         (img: any) => img instanceof File,
       ) as File[];
       if (files.length > 0) variantFileMap.push({ vIdx, files });
@@ -324,7 +324,7 @@ const ProductForm = ({ product, categories, colors }: Props) => {
 
     // Build variants with resolved URLs only (no File objects)
     const variantsData: any[] = (data.variants || []).map((variant, vIdx) => {
-      const existingUrls = (variant.images || []).filter(
+      const existingUrls = (variant.thumbnails || []).filter(
         (img: any) => typeof img === 'string',
       ) as string[];
       return {
@@ -333,7 +333,7 @@ const ProductForm = ({ product, categories, colors }: Props) => {
           size: s.size,
           stock: Number(s.stock) || 0,
         })),
-        images: [...existingUrls, ...(variantNewUrlsMap.get(vIdx) || [])],
+        thumbnails: [...existingUrls, ...(variantNewUrlsMap.get(vIdx) || [])],
         sku: variant.sku,
       };
     });
@@ -366,6 +366,10 @@ const ProductForm = ({ product, categories, colors }: Props) => {
     formData.append('offerTag', data.offerTag || '');
     formData.append('discountPercentage', String(data.discountPercentage));
     formData.append('videoUrl', data.videoUrl || '');
+    formData.append(
+      'sizeGuide',
+      data.sizeGuide === 'none' ? '' : data.sizeGuide || '',
+    );
     formData.append('color', data.color);
     formData.append('sizes', JSON.stringify(data.sizes || []));
     formData.append('sku', data.sku || '');
@@ -378,8 +382,7 @@ const ProductForm = ({ product, categories, colors }: Props) => {
         })),
       ),
     );
-    if (imageUrl) formData.append('image', imageUrl);
-    formData.append('images', JSON.stringify(allGalleryUrls));
+    formData.append('thumbnails', JSON.stringify(allGalleryUrls));
     formData.append('variants', JSON.stringify(variantsData));
 
     // ── Step 3: Send to Express (URLs only — fast, no files) ──────────────
@@ -616,6 +619,38 @@ const ProductForm = ({ product, categories, colors }: Props) => {
               </FormItem>
             )}
           />
+
+          <FormField
+            control={form.control}
+            name="sizeGuide"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Size Guide</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Size Guide" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="none">None</SelectItem>
+                    {sizeGuides.map((sg) => (
+                      <SelectItem key={sg._id} value={sg._id}>
+                        {sg.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormDescription>
+                  Select a size guide to show on the product details page.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </div>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
@@ -712,22 +747,24 @@ const ProductForm = ({ product, categories, colors }: Props) => {
           />
         </div>
 
-        <FormField
-          control={form.control}
-          name="image"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Product Image</FormLabel>
-              <FormControl>
-                <SingleImageUploader
-                  defaultValue={field.value as string}
-                  onChange={(file) => field.onChange(file)}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <div className="md:col-span-2">
+          <FormField
+            control={form.control}
+            name="thumbnails"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Product Gallery (Thumbnails)</FormLabel>
+                <FormControl>
+                  <MultiImageUploader
+                    value={field.value}
+                    onChange={(files) => field.onChange(files)}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
 
         <FormField
           control={form.control}
@@ -930,25 +967,6 @@ const ProductForm = ({ product, categories, colors }: Props) => {
           )}
         />
 
-        {/* Gallery Images (General) */}
-        <div className="border-border/50 bg-muted/20 rounded-xl border p-5">
-          <FormField
-            control={form.control}
-            name="images"
-            render={({ field }) => (
-              <FormItem>
-                <MultiImageUploader
-                  label="General Gallery Images"
-                  value={field.value || []}
-                  onChange={field.onChange}
-                  max={8}
-                />
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-
         {/* Product Variants */}
         <div className="space-y-6">
           <div className="flex items-center justify-between">
@@ -968,7 +986,7 @@ const ProductForm = ({ product, categories, colors }: Props) => {
                 appendVariant({
                   color: '',
                   sizes: watchedSizes.map((s) => ({ size: s, stock: 0 })),
-                  images: [],
+                  thumbnails: [],
                   sku: '',
                 })
               }
@@ -1105,15 +1123,18 @@ const ProductForm = ({ product, categories, colors }: Props) => {
                   <div className="md:col-span-8">
                     <FormField
                       control={form.control}
-                      name={`variants.${index}.images`}
+                      name={`variants.${index}.thumbnails`}
                       render={({ field }) => (
                         <FormItem>
-                          <MultiImageUploader
-                            label="Variant Gallery (Max 6)"
-                            value={field.value || []}
-                            onChange={field.onChange}
-                            max={6}
-                          />
+                          <FormLabel className="text-[10px] font-black tracking-widest text-zinc-500 uppercase">
+                            Variant Thumbnails
+                          </FormLabel>
+                          <FormControl>
+                            <MultiImageUploader
+                              value={field.value}
+                              onChange={(files) => field.onChange(files)}
+                            />
+                          </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}

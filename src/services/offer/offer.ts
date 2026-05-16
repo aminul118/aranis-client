@@ -34,3 +34,6 @@ export const applyOffer = async (tag: string, productIds: string[]) => {
     },
   });
 };
+export const getActiveOffer = async () => {
+  return await serverFetch.get<ApiResponse<IOffer>>('/offers/active');
+};

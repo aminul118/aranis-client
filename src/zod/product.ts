@@ -9,16 +9,9 @@ export const productSchema = z.object({
     .number()
     .min(0, 'Price cannot be negative')
     .refine((val) => val > 0, 'Price must be greater than 0'),
-  image: z
-    .union([z.string(), z.any()])
-    .refine(
-      (val) => val !== undefined && val !== null,
-      'Main product image is required',
-    ),
-  images: z
+  thumbnails: z
     .array(z.union([z.string(), z.any()]))
-    .optional()
-    .default([]),
+    .min(1, 'At least one product thumbnail is required'),
   description: z.string().min(1, 'Description is required'),
   details: z.string().default(''),
   slug: z.string().optional(),
@@ -54,7 +47,7 @@ export const productSchema = z.object({
             }),
           )
           .default([]),
-        images: z
+        thumbnails: z
           .array(z.union([z.string(), z.any()]))
           .optional()
           .default([]),

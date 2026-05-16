@@ -35,6 +35,18 @@ const GlobalOfferModal = () => {
       try {
         const baseUrl =
           process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:5000/api/v1';
+
+        // 1. Check if there's an active offer
+        const offerRes = await fetch(`${baseUrl}/offers/active`, {
+          credentials: 'include',
+        });
+        const offerData = await offerRes.json();
+
+        if (!offerData?.success || !offerData?.data) {
+          return; // No active offer, don't show popup
+        }
+
+        // 2. Fetch the active popup banner
         const res = await fetch(`${baseUrl}/popup-banners/active`, {
           credentials: 'include',
         });

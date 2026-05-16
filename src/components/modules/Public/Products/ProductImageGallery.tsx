@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { useCallback, useRef, useState } from 'react';
 
 interface ProductImageGalleryProps {
-  images: string[];
+  thumbnails: string[];
   productName: string;
   saleBadge?: React.ReactNode;
 }
@@ -13,11 +13,11 @@ interface ProductImageGalleryProps {
 const ZOOM_SCALE = 2.4;
 
 const ProductImageGallery = ({
-  images,
+  thumbnails,
   productName,
   saleBadge,
 }: ProductImageGalleryProps) => {
-  const [selectedImage, setSelectedImage] = useState(images[0] || '');
+  const [selectedImage, setSelectedImage] = useState(thumbnails[0] || '');
   const [isZoomed, setIsZoomed] = useState(false);
   const [zoomOrigin, setZoomOrigin] = useState({ x: 50, y: 50 });
   const containerRef = useRef<HTMLDivElement>(null);
@@ -45,8 +45,8 @@ const ProductImageGallery = ({
     setIsZoomed(false);
   };
 
-  const hasMultiple = images.length > 1;
-  const currentIdx = images.indexOf(selectedImage);
+  const hasMultiple = thumbnails.length > 1;
+  const currentIdx = thumbnails.indexOf(selectedImage);
 
   return (
     <div className="flex flex-col-reverse gap-4 select-none lg:h-[700px] lg:flex-row">
@@ -56,7 +56,7 @@ const ProductImageGallery = ({
           ref={thumbsRef}
           className="scrollbar-none flex snap-x gap-3 overflow-x-auto px-1 py-2 lg:w-24 lg:snap-y lg:flex-col lg:overflow-y-auto"
         >
-          {images.map((img, idx) => {
+          {thumbnails.map((img, idx) => {
             const active = selectedImage === img;
             return (
               <button
@@ -154,7 +154,7 @@ const ProductImageGallery = ({
         {/* Image counter */}
         {hasMultiple && (
           <div className="absolute right-4 bottom-4 z-10 rounded-full bg-black/60 px-3 py-1.5 text-xs font-bold text-white backdrop-blur-sm">
-            {currentIdx + 1} / {images.length}
+            {currentIdx + 1} / {thumbnails.length}
           </div>
         )}
       </div>

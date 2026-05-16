@@ -22,9 +22,12 @@ export type {
   ILogin,
   IMeta,
   IProject,
+  ISizeGuide,
   IStats,
   IUser,
 } from './api.types';
+
+import { ISizeGuide } from './api.types';
 
 export enum Role {
   ADMIN = 'ADMIN',
@@ -44,7 +47,7 @@ export interface IVariantSize {
 
 export interface IVariant {
   color: string;
-  images: string[];
+  thumbnails: string[];
   sizes: IVariantSize[];
   sku?: string;
 }
@@ -56,8 +59,7 @@ export interface IProduct {
   subCategory: string;
   type: string;
   price: number;
-  image: string;
-  images?: string[];
+  thumbnails: string[];
   description: string;
   details: string | string[];
   color: string;
@@ -76,6 +78,7 @@ export interface IProduct {
   rating?: number;
   soldCount?: number;
   videoUrl?: string;
+  sizeGuide?: ISizeGuide | string;
   isDeleted?: boolean;
 }
 

@@ -195,7 +195,7 @@ export default function RestockRequestsPage() {
                         <div className="flex items-center gap-4">
                           <div className="border-border relative h-12 w-10 overflow-hidden rounded-md border">
                             <Image
-                              src={request.product.image}
+                              src={request.product.thumbnails?.[0]}
                               alt={request.product.name}
                               fill
                               className="object-cover"
