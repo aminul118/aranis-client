@@ -44,7 +44,7 @@ const NavUser = ({ user }: { user: IUser }) => {
       <DropdownMenuTrigger asChild>
         <Avatar className="cursor-pointer">
           <AvatarImage
-            src={user?.picture || './user-placeholder.png'}
+            src={user?.picture || './user-placeholder.jpg'}
             alt={fullName}
           />
           <AvatarFallback>{initials}</AvatarFallback>
@@ -56,7 +56,7 @@ const NavUser = ({ user }: { user: IUser }) => {
         <DropdownMenuGroup className="mt-3 flex flex-col items-center gap-2">
           <Avatar className="h-14 w-14 object-cover">
             <AvatarImage
-              src={user?.picture || './user-placeholder.png'}
+              src={user?.picture || './user-placeholder.jpg'}
               alt={fullName}
             />
             <AvatarFallback>{initials}</AvatarFallback>

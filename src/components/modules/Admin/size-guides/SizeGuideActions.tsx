@@ -11,15 +11,16 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { deleteSizeGuide } from '@/services/size-guide/size-guide';
 import { ISizeGuide } from '@/types';
-import { EllipsisIcon, PencilIcon, Trash2Icon } from 'lucide-react';
+import { EllipsisIcon, EyeIcon, PencilIcon, Trash2Icon } from 'lucide-react';
 import { useState } from 'react';
 
 interface Props {
   sizeGuide: ISizeGuide;
   onEdit: (sg: ISizeGuide) => void;
+  onView: () => void;
 }
 
-const SizeGuideActions = ({ sizeGuide, onEdit }: Props) => {
+const SizeGuideActions = ({ sizeGuide, onEdit, onView }: Props) => {
   const [deleteOpen, setDeleteOpen] = useState(false);
 
   const handleDelete = async (id: string) => {
@@ -42,6 +43,14 @@ const SizeGuideActions = ({ sizeGuide, onEdit }: Props) => {
           </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="min-w-48">
+          <DropdownMenuItem
+            className="flex cursor-pointer items-center"
+            onClick={onView}
+          >
+            <EyeIcon className="mr-2 h-4 w-4" />
+            <span>View Image</span>
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
           <DropdownMenuItem
             className="flex cursor-pointer items-center"
             onClick={() => onEdit(sizeGuide)}

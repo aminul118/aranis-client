@@ -15,7 +15,7 @@ import RefreshButton from '../button/refresh-button';
 import ClearAllFilter from '../filtering/ClearAllFilter';
 import PageLimit from '../pagination/PageLimit';
 import SearchFilter from '../searching/SearchFilter';
-import Sorting, { SortOption } from '../sorting/Sorting';
+import { SortOption } from '../sorting/Sorting';
 
 interface IProps {
   children?: ReactNode;
@@ -76,7 +76,6 @@ const TableFilters = ({
                       <SheetTitle>Filters</SheetTitle>
                     </SheetHeader>
                     <div className="flex flex-col gap-6 px-4 py-6">
-                      <Sorting sortOptions={sortOptions} />
                       <PageLimit pageNumbers={pageNumbers} />
                       <ClearAllFilter />
                       {children}
@@ -97,7 +96,6 @@ const TableFilters = ({
         <SearchFilter />
         <div className="flex flex-wrap items-center justify-end gap-2">
           <PageLimit pageNumbers={pageNumbers} />
-          <Sorting sortOptions={sortOptions} />
           <ClearAllFilter />
           <RefreshButton />
           {children}

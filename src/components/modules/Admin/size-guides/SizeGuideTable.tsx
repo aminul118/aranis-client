@@ -30,6 +30,8 @@ interface Props {
 const SizeGuideTable = ({ sizeGuides, meta }: Props) => {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
+  const [isImageOpen, setIsImageOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [selectedSizeGuide, setSelectedSizeGuide] = useState<
     ISizeGuide | undefined
   >(undefined);
@@ -39,22 +41,45 @@ const SizeGuideTable = ({ sizeGuides, meta }: Props) => {
     setIsOpen(true);
   };
 
+  const handleViewImage = (image: string) => {
+    setPreviewImage(image);
+    setIsImageOpen(true);
+  };
+
   const columns: Column<ISizeGuide>[] = [
     {
       header: 'Image',
       accessor: (sg) => (
-        <div className="relative h-16 w-16 overflow-hidden rounded-lg border border-white/10">
-          <Image src={sg.image} alt={sg.name} fill className="object-cover" />
+        <div
+          className="group relative h-16 w-16 cursor-zoom-in overflow-hidden rounded-lg border border-white/10"
+          onClick={() => handleViewImage(sg.image)}
+        >
+          <Image
+            src={sg.image}
+            alt={sg.name}
+            fill
+            className="object-cover transition-transform group-hover:scale-110"
+          />
+          <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
+            <Plus className="h-5 w-5 text-white" />
+          </div>
         </div>
       ),
     },
     {
       header: 'Name',
       accessor: (sg) => <span className="font-bold">{sg.name}</span>,
+      sortKey: 'name',
     },
     {
       header: 'Actions',
-      accessor: (sg) => <SizeGuideActions sizeGuide={sg} onEdit={handleOpen} />,
+      accessor: (sg) => (
+        <SizeGuideActions
+          sizeGuide={sg}
+          onEdit={handleOpen}
+          onView={() => handleViewImage(sg.image)}
+        />
+      ),
     },
   ];
 
@@ -91,6 +116,24 @@ const SizeGuideTable = ({ sizeGuides, meta }: Props) => {
               sizeGuide={selectedSizeGuide}
               onSuccess={() => setIsOpen(false)}
             />
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Image Preview Modal */}
+      <Dialog open={isImageOpen} onOpenChange={setIsImageOpen}>
+        <DialogContent className="overflow-hidden border-none bg-transparent p-0 shadow-none sm:max-w-[800px]">
+          <DialogHeader className="sr-only">
+            <DialogTitle>Size Guide Image Preview</DialogTitle>
+          </DialogHeader>
+          <div className="relative flex aspect-auto h-full w-full items-center justify-center">
+            {previewImage && (
+              <img
+                src={previewImage}
+                alt="Size Guide Preview"
+                className="max-h-[90vh] max-w-full rounded-xl object-contain shadow-2xl"
+              />
+            )}
           </div>
         </DialogContent>
       </Dialog>

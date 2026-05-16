@@ -35,9 +35,10 @@ type FormValues = z.infer<typeof popupBannerSchema>;
 
 interface Props {
   banner?: IPopupBanner;
+  onSuccess?: () => void;
 }
 
-const PopupBannerForm = ({ banner }: Props) => {
+const PopupBannerForm = ({ banner, onSuccess }: Props) => {
   const router = useRouter();
   const { executePost } = useActionHandler();
   const isEdit = !!banner;
@@ -59,8 +60,8 @@ const PopupBannerForm = ({ banner }: Props) => {
           updatePopupBanner(values as IPopupBanner, banner._id as string),
         success: {
           onSuccess: () => {
-            router.push('/admin/popup-banners');
             router.refresh();
+            onSuccess?.();
           },
           loadingText: 'Updating popup banner...',
           message: 'Popup banner updated successfully',
@@ -71,8 +72,8 @@ const PopupBannerForm = ({ banner }: Props) => {
         action: () => createPopupBanner(values as IPopupBanner),
         success: {
           onSuccess: () => {
-            router.push('/admin/popup-banners');
             router.refresh();
+            onSuccess?.();
           },
           loadingText: 'Creating popup banner...',
           message: 'Popup banner created successfully',

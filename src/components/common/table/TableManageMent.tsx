@@ -15,16 +15,30 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Edit, Eye, Loader2, MoreHorizontal, Trash } from 'lucide-react';
-import { ReactNode } from 'react';
+import { cn } from '@/lib/utils';
+import {
+  ArrowDown,
+  ArrowUp,
+  ArrowUpDown,
+  Edit,
+  Eye,
+  Loader2,
+  MoreHorizontal,
+  Trash,
+} from 'lucide-react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { ReactNode, useTransition } from 'react';
 
 /* =======================
    Column Type
 ======================= */
 export interface Column<T> {
   header: string;
-  accessor: keyof T | ((row: T, index: number) => ReactNode);
+  accessor:
+    | keyof T
+    | ((row: T, index: number, globalIndex: number) => ReactNode);
   className?: string;
+  sortKey?: string;
 }
 
 /* =======================
@@ -41,24 +55,66 @@ interface TableManageMentProps<T> {
   isRefreshing?: boolean;
   selectedIds?: string[];
   onSelectionChange?: (ids: string[]) => void;
+  page?: number;
+  limit?: number;
 }
 
 /* =======================
    Component
 ======================= */
-function TableManageMent<T>({
-  data,
-  columns,
-  getRowKey,
-  onView,
-  onEdit,
-  onDelete,
-  emptyMessage = 'No records found.',
-  isRefreshing = false,
-  selectedIds = [],
-  onSelectionChange,
-}: TableManageMentProps<T>) {
+function TableManageMent<T>(props: TableManageMentProps<T>) {
+  const {
+    data,
+    columns,
+    getRowKey,
+    onView,
+    onEdit,
+    onDelete,
+    emptyMessage = 'No records found.',
+    isRefreshing = false,
+    selectedIds = [],
+    onSelectionChange,
+  } = props;
+
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [isPending, startTransition] = useTransition();
+
+  const page = props.page ?? (Number(searchParams.get('page')) || 1);
+  const limit = props.limit ?? (Number(searchParams.get('limit')) || 10);
+
   const hasActions = Boolean(onView || onEdit || onDelete);
+
+  const handleSort = (key: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    const currentSort = params.get('sort');
+
+    let newSort = key;
+    if (currentSort === key) {
+      newSort = `-${key}`;
+    } else if (currentSort === `-${key}`) {
+      newSort = '';
+    }
+
+    if (newSort) {
+      params.set('sort', newSort);
+    } else {
+      params.delete('sort');
+    }
+    params.set('page', '1');
+
+    startTransition(() => {
+      router.push(`?${params.toString()}`);
+    });
+  };
+
+  const getSortIcon = (key: string) => {
+    const currentSort = searchParams.get('sort');
+    if (currentSort === key) return <ArrowUp className="ml-1 h-3 w-3" />;
+    if (currentSort === `-${key}`)
+      return <ArrowDown className="ml-1 h-3 w-3" />;
+    return <ArrowUpDown className="ml-1 h-3 w-3 opacity-30" />;
+  };
 
   /*  SAFETY: always work with array */
   const safeData: T[] = Array.isArray(data) ? data : [];
@@ -101,11 +157,34 @@ function TableManageMent<T>({
                   />
                 </TableHead>
               )}
-              {columns.map((column, index) => (
-                <TableHead key={index} className={column.className}>
-                  {column.header}
-                </TableHead>
-              ))}
+              {columns.map((column, index) => {
+                const sortKey =
+                  column.sortKey ||
+                  (typeof column.accessor === 'string'
+                    ? (column.accessor as string)
+                    : undefined);
+
+                return (
+                  <TableHead
+                    key={index}
+                    className={cn(
+                      column.className,
+                      sortKey &&
+                        'hover:text-foreground cursor-pointer transition-colors select-none hover:bg-black/5 dark:hover:bg-white/5',
+                    )}
+                    onClick={() => sortKey && handleSort(sortKey)}
+                  >
+                    <div className="flex items-center gap-1">
+                      {column.header}
+                      {sortKey && (
+                        <div className="flex shrink-0 items-center">
+                          {getSortIcon(sortKey)}
+                        </div>
+                      )}
+                    </div>
+                  </TableHead>
+                );
+              })}
 
               {hasActions && (
                 <TableHead className="w-[70px] text-center">Actions</TableHead>
@@ -151,13 +230,16 @@ function TableManageMent<T>({
                       />
                     </TableCell>
                   )}
-                  {columns.map((col, colIndex) => (
-                    <TableCell key={colIndex} className={col.className}>
-                      {typeof col.accessor === 'function'
-                        ? col.accessor(item, rowIndex)
-                        : String(item[col.accessor] ?? '')}
-                    </TableCell>
-                  ))}
+                  {columns.map((col, colIndex) => {
+                    const globalIndex = (page - 1) * limit + rowIndex + 1;
+                    return (
+                      <TableCell key={colIndex} className={col.className}>
+                        {typeof col.accessor === 'function'
+                          ? col.accessor(item, rowIndex, globalIndex)
+                          : String(item[col.accessor] ?? '')}
+                      </TableCell>
+                    );
+                  })}
 
                   {hasActions && (
                     <TableCell className="text-center">

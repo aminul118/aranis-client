@@ -353,7 +353,7 @@ const ProductDetailContent = ({ product }: ProductDetailContentProps) => {
                     )}
                   >
                     <Image
-                      src={product.thumbnails?.[0] || '/placeholder.png'}
+                      src={product.thumbnails?.[0] || '/placeholder.jpg'}
                       alt={product.color}
                       fill
                       className="object-cover transition-transform duration-700 group-hover:scale-110"
@@ -431,38 +431,49 @@ const ProductDetailContent = ({ product }: ProductDetailContentProps) => {
                 {product.sizeGuide && (
                   <Dialog>
                     <DialogTrigger asChild>
-                      <button className="group flex items-center gap-1.5 text-xs font-bold text-blue-500 transition-colors hover:text-blue-600">
+                      <button className="group flex items-center gap-2 rounded-full bg-blue-500/5 px-4 py-2 text-xs font-black tracking-widest text-blue-600 transition-all hover:bg-blue-500/10 active:scale-95">
                         <Ruler
                           size={14}
                           className="transition-transform group-hover:rotate-12"
                         />
-                        Size Guide
+                        SIZE GUIDE
                       </button>
                     </DialogTrigger>
-                    <DialogContent className="max-w-3xl overflow-hidden rounded-3xl border-none bg-white/95 p-0 backdrop-blur-xl dark:bg-zinc-900/95">
-                      <DialogHeader className="p-6 pb-0">
-                        <DialogTitle className="flex items-center gap-2 text-2xl font-black tracking-tight">
-                          <Ruler className="text-blue-500" />
-                          {(product.sizeGuide as any).name || 'Size Guide'}
-                        </DialogTitle>
+                    <DialogContent className="max-w-3xl overflow-hidden rounded-[40px] border-none bg-white/95 p-0 shadow-2xl backdrop-blur-xl dark:bg-zinc-900/95">
+                      <DialogHeader className="p-8 pb-0">
+                        <div className="flex items-center justify-between">
+                          <DialogTitle className="flex items-center gap-3 text-3xl font-black tracking-tighter uppercase italic">
+                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-500/10 text-blue-500">
+                              <Ruler size={20} />
+                            </div>
+                            {(product.sizeGuide as any).name || 'Size Guide'}
+                          </DialogTitle>
+                        </div>
+                        <p className="text-muted-foreground/60 mt-2 text-sm font-medium">
+                          Find your perfect fit with our artisanal measurement
+                          guide
+                        </p>
                       </DialogHeader>
-                      <div className="relative aspect-[4/5] w-full p-6">
-                        <div className="relative h-full w-full overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950">
+                      <div className="relative aspect-[4/5] w-full p-8 md:aspect-video">
+                        <div className="group relative h-full w-full overflow-hidden rounded-3xl border-2 border-zinc-200 bg-zinc-50 transition-all hover:border-blue-500/20 dark:border-zinc-800 dark:bg-zinc-950">
                           <Image
                             src={(product.sizeGuide as any).image}
                             alt={
                               (product.sizeGuide as any).name || 'Size Guide'
                             }
                             fill
-                            className="object-contain p-4"
+                            className="object-contain p-4 transition-transform duration-700 group-hover:scale-105"
                             priority
                           />
                         </div>
                       </div>
-                      <div className="flex justify-center border-t border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-950">
-                        <p className="text-[10px] font-bold tracking-widest text-zinc-400 uppercase">
-                          Scroll to zoom • Measurements are in inches
+                      <div className="flex flex-col items-center justify-center gap-2 border-t border-zinc-200 bg-zinc-50 p-6 dark:border-zinc-800 dark:bg-zinc-950">
+                        <p className="text-[10px] font-black tracking-[0.3em] text-zinc-400 uppercase">
+                          Measurements are in inches • Artisanal Craftsmanship
                         </p>
+                        <div className="flex h-1.5 w-24 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-800">
+                          <div className="animate-shimmer h-full w-1/2 bg-linear-to-r from-transparent via-blue-500/50 to-transparent" />
+                        </div>
                       </div>
                     </DialogContent>
                   </Dialog>

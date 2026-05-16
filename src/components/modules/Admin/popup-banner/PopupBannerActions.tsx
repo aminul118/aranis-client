@@ -14,10 +14,13 @@ import {
   IPopupBanner,
 } from '@/services/popup-banner/popup-banner';
 import { EllipsisIcon, PencilIcon, Trash2Icon } from 'lucide-react';
-import Link from 'next/link';
 import { useState } from 'react';
+interface Props {
+  banner: IPopupBanner;
+  onEdit?: (banner: IPopupBanner) => void;
+}
 
-const PopupBannerActions = ({ banner }: { banner: IPopupBanner }) => {
+const PopupBannerActions = ({ banner, onEdit }: Props) => {
   const [deleteOpen, setDeleteOpen] = useState(false);
 
   const handleDelete = async (id: string) => {
@@ -40,14 +43,12 @@ const PopupBannerActions = ({ banner }: { banner: IPopupBanner }) => {
           </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="min-w-48">
-          <DropdownMenuItem asChild>
-            <Link
-              href={`/admin/popup-banners/${banner._id}/edit`}
-              className="flex cursor-pointer items-center"
-            >
-              <PencilIcon className="mr-2 h-4 w-4" />
-              <span>Edit</span>
-            </Link>
+          <DropdownMenuItem
+            className="flex cursor-pointer items-center"
+            onClick={() => onEdit?.(banner)}
+          >
+            <PencilIcon className="mr-2 h-4 w-4" />
+            <span>Edit</span>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem

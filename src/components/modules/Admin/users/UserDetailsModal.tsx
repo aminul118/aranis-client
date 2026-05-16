@@ -4,7 +4,12 @@ import DateFormat from '@/components/common/formater/date-format';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import {
   Select,
   SelectContent,
@@ -83,7 +88,11 @@ export function UserDetailsModal({ user, open, setOpen }: Props) {
 
           <div className="mt-4 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
             <div>
-              <h2 className="text-2xl font-bold tracking-tight">{fullName}</h2>
+              <DialogHeader className="p-0 text-left">
+                <DialogTitle className="text-2xl font-bold tracking-tight">
+                  {fullName}
+                </DialogTitle>
+              </DialogHeader>
               <p className="text-muted-foreground mt-1 flex items-center gap-2">
                 {email || phone}
                 {isVerified && (

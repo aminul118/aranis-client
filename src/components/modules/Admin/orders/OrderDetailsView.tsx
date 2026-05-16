@@ -328,18 +328,21 @@ const OrderDetailsView = ({ order }: { order: IOrder }) => {
                             <div className="flex items-center gap-4">
                               <div className="bg-muted border-border/50 relative h-12 w-12 shrink-0 overflow-hidden rounded-lg border">
                                 <Image
-                                  src={product.thumbnails?.[0]}
-                                  alt={product.name}
+                                  src={
+                                    product?.thumbnails?.[0] ||
+                                    '/placeholder.jpg'
+                                  }
+                                  alt={product?.name || 'Product Deleted'}
                                   fill
                                   className="object-cover transition-transform duration-500 group-hover:scale-110"
                                 />
                               </div>
                               <div className="min-w-0">
                                 <p className="text-foreground truncate text-sm font-bold">
-                                  {product.name}
+                                  {product?.name || 'Product Deleted'}
                                 </p>
                                 <p className="text-muted-foreground text-[10px] tracking-widest uppercase">
-                                  {product.category}
+                                  {product?.category || 'N/A'}
                                 </p>
                               </div>
                             </div>
@@ -508,8 +511,8 @@ const OrderDetailsView = ({ order }: { order: IOrder }) => {
                     <td className="py-6">
                       <div className="relative h-12 w-12 overflow-hidden rounded border border-gray-100">
                         <Image
-                          src={product.thumbnails?.[0]}
-                          alt={product.name}
+                          src={product?.thumbnails?.[0] || '/placeholder.jpg'}
+                          alt={product?.name || 'Product Deleted'}
                           fill
                           className="object-cover"
                         />
@@ -517,10 +520,10 @@ const OrderDetailsView = ({ order }: { order: IOrder }) => {
                     </td>
                     <td className="py-6">
                       <div className="font-black text-gray-800">
-                        {product.name}
+                        {product?.name || 'Product Deleted'}
                       </div>
                       <div className="text-[10px] tracking-widest text-gray-400 uppercase">
-                        {product.category}
+                        {product?.category || 'N/A'}
                       </div>
                     </td>
                     <td className="py-6 text-center text-sm">

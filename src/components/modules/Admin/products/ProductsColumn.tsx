@@ -124,7 +124,7 @@ const ProductsColumn: Column<IProduct>[] = [
       >
         <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-md border border-white/10">
           <Image
-            src={(p.thumbnails?.[0] as string) || '/placeholder.png'}
+            src={(p.thumbnails?.[0] as string) || '/placeholder.jpg'}
             alt={p.name}
             fill
             className="object-cover"
@@ -138,6 +138,7 @@ const ProductsColumn: Column<IProduct>[] = [
         </div>
       </Link>
     ),
+    sortKey: 'name',
   },
   {
     header: 'Price',
@@ -151,10 +152,12 @@ const ProductsColumn: Column<IProduct>[] = [
         )}
       </div>
     ),
+    sortKey: 'price',
   },
   {
     header: 'Stock',
     accessor: (p) => <StockBadge product={p} />,
+    sortKey: 'stock',
   },
   {
     header: 'Sold',
@@ -163,6 +166,7 @@ const ProductsColumn: Column<IProduct>[] = [
         {p.soldCount ?? 0}
       </span>
     ),
+    sortKey: 'soldCount',
   },
   {
     header: 'Featured',
@@ -174,6 +178,7 @@ const ProductsColumn: Column<IProduct>[] = [
       ) : (
         <span className="text-muted-foreground text-xs">No</span>
       ),
+    sortKey: 'featured',
   },
   {
     header: 'Actions',

@@ -10,7 +10,7 @@ import UserActions from './user-actions';
 const UsersColumn: Column<IUser>[] = [
   {
     header: 'SI',
-    accessor: (_, i) => i + 1,
+    accessor: (_, __, globalIndex) => globalIndex,
   },
   {
     header: 'Photo',
@@ -27,14 +27,17 @@ const UsersColumn: Column<IUser>[] = [
   {
     header: 'Name',
     accessor: (u) => u.fullName,
+    sortKey: 'fullName',
   },
   {
     header: 'Email',
     accessor: (u) => u.email,
+    sortKey: 'email',
   },
   {
     header: 'Role',
     accessor: (u) => u.role,
+    sortKey: 'role',
   },
   {
     header: 'Verify',
@@ -46,10 +49,12 @@ const UsersColumn: Column<IUser>[] = [
       ) : (
         <Badge variant="secondary">Unverified</Badge>
       ),
+    sortKey: 'isVerified',
   },
   {
     header: 'User Join Date & Time',
     accessor: (u) => <DateFormat date={u.createdAt} />,
+    sortKey: 'createdAt',
   },
   {
     header: 'Actions',

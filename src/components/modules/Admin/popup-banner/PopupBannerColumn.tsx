@@ -6,10 +6,12 @@ import { IPopupBanner } from '@/services/popup-banner/popup-banner';
 import Image from 'next/image';
 import PopupBannerActions from './PopupBannerActions';
 
-const PopupBannerColumn: Column<IPopupBanner>[] = [
+export const getPopupBannerColumns = (
+  onEdit: (banner: IPopupBanner) => void,
+): Column<IPopupBanner>[] => [
   {
     header: 'SI',
-    accessor: (_, i) => i + 1,
+    accessor: (_, __, globalIndex) => globalIndex,
   },
   {
     header: 'Image',
@@ -30,12 +32,14 @@ const PopupBannerColumn: Column<IPopupBanner>[] = [
     accessor: (b) => (
       <span className="text-sm font-semibold">{b.title || '—'}</span>
     ),
+    sortKey: 'title',
   },
   {
     header: 'Link',
     accessor: (b) => (
       <span className="text-muted-foreground text-xs">{b.link || '—'}</span>
     ),
+    sortKey: 'link',
   },
   {
     header: 'Status',
@@ -44,11 +48,10 @@ const PopupBannerColumn: Column<IPopupBanner>[] = [
         {b.isActive ? 'Active' : 'Inactive'}
       </Badge>
     ),
+    sortKey: 'isActive',
   },
   {
     header: 'Actions',
-    accessor: (b) => <PopupBannerActions banner={b} />,
+    accessor: (b) => <PopupBannerActions banner={b} onEdit={onEdit} />,
   },
 ];
-
-export default PopupBannerColumn;
