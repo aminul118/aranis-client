@@ -4,7 +4,7 @@ import AppPagination from '@/components/common/pagination/AppPagination';
 import { TransitionContext } from '@/context/useTransition';
 import { cn } from '@/lib/utils';
 import { IMeta } from '@/types';
-import { ReactNode, useTransition } from 'react';
+import { ReactNode, useState, useTransition } from 'react';
 import CenterSpinner from '../loader/CenterSpinner';
 
 interface Props {
@@ -19,9 +19,12 @@ const ClientWrapper = ({
   loader = <CenterSpinner />,
 }: Props) => {
   const [isPending, startTransition] = useTransition();
+  const [pendingAction, setPendingAction] = useState<string | null>(null);
 
   return (
-    <TransitionContext.Provider value={{ isPending, startTransition }}>
+    <TransitionContext.Provider
+      value={{ isPending, startTransition, pendingAction, setPendingAction }}
+    >
       <section className="relative">
         {/* Content */}
         <div className="relative">

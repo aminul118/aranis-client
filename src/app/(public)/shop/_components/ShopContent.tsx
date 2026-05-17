@@ -31,6 +31,7 @@ const ShopContent = ({ initialFilters }: ShopContentProps) => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [isPending, startTransition] = useReactTransition();
+  const [pendingAction, setPendingAction] = useState<string | null>(null);
   const [allProducts, setAllProducts] = useState<IProduct[]>([]);
   const [meta, setMeta] = useState<IMeta | null>(null);
   const [loading, setLoading] = useState(true);
@@ -188,7 +189,9 @@ const ShopContent = ({ initialFilters }: ShopContentProps) => {
   };
 
   return (
-    <TransitionContext.Provider value={{ startTransition, isPending }}>
+    <TransitionContext.Provider
+      value={{ startTransition, isPending, pendingAction, setPendingAction }}
+    >
       <div
         className={cn(
           'bg-background mt-8 min-h-screen transition-opacity',
