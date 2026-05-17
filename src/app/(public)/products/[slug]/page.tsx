@@ -10,6 +10,15 @@ interface Props {
   params: Promise<{ slug: string }>;
 }
 
+export async function generateStaticParams() {
+  const { data: products } = await getProducts({ limit: '1000' });
+  return (
+    products?.map((product) => ({
+      slug: product.slug,
+    })) || []
+  );
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const { data: product } = await getSingleProduct(slug);

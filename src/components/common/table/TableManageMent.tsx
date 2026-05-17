@@ -147,7 +147,7 @@ function TableManageMent<T>(props: TableManageMentProps<T>) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="bg-background/40 pointer-events-none absolute inset-0 z-50 flex items-center justify-center backdrop-blur-xs"
+              className="pointer-events-none absolute top-[48px] right-0 bottom-0 left-0 z-50 flex items-center justify-center bg-black/10 backdrop-blur-sm dark:bg-black/40"
             >
               <TableLoader
                 text={isRefreshing ? 'Refreshing' : pendingAction || 'Syncing'}
@@ -159,9 +159,7 @@ function TableManageMent<T>(props: TableManageMentProps<T>) {
         <Table
           className={cn(
             'transition-all duration-500 ease-in-out',
-            isLoading
-              ? 'pointer-events-none opacity-40 grayscale-[0.2]'
-              : 'opacity-100 grayscale-0',
+            isLoading && 'pointer-events-none',
           )}
         >
           {/* ... rest of the table ... */}

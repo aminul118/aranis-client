@@ -2,16 +2,10 @@ import generateMetaTags from '@/seo/generateMetaTags';
 import { getNavbars } from '@/services/navbar/navbar';
 import { getSiteSettings } from '@/services/settings/settings';
 import { Metadata } from 'next';
-import { Suspense } from 'react';
-import ShopContent from './_components/ShopContent';
-import ShopSkeleton from './_components/ShopSkeleton';
 
+import ShopContent from './_components/ShopContent';
 const ShopPage = () => {
-  return (
-    <Suspense fallback={<ShopSkeleton />}>
-      <ShopContent />
-    </Suspense>
-  );
+  return <ShopContent />;
 };
 
 export default ShopPage;

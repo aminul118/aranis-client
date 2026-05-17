@@ -2,10 +2,6 @@
 
 import { revalidateTag } from 'next/cache';
 
-const revalidate = async (tag: string) => {
-  revalidateTag(tag, {
-    expire: 0,
-  } as any);
-};
-
-export { revalidate };
+export async function revalidate(tag: string) {
+  revalidateTag(tag, { expire: 0 } as any);
+}

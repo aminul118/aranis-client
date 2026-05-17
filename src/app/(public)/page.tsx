@@ -2,7 +2,6 @@ import BestSellingProducts from '@/components/modules/Public/Home/BestSellingPro
 import FeaturedProducts from '@/components/modules/Public/Home/FeaturedProducts';
 import HeroBanner from '@/components/modules/Public/Home/HeroBanner';
 import HomeSEOContent from '@/components/modules/Public/Home/HomeSEOContent';
-import { ProductGridSkeleton } from '@/components/modules/Public/Home/HomeSkeletons';
 import NewArrivals from '@/components/modules/Public/Home/NewArrivals';
 import generateMetaTags from '@/seo/generateMetaTags';
 import {
@@ -11,7 +10,6 @@ import {
 } from '@/services/hero-banner/hero-banner';
 import { getSiteSettings } from '@/services/settings/settings';
 import { Metadata } from 'next';
-import { Suspense } from 'react';
 
 const HomePage = async () => {
   const [heroBannersRes, miniBannersRes] = await Promise.all([
@@ -25,22 +23,9 @@ const HomePage = async () => {
         mainSlides={heroBannersRes?.data}
         miniBanners={miniBannersRes?.data}
       />
-      <Suspense fallback={<ProductGridSkeleton title="New Arrivals" />}>
-        <NewArrivals />
-      </Suspense>
-      <Suspense fallback={<ProductGridSkeleton title="Most Wanted Items" />}>
-        <BestSellingProducts />
-      </Suspense>
-      <Suspense
-        fallback={
-          <ProductGridSkeleton
-            title="Featured Excellence"
-            subtitle="Our hand-picked selections for this season"
-          />
-        }
-      >
-        <FeaturedProducts />
-      </Suspense>
+      <NewArrivals />
+      <BestSellingProducts />
+      <FeaturedProducts />
       <HomeSEOContent />
     </>
   );
