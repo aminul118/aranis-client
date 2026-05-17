@@ -5,7 +5,6 @@ import {
   ImageIcon,
   Layers,
   LayoutDashboard,
-  Lock,
   MapPin,
   Megaphone,
   Menu as MenuIcon,
@@ -15,7 +14,6 @@ import {
   Ruler,
   ShoppingCart,
   TicketPercent,
-  User,
   Users,
 } from 'lucide-react';
 
@@ -23,9 +21,14 @@ const adminSidebarMenu: MenuGroup[] = [
   {
     title: 'Dashboard',
     roles: ['SUPER_ADMIN', 'ADMIN'] as UserRole[],
+    menu: [{ name: 'Overview', url: '/admin', icon: LayoutDashboard }],
+  },
+  {
+    title: 'System',
+    roles: ['SUPER_ADMIN', 'ADMIN'] as UserRole[],
     menu: [
-      { name: 'Overview', url: '/admin', icon: LayoutDashboard },
-      { name: 'Website', url: '/', icon: Globe },
+      { name: 'Support Center', url: '/admin/chat', icon: MessageCircle },
+      { name: 'User Management', url: '/admin/users', icon: Users },
     ],
   },
   {
@@ -56,23 +59,6 @@ const adminSidebarMenu: MenuGroup[] = [
       { name: 'Mini Banners', url: '/admin/mini-banners', icon: ImageIcon },
       { name: 'Popup Banner', url: '/admin/popup-banners', icon: Megaphone },
       { name: 'Size Guides', url: '/admin/size-guides', icon: Ruler },
-    ],
-  },
-  {
-    title: 'System',
-    roles: ['SUPER_ADMIN', 'ADMIN'] as UserRole[],
-    menu: [
-      { name: 'Support Center', url: '/admin/chat', icon: MessageCircle },
-      { name: 'User Management', url: '/admin/users', icon: Users },
-    ],
-  },
-  {
-    title: 'Account',
-    roles: ['SUPER_ADMIN', 'ADMIN'] as UserRole[],
-    menu: [
-      { name: 'My Profile', url: '/admin/settings/profile', icon: User },
-      { name: 'Password', url: '/admin/settings/password', icon: Lock },
-      { name: 'Appearance', url: '/admin/settings/appearance', icon: Palette },
     ],
   },
 ];
