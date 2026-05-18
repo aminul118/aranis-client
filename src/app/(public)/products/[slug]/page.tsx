@@ -70,7 +70,7 @@ const ProductPage = async ({ params }: Props) => {
       .slice(0, 10) || [];
 
   return (
-    <div className="bg-background min-h-screen pt-28 pb-16">
+    <div className="bg-background min-h-screen pt-8 pb-16">
       <div className="container mx-auto px-4 md:px-6">
         <Link
           href="/shop"

@@ -1,25 +1,102 @@
 'use client';
 
+import { playNotificationSound } from '@/helpers/audio';
 import { useSocket } from '@/hooks/useSocket';
 import { cn } from '@/lib/utils';
 import {
   clearAll,
+  deleteOneNotification,
   getMyNotifications,
   INotification,
   markAllAsRead,
   markAsRead,
 } from '@/services/notification/notification';
-import { Bell } from 'lucide-react';
+import {
+  Bell,
+  CheckCircle,
+  CreditCard,
+  Heart,
+  MessageSquare,
+  Package,
+  RefreshCw,
+  Trash2,
+} from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 interface Props {
   user: any;
 }
 
+const getNotificationConfig = (type: string) => {
+  switch (type) {
+    case 'Order':
+      return {
+        icon: Package,
+        colorClass:
+          'bg-blue-500/10 text-blue-500 border-blue-500/20 dark:bg-blue-500/20',
+        label: 'Order',
+      };
+    case 'Chat':
+      return {
+        icon: MessageSquare,
+        colorClass:
+          'bg-emerald-500/10 text-emerald-500 border-emerald-500/20 dark:bg-emerald-500/20',
+        label: 'Chat',
+      };
+    case 'Payment':
+      return {
+        icon: CreditCard,
+        colorClass:
+          'bg-amber-500/10 text-amber-500 border-amber-500/20 dark:bg-amber-500/20',
+        label: 'Payment',
+      };
+    case 'Wishlist':
+      return {
+        icon: Heart,
+        colorClass:
+          'bg-pink-500/10 text-pink-500 border-pink-500/20 dark:bg-pink-500/20',
+        label: 'Wishlist',
+      };
+    case 'Restock':
+      return {
+        icon: RefreshCw,
+        colorClass:
+          'bg-purple-500/10 text-purple-500 border-purple-500/20 dark:bg-purple-500/20',
+        label: 'Restock',
+      };
+    default:
+      return {
+        icon: Bell,
+        colorClass:
+          'bg-zinc-500/10 text-zinc-500 border-zinc-500/20 dark:bg-zinc-500/20',
+        label: 'System',
+      };
+  }
+};
+
+const getRelativeTime = (dateString: string) => {
+  const now = new Date();
+  const past = new Date(dateString);
+  const diffMs = now.getTime() - past.getTime();
+  const diffSec = Math.floor(diffMs / 1000);
+  const diffMin = Math.floor(diffSec / 60);
+  const diffHour = Math.floor(diffMin / 60);
+  const diffDay = Math.floor(diffHour / 24);
+
+  if (diffSec < 10) return 'Just now';
+  if (diffSec < 60) return `${diffSec}s ago`;
+  if (diffMin < 60) return `${diffMin}m ago`;
+  if (diffHour < 24) return `${diffHour}h ago`;
+  if (diffDay === 1) return 'Yesterday';
+  return past.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+};
+
 const NotificationBell = ({ user }: Props) => {
   const [notifications, setNotifications] = useState<INotification[]>([]);
+  const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
 
   const fetchNotifications = useCallback(async () => {
     try {
@@ -39,8 +116,8 @@ const NotificationBell = ({ user }: Props) => {
 
   const handleSocketNotification = useCallback(
     (data: any) => {
-      // Refresh from server to get the official persistent notification ID and data
       fetchNotifications();
+      playNotificationSound(); // Play soft dual-tone chime instantly!
 
       toast.info(data.title || 'Notification', {
         description: data.message,
@@ -54,14 +131,18 @@ const NotificationBell = ({ user }: Props) => {
     handleSocketNotification,
     user?._id || user?.userId,
     'new-notification',
-    user?.role === 'ADMIN' ? ['admins'] : [],
+    user?.role === 'ADMIN' || user?.role === 'SUPER_ADMIN' ? ['admins'] : [],
   );
   useSocket(
     handleSocketNotification,
     user?._id || user?.userId,
     'newNotification',
   );
-  useSocket(handleSocketNotification, undefined, 'order-status-updated');
+  useSocket(
+    handleSocketNotification,
+    user?._id || user?.userId,
+    'order-status-updated',
+  );
 
   // Sync with chat status
   useSocket(
@@ -70,18 +151,16 @@ const NotificationBell = ({ user }: Props) => {
     },
     user?._id || user?.userId,
     'receive-message',
-    user?.role === 'ADMIN' ? ['admins'] : [],
+    user?.role === 'ADMIN' || user?.role === 'SUPER_ADMIN' ? ['admins'] : [],
   );
 
   useSocket(
-    (data) => {
-      // If messages in a conversation are marked seen, refresh our notification list
-      // to clear the related chat notifications
+    () => {
       fetchNotifications();
     },
     user?._id || user?.userId,
     'messages-marked-seen',
-    user?.role === 'ADMIN' ? ['admins'] : [],
+    user?.role === 'ADMIN' || user?.role === 'SUPER_ADMIN' ? ['admins'] : [],
   );
 
   const handleMarkAsRead = async (id: string) => {
@@ -94,15 +173,62 @@ const NotificationBell = ({ user }: Props) => {
   const handleMarkAllAsRead = async () => {
     await markAllAsRead();
     setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
+    toast.success('All notifications marked as read');
   };
 
   const handleClearAllInternal = async () => {
     await clearAll();
     setNotifications([]);
+    toast.success('All notifications cleared');
   };
 
-  const [isOpen, setIsOpen] = useState(false);
-  const router = useRouter();
+  const handleDeleteOne = async (e: React.MouseEvent, id: string) => {
+    e.stopPropagation();
+    await deleteOneNotification(id);
+    setNotifications((prev) => prev.filter((n) => n._id !== id));
+    toast.success('Notification removed');
+  };
+
+  const handleNotificationClick = async (notif: INotification) => {
+    if (!notif.isRead) {
+      await handleMarkAsRead(notif._id);
+    }
+
+    setIsOpen(false);
+
+    const role = user?.role;
+    const isChat = notif.type === 'Chat';
+    const isOrder = notif.type === 'Order';
+    const isRestock = notif.type === 'Restock';
+    const isWishlist = notif.type === 'Wishlist';
+
+    if (role === 'ADMIN' || role === 'SUPER_ADMIN') {
+      if (isChat) {
+        router.push(
+          `/admin/chat${notif.conversationId ? `?conversationId=${notif.conversationId}` : ''}`,
+        );
+      } else if (isOrder) {
+        router.push(`/admin/orders${notif.orderId ? `/${notif.orderId}` : ''}`);
+      } else if (isRestock) {
+        router.push('/admin/restock-requests');
+      } else if (isWishlist) {
+        router.push('/admin/products');
+      } else if (notif.link) {
+        router.push(notif.link);
+      }
+    } else {
+      // Regular User
+      if (isChat) {
+        router.push('/user/chat');
+      } else if (isOrder) {
+        router.push('/user/orders');
+      } else if (notif.link) {
+        router.push(notif.link);
+      } else {
+        router.push('/notifications');
+      }
+    }
+  };
 
   const handleBellClick = () => {
     if (window.innerWidth < 1024) {
@@ -152,31 +278,34 @@ const NotificationBell = ({ user }: Props) => {
       {/* Notifications Dropdown */}
       <div
         className={cn(
-          'bg-popover absolute top-full right-0 z-50 mt-2 w-80 origin-top-right rounded-xl border p-4 shadow-xl transition-all duration-300',
+          'bg-popover/95 border-border absolute top-full right-0 z-50 mt-3 w-96 origin-top-right rounded-2xl border p-4 shadow-xl backdrop-blur-xl transition-all duration-300',
           isOpen
             ? 'visible translate-y-0 opacity-100'
             : 'pointer-events-none invisible -translate-y-2 opacity-0',
         )}
       >
-        <div className="mb-2 flex items-center justify-between border-b pb-2">
+        <div className="mb-3 flex items-center justify-between border-b pb-3">
           <div className="flex items-center gap-2">
-            <h4 className="text-sm font-bold">Notifications</h4>
+            <h4 className="text-sm font-black tracking-tight uppercase">
+              Notifications
+            </h4>
             {unreadCount > 0 && (
-              <span className="rounded-full bg-red-500/10 px-1.5 py-0.5 text-[10px] font-bold text-red-600">
+              <span className="rounded-full bg-blue-500/10 px-2 py-0.5 text-[10px] font-black text-blue-600">
                 {unreadCount} New
               </span>
             )}
           </div>
-          <div className="flex gap-2">
+          <div className="flex items-center gap-3">
             {notifications.some((n) => !n.isRead) && (
               <button
                 onClick={(e) => {
                   e.stopPropagation();
                   handleMarkAllAsRead();
                 }}
-                className="text-primary text-[10px] hover:underline"
+                className="flex items-center gap-1 text-[10px] font-extrabold text-blue-600 uppercase hover:underline"
               >
-                Mark all read
+                <CheckCircle size={10} />
+                <span>Mark all read</span>
               </button>
             )}
             {notifications.length > 0 && (
@@ -185,51 +314,76 @@ const NotificationBell = ({ user }: Props) => {
                   e.stopPropagation();
                   handleClearAllInternal();
                 }}
-                className="text-muted-foreground hover:text-destructive text-[10px] hover:underline"
+                className="flex items-center gap-1 text-[10px] font-extrabold text-red-500 uppercase hover:underline"
               >
-                Clear all
+                <Trash2 size={10} />
+                <span>Clear all</span>
               </button>
             )}
           </div>
         </div>
-        <div className="scrollbar-hide max-h-80 space-y-3 overflow-y-auto">
+
+        <div className="scrollbar-hide max-h-80 space-y-2.5 overflow-y-auto">
           {notifications.length > 0 ? (
-            notifications.map((notif) => (
-              <div
-                key={notif._id}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  if (!notif.isRead) handleMarkAsRead(notif._id);
-                }}
-                className={cn(
-                  'flex cursor-pointer items-start gap-3 rounded-lg p-2 transition-colors',
-                  notif.isRead
-                    ? 'hover:bg-muted/30 opacity-60'
-                    : 'bg-primary/5 hover:bg-primary/10',
-                )}
-              >
-                {!notif.isRead && (
-                  <div className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-blue-500" />
-                )}
-                <div className={cn(!notif.isRead ? '' : 'ml-5')}>
-                  <p className="text-xs font-semibold">{notif.title}</p>
-                  <p className="text-muted-foreground text-[10px] leading-tight">
-                    {notif.message}
-                  </p>
-                  <p className="text-muted-foreground/60 mt-1 text-[9px] font-medium uppercase">
-                    {new Date(notif.createdAt).toLocaleTimeString([], {
-                      hour: '2-digit',
-                      minute: '2-digit',
-                    })}
-                  </p>
+            notifications.map((notif) => {
+              const config = getNotificationConfig(notif.type);
+              const IconComp = config.icon;
+
+              return (
+                <div
+                  key={notif._id}
+                  onClick={() => handleNotificationClick(notif)}
+                  className={cn(
+                    'group relative flex cursor-pointer items-start gap-3.5 rounded-xl border border-transparent p-3 transition-all',
+                    notif.isRead
+                      ? 'bg-muted/10 hover:bg-muted/20 opacity-60'
+                      : 'border-blue-500/10 bg-blue-600/[0.02] hover:bg-blue-600/[0.04]',
+                  )}
+                >
+                  <div
+                    className={cn(
+                      'flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-transparent transition-all group-hover:scale-105',
+                      config.colorClass,
+                    )}
+                  >
+                    <IconComp size={16} strokeWidth={2.5} />
+                  </div>
+
+                  <div className="flex-1 space-y-0.5">
+                    <div className="flex items-start justify-between gap-2">
+                      <p className="text-foreground text-xs leading-snug font-black tracking-tight">
+                        {notif.title}
+                      </p>
+                      <span className="text-muted-foreground/50 shrink-0 text-[9px] font-bold uppercase">
+                        {getRelativeTime(notif.createdAt)}
+                      </span>
+                    </div>
+                    <p className="text-muted-foreground line-clamp-2 text-[10px] leading-normal font-medium">
+                      {notif.message}
+                    </p>
+                  </div>
+
+                  {/* Inline Delete Button */}
+                  <button
+                    onClick={(e) => handleDeleteOne(e, notif._id)}
+                    className="text-muted-foreground/20 absolute top-3 right-3 flex h-6 w-6 items-center justify-center rounded-full opacity-0 transition-all group-hover:opacity-100 hover:bg-red-500/10 hover:text-red-500"
+                    title="Delete Notification"
+                  >
+                    <Trash2 size={12} />
+                  </button>
                 </div>
-              </div>
-            ))
+              );
+            })
           ) : (
-            <div className="flex flex-col items-center justify-center py-6 text-center">
-              <Bell className="text-muted-foreground/20 mb-2 h-8 w-8" />
-              <p className="text-muted-foreground text-xs">
+            <div className="flex flex-col items-center justify-center py-8 text-center">
+              <div className="bg-muted/30 mb-3 flex h-14 w-14 items-center justify-center rounded-2xl">
+                <Bell className="text-muted-foreground/30 h-6 w-6" />
+              </div>
+              <p className="text-muted-foreground text-xs font-bold">
                 No new notifications
+              </p>
+              <p className="text-muted-foreground/40 mt-0.5 text-[9px]">
+                We will notify you when something happens.
               </p>
             </div>
           )}

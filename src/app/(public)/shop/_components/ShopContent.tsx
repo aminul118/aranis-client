@@ -282,7 +282,7 @@ const ShopContent = ({
     >
       <div
         className={cn(
-          'bg-background mt-8 min-h-screen transition-opacity duration-300',
+          'bg-background min-h-screen transition-opacity duration-300',
           (isPending || loading) && 'pointer-events-none opacity-60',
         )}
       >

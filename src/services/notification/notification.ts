@@ -9,9 +9,11 @@ export interface INotification {
   user?: string;
   title: string;
   message: string;
-  type: 'Order' | 'System' | 'Payment' | 'Chat';
+  type: 'Order' | 'System' | 'Payment' | 'Chat' | 'Wishlist' | 'Restock';
   isRead: boolean;
   orderId?: string;
+  conversationId?: string;
+  link?: string;
   createdAt: string;
 }
 
@@ -19,6 +21,7 @@ const getMyNotifications = async () => {
   return await serverFetch.get<ApiResponse<INotification[]>>(
     '/notifications/my-notifications',
     {
+      cache: 'no-store',
       next: {
         tags: ['notification'],
       },
@@ -50,4 +53,24 @@ const clearAll = async () => {
   return res;
 };
 
-export { clearAll, getMyNotifications, markAllAsRead, markAsRead };
+const deleteOneNotification = async (id: string) => {
+  const res = await serverFetch.delete<ApiResponse<any>>(
+    '/notifications/bulk-delete',
+    {
+      body: JSON.stringify({ ids: [id] }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    },
+  );
+  revalidate('notification');
+  return res;
+};
+
+export {
+  clearAll,
+  deleteOneNotification,
+  getMyNotifications,
+  markAllAsRead,
+  markAsRead,
+};
