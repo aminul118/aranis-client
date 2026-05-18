@@ -68,14 +68,15 @@ const AppPagination = ({ meta, className }: IPaginationProps) => {
   const paginationItems = getPaginationItems();
 
   return (
-    <Pagination className={cn('py-6 md:py-8 lg:py-12', className)}>
-      <PaginationContent>
+    <Pagination className={cn('py-4', className)}>
+      <PaginationContent className="gap-2">
         {/* Previous */}
         <PaginationItem>
           <PaginationPrevious
             className={cn(
               (page <= 1 || isPending) && 'pointer-events-none opacity-50',
-              'cursor-pointer',
+              'h-10 cursor-pointer rounded-full border-none px-4 font-bold transition-all duration-300',
+              'bg-black/[0.03] text-zinc-700 hover:bg-black/[0.06] hover:text-zinc-900 dark:bg-white/[0.04] dark:text-zinc-300 dark:hover:bg-white/[0.07] dark:hover:text-white',
             )}
             onClick={() => page > 1 && handlePageChange(page - 1)}
             aria-disabled={page <= 1 || isPending}
@@ -93,7 +94,10 @@ const AppPagination = ({ meta, className }: IPaginationProps) => {
                 onClick={() => handlePageChange(item as number)}
                 className={cn(
                   isPending && 'pointer-events-none',
-                  'cursor-pointer',
+                  'flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border-none! font-bold transition-all duration-300',
+                  item === page
+                    ? 'bg-zinc-900 font-extrabold text-white shadow-md hover:bg-zinc-800 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-100'
+                    : 'bg-transparent text-zinc-500 hover:bg-black/5 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-white/5 dark:hover:text-white',
                 )}
               >
                 {item}
@@ -108,7 +112,8 @@ const AppPagination = ({ meta, className }: IPaginationProps) => {
             className={cn(
               (page >= totalPage || isPending) &&
                 'pointer-events-none opacity-50',
-              'cursor-pointer',
+              'h-10 cursor-pointer rounded-full border-none px-4 font-bold transition-all duration-300',
+              'bg-black/[0.03] text-zinc-700 hover:bg-black/[0.06] hover:text-zinc-900 dark:bg-white/[0.04] dark:text-zinc-300 dark:hover:bg-white/[0.07] dark:hover:text-white',
             )}
             onClick={() => page < totalPage && handlePageChange(page + 1)}
             aria-disabled={page >= totalPage || isPending}

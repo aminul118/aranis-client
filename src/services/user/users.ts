@@ -6,6 +6,7 @@ import { ApiResponse, IUser } from '@/types';
 
 const getMe = async () => {
   return await serverFetch.get<ApiResponse<IUser>>('/user/me', {
+    cache: 'no-store',
     next: {
       tags: ['ME'],
     },

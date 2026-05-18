@@ -65,15 +65,15 @@ const ShopHeader = ({
       <div className="flex w-full flex-col gap-3 sm:flex-row lg:w-auto lg:items-center">
         <div className="flex flex-1 items-center gap-2 sm:flex-none">
           {/* View Toggles */}
-          <div className="flex h-11 items-center gap-1 rounded-2xl bg-[#151722] p-1.5 shadow-2xl">
+          <div className="flex h-12 items-center gap-1 rounded-full border border-black/10 bg-white/70 p-1 shadow-sm backdrop-blur-xl transition-all dark:border-white/10 dark:bg-white/[0.03] dark:shadow-2xl">
             <Button
               variant="ghost"
               size="sm"
               className={cn(
-                'h-full w-10 rounded-xl p-0 transition-all duration-300',
+                'h-10 w-10 rounded-full p-0 transition-all duration-300',
                 viewMode === 'grid'
-                  ? 'bg-[#0a0b10] text-white shadow-xl'
-                  : 'text-gray-400 hover:bg-white/5 hover:text-white',
+                  ? 'text-primary border border-black/5 bg-white font-bold shadow-md dark:border-white/10 dark:bg-white/10 dark:text-white'
+                  : 'text-zinc-500 hover:bg-black/5 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-white/5 dark:hover:text-white',
               )}
               onClick={() => onUpdateURL({ view: 'grid' })}
             >
@@ -83,10 +83,10 @@ const ShopHeader = ({
               variant="ghost"
               size="sm"
               className={cn(
-                'h-full w-10 rounded-xl p-0 transition-all duration-300',
+                'h-10 w-10 rounded-full p-0 transition-all duration-300',
                 viewMode === 'list'
-                  ? 'bg-[#0a0b10] text-white shadow-xl'
-                  : 'text-gray-400 hover:bg-white/5 hover:text-white',
+                  ? 'text-primary border border-black/5 bg-white font-bold shadow-md dark:border-white/10 dark:bg-white/10 dark:text-white'
+                  : 'text-zinc-500 hover:bg-black/5 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-white/5 dark:hover:text-white',
               )}
               onClick={() => onUpdateURL({ view: 'list' })}
             >
@@ -94,39 +94,9 @@ const ShopHeader = ({
             </Button>
           </div>
 
-          <div className="hidden sm:block">
-            <Select
-              value={selectedCategory}
-              onValueChange={(value) => {
-                onUpdateURL({ category: value, subCategory: '', type: '' });
-              }}
-            >
-              <SelectTrigger className="h-11 w-auto min-w-[180px] rounded-2xl border-none bg-[#151722] px-6 font-bold text-white shadow-2xl ring-offset-0 focus:ring-0">
-                <SelectValue placeholder="Category" />
-              </SelectTrigger>
-              <SelectContent className="shadow-3xl rounded-2xl border-white/5 bg-[#151722] text-white">
-                <SelectItem
-                  value="All"
-                  className="font-bold focus:bg-white/10 focus:text-white"
-                >
-                  All Categories
-                </SelectItem>
-                {dbCategories.map((cat) => (
-                  <SelectItem
-                    key={cat._id}
-                    value={cat.name}
-                    className="font-bold focus:bg-white/10 focus:text-white"
-                  >
-                    {cat.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
           <Sheet open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>
             <SheetTrigger asChild>
-              <Button className="h-11 flex-1 items-center gap-3 rounded-2xl bg-[#151722] px-6 font-bold text-white hover:bg-[#1a1c2e] sm:flex-none lg:hidden">
+              <Button className="h-12 flex-1 items-center gap-3 rounded-full bg-zinc-900 font-bold text-white shadow-md transition-all hover:bg-zinc-800 sm:flex-none lg:hidden dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-100">
                 <SlidersHorizontal size={16} />
                 Filters
               </Button>
@@ -158,25 +128,25 @@ const ShopHeader = ({
             value={sortBy}
             onValueChange={(value) => onUpdateURL({ sort: value })}
           >
-            <SelectTrigger className="h-11 flex-1 rounded-2xl border-none bg-[#151722] px-6 font-bold text-white shadow-2xl ring-offset-0 focus:ring-0 sm:w-[200px] sm:flex-none">
+            <SelectTrigger className="h-12 flex-1 rounded-full border border-black/10 bg-white/70 px-6 font-bold text-zinc-800 shadow-sm ring-offset-0 transition-all hover:bg-white focus:ring-0 sm:w-[200px] sm:flex-none dark:border-white/10 dark:bg-white/[0.03] dark:text-white dark:shadow-2xl dark:hover:bg-white/[0.05]">
               <SelectValue placeholder="Sort by" />
             </SelectTrigger>
-            <SelectContent className="shadow-3xl rounded-2xl border-white/5 bg-[#151722] text-white">
+            <SelectContent className="shadow-3xl rounded-[20px] border-black/10 bg-white text-zinc-800 backdrop-blur-xl dark:border-white/10 dark:bg-[#151722] dark:text-white">
               <SelectItem
                 value="Newest"
-                className="font-bold focus:bg-white/10 focus:text-white"
+                className="font-bold focus:bg-black/5 focus:text-zinc-900 dark:focus:bg-white/10 dark:focus:text-white"
               >
                 Newest First
               </SelectItem>
               <SelectItem
                 value="price"
-                className="font-bold focus:bg-white/10 focus:text-white"
+                className="font-bold focus:bg-black/5 focus:text-zinc-900 dark:focus:bg-white/10 dark:focus:text-white"
               >
                 Price: Low-High
               </SelectItem>
               <SelectItem
                 value="-price"
-                className="font-bold focus:bg-white/10 focus:text-white"
+                className="font-bold focus:bg-black/5 focus:text-zinc-900 dark:focus:bg-white/10 dark:focus:text-white"
               >
                 Price: High-Low
               </SelectItem>

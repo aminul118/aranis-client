@@ -88,7 +88,12 @@ const Navbar = ({
     >
       <TopBar siteSettings={siteSettings} />
       <div className="hidden lg:block">
-        <MainNavbar user={user} logo={logo} />
+        <MainNavbar
+          user={user}
+          logo={logo}
+          totalItems={totalItems}
+          wishlistCount={wishlistCount}
+        />
         <Suspense
           fallback={<div className="h-14 w-full bg-white dark:bg-[#0a0a0a]" />}
         >

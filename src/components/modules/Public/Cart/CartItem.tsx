@@ -7,11 +7,34 @@ import Image from 'next/image';
 
 interface CartItemProps {
   item: ICartItem;
-  onUpdateQuantity: (id: string, quantity: number) => void;
-  onRemove: (id: string) => void;
+  onUpdateQuantity: (
+    id: string,
+    quantity: number,
+    selectedColor?: string,
+    selectedSize?: string,
+  ) => void;
+  onRemove: (id: string, selectedColor?: string, selectedSize?: string) => void;
+  onUpdateSize?: (
+    id: string,
+    newSize: string,
+    selectedColor?: string,
+    oldSize?: string,
+  ) => void;
+  onUpdateColor?: (
+    id: string,
+    newColor: string,
+    selectedSize?: string,
+    oldColor?: string,
+  ) => void;
 }
 
-const CartItem = ({ item, onUpdateQuantity, onRemove }: CartItemProps) => {
+const CartItem = ({
+  item,
+  onUpdateQuantity,
+  onRemove,
+  onUpdateSize,
+  onUpdateColor,
+}: CartItemProps) => {
   const imageSrc =
     item.thumbnails?.[0] &&
     typeof item.thumbnails[0] === 'string' &&
@@ -19,6 +42,14 @@ const CartItem = ({ item, onUpdateQuantity, onRemove }: CartItemProps) => {
     item.thumbnails[0] !== ''
       ? item.thumbnails[0]
       : 'https://placehold.co/600x800?text=No+Image';
+
+  const availableColors = Array.from(
+    new Set(
+      [item.color, ...(item.variants?.map((v) => v.color) || [])].filter(
+        Boolean,
+      ),
+    ),
+  );
 
   return (
     <motion.div
@@ -49,23 +80,100 @@ const CartItem = ({ item, onUpdateQuantity, onRemove }: CartItemProps) => {
             <h3 className="text-foreground text-xl font-black tracking-tight transition-colors group-hover:text-blue-600">
               {item.name}
             </h3>
-            <div className="flex items-center gap-2">
-              <span className="text-muted-foreground/60 text-xs font-bold tracking-widest uppercase">
-                {item.category}
-              </span>
-              {(item.selectedColor || item.selectedSize) && (
-                <div className="flex gap-2">
-                  <span className="bg-border h-4 w-px" />
-                  <span className="text-muted-foreground/80 text-[10px] font-bold">
-                    {item.selectedSize}{' '}
-                    {item.selectedColor && `• ${item.selectedColor}`}
+            <div className="mt-2 flex flex-wrap items-center gap-3">
+              {item.sizes && item.sizes.length > 0 ? (
+                <div className="flex items-center gap-1.5">
+                  <span className="text-muted-foreground/50 text-[10px] font-black tracking-wider uppercase">
+                    Size:
                   </span>
+                  <select
+                    value={item.selectedSize || ''}
+                    onChange={(e) =>
+                      onUpdateSize &&
+                      onUpdateSize(
+                        item._id as string,
+                        e.target.value,
+                        item.selectedColor,
+                        item.selectedSize,
+                      )
+                    }
+                    className="cursor-pointer rounded-lg border border-black/5 bg-black/[0.03] px-2 py-1 text-xs font-black text-zinc-800 transition-all hover:bg-black/[0.05] focus:outline-none dark:border-white/10 dark:bg-white/[0.04] dark:text-zinc-200 dark:hover:bg-white/[0.08]"
+                  >
+                    {item.sizes.map((size) => (
+                      <option
+                        key={size}
+                        value={size}
+                        className="bg-background text-foreground font-medium"
+                      >
+                        {size}
+                      </option>
+                    ))}
+                  </select>
                 </div>
+              ) : (
+                item.selectedSize && (
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-muted-foreground/50 text-[10px] font-black tracking-wider uppercase">
+                      Size:
+                    </span>
+                    <span className="rounded-lg border border-black/5 bg-black/[0.03] px-2.5 py-1 text-xs font-bold text-zinc-700 dark:border-white/10 dark:bg-white/[0.04] dark:text-zinc-300">
+                      {item.selectedSize}
+                    </span>
+                  </div>
+                )
+              )}
+
+              {availableColors.length > 1 ? (
+                <div className="flex items-center gap-1.5">
+                  <span className="text-muted-foreground/50 text-[10px] font-black tracking-wider uppercase">
+                    Color:
+                  </span>
+                  <select
+                    value={item.selectedColor || ''}
+                    onChange={(e) =>
+                      onUpdateColor &&
+                      onUpdateColor(
+                        item._id as string,
+                        e.target.value,
+                        item.selectedSize,
+                        item.selectedColor,
+                      )
+                    }
+                    className="cursor-pointer rounded-lg border border-black/5 bg-black/[0.03] px-2 py-1 text-xs font-black text-zinc-800 transition-all hover:bg-black/[0.05] focus:outline-none dark:border-white/10 dark:bg-white/[0.04] dark:text-zinc-200 dark:hover:bg-white/[0.08]"
+                  >
+                    {availableColors.map((color) => (
+                      <option
+                        key={color}
+                        value={color}
+                        className="bg-background text-foreground font-medium"
+                      >
+                        {color}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              ) : (
+                item.selectedColor && (
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-muted-foreground/50 text-[10px] font-black tracking-wider uppercase">
+                      Color:
+                    </span>
+                    <span className="rounded-lg border border-black/5 bg-black/[0.03] px-2.5 py-1 text-xs font-bold text-zinc-700 dark:border-white/10 dark:bg-white/[0.04] dark:text-zinc-300">
+                      {item.selectedColor}
+                    </span>
+                  </div>
+                )
               )}
             </div>
           </div>
           <button
-            onClick={() => onRemove(item._id as string)}
+            onClick={() =>
+              onRemove(
+                item._id as string,
+                item.selectedColor,
+                item.selectedSize,
+              )
+            }
             className="text-muted-foreground/30 flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-all hover:bg-red-500/10 hover:text-red-500 active:scale-90"
           >
             <Trash2 size={18} />
@@ -77,7 +185,12 @@ const CartItem = ({ item, onUpdateQuantity, onRemove }: CartItemProps) => {
           <div className="bg-muted/30 border-border flex items-center gap-4 rounded-full border p-1 backdrop-blur-sm">
             <button
               onClick={() =>
-                onUpdateQuantity(item._id as string, item.quantity - 1)
+                onUpdateQuantity(
+                  item._id as string,
+                  item.quantity - 1,
+                  item.selectedColor,
+                  item.selectedSize,
+                )
               }
               disabled={item.quantity <= 1}
               className="text-muted-foreground hover:bg-background hover:text-foreground flex h-8 w-8 items-center justify-center rounded-full shadow-xs transition-all disabled:opacity-30"
@@ -89,7 +202,12 @@ const CartItem = ({ item, onUpdateQuantity, onRemove }: CartItemProps) => {
             </span>
             <button
               onClick={() =>
-                onUpdateQuantity(item._id as string, item.quantity + 1)
+                onUpdateQuantity(
+                  item._id as string,
+                  item.quantity + 1,
+                  item.selectedColor,
+                  item.selectedSize,
+                )
               }
               className="text-muted-foreground hover:bg-background hover:text-foreground flex h-8 w-8 items-center justify-center rounded-full shadow-xs transition-all"
             >

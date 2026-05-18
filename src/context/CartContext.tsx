@@ -22,6 +22,18 @@ interface CartContextType {
     selectedColor?: string,
     selectedSize?: string,
   ) => void;
+  updateSize: (
+    id: string,
+    newSize: string,
+    selectedColor?: string,
+    oldSize?: string,
+  ) => void;
+  updateColor: (
+    id: string,
+    newColor: string,
+    selectedSize?: string,
+    oldColor?: string,
+  ) => void;
   clearCart: () => void;
   totalItems: number;
   subtotal: number;
@@ -117,6 +129,126 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
     );
   };
 
+  const updateSize = (
+    id: string,
+    newSize: string,
+    selectedColor?: string,
+    oldSize?: string,
+  ) => {
+    setCart((prevCart) => {
+      const targetItem = prevCart.find(
+        (item) =>
+          item._id === id &&
+          item.selectedColor === selectedColor &&
+          item.selectedSize === oldSize,
+      );
+      if (!targetItem) return prevCart;
+
+      const existingItemWithNewSize = prevCart.find(
+        (item) =>
+          item._id === id &&
+          item.selectedColor === selectedColor &&
+          item.selectedSize === newSize,
+      );
+
+      if (existingItemWithNewSize) {
+        return prevCart
+          .map((item) =>
+            item._id === id &&
+            item.selectedColor === selectedColor &&
+            item.selectedSize === newSize
+              ? { ...item, quantity: item.quantity + targetItem.quantity }
+              : item,
+          )
+          .filter(
+            (item) =>
+              !(
+                item._id === id &&
+                item.selectedColor === selectedColor &&
+                item.selectedSize === oldSize
+              ),
+          );
+      } else {
+        return prevCart.map((item) =>
+          item._id === id &&
+          item.selectedColor === selectedColor &&
+          item.selectedSize === oldSize
+            ? { ...item, selectedSize: newSize }
+            : item,
+        );
+      }
+    });
+  };
+
+  const updateColor = (
+    id: string,
+    newColor: string,
+    selectedSize?: string,
+    oldColor?: string,
+  ) => {
+    setCart((prevCart) => {
+      const targetItem = prevCart.find(
+        (item) =>
+          item._id === id &&
+          item.selectedColor === oldColor &&
+          item.selectedSize === selectedSize,
+      );
+      if (!targetItem) return prevCart;
+
+      const existingItemWithNewColor = prevCart.find(
+        (item) =>
+          item._id === id &&
+          item.selectedColor === newColor &&
+          item.selectedSize === selectedSize,
+      );
+
+      let updatedThumbnails = targetItem.thumbnails;
+      if (newColor !== targetItem.color && targetItem.variants) {
+        const matchingVariant = targetItem.variants.find(
+          (v) => v.color === newColor,
+        );
+        if (
+          matchingVariant &&
+          matchingVariant.thumbnails &&
+          matchingVariant.thumbnails.length > 0
+        ) {
+          updatedThumbnails = matchingVariant.thumbnails;
+        }
+      }
+
+      if (existingItemWithNewColor) {
+        return prevCart
+          .map((item) =>
+            item._id === id &&
+            item.selectedColor === newColor &&
+            item.selectedSize === selectedSize
+              ? { ...item, quantity: item.quantity + targetItem.quantity }
+              : item,
+          )
+          .filter(
+            (item) =>
+              !(
+                item._id === id &&
+                item.selectedColor === oldColor &&
+                item.selectedSize === selectedSize
+              ),
+          );
+      } else {
+        return prevCart.map((item) =>
+          item._id === id &&
+          item.selectedColor === oldColor &&
+          item.selectedSize === selectedSize
+            ? {
+                ...item,
+                selectedColor: newColor,
+                thumbnails: updatedThumbnails,
+              }
+            : item,
+        );
+      }
+    });
+  };
+
   const clearCart = () => {
     setCart([]);
     setCouponCode(null);
@@ -151,6 +283,8 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
         addToCart,
         removeFromCart,
         updateQuantity,
+        updateSize,
+        updateColor,
         clearCart,
         totalItems,
         subtotal,

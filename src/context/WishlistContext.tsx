@@ -39,7 +39,10 @@ export const WishlistProvider: React.FC<{ children: React.ReactNode }> = ({
     try {
       const res = await getMyWishlist();
       if (res?.success) {
-        setWishlist(res.data || []);
+        const validItems = (res.data || []).filter(
+          (item) => item && item.product,
+        );
+        setWishlist(validItems);
       } else {
         setWishlist([]);
       }
@@ -48,18 +51,18 @@ export const WishlistProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-  // Sync Guest Wishlist to Server on Login
   const syncWishlist = async (localItems: IWishlistItem[]) => {
     try {
-      // First fetch current server wishlist to avoid toggling off existing items
       const res = await getMyWishlist();
       const serverItems = res?.data || [];
       const serverProductIds = new Set(
-        serverItems.map((item) => item.product._id),
+        serverItems
+          .filter((item) => item && item.product)
+          .map((item) => item.product._id),
       );
 
       for (const item of localItems) {
-        if (!serverProductIds.has(item.product._id)) {
+        if (item && item.product && !serverProductIds.has(item.product._id)) {
           await toggleWishlistService(item.product._id as string);
         }
       }
@@ -68,6 +71,9 @@ export const WishlistProvider: React.FC<{ children: React.ReactNode }> = ({
       toast.success('Your saved items have been synced!');
     } catch (error) {
       console.error('Failed to sync wishlist', error);
+      // Fall back: clean up storage and fetch to proceed safely
+      localStorage.removeItem(GUEST_WISHLIST_KEY);
+      await fetchWishlist();
     }
   };
 
@@ -75,10 +81,17 @@ export const WishlistProvider: React.FC<{ children: React.ReactNode }> = ({
     if (user) {
       const localData = localStorage.getItem(GUEST_WISHLIST_KEY);
       if (localData) {
-        const localItems = JSON.parse(localData);
-        if (localItems.length > 0) {
-          syncWishlist(localItems);
-        } else {
+        try {
+          const parsed = JSON.parse(localData);
+          const localItems = (Array.isArray(parsed) ? parsed : []).filter(
+            (item) => item && item.product,
+          );
+          if (localItems.length > 0) {
+            syncWishlist(localItems);
+          } else {
+            fetchWishlist();
+          }
+        } catch {
           fetchWishlist();
         }
       } else {
@@ -87,7 +100,15 @@ export const WishlistProvider: React.FC<{ children: React.ReactNode }> = ({
     } else {
       const localData = localStorage.getItem(GUEST_WISHLIST_KEY);
       if (localData) {
-        setWishlist(JSON.parse(localData));
+        try {
+          const parsed = JSON.parse(localData);
+          const validItems = (Array.isArray(parsed) ? parsed : []).filter(
+            (item) => item && item.product,
+          );
+          setWishlist(validItems);
+        } catch {
+          setWishlist([]);
+        }
       } else {
         setWishlist([]);
       }
@@ -96,6 +117,31 @@ export const WishlistProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const toggleWishlist = async (product: IProduct) => {
     if (user) {
+      // Optimistic Update: instantly add/remove from local state
+      const isExist = wishlist.some(
+        (item) => item?.product?._id === product._id,
+      );
+      const originalWishlist = [...wishlist];
+
+      let updatedWishlist: IWishlistItem[];
+      if (isExist) {
+        updatedWishlist = wishlist.filter(
+          (item) => item?.product?._id !== product._id,
+        );
+      } else {
+        const newItem: IWishlistItem = {
+          _id: `temp_${Date.now()}`,
+          user: user._id as string,
+          product,
+          quantity: 1,
+          createdAt: new Date().toISOString(),
+        };
+        updatedWishlist = [...wishlist, newItem];
+      }
+
+      // Set state immediately for zero-lag UI
+      setWishlist(updatedWishlist);
+
       try {
         const res = await toggleWishlistService(product._id as string);
         if (res.success) {
@@ -104,19 +150,25 @@ export const WishlistProvider: React.FC<{ children: React.ReactNode }> = ({
             res.data?.action === 'added' ? 'added to' : 'removed from';
           toast.success(`"${product.name}" ${action} wishlist`);
         } else {
+          // Rollback on server failure
+          setWishlist(originalWishlist);
           toast.error(res.message || 'Failed to update wishlist');
         }
       } catch (error) {
+        // Rollback on network failure
+        setWishlist(originalWishlist);
         toast.error('Something went wrong');
       }
     } else {
       // Guest Toggle
-      const isExist = wishlist.some((item) => item.product._id === product._id);
+      const isExist = wishlist.some(
+        (item) => item && item.product && item.product._id === product._id,
+      );
       let updatedWishlist: IWishlistItem[];
 
       if (isExist) {
         updatedWishlist = wishlist.filter(
-          (item) => item.product._id !== product._id,
+          (item) => item && item.product && item.product._id !== product._id,
         );
         toast.success(`"${product.name}" removed from wishlist`);
       } else {
@@ -184,11 +236,13 @@ export const WishlistProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const isInWishlist = (productId: string) => {
-    return wishlist.some((item) => item.product._id === productId);
+    return wishlist.some(
+      (item) => item && item.product && item.product._id === productId,
+    );
   };
 
-  // Calculate total count based on unique items
-  const wishlistCount = wishlist.length;
+  // Calculate total count based only on items with valid products
+  const wishlistCount = wishlist.filter((item) => item && item.product).length;
 
   return (
     <WishlistContext.Provider

@@ -9,8 +9,22 @@ import { usePathname } from 'next/navigation';
 
 const MobileBottomNav = () => {
   const pathname = usePathname();
-  const { totalItems } = useCart();
-  const { wishlistCount } = useWishlist();
+
+  let totalItems = 0;
+  try {
+    const cart = useCart();
+    totalItems = cart?.totalItems || 0;
+  } catch (error) {
+    // Safe fallback
+  }
+
+  let wishlistCount = 0;
+  try {
+    const wishlist = useWishlist();
+    wishlistCount = wishlist?.wishlistCount || 0;
+  } catch (error) {
+    // Safe fallback
+  }
 
   const navItems = [
     {

@@ -14,11 +14,37 @@ import NavSearch from './NavSearch';
 interface MainNavbarProps {
   user?: IUser | null;
   logo?: React.ReactNode;
+  totalItems?: number;
+  wishlistCount?: number;
 }
 
-const MainNavbar = ({ user, logo }: MainNavbarProps) => {
-  const { totalItems } = useCart();
-  const { wishlistCount } = useWishlist();
+const MainNavbar = ({
+  user,
+  logo,
+  totalItems: propTotalItems,
+  wishlistCount: propWishlistCount,
+}: MainNavbarProps) => {
+  let contextTotalItems = 0;
+  try {
+    const cart = useCart();
+    contextTotalItems = cart?.totalItems || 0;
+  } catch (error) {
+    // Safe fallback
+  }
+
+  let contextWishlistCount = 0;
+  try {
+    const wishlist = useWishlist();
+    contextWishlistCount = wishlist?.wishlistCount || 0;
+  } catch (error) {
+    // Safe fallback
+  }
+
+  const totalItems =
+    propTotalItems !== undefined ? propTotalItems : contextTotalItems;
+  const wishlistCount =
+    propWishlistCount !== undefined ? propWishlistCount : contextWishlistCount;
+
   const [searchQuery, setSearchQuery] = useState('');
   const router = useRouter();
 

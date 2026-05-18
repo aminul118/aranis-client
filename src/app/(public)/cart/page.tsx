@@ -13,6 +13,8 @@ const CartPage = () => {
     cart,
     removeFromCart,
     updateQuantity,
+    updateSize,
+    updateColor,
     subtotal,
     discount,
     discountPercent,
@@ -61,10 +63,12 @@ const CartPage = () => {
             <AnimatePresence mode="popLayout">
               {cart.map((item) => (
                 <CartItem
-                  key={item._id}
+                  key={`${item._id}_${item.selectedColor || ''}_${item.selectedSize || ''}`}
                   item={item}
                   onUpdateQuantity={updateQuantity}
                   onRemove={removeFromCart}
+                  onUpdateSize={updateSize}
+                  onUpdateColor={updateColor}
                 />
               ))}
             </AnimatePresence>

@@ -14,7 +14,11 @@ export const dynamic = 'force-dynamic';
 
 const MainLayout = ({ children }: Children) => {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html
+      lang="en"
+      className={fonts.spaceGrotesk.variable}
+      suppressHydrationWarning
+    >
       <GoogleAnalytics gaId={envVars.analytics.googleAnalytics} />
       <body className={fonts.spaceGrotesk.className} suppressHydrationWarning>
         <TopLoadingBar />

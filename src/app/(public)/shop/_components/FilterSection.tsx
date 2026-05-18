@@ -35,7 +35,7 @@ interface FilterSectionProps {
 }
 
 const card =
-  'rounded-3xl border border-white/10 bg-white/[0.03] shadow-[0_0_0_1px_rgba(255,255,255,0.04)] backdrop-blur-xl';
+  'rounded-3xl border border-black/5 dark:border-white/10 bg-white/70 dark:bg-white/[0.03] shadow-[0_8px_30px_rgba(0,0,0,0.02)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.2)] backdrop-blur-xl transition-all duration-300';
 
 const heading =
   'mb-4 text-xs font-extrabold tracking-[0.22em] uppercase text-muted-foreground';
@@ -96,7 +96,7 @@ const FilterSection = ({
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35 }}
-      className="flex flex-col gap-6"
+      className="flex flex-col gap-6 pb-24"
     >
       {/* SORT */}
       {showSort && (
@@ -115,10 +115,10 @@ const FilterSection = ({
                 >
                   <Button
                     className={cn(
-                      'w-full justify-between rounded-2xl px-4 py-6 text-left font-semibold',
+                      'w-full justify-between rounded-2xl px-4 py-6 text-left font-semibold transition-all duration-300',
                       active
-                        ? 'bg-primary/15 text-foreground shadow-[0_0_0_1px_rgba(99,102,241,0.35)]'
-                        : 'bg-transparent hover:bg-white/5',
+                        ? 'bg-primary/10 dark:bg-primary/20 text-primary shadow-[0_0_0_1px_rgba(99,102,241,0.35)]'
+                        : 'bg-transparent text-zinc-700 hover:bg-black/5 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-white/5 dark:hover:text-white',
                     )}
                     variant="ghost"
                     onClick={() => onUpdateURL({ sort: item.value })}
@@ -150,11 +150,11 @@ const FilterSection = ({
               onUpdateURL({ category: value, subCategory: '', type: '' });
             }}
           >
-            <SelectTrigger className="text-foreground h-12 w-full rounded-2xl border-white/10 bg-white/[0.04] px-5 font-semibold shadow-sm ring-offset-0 focus:ring-0">
+            <SelectTrigger className="h-12 w-full rounded-2xl border-black/10 bg-black/[0.02] px-5 font-semibold text-zinc-700 shadow-sm ring-offset-0 focus:ring-0 dark:border-white/10 dark:bg-white/[0.04] dark:text-white">
               <SelectValue placeholder="Select Category" />
             </SelectTrigger>
 
-            <SelectContent className="bg-background/95 rounded-2xl border-white/10 backdrop-blur-xl">
+            <SelectContent className="dark:bg-background/95 rounded-2xl border-black/10 bg-white/95 backdrop-blur-xl dark:border-white/10">
               <SelectItem value="All" className="font-semibold">
                 All Categories
               </SelectItem>
@@ -190,10 +190,10 @@ const FilterSection = ({
                 >
                   <Button
                     className={cn(
-                      'w-full justify-between rounded-2xl px-4 py-6 font-semibold',
+                      'w-full justify-between rounded-2xl px-4 py-6 font-semibold transition-all duration-300',
                       active
-                        ? 'bg-primary/15 shadow-[0_0_0_1px_rgba(99,102,241,0.35)]'
-                        : 'bg-transparent hover:bg-white/5',
+                        ? 'bg-primary/10 dark:bg-primary/20 text-primary shadow-[0_0_0_1px_rgba(99,102,241,0.35)]'
+                        : 'bg-transparent text-zinc-700 hover:bg-black/5 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-white/5 dark:hover:text-white',
                     )}
                     variant="ghost"
                     onClick={() =>
@@ -234,10 +234,10 @@ const FilterSection = ({
                     >
                       <Button
                         className={cn(
-                          'rounded-2xl px-4',
+                          'rounded-2xl px-4 font-semibold transition-all duration-300',
                           active
-                            ? 'bg-primary/15 shadow-[0_0_0_1px_rgba(99,102,241,0.35)]'
-                            : 'bg-white/[0.04] hover:bg-white/[0.07]',
+                            ? 'bg-primary/10 dark:bg-primary/20 text-primary shadow-[0_0_0_1px_rgba(99,102,241,0.35)]'
+                            : 'bg-black/[0.03] text-zinc-700 hover:bg-black/[0.06] hover:text-zinc-900 dark:bg-white/[0.04] dark:text-zinc-300 dark:hover:bg-white/[0.07] dark:hover:text-white',
                         )}
                         variant="ghost"
                         onClick={() => onUpdateURL({ type })}
@@ -314,7 +314,7 @@ const FilterSection = ({
                     });
                   }
                 }}
-                className="focus:border-primary/50 w-full rounded-xl border border-white/10 bg-[#0e1017] px-3 py-2 text-xs font-bold text-white transition-colors focus:outline-none"
+                className="focus:border-primary/50 w-full rounded-xl border border-black/10 bg-white/50 px-3 py-2 text-xs font-bold text-zinc-800 shadow-sm transition-all focus:outline-none dark:border-white/10 dark:bg-[#0e1017] dark:text-white dark:shadow-none"
               />
             </div>
             <div className="flex flex-1 flex-col gap-1">
@@ -356,7 +356,7 @@ const FilterSection = ({
                     });
                   }
                 }}
-                className="focus:border-primary/50 w-full rounded-xl border border-white/10 bg-[#0e1017] px-3 py-2 text-xs font-bold text-white transition-colors focus:outline-none"
+                className="focus:border-primary/50 w-full rounded-xl border border-black/10 bg-white/50 px-3 py-2 text-xs font-bold text-zinc-800 shadow-sm transition-all focus:outline-none dark:border-white/10 dark:bg-[#0e1017] dark:text-white dark:shadow-none"
               />
             </div>
           </div>
@@ -387,7 +387,7 @@ const FilterSection = ({
                     'relative grid h-11 w-11 place-items-center rounded-full border shadow-sm transition',
                     active
                       ? 'border-primary ring-primary ring-offset-background ring-2 ring-offset-4'
-                      : 'border-white/10 hover:border-white/20',
+                      : 'border-black/10 hover:border-black/20 dark:border-white/10 dark:hover:border-white/20',
                   )}
                   style={{ backgroundColor: bg }}
                 >
@@ -431,10 +431,10 @@ const FilterSection = ({
               >
                 <Button
                   className={cn(
-                    'w-full rounded-2xl font-semibold',
+                    'w-full rounded-2xl font-semibold transition-all duration-300',
                     active
-                      ? 'bg-primary/15 shadow-[0_0_0_1px_rgba(99,102,241,0.35)]'
-                      : 'bg-white/[0.04] hover:bg-white/[0.07]',
+                      ? 'bg-primary/10 dark:bg-primary/20 text-primary shadow-[0_0_0_1px_rgba(99,102,241,0.35)]'
+                      : 'bg-black/[0.03] text-zinc-700 hover:bg-black/[0.06] hover:text-zinc-900 dark:bg-white/[0.04] dark:text-zinc-300 dark:hover:bg-white/[0.07] dark:hover:text-white',
                   )}
                   variant="ghost"
                   onClick={() =>

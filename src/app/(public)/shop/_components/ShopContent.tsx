@@ -405,7 +405,7 @@ const ShopContent = ({
                   />
 
                   {meta && (
-                    <div className="border-border mt-12 flex justify-center border-t pt-12">
+                    <div className="flex justify-center py-12">
                       <AppPagination meta={meta} />
                     </div>
                   )}

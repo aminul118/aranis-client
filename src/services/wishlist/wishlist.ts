@@ -29,6 +29,7 @@ export const getMyWishlist = async () => {
   return await serverFetch.get<ApiResponse<IWishlistItem[]>>(
     '/wishlist/my-wishlist',
     {
+      cache: 'no-store',
       next: { tags: ['wishlist'] },
     },
   );
