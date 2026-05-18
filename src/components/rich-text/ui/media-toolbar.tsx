@@ -41,28 +41,39 @@ import {
   useSelected,
 } from 'platejs/react';
 import { toast } from 'sonner';
-import { deleteImage } from '../actions/cloudinary';
+import { deleteImage } from '../actions/r2';
 import { CaptionButton } from './caption';
 
 const inputVariants = cva(
   'flex h-[28px] w-full rounded-md border-none bg-transparent px-1.5 py-1 text-base placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-transparent md:text-sm',
 );
 
-// Helper to extract Cloudinary public ID from URL
+// Helper to extract R2 key or Cloudinary public ID from URL
 function getPublicIdFromUrl(url: string) {
   try {
-    if (!url || !url.includes('cloudinary.com')) return null;
-    const parts = url.split('/upload/');
-    if (parts.length < 2) return null;
-    let path = parts[1];
-    // Remove version (e.g., v16151515/)
-    path = path.replace(/^v\d+\//, '');
-    // Remove extension
-    const lastDotIndex = path.lastIndexOf('.');
-    if (lastDotIndex !== -1) {
-      path = path.substring(0, lastDotIndex);
+    if (!url) return null;
+    // R2 Key Extraction
+    if (url.includes('cdn.thearanis.com')) {
+      const parts = url.split('cdn.thearanis.com/');
+      if (parts.length > 1) {
+        return parts[1];
+      }
     }
-    return path;
+    // Cloudinary public ID Extraction
+    if (url.includes('cloudinary.com')) {
+      const parts = url.split('/upload/');
+      if (parts.length < 2) return null;
+      let path = parts[1];
+      // Remove version (e.g., v16151515/)
+      path = path.replace(/^v\d+\//, '');
+      // Remove extension
+      const lastDotIndex = path.lastIndexOf('.');
+      if (lastDotIndex !== -1) {
+        path = path.substring(0, lastDotIndex);
+      }
+      return path;
+    }
+    return null;
   } catch (e) {
     return null;
   }

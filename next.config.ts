@@ -16,14 +16,6 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'i.ibb.co',
-      },
-      {
-        protocol: 'https',
-        hostname: 'i.ibb.co.com',
-      },
-      {
-        protocol: 'https',
         hostname: 'res.cloudinary.com',
       },
       {
@@ -33,6 +25,14 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'placehold.co',
+      },
+      {
+        protocol: 'https',
+        hostname: 'pub-8cc674862c474468be0fca8792ce7a3f.r2.dev',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cdn.thearanis.com',
       },
     ],
   },

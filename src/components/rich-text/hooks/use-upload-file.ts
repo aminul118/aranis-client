@@ -1,4 +1,3 @@
-import envVars from '@/config/env.config';
 import * as React from 'react';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -26,7 +25,7 @@ export function useUploadFile({
   const [progress, setProgress] = React.useState<number>(0);
   const [isUploading, setIsUploading] = React.useState(false);
 
-  async function uploadToCloudinary(file: File) {
+  async function uploadToR2(file: File) {
     setIsUploading(true);
     setUploadingFile(file);
     setProgress(0);
@@ -34,18 +33,6 @@ export function useUploadFile({
     try {
       const formData = new FormData();
       formData.append('file', file);
-      // TODO: Move these to env variables
-      const cloudName = envVars.cloudinary.cloudName;
-      const uploadPreset = envVars.cloudinary.uploadPreset;
-
-      if (!cloudName || !uploadPreset) {
-        throw new Error(
-          'Cloudinary configuration missing. Please set CLOUDINARY_CLOUD_NAME and CLOUDINARY_UPLOAD_PRESET',
-        );
-      }
-
-      formData.append('upload_preset', uploadPreset);
-      // formData.append('folder', 'aminul-portfolio-editor'); // Let the preset handle the folder
 
       const xhr = new XMLHttpRequest();
 
@@ -60,20 +47,23 @@ export function useUploadFile({
         xhr.addEventListener('load', () => {
           if (xhr.status >= 200 && xhr.status < 300) {
             const response = JSON.parse(xhr.responseText);
+            const secureUrl = response.secure_url;
+            const parts = secureUrl.split('cdn.thearanis.com/');
+            const key = parts.length > 1 ? parts[1] : secureUrl;
+
             const uploadedFile: UploadedFile = {
-              key: response.public_id,
-              url: response.secure_url,
+              key: key,
+              url: secureUrl,
               name: file.name,
               size: file.size,
               type: file.type,
             };
             resolve(uploadedFile);
           } else {
-            const errorResponse = JSON.parse(xhr.responseText);
+            const errorResponse = JSON.parse(xhr.responseText || '{}');
             reject(
               new Error(
-                errorResponse.error.message ||
-                  `Upload failed: ${xhr.statusText}`,
+                errorResponse.error || `Upload failed: ${xhr.statusText}`,
               ),
             );
           }
@@ -83,10 +73,7 @@ export function useUploadFile({
           reject(new Error('Upload failed due to network error'));
         });
 
-        xhr.open(
-          'POST',
-          `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
-        );
+        xhr.open('POST', '/api/upload');
         xhr.send(formData);
       });
 
@@ -99,7 +86,7 @@ export function useUploadFile({
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : 'Upload failed';
-      console.error('Cloudinary Upload Error:', error);
+      console.error('R2 Upload Error:', error);
       toast.error(errorMessage);
       onUploadError?.(error);
       return undefined;
@@ -114,7 +101,7 @@ export function useUploadFile({
     isUploading,
     progress,
     uploadedFile,
-    uploadFile: uploadToCloudinary,
+    uploadFile: uploadToR2,
     uploadingFile,
   };
 }

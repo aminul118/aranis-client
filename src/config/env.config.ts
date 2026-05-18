@@ -23,11 +23,12 @@ const envVars = {
     googleAnalytics,
     googleTagManagerId,
   },
-  cloudinary: {
-    cloudName: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME as string,
-    uploadPreset: process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET as string,
-    apiKey: process.env.CLOUDINARY_API_KEY as string,
-    apiSecret: process.env.CLOUDINARY_API_SECRET as string,
+  r2: {
+    accountId: process.env.R2_ACCOUNT_ID as string,
+    accessKeyId: process.env.R2_ACCESS_KEY_ID as string,
+    secretAccessKey: process.env.R2_SECRET_ACCESS_KEY as string,
+    bucketName: process.env.R2_BUCKET_NAME as string,
+    publicDevUrl: process.env.R2_PUBLIC_DEV_URL as string,
   },
 };
 
