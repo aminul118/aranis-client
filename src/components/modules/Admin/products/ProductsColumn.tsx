@@ -154,11 +154,11 @@ const ProductsColumn: Column<IProduct>[] = [
     accessor: (p) => (
       <div className="flex flex-col">
         <span className="font-bold">৳{p.price.toFixed(2)}</span>
-        {p.salePrice && (
+        {p.salePrice && p.salePrice > 0 ? (
           <span className="text-xs font-bold text-emerald-500">
             Sale: ৳{p.salePrice.toFixed(2)}
           </span>
-        )}
+        ) : null}
       </div>
     ),
     sortKey: 'price',

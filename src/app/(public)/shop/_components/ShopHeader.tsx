@@ -65,7 +65,7 @@ const ShopHeader = ({
       <div className="flex w-full flex-col gap-3 sm:flex-row lg:w-auto lg:items-center">
         <div className="flex flex-1 items-center gap-2 sm:flex-none">
           {/* View Toggles */}
-          <div className="flex h-12 items-center gap-1 rounded-full border border-black/10 bg-white/70 p-1 shadow-sm backdrop-blur-xl transition-all dark:border-white/10 dark:bg-white/[0.03] dark:shadow-2xl">
+          <div className="flex !h-12 items-center gap-1 rounded-full border border-black/10 bg-white/70 p-1 shadow-sm backdrop-blur-xl transition-all dark:border-white/10 dark:bg-white/[0.03] dark:shadow-2xl">
             <Button
               variant="ghost"
               size="sm"
@@ -96,7 +96,7 @@ const ShopHeader = ({
 
           <Sheet open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>
             <SheetTrigger asChild>
-              <Button className="h-12 flex-1 items-center gap-3 rounded-full bg-zinc-900 font-bold text-white shadow-md transition-all hover:bg-zinc-800 sm:flex-none lg:hidden dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-100">
+              <Button className="h-12 flex-1 items-center justify-center gap-3 rounded-full border border-black/10 bg-white/70 px-6 font-bold text-zinc-800 shadow-sm transition-all outline-none hover:bg-white sm:flex-none lg:hidden dark:border-white/10 dark:bg-white/[0.03] dark:text-white dark:hover:bg-white/[0.05]">
                 <SlidersHorizontal size={16} />
                 Filters
               </Button>
@@ -128,7 +128,7 @@ const ShopHeader = ({
             value={sortBy}
             onValueChange={(value) => onUpdateURL({ sort: value })}
           >
-            <SelectTrigger className="h-12 flex-1 rounded-full border border-black/10 bg-white/70 px-6 font-bold text-zinc-800 shadow-sm ring-offset-0 transition-all hover:bg-white focus:ring-0 sm:w-[200px] sm:flex-none dark:border-white/10 dark:bg-white/[0.03] dark:text-white dark:shadow-2xl dark:hover:bg-white/[0.05]">
+            <SelectTrigger className="!h-12 flex-1 rounded-full border border-black/10 bg-white/70 px-6 font-bold text-zinc-800 shadow-sm ring-offset-0 transition-all hover:bg-white focus:ring-0 sm:w-[200px] sm:flex-none dark:border-white/10 dark:bg-white/[0.03] dark:text-white dark:shadow-2xl dark:hover:bg-white/[0.05]">
               <SelectValue placeholder="Sort by" />
             </SelectTrigger>
             <SelectContent className="shadow-3xl rounded-[20px] border-black/10 bg-white text-zinc-800 backdrop-blur-xl dark:border-white/10 dark:bg-[#151722] dark:text-white">

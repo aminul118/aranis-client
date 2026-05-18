@@ -300,7 +300,7 @@ const ShopContent = ({
           (isPending || loading) && 'pointer-events-none opacity-60',
         )}
       >
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-4 py-8 md:py-12">
           {isOfferPage && hasInitialProducts === false ? (
             <div className="flex min-h-[50vh] flex-col items-center justify-center py-10 text-center">
               <motion.div

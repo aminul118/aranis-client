@@ -87,6 +87,7 @@ const FilterSection = ({
 
   const sortOptions = [
     { label: 'Newest First', value: '-createdAt' },
+    { label: 'Most Popular', value: '-soldCount' },
     { label: 'Price: Low-High', value: 'price' },
     { label: 'Price: High-Low', value: '-price' },
   ];

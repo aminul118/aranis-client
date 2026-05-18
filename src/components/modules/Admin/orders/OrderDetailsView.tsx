@@ -341,9 +341,25 @@ const OrderDetailsView = ({ order }: { order: IOrder }) => {
                                 <p className="text-foreground truncate text-sm font-bold">
                                   {product?.name || 'Product Deleted'}
                                 </p>
-                                <p className="text-muted-foreground text-[10px] tracking-widest uppercase">
-                                  {product?.category || 'N/A'}
-                                </p>
+                                <div className="text-muted-foreground mt-0.5 flex flex-wrap items-center gap-1.5 text-[10px] font-semibold tracking-wider uppercase">
+                                  <span>{product?.category || 'N/A'}</span>
+                                  {item.color && (
+                                    <>
+                                      <span>•</span>
+                                      <span className="bg-muted text-foreground rounded px-1.5 py-0.5 font-black">
+                                        {item.color}
+                                      </span>
+                                    </>
+                                  )}
+                                  {item.size && (
+                                    <>
+                                      <span>•</span>
+                                      <span className="bg-muted text-foreground rounded px-1.5 py-0.5 font-black">
+                                        Size: {item.size}
+                                      </span>
+                                    </>
+                                  )}
+                                </div>
                               </div>
                             </div>
                           </td>
@@ -522,8 +538,24 @@ const OrderDetailsView = ({ order }: { order: IOrder }) => {
                       <div className="font-black text-gray-800">
                         {product?.name || 'Product Deleted'}
                       </div>
-                      <div className="text-[10px] tracking-widest text-gray-400 uppercase">
-                        {product?.category || 'N/A'}
+                      <div className="mt-1 flex flex-wrap items-center gap-1.5 text-[10px] tracking-widest text-gray-400 uppercase">
+                        <span>{product?.category || 'N/A'}</span>
+                        {item.color && (
+                          <>
+                            <span>•</span>
+                            <span className="font-black text-gray-700">
+                              {item.color}
+                            </span>
+                          </>
+                        )}
+                        {item.size && (
+                          <>
+                            <span>•</span>
+                            <span className="font-black text-gray-700">
+                              Size: {item.size}
+                            </span>
+                          </>
+                        )}
                       </div>
                     </td>
                     <td className="py-6 text-center text-sm">

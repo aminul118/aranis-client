@@ -514,26 +514,42 @@ const ProductDetailContent = ({
                     }
                   })();
 
-                  if (sizeStock === 0) return null;
+                  const isStockOut = sizeStock === 0;
 
                   return (
                     <button
                       key={size}
-                      onClick={() => setSelectedSize(size)}
-                      disabled={sizeStock === 0}
+                      onClick={() => !isStockOut && setSelectedSize(size)}
+                      disabled={isStockOut}
                       className={cn(
-                        'group relative flex min-w-16 flex-col items-center justify-center gap-0.5 rounded-2xl border-2 px-5 py-3 transition-all duration-300',
+                        'group relative flex min-w-16 flex-col items-center justify-center gap-0.5 overflow-hidden rounded-2xl border-2 px-5 py-3 transition-all duration-300',
                         selectedSize === size
                           ? 'border-blue-600 bg-blue-600 text-white shadow-xl shadow-blue-500/20'
-                          : sizeStock === 0
-                            ? 'border-border/30 bg-muted/20 cursor-not-allowed opacity-40'
+                          : isStockOut
+                            ? 'cursor-not-allowed border-red-200 bg-red-50/50 text-red-400'
                             : 'border-border/50 bg-muted/30 text-muted-foreground hover:text-foreground hover:border-blue-500/30',
                       )}
                     >
-                      <span className="text-sm font-black tracking-widest uppercase">
+                      <span
+                        className={cn(
+                          'text-sm font-black tracking-widest uppercase',
+                          isStockOut && 'text-red-400/80 line-through',
+                        )}
+                      >
                         {size}
                       </span>
-                      {selectedSize === size && (
+
+                      {isStockOut && (
+                        <>
+                          {/* Visual cross lines */}
+                          <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+                            <div className="h-[1.5px] w-[140%] rotate-45 transform bg-red-400/60" />
+                            <div className="absolute h-[1.5px] w-[140%] -rotate-45 transform bg-red-400/60" />
+                          </div>
+                        </>
+                      )}
+
+                      {selectedSize === size && !isStockOut && (
                         <div className="absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-blue-500 text-white shadow-lg ring-2 ring-white">
                           <Check className="h-2.5 w-2.5" strokeWidth={4} />
                         </div>
@@ -549,15 +565,26 @@ const ProductDetailContent = ({
           <div className="flex flex-col gap-4 pt-6">
             <div className="flex flex-row gap-3">
               {currentStock < 1 ? (
-                <Button
-                  onClick={handleRestockRequest}
-                  disabled={isRequesting}
-                  size="lg"
-                  className="flex-1 rounded-2xl bg-blue-600 py-4 text-sm font-black text-white shadow-xl shadow-blue-500/20 transition-all hover:bg-blue-700 active:scale-[0.98]"
-                >
-                  <BellRing className="mr-2 h-4 w-4" />{' '}
-                  {isRequesting ? 'Requesting...' : 'Notify Me'}
-                </Button>
+                <div className="flex flex-1 flex-col gap-3">
+                  <Button
+                    disabled
+                    size="lg"
+                    className="w-full cursor-not-allowed rounded-2xl border-2 border-red-500/30 bg-red-500/10 py-4 text-sm font-black text-red-500 shadow-none"
+                  >
+                    STOCK OUT
+                  </Button>
+                  <Button
+                    onClick={handleRestockRequest}
+                    disabled={isRequesting}
+                    variant="outline"
+                    className="w-full rounded-2xl border-2 border-zinc-200 py-4 text-sm font-bold text-zinc-600 transition-all hover:bg-zinc-50 active:scale-[0.98]"
+                  >
+                    <BellRing className="mr-2 h-4 w-4 animate-pulse text-blue-500" />{' '}
+                    {isRequesting
+                      ? 'Requesting...'
+                      : 'Notify Me When Restocked'}
+                  </Button>
+                </div>
               ) : (
                 <>
                   <Button

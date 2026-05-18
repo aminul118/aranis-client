@@ -30,8 +30,20 @@ const UsersColumn: Column<IUser>[] = [
     sortKey: 'fullName',
   },
   {
-    header: 'Email',
-    accessor: (u) => u.email,
+    header: 'Email / Phone',
+    accessor: (u) => (
+      <div className="flex flex-col gap-0.5">
+        {u.email && <span className="text-sm font-medium">{u.email}</span>}
+        {u.phone && (
+          <span className="text-muted-foreground text-xs font-semibold">
+            {u.phone}
+          </span>
+        )}
+        {!u.email && !u.phone && (
+          <span className="text-muted-foreground">-</span>
+        )}
+      </div>
+    ),
     sortKey: 'email',
   },
   {

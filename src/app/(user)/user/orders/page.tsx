@@ -244,9 +244,9 @@ const UserOrdersPage = () => {
                             className="flex items-center gap-6"
                           >
                             <div className="bg-muted border-border/50 relative h-16 w-16 shrink-0 overflow-hidden rounded-xl border">
-                              {item.product?.thumbnail ? (
+                              {item.product?.thumbnails?.[0] ? (
                                 <Image
-                                  src={item.product.thumbnails?.[0]}
+                                  src={item.product.thumbnails[0]}
                                   alt={item.product.name}
                                   fill
                                   className="object-cover"
@@ -263,6 +263,8 @@ const UserOrdersPage = () => {
                               </h4>
                               <p className="text-muted-foreground text-xs font-bold tracking-widest uppercase">
                                 Qty: {item.quantity} • ৳{item.price.toFixed(2)}
+                                {item.size && ` • Size: ${item.size}`}
+                                {item.color && ` • Color: ${item.color}`}
                               </p>
                             </div>
                             {item.product && (
