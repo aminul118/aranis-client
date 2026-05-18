@@ -133,10 +133,16 @@ const ShopHeader = ({
             </SelectTrigger>
             <SelectContent className="shadow-3xl rounded-[20px] border-black/10 bg-white text-zinc-800 backdrop-blur-xl dark:border-white/10 dark:bg-[#151722] dark:text-white">
               <SelectItem
-                value="Newest"
+                value="-createdAt"
                 className="font-bold focus:bg-black/5 focus:text-zinc-900 dark:focus:bg-white/10 dark:focus:text-white"
               >
                 Newest First
+              </SelectItem>
+              <SelectItem
+                value="-soldCount"
+                className="font-bold focus:bg-black/5 focus:text-zinc-900 dark:focus:bg-white/10 dark:focus:text-white"
+              >
+                Most Popular
               </SelectItem>
               <SelectItem
                 value="price"

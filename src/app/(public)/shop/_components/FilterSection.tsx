@@ -86,7 +86,7 @@ const FilterSection = ({
   const sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
 
   const sortOptions = [
-    { label: 'Newest First', value: 'Newest' },
+    { label: 'Newest First', value: '-createdAt' },
     { label: 'Price: Low-High', value: 'price' },
     { label: 'Price: High-Low', value: '-price' },
   ];

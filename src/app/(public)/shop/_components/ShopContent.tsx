@@ -77,7 +77,7 @@ const ShopContent = ({
   const selectedSizes = searchParams.get('sizes')?.split(',') || [];
   const selectedMinPrice = searchParams.get('minPrice') || '';
   const selectedMaxPrice = searchParams.get('maxPrice') || '';
-  const sortBy = searchParams.get('sort') || 'Newest';
+  const sortBy = searchParams.get('sort') || '-createdAt';
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
@@ -144,7 +144,13 @@ const ShopContent = ({
         }
       } catch (error) {
         console.error('Failed to fetch products', error);
+        if (hasInitialProducts === null) {
+          setHasInitialProducts(false);
+        }
       } finally {
+        if (hasInitialProducts === null) {
+          setHasInitialProducts(false);
+        }
         setLoading(false);
         NProgress.done();
       }
@@ -275,6 +281,14 @@ const ShopContent = ({
 
     updateURL(clearParams);
   };
+
+  if (isOfferPage && hasInitialProducts === null) {
+    return (
+      <div className="bg-background flex min-h-[70vh] items-center justify-center">
+        <div className="h-10 w-10 animate-spin rounded-full border-t-2 border-b-2 border-red-500"></div>
+      </div>
+    );
+  }
 
   return (
     <TransitionContext.Provider
