@@ -31,7 +31,7 @@ const RootLayout = async ({ children }: Children) => {
   const sortedNavItems = [...navItems].sort((a, b) => a.order - b.order);
 
   return (
-    <main className="flex min-h-screen flex-col pb-16 lg:pb-0">
+    <main className="mt-4 flex min-h-screen flex-col pb-16 lg:mt-0 lg:pb-0">
       <Navbar
         user={user as any}
         navItems={sortedNavItems as any}
