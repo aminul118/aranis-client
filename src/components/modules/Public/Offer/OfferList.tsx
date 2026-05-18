@@ -14,33 +14,6 @@ const OfferList = ({ products, tag }: OfferListProps) => {
 
   return (
     <div className="container mx-auto px-4">
-      {/* Header Section - Only show if offers exist */}
-      {hasProducts && (
-        <div className="mb-24 text-center">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8, rotate: -10 }}
-            animate={{ opacity: 1, scale: 1, rotate: 0 }}
-            transition={{ type: 'spring', damping: 15 }}
-            className="mx-auto mb-10 flex h-28 w-28 items-center justify-center rounded-full bg-linear-to-br from-red-500/10 to-pink-500/10 text-red-500 backdrop-blur-3xl"
-          >
-            <Gift size={56} strokeWidth={1} />
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-          >
-            <h1 className="text-foreground mb-6 text-6xl font-black tracking-tighter uppercase italic md:text-9xl">
-              {tag || 'Special'} <span className="text-red-500">Offers</span>
-            </h1>
-            <p className="text-muted-foreground/60 mx-auto max-w-2xl text-lg leading-relaxed font-medium">
-              Discover our most coveted pieces at temporary, privileged pricing.
-            </p>
-          </motion.div>
-        </div>
-      )}
-
       {/* Grid Section */}
       {hasProducts ? (
         <motion.div

@@ -1,7 +1,6 @@
 'use client';
 
 import ProductCard from '@/components/common/ProductCard';
-import ProductCardSkeleton from '@/components/common/loader/ProductCardSkeleton';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { IProduct } from '@/types';
@@ -17,21 +16,8 @@ interface ProductListProps {
 const ProductList = ({ products, loading, viewMode }: ProductListProps) => {
   const router = useRouter();
 
-  if (loading) {
-    return (
-      <div
-        className={cn(
-          'grid gap-6 md:gap-8',
-          viewMode === 'grid'
-            ? 'grid-cols-2 md:grid-cols-3 xl:grid-cols-4'
-            : 'grid-cols-1',
-        )}
-      >
-        {Array.from({ length: 8 }).map((_, i) => (
-          <ProductCardSkeleton key={i} viewMode={viewMode} />
-        ))}
-      </div>
-    );
+  if (loading && products.length === 0) {
+    return <div className="h-96 w-full" />;
   }
 
   if (products.length === 0) {

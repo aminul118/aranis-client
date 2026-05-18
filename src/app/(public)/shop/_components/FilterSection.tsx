@@ -8,11 +8,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Slider } from '@/components/ui/slider';
 import { cn } from '@/lib/utils';
 import { ICategory } from '@/services/category/category';
 import { IColor } from '@/services/color/color';
 import { motion } from 'framer-motion';
 import { Check } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 interface FilterSectionProps {
   dbCategories: ICategory[];
@@ -27,6 +29,9 @@ interface FilterSectionProps {
   onToggleMultiFilter: (key: string, value: string, current: string[]) => void;
   showSort?: boolean;
   showCategory?: boolean;
+  priceRange?: { minPrice: number; maxPrice: number } | null;
+  selectedMinPrice: string;
+  selectedMaxPrice: string;
 }
 
 const card =
@@ -48,10 +53,35 @@ const FilterSection = ({
   onToggleMultiFilter,
   showSort = false,
   showCategory = true,
+  priceRange,
+  selectedMinPrice,
+  selectedMaxPrice,
 }: FilterSectionProps) => {
   const currentCategoryData = dbCategories.find(
     (c) => c.name === selectedCategory,
   );
+
+  let globalMin = priceRange?.minPrice ?? 0;
+  let globalMax = priceRange?.maxPrice ?? 10000;
+  if (globalMin === globalMax) {
+    globalMin = 0;
+    if (globalMax === 0) {
+      globalMax = 10000;
+    }
+  }
+
+  const activeMin = selectedMinPrice ? Number(selectedMinPrice) : globalMin;
+  const activeMax = selectedMaxPrice ? Number(selectedMaxPrice) : globalMax;
+
+  const [localRange, setLocalRange] = useState<[number, number]>([
+    activeMin,
+    activeMax,
+  ]);
+
+  // Sync local range with active filters (e.g., when filters are cleared)
+  useEffect(() => {
+    setLocalRange([activeMin, activeMax]);
+  }, [activeMin, activeMax, globalMin, globalMax]);
 
   const sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
 
@@ -221,6 +251,118 @@ const FilterSection = ({
           </div>
         )}
 
+      {/* PRICE RANGE */}
+      {globalMax >= globalMin && (
+        <div className={cn(card, 'p-5')}>
+          <div className={heading}>Price Range</div>
+
+          <div className="px-2 pt-2">
+            <Slider
+              min={globalMin}
+              max={globalMax}
+              step={50}
+              value={localRange}
+              onValueChange={(val) => setLocalRange(val as [number, number])}
+              onValueCommit={(val) => {
+                const [newMin, newMax] = val as [number, number];
+                onUpdateURL({
+                  minPrice: newMin === globalMin ? null : String(newMin),
+                  maxPrice: newMax === globalMax ? null : String(newMax),
+                });
+              }}
+              className="my-6"
+            />
+          </div>
+
+          <div className="mt-4 flex items-center gap-3">
+            <div className="flex flex-1 flex-col gap-1">
+              <label className="text-muted-foreground text-[9px] font-bold tracking-wider uppercase">
+                Min Price
+              </label>
+              <input
+                type="number"
+                min={globalMin}
+                max={globalMax}
+                value={localRange[0]}
+                onChange={(e) => {
+                  const val = Math.min(Number(e.target.value), localRange[1]);
+                  setLocalRange([val, localRange[1]]);
+                }}
+                onBlur={() => {
+                  onUpdateURL({
+                    minPrice:
+                      localRange[0] === globalMin
+                        ? null
+                        : String(localRange[0]),
+                    maxPrice:
+                      localRange[1] === globalMax
+                        ? null
+                        : String(localRange[1]),
+                  });
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    onUpdateURL({
+                      minPrice:
+                        localRange[0] === globalMin
+                          ? null
+                          : String(localRange[0]),
+                      maxPrice:
+                        localRange[1] === globalMax
+                          ? null
+                          : String(localRange[1]),
+                    });
+                  }
+                }}
+                className="focus:border-primary/50 w-full rounded-xl border border-white/10 bg-[#0e1017] px-3 py-2 text-xs font-bold text-white transition-colors focus:outline-none"
+              />
+            </div>
+            <div className="flex flex-1 flex-col gap-1">
+              <label className="text-muted-foreground text-[9px] font-bold tracking-wider uppercase">
+                Max Price
+              </label>
+              <input
+                type="number"
+                min={globalMin}
+                max={globalMax}
+                value={localRange[1]}
+                onChange={(e) => {
+                  const val = Math.max(Number(e.target.value), localRange[0]);
+                  setLocalRange([localRange[0], val]);
+                }}
+                onBlur={() => {
+                  onUpdateURL({
+                    minPrice:
+                      localRange[0] === globalMin
+                        ? null
+                        : String(localRange[0]),
+                    maxPrice:
+                      localRange[1] === globalMax
+                        ? null
+                        : String(localRange[1]),
+                  });
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    onUpdateURL({
+                      minPrice:
+                        localRange[0] === globalMin
+                          ? null
+                          : String(localRange[0]),
+                      maxPrice:
+                        localRange[1] === globalMax
+                          ? null
+                          : String(localRange[1]),
+                    });
+                  }
+                }}
+                className="focus:border-primary/50 w-full rounded-xl border border-white/10 bg-[#0e1017] px-3 py-2 text-xs font-bold text-white transition-colors focus:outline-none"
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* COLORS */}
       <div className={cn(card, 'p-5')}>
         <div className={heading}>Colors</div>
@@ -231,31 +373,43 @@ const FilterSection = ({
             const bg = color.hex || color.name.toLowerCase().replace(/\s/g, '');
 
             return (
-              <motion.button
+              <div
                 key={color.name}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.97 }}
-                onClick={() =>
-                  onToggleMultiFilter('color', color.name, selectedColors)
-                }
-                className={cn(
-                  'relative grid h-11 w-11 place-items-center rounded-full border shadow-sm transition',
-                  active
-                    ? 'border-primary ring-primary ring-offset-background ring-2 ring-offset-4'
-                    : 'border-white/10 hover:border-white/20',
-                )}
-                style={{ backgroundColor: bg }}
-                title={color.name}
+                className="group relative flex justify-center"
               >
-                {/* glossy highlight */}
-                <span className="pointer-events-none absolute inset-0 rounded-full bg-gradient-to-b from-white/25 to-transparent" />
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.97 }}
+                  onClick={() =>
+                    onToggleMultiFilter('color', color.name, selectedColors)
+                  }
+                  className={cn(
+                    'relative grid h-11 w-11 place-items-center rounded-full border shadow-sm transition',
+                    active
+                      ? 'border-primary ring-primary ring-offset-background ring-2 ring-offset-4'
+                      : 'border-white/10 hover:border-white/20',
+                  )}
+                  style={{ backgroundColor: bg }}
+                >
+                  {/* glossy highlight */}
+                  <span className="pointer-events-none absolute inset-0 rounded-full bg-gradient-to-b from-white/25 to-transparent" />
 
-                {active && (
-                  <span className="relative grid h-6 w-6 place-items-center rounded-full bg-white/70 backdrop-blur">
-                    <Check className="h-4 w-4 text-black" />
-                  </span>
-                )}
-              </motion.button>
+                  {active && (
+                    <span className="relative grid h-6 w-6 place-items-center rounded-full bg-white/70 backdrop-blur">
+                      <Check className="h-4 w-4 text-black" />
+                    </span>
+                  )}
+                </motion.button>
+
+                {/* Premium Custom Tooltip */}
+                <div className="pointer-events-none absolute bottom-full left-1/2 z-50 mb-2.5 origin-bottom -translate-x-1/2 scale-75 opacity-0 transition-all duration-200 group-hover:scale-100 group-hover:opacity-100">
+                  <div className="rounded-lg border border-white/10 bg-[#0e1017]/95 px-2.5 py-1.5 text-[10px] font-bold tracking-wide whitespace-nowrap text-white uppercase shadow-xl backdrop-blur-md">
+                    {color.name}
+                  </div>
+                  {/* Tooltip arrow */}
+                  <div className="absolute top-full left-1/2 z-40 h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rotate-45 border-r border-b border-white/10 bg-[#0e1017]" />
+                </div>
+              </div>
             );
           })}
         </div>

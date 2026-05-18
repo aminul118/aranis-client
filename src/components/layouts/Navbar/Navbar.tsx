@@ -39,8 +39,21 @@ const Navbar = ({
   logo?: React.ReactNode;
   siteSettings?: any;
 }) => {
-  const { totalItems } = useCart();
-  const { wishlistCount } = useWishlist();
+  let totalItems = 0;
+  try {
+    const cart = useCart();
+    totalItems = cart?.totalItems || 0;
+  } catch (error) {
+    // Safe fallback for SSR or context-less environments
+  }
+
+  let wishlistCount = 0;
+  try {
+    const wishlist = useWishlist();
+    wishlistCount = wishlist?.wishlistCount || 0;
+  } catch (error) {
+    // Safe fallback for SSR or context-less environments
+  }
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);

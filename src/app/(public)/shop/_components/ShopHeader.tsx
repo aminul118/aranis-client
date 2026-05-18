@@ -101,7 +101,7 @@ const ShopHeader = ({
                 onUpdateURL({ category: value, subCategory: '', type: '' });
               }}
             >
-              <SelectTrigger className="h-11 w-[160px] rounded-2xl border-none bg-[#151722] px-6 font-bold text-white shadow-2xl ring-offset-0 focus:ring-0">
+              <SelectTrigger className="h-11 w-auto min-w-[180px] rounded-2xl border-none bg-[#151722] px-6 font-bold text-white shadow-2xl ring-offset-0 focus:ring-0">
                 <SelectValue placeholder="Category" />
               </SelectTrigger>
               <SelectContent className="shadow-3xl rounded-2xl border-white/5 bg-[#151722] text-white">

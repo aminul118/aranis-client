@@ -2,6 +2,7 @@
 
 import serverFetch from '@/lib/server-fetch';
 import { ApiResponse } from '@/types';
+import { revalidatePath } from 'next/cache';
 
 export interface IOffer {
   _id?: string;
@@ -13,13 +14,26 @@ export interface IOffer {
   isActive: boolean;
 }
 
+// Helper to trigger concurrent Next.js revalidations
+const triggerRevalidations = () => {
+  try {
+    revalidatePath('/offers');
+    revalidatePath('/shop');
+    revalidatePath('/');
+  } catch (error) {
+    console.error('Failed to trigger Next.js cache revalidations:', error);
+  }
+};
+
 export const createOffer = async (payload: Partial<IOffer>) => {
-  return await serverFetch.post<ApiResponse<IOffer>>('/offers/create', {
+  const res = await serverFetch.post<ApiResponse<IOffer>>('/offers/create', {
     body: JSON.stringify(payload),
     headers: {
       'Content-Type': 'application/json',
     },
   });
+  triggerRevalidations();
+  return res;
 };
 
 export const getOffers = async (params: Record<string, any> = {}) => {
@@ -28,34 +42,42 @@ export const getOffers = async (params: Record<string, any> = {}) => {
 };
 
 export const updateOffer = async (id: string, payload: Partial<IOffer>) => {
-  return await serverFetch.patch<ApiResponse<IOffer>>(`/offers/${id}`, {
+  const res = await serverFetch.patch<ApiResponse<IOffer>>(`/offers/${id}`, {
     body: JSON.stringify(payload),
     headers: {
       'Content-Type': 'application/json',
     },
   });
+  triggerRevalidations();
+  return res;
 };
 
 export const deleteOffer = async (id: string) => {
-  return await serverFetch.delete<ApiResponse<any>>(`/offers/${id}`);
+  const res = await serverFetch.delete<ApiResponse<any>>(`/offers/${id}`);
+  triggerRevalidations();
+  return res;
 };
 
 export const applyOffer = async (tag: string, productIds: string[]) => {
-  return await serverFetch.post<ApiResponse<any>>('/offers/apply', {
+  const res = await serverFetch.post<ApiResponse<any>>('/offers/apply', {
     body: JSON.stringify({ tag, productIds }),
     headers: {
       'Content-Type': 'application/json',
     },
   });
+  triggerRevalidations();
+  return res;
 };
 
 export const applyOfferToAll = async (tag: string) => {
-  return await serverFetch.post<ApiResponse<any>>('/offers/apply-all', {
+  const res = await serverFetch.post<ApiResponse<any>>('/offers/apply-all', {
     body: JSON.stringify({ tag }),
     headers: {
       'Content-Type': 'application/json',
     },
   });
+  triggerRevalidations();
+  return res;
 };
 
 export const getActiveOffer = async () => {

@@ -3,6 +3,7 @@
 import { revalidate } from '@/lib/revalidate';
 import serverFetch from '@/lib/server-fetch';
 import { ApiResponse } from '@/types';
+import { revalidatePath } from 'next/cache';
 
 export interface ISocialLink {
   platform: string;
@@ -22,6 +23,8 @@ export interface ISiteSetting {
   contactNumber?: string;
   email?: string;
   location?: string;
+  returnPolicy?: string;
+  refundPolicy?: string;
 }
 
 const getSiteSettings = async () => {
@@ -51,7 +54,8 @@ const updateSiteSettings = async (
       headers: isFormData ? {} : { 'Content-Type': 'application/json' },
     },
   );
-  revalidate('site-settings');
+  await revalidate('site-settings');
+  revalidatePath('/', 'layout');
   return res;
 };
 

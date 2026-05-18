@@ -40,13 +40,19 @@ import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import ProductImageGallery from './ProductImageGallery';
 
+import { ISiteSetting } from '@/services/settings/settings';
+
 interface ProductDetailContentProps {
   product: IProduct;
+  settings?: ISiteSetting;
 }
 
 import { useUser } from '@/context/UserContext';
 
-const ProductDetailContent = ({ product }: ProductDetailContentProps) => {
+const ProductDetailContent = ({
+  product,
+  settings,
+}: ProductDetailContentProps) => {
   const router = useRouter();
   const { addToCart } = useCart();
   const { user } = useUser();
@@ -675,67 +681,79 @@ const ProductDetailContent = ({ product }: ProductDetailContentProps) => {
 
               <TabsContent value="refund" className="mt-0">
                 <div className="prose prose-sm dark:prose-invert text-muted-foreground/80 max-w-none text-base leading-relaxed font-medium">
-                  <p>
-                    We believe in the quality of our products. If you are not
-                    completely satisfied with your purchase, we offer a
-                    straightforward refund policy.
-                  </p>
-                  <ul className="mt-4 space-y-2">
-                    <li>
-                      Refunds must be requested within 30 days of delivery.
-                    </li>
-                    <li>
-                      The item must be in its original condition, unworn,
-                      unwashed, with all original tags attached.
-                    </li>
-                    <li>
-                      Refunds will be processed to the original payment method
-                      within 5-7 business days after we receive the returned
-                      item.
-                    </li>
-                    <li>
-                      Shipping costs are non-refundable unless the item received
-                      was damaged or incorrect.
-                    </li>
-                  </ul>
-                  <p className="mt-4">
-                    Please contact our support team at support@Aranis.com to
-                    initiate a refund request.
-                  </p>
+                  {settings?.refundPolicy ? (
+                    <HtmlContent content={settings.refundPolicy} />
+                  ) : (
+                    <>
+                      <p>
+                        We believe in the quality of our products. If you are
+                        not completely satisfied with your purchase, we offer a
+                        straightforward refund policy.
+                      </p>
+                      <ul className="mt-4 space-y-2">
+                        <li>
+                          Refunds must be requested within 30 days of delivery.
+                        </li>
+                        <li>
+                          The item must be in its original condition, unworn,
+                          unwashed, with all original tags attached.
+                        </li>
+                        <li>
+                          Refunds will be processed to the original payment
+                          method within 5-7 business days after we receive the
+                          returned item.
+                        </li>
+                        <li>
+                          Shipping costs are non-refundable unless the item
+                          received was damaged or incorrect.
+                        </li>
+                      </ul>
+                      <p className="mt-4">
+                        Please contact our support team at support@Aranis.com to
+                        initiate a refund request.
+                      </p>
+                    </>
+                  )}
                 </div>
               </TabsContent>
 
               <TabsContent value="return" className="mt-0">
                 <div className="prose prose-sm dark:prose-invert text-muted-foreground/80 max-w-none text-base leading-relaxed font-medium">
-                  <p>
-                    Our return process is designed to be as seamless as possible
-                    for you.
-                  </p>
-                  <ul className="mt-4 space-y-2">
-                    <li>
-                      You have 30 days from the date of delivery to return your
-                      item.
-                    </li>
-                    <li>
-                      To initiate a return, please log in to your account,
-                      navigate to "My Orders," and select the item you wish to
-                      return.
-                    </li>
-                    <li>
-                      You will receive a pre-paid return shipping label via
-                      email.
-                    </li>
-                    <li>
-                      Please package the item securely and drop it off at any
-                      authorized shipping location.
-                    </li>
-                  </ul>
-                  <p className="mt-4">
-                    Once your return is received and inspected, we will notify
-                    you of the approval or rejection of your return. Approved
-                    returns will be refunded or exchanged according to your
-                    preference.
-                  </p>
+                  {settings?.returnPolicy ? (
+                    <HtmlContent content={settings.returnPolicy} />
+                  ) : (
+                    <>
+                      <p>
+                        Our return process is designed to be as seamless as
+                        possible for you.
+                      </p>
+                      <ul className="mt-4 space-y-2">
+                        <li>
+                          You have 30 days from the date of delivery to return
+                          your item.
+                        </li>
+                        <li>
+                          To initiate a return, please log in to your account,
+                          navigate to "My Orders," and select the item you wish
+                          to return.
+                        </li>
+                        <li>
+                          You will receive a pre-paid return shipping label via
+                          email.
+                        </li>
+                        <li>
+                          Please package the item securely and drop it off at
+                          any authorized shipping location.
+                        </li>
+                      </ul>
+                      <p className="mt-4">
+                        Once your return is received and inspected, we will
+                        notify you of the approval or rejection of your return.
+                        Approved returns will be refunded or exchanged according
+                        to your preference.
+                      </p>
+                    </>
+                  )}
                 </div>
               </TabsContent>
             </Tabs>

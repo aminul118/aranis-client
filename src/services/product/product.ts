@@ -113,11 +113,23 @@ const deleteProductBulk = async (ids: string[]) => {
   return res;
 };
 
+const getProductPriceRange = async () => {
+  return await serverFetch.get<
+    ApiResponse<{ minPrice: number; maxPrice: number }>
+  >('/products/price-range', {
+    next: {
+      tags: ['product-price-range'],
+      revalidate: 3600, // Revalidate every hour
+    },
+  });
+};
+
 export {
   deleteProduct,
   deleteProductBulk,
   getBestSellingProducts,
   getNewArrivals,
+  getProductPriceRange,
   getProducts,
   getSingleProduct,
   getTopRatedProducts,

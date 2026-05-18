@@ -7,9 +7,12 @@ interface ActiveFiltersProps {
   selectedColors: string[];
   selectedSizes: string[];
   selectedQuery?: string;
+  selectedMinPrice?: string;
+  selectedMaxPrice?: string;
   onUpdateURL: (params: Record<string, string | null>) => void;
   onToggleMultiFilter: (key: string, value: string, current: string[]) => void;
   onClearAll: () => void;
+  isCategoryFixed?: boolean;
 }
 
 const ActiveFilters = ({
@@ -17,15 +20,20 @@ const ActiveFilters = ({
   selectedColors,
   selectedSizes,
   selectedQuery,
+  selectedMinPrice,
+  selectedMaxPrice,
   onUpdateURL,
   onToggleMultiFilter,
   onClearAll,
+  isCategoryFixed = false,
 }: ActiveFiltersProps) => {
   const hasActiveFilters =
-    selectedCategory !== 'All' ||
+    (!isCategoryFixed && selectedCategory !== 'All') ||
     selectedColors.length > 0 ||
     selectedSizes.length > 0 ||
-    !!selectedQuery;
+    !!selectedQuery ||
+    !!selectedMinPrice ||
+    !!selectedMaxPrice;
 
   if (!hasActiveFilters) return null;
 
@@ -49,7 +57,7 @@ const ActiveFilters = ({
             </button>
           </Badge>
         )}
-        {selectedCategory !== 'All' && (
+        {!isCategoryFixed && selectedCategory !== 'All' && (
           <Badge
             variant="secondary"
             className="gap-1 rounded-full bg-blue-500/10 px-3 py-1 pr-1 text-blue-600 dark:text-blue-400"
@@ -59,6 +67,21 @@ const ActiveFilters = ({
               onClick={() =>
                 onUpdateURL({ category: 'All', subCategory: '', type: '' })
               }
+              className="rounded-full p-0.5 hover:bg-blue-500/20"
+            >
+              <X size={12} />
+            </button>
+          </Badge>
+        )}
+        {(selectedMinPrice || selectedMaxPrice) && (
+          <Badge
+            variant="secondary"
+            className="gap-1 rounded-full bg-blue-500/10 px-3 py-1 pr-1 text-blue-600 dark:text-blue-400"
+          >
+            Price: {selectedMinPrice ? `${selectedMinPrice} TK` : '0 TK'} -{' '}
+            {selectedMaxPrice ? `${selectedMaxPrice} TK` : 'Max'}
+            <button
+              onClick={() => onUpdateURL({ minPrice: null, maxPrice: null })}
               className="rounded-full p-0.5 hover:bg-blue-500/20"
             >
               <X size={12} />

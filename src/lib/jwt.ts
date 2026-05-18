@@ -6,8 +6,12 @@ import { ResponseCookie } from 'next/dist/compiled/@edge-runtime/cookies';
 import { cookies } from 'next/headers';
 
 const getCookie = async (key: string) => {
-  const cookieStore = await cookies();
-  return cookieStore.get(key)?.value || null;
+  try {
+    const cookieStore = await cookies();
+    return cookieStore.get(key)?.value || null;
+  } catch {
+    return null;
+  }
 };
 
 const verifyAccessToken = async (token: string): Promise<JwtPayload | null> => {
@@ -33,13 +37,21 @@ const setCookie = async (
   value: string,
   options: Partial<ResponseCookie>,
 ) => {
-  const cookieStore = await cookies();
-  cookieStore.set(key, value, options);
+  try {
+    const cookieStore = await cookies();
+    cookieStore.set(key, value, options);
+  } catch {
+    // No-op outside request scope
+  }
 };
 
 const deleteCookie = async (key: string) => {
-  const cookieStore = await cookies();
-  cookieStore.delete(key);
+  try {
+    const cookieStore = await cookies();
+    cookieStore.delete(key);
+  } catch {
+    // No-op outside request scope
+  }
 };
 
 export {

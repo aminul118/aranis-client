@@ -6,9 +6,12 @@ import { generateShopPath } from '@/lib/url-slugs';
 import { cn } from '@/lib/utils';
 import { getCategories, ICategory } from '@/services/category/category';
 import { getColors, IColor } from '@/services/color/color';
-import { getProducts } from '@/services/product/product';
+import { getProductPriceRange, getProducts } from '@/services/product/product';
 import { IMeta, IProduct } from '@/types';
+import { motion } from 'framer-motion';
+import { Gift } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import NProgress from 'nprogress';
 import {
   useEffect,
   useTransition as useReactTransition,
@@ -19,15 +22,26 @@ import FilterSection from './FilterSection';
 import ProductList from './ProductList';
 import ShopHeader from './ShopHeader';
 
+// Global memory cache to eliminate loading flickers during page changes/navigating navbar
+let cachedColors: IColor[] | null = null;
+let cachedCategories: ICategory[] | null = null;
+let cachedPriceRange: { minPrice: number; maxPrice: number } | null = null;
+
 interface ShopContentProps {
   initialFilters?: {
     category?: string;
     subCategory?: string;
     type?: string;
   };
+  isOfferPage?: boolean;
+  offerTag?: string;
 }
 
-const ShopContent = ({ initialFilters }: ShopContentProps) => {
+const ShopContent = ({
+  initialFilters,
+  isOfferPage = false,
+  offerTag,
+}: ShopContentProps) => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [isPending, startTransition] = useReactTransition();
@@ -35,8 +49,19 @@ const ShopContent = ({ initialFilters }: ShopContentProps) => {
   const [allProducts, setAllProducts] = useState<IProduct[]>([]);
   const [meta, setMeta] = useState<IMeta | null>(null);
   const [loading, setLoading] = useState(true);
-  const [dbColors, setDbColors] = useState<IColor[]>([]);
-  const [dbCategories, setDbCategories] = useState<ICategory[]>([]);
+  const [hasInitialProducts, setHasInitialProducts] = useState<boolean | null>(
+    null,
+  );
+
+  // Initialize with cached metadata to render sidebar filters instantly without flickering
+  const [dbColors, setDbColors] = useState<IColor[]>(cachedColors || []);
+  const [dbCategories, setDbCategories] = useState<ICategory[]>(
+    cachedCategories || [],
+  );
+  const [priceRange, setPriceRange] = useState<{
+    minPrice: number;
+    maxPrice: number;
+  } | null>(cachedPriceRange || null);
 
   const page = Number(searchParams.get('page')) || 1;
   const limit = 12;
@@ -50,6 +75,8 @@ const ShopContent = ({ initialFilters }: ShopContentProps) => {
 
   const selectedColors = searchParams.get('color')?.split(',') || [];
   const selectedSizes = searchParams.get('sizes')?.split(',') || [];
+  const selectedMinPrice = searchParams.get('minPrice') || '';
+  const selectedMaxPrice = searchParams.get('maxPrice') || '';
   const sortBy = searchParams.get('sort') || 'Newest';
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
@@ -67,11 +94,22 @@ const ShopContent = ({ initialFilters }: ShopContentProps) => {
 
   useEffect(() => {
     const fetchAll = async () => {
-      setLoading(true);
+      // Background stale-while-revalidate: only show spinner if we have no products yet
+      if (allProducts.length === 0) {
+        setLoading(true);
+      }
+      NProgress.start();
       try {
         const query: Record<string, string> = {};
         searchParams.forEach((value, key) => {
-          query[key] = value;
+          if (
+            value !== 'undefined' &&
+            value !== 'null' &&
+            value &&
+            value.trim() !== ''
+          ) {
+            query[key] = value;
+          }
         });
 
         if (initialFilters?.category) query.category = initialFilters.category;
@@ -79,31 +117,70 @@ const ShopContent = ({ initialFilters }: ShopContentProps) => {
           query.subCategory = initialFilters.subCategory;
         if (initialFilters?.type) query.type = initialFilters.type;
 
+        if (isOfferPage) {
+          query.isOffer = 'true';
+          if (offerTag) {
+            query.offerTag = offerTag;
+          }
+        }
+
         if (!query.limit) query.limit = limit.toString();
         if (!query.page) query.page = page.toString();
 
         const { data, meta: productMeta } = await getProducts(query);
         setAllProducts(data || []);
         setMeta(productMeta || null);
+
+        // Track if there are any products initially before user filters
+        const isQueryEmpty =
+          !searchParams.get('color') &&
+          !searchParams.get('sizes') &&
+          !searchParams.get('minPrice') &&
+          !searchParams.get('maxPrice') &&
+          !searchParams.get('q') &&
+          !searchParams.get('sort');
+        if (isQueryEmpty && hasInitialProducts === null) {
+          setHasInitialProducts(data && data.length > 0);
+        }
       } catch (error) {
         console.error('Failed to fetch products', error);
       } finally {
         setLoading(false);
+        NProgress.done();
       }
     };
     fetchAll();
-  }, [searchParams, page, initialFilters]);
+  }, [
+    searchParams,
+    page,
+    initialFilters?.category,
+    initialFilters?.subCategory,
+    initialFilters?.type,
+    isOfferPage,
+    offerTag,
+  ]);
 
   useEffect(() => {
     const fetchMetadata = async () => {
       try {
-        const [colorRes, catRes] = await Promise.all([
+        const [colorRes, catRes, priceRes] = await Promise.all([
           getColors({ limit: '100' }),
           getCategories({ limit: '100' }),
+          getProductPriceRange(),
         ]);
 
-        if (colorRes.data) setDbColors(colorRes.data);
-        if (catRes.data) setDbCategories(catRes.data);
+        if (colorRes.data) {
+          cachedColors = colorRes.data;
+          setDbColors(colorRes.data);
+        }
+        if (catRes.data) {
+          cachedCategories = catRes.data;
+          setDbCategories(catRes.data);
+        }
+        if (priceRes.data) {
+          cachedPriceRange = priceRes.data;
+          setPriceRange(priceRes.data);
+        }
       } catch (error) {
         console.error('Failed to fetch filter metadata', error);
       }
@@ -157,7 +234,10 @@ const ShopContent = ({ initialFilters }: ShopContentProps) => {
     const queryStr = searchStr ? `?${searchStr}` : '';
 
     startTransition(() => {
-      if (hasStructuralChange || initialFilters) {
+      if (initialFilters) {
+        // We are on a clean category page (e.g. /pakistani). Keep the path completely intact!
+        router.push(`${window.location.pathname}${queryStr}`);
+      } else if (hasStructuralChange) {
         const nextPath = generateShopPath(
           nextCategory,
           nextSubCategory,
@@ -178,14 +258,22 @@ const ShopContent = ({ initialFilters }: ShopContentProps) => {
   };
 
   const handleClearAll = () => {
-    updateURL({
-      category: 'All',
-      subCategory: '',
-      type: '',
+    const clearParams: Record<string, string | null> = {
       color: null,
       sizes: null,
+      minPrice: null,
+      maxPrice: null,
       q: null,
-    });
+    };
+
+    if (!initialFilters) {
+      // Only clear structural category paths if we are on the general /shop page
+      clearParams.category = 'All';
+      clearParams.subCategory = '';
+      clearParams.type = '';
+    }
+
+    updateURL(clearParams);
   };
 
   return (
@@ -194,79 +282,137 @@ const ShopContent = ({ initialFilters }: ShopContentProps) => {
     >
       <div
         className={cn(
-          'bg-background mt-8 min-h-screen transition-opacity',
-          isPending && 'pointer-events-none opacity-50',
+          'bg-background mt-8 min-h-screen transition-opacity duration-300',
+          (isPending || loading) && 'pointer-events-none opacity-60',
         )}
       >
         <div className="container mx-auto px-4">
-          <ShopHeader
-            dbCategories={dbCategories}
-            selectedCategory={selectedCategory}
-            selectedSubCategory={selectedSubCategory}
-            selectedType={selectedType}
-            totalItems={meta?.total || 0}
-            viewMode={viewMode}
-            sortBy={sortBy}
-            isSidebarOpen={isSidebarOpen}
-            setIsSidebarOpen={setIsSidebarOpen}
-            onUpdateURL={updateURL}
-          >
-            <FilterSection
-              dbCategories={dbCategories}
-              dbColors={dbColors}
-              selectedCategory={selectedCategory}
-              selectedSubCategory={selectedSubCategory}
-              selectedType={selectedType}
-              selectedColors={selectedColors}
-              selectedSizes={selectedSizes}
-              sortBy={sortBy}
-              onUpdateURL={updateURL}
-              onToggleMultiFilter={toggleMultiFilter}
-              showSort
-            />
-          </ShopHeader>
+          {isOfferPage && hasInitialProducts === false ? (
+            <div className="flex min-h-[50vh] flex-col items-center justify-center py-10 text-center">
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="flex flex-col items-center"
+              >
+                <motion.div
+                  animate={{
+                    rotate: [0, 10, -10, 0],
+                  }}
+                  transition={{
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: 'easeInOut',
+                  }}
+                  className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-red-50/80 text-red-400 dark:bg-red-900/20"
+                >
+                  <Gift size={38} strokeWidth={1.5} />
+                </motion.div>
 
-          <ActiveFilters
-            selectedCategory={selectedCategory}
-            selectedColors={selectedColors}
-            selectedSizes={selectedSizes}
-            selectedQuery={searchParams.get('q') || ''}
-            onUpdateURL={updateURL}
-            onToggleMultiFilter={toggleMultiFilter}
-            onClearAll={handleClearAll}
-          />
+                <h1 className="text-foreground mb-2 text-2xl font-bold tracking-tight">
+                  No Active Offers Found
+                </h1>
 
-          <div className="flex items-start gap-12">
-            <aside className="sticky top-32 hidden w-64 shrink-0 flex-col gap-10 lg:flex">
-              <FilterSection
+                <p className="text-muted-foreground mb-8 max-w-[280px] text-sm leading-relaxed">
+                  We're currently preparing our next seasonal curation. Stay
+                  tuned!
+                </p>
+
+                <div className="h-1 w-12 rounded-full bg-red-500/10" />
+              </motion.div>
+            </div>
+          ) : (
+            <>
+              {isOfferPage && (
+                <div className="container mx-auto mb-10 px-4 text-center">
+                  <h1 className="text-foreground text-3xl font-black tracking-tight uppercase md:text-5xl">
+                    {offerTag || 'Special'}{' '}
+                    <span className="text-red-500">Offers</span>
+                  </h1>
+                  <p className="text-muted-foreground mx-auto mt-2 max-w-xl text-sm md:text-base">
+                    Discover our premium collections at exclusive, temporary
+                    pricing.
+                  </p>
+                </div>
+              )}
+              <ShopHeader
                 dbCategories={dbCategories}
-                dbColors={dbColors}
                 selectedCategory={selectedCategory}
                 selectedSubCategory={selectedSubCategory}
                 selectedType={selectedType}
+                totalItems={meta?.total || 0}
+                viewMode={viewMode}
+                sortBy={sortBy}
+                isSidebarOpen={isSidebarOpen}
+                setIsSidebarOpen={setIsSidebarOpen}
+                onUpdateURL={updateURL}
+              >
+                <FilterSection
+                  dbCategories={dbCategories}
+                  dbColors={dbColors}
+                  selectedCategory={selectedCategory}
+                  selectedSubCategory={selectedSubCategory}
+                  selectedType={selectedType}
+                  selectedColors={selectedColors}
+                  selectedSizes={selectedSizes}
+                  sortBy={sortBy}
+                  onUpdateURL={updateURL}
+                  onToggleMultiFilter={toggleMultiFilter}
+                  showSort
+                  priceRange={priceRange}
+                  selectedMinPrice={selectedMinPrice}
+                  selectedMaxPrice={selectedMaxPrice}
+                />
+              </ShopHeader>
+
+              <ActiveFilters
+                selectedCategory={selectedCategory}
                 selectedColors={selectedColors}
                 selectedSizes={selectedSizes}
-                sortBy={sortBy}
+                selectedQuery={searchParams.get('q') || ''}
+                selectedMinPrice={selectedMinPrice}
+                selectedMaxPrice={selectedMaxPrice}
                 onUpdateURL={updateURL}
                 onToggleMultiFilter={toggleMultiFilter}
-                showCategory={false}
-              />
-            </aside>
-
-            <main className="flex-1">
-              <ProductList
-                products={allProducts}
-                loading={loading}
-                viewMode={viewMode}
+                onClearAll={handleClearAll}
+                isCategoryFixed={!!initialFilters}
               />
 
-              {meta && (
-                <div className="border-border mt-12 flex justify-center border-t pt-12">
-                  <AppPagination meta={meta} />
-                </div>
-              )}
-            </main>
-          </div>
+              <div className="flex items-start gap-12">
+                <aside className="sticky top-32 hidden w-64 shrink-0 flex-col gap-10 lg:flex">
+                  <FilterSection
+                    dbCategories={dbCategories}
+                    dbColors={dbColors}
+                    selectedCategory={selectedCategory}
+                    selectedSubCategory={selectedSubCategory}
+                    selectedType={selectedType}
+                    selectedColors={selectedColors}
+                    selectedSizes={selectedSizes}
+                    sortBy={sortBy}
+                    onUpdateURL={updateURL}
+                    onToggleMultiFilter={toggleMultiFilter}
+                    showCategory={false}
+                    priceRange={priceRange}
+                    selectedMinPrice={selectedMinPrice}
+                    selectedMaxPrice={selectedMaxPrice}
+                  />
+                </aside>
+
+                <main className="flex-1">
+                  <ProductList
+                    products={allProducts}
+                    loading={loading}
+                    viewMode={viewMode}
+                  />
+
+                  {meta && (
+                    <div className="border-border mt-12 flex justify-center border-t pt-12">
+                      <AppPagination meta={meta} />
+                    </div>
+                  )}
+                </main>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </TransitionContext.Provider>

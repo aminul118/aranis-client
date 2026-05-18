@@ -1,6 +1,7 @@
 import ProductCard from '@/components/common/ProductCard';
 import ProductDetailContent from '@/components/modules/Public/Products/ProductDetailContent';
 import { getProducts, getSingleProduct } from '@/services/product/product';
+import { getSiteSettings } from '@/services/settings/settings';
 import { ArrowLeft } from 'lucide-react';
 import { Metadata } from 'next';
 import Link from 'next/link';
@@ -49,7 +50,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 const ProductPage = async ({ params }: Props) => {
   const { slug } = await params;
-  const { data: product } = await getSingleProduct(slug);
+  const [{ data: product }, { data: settings }] = await Promise.all([
+    getSingleProduct(slug),
+    getSiteSettings(),
+  ]);
 
   if (!product) {
     notFound();
@@ -76,7 +80,7 @@ const ProductPage = async ({ params }: Props) => {
           Explore More Collections
         </Link>
 
-        <ProductDetailContent product={product} />
+        <ProductDetailContent product={product} settings={settings} />
 
         {relatedProducts.length > 0 && (
           <div className="border-border/50 mt-24 border-t pt-16">
