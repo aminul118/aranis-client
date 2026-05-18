@@ -547,15 +547,15 @@ const ProductDetailContent = ({
 
           {/* CTA Section */}
           <div className="flex flex-col gap-4 pt-6">
-            <div className="flex flex-col gap-4 sm:flex-row">
+            <div className="flex flex-row gap-3">
               {currentStock < 1 ? (
                 <Button
                   onClick={handleRestockRequest}
                   disabled={isRequesting}
                   size="lg"
-                  className="flex-1 rounded-3xl bg-blue-600 py-7 text-lg font-black text-white shadow-xl shadow-blue-500/20 transition-all hover:bg-blue-700 active:scale-[0.98]"
+                  className="flex-1 rounded-2xl bg-blue-600 py-4 text-sm font-black text-white shadow-xl shadow-blue-500/20 transition-all hover:bg-blue-700 active:scale-[0.98]"
                 >
-                  <BellRing className="mr-2 h-5 w-5" />{' '}
+                  <BellRing className="mr-2 h-4 w-4" />{' '}
                   {isRequesting ? 'Requesting...' : 'Notify Me'}
                 </Button>
               ) : (
@@ -564,14 +564,14 @@ const ProductDetailContent = ({
                     onClick={() => handleAddToCart(false)}
                     size="lg"
                     variant="outline"
-                    className="flex-1 rounded-3xl border-2 border-blue-600 py-7 text-lg font-black text-blue-600 transition-all hover:bg-blue-50 active:scale-[0.98]"
+                    className="flex-1 rounded-2xl border-2 border-blue-600 py-4 text-sm font-black text-blue-600 transition-all hover:bg-blue-50 active:scale-[0.98]"
                   >
-                    Add to Cart <ShoppingCart className="ml-2 h-5 w-5" />
+                    Add to Cart <ShoppingCart className="ml-2 h-4 w-4" />
                   </Button>
                   <Button
                     onClick={() => handleAddToCart(true)}
                     size="lg"
-                    className="flex-1 rounded-3xl bg-blue-600 py-7 text-lg font-black text-white shadow-xl shadow-blue-500/20 transition-all hover:bg-blue-700 active:scale-[0.98]"
+                    className="flex-1 rounded-2xl bg-blue-600 py-4 text-sm font-black text-white shadow-xl shadow-blue-500/20 transition-all hover:bg-blue-700 active:scale-[0.98]"
                   >
                     Buy Now
                   </Button>
