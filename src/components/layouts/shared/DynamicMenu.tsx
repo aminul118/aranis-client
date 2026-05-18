@@ -18,6 +18,7 @@ import {
 } from '@/components/ui/sidebar';
 import { useSocket } from '@/hooks/useSocket';
 import { getUnreadCount } from '@/services/chat/chat';
+import { getUnreadOrdersCount } from '@/services/order/order';
 import { IUser } from '@/types';
 import { MenuGroup, UserRole } from '@/types/admin-menu';
 import { ChevronRight } from 'lucide-react';
@@ -39,6 +40,7 @@ interface DynamicMenuProps {
 const DynamicMenu = ({ menuGroups, role, user }: DynamicMenuProps) => {
   const pathname = usePathname();
   const [unreadChatCount, setUnreadChatCount] = useState(0);
+  const [unreadOrderCount, setUnreadOrderCount] = useState(0);
   const socketRef = useRef<Socket | null>(null);
 
   const fetchUnreadCount = async () => {
@@ -54,14 +56,35 @@ const DynamicMenu = ({ menuGroups, role, user }: DynamicMenuProps) => {
     }
   };
 
+  const fetchUnreadOrdersCount = async () => {
+    if (role === 'ADMIN' || role === 'SUPER_ADMIN') {
+      try {
+        const res = await getUnreadOrdersCount();
+        if (res.success) {
+          setUnreadOrderCount(res.data);
+        }
+      } catch (error) {
+        console.error('Failed to fetch unread orders count:', error);
+      }
+    }
+  };
+
   useEffect(() => {
     fetchUnreadCount();
-    const interval = setInterval(fetchUnreadCount, 30000); // 30s polling
+    fetchUnreadOrdersCount();
+    const interval = setInterval(() => {
+      fetchUnreadCount();
+      fetchUnreadOrdersCount();
+    }, 30000); // 30s polling
     return () => clearInterval(interval);
   }, [role]);
 
   const handleSocketUpdate = () => {
     fetchUnreadCount();
+  };
+
+  const handleOrderSocketUpdate = () => {
+    fetchUnreadOrdersCount();
   };
 
   useSocket(
@@ -74,6 +97,7 @@ const DynamicMenu = ({ menuGroups, role, user }: DynamicMenuProps) => {
   useSocket(handleSocketUpdate, user?._id, 'receive-message');
   useSocket(handleSocketUpdate, undefined, 'new-user-message');
   useSocket(handleSocketUpdate, user?._id, 'messages-marked-seen');
+  useSocket(handleOrderSocketUpdate, undefined, 'unread-orders-updated');
 
   const isLinkActive = (url: string) => {
     if (url === '/admin' || url === '/user') return pathname === url;
@@ -112,9 +136,13 @@ const DynamicMenu = ({ menuGroups, role, user }: DynamicMenuProps) => {
                 const hasSubMenu = menu.subMenu && menu.subMenu.length > 0;
                 const active = isLinkActive(menu.url);
 
-                // Inject dynamic badge for Support Center
+                // Inject dynamic badge for Support Center and Orders
                 const displayBadge =
-                  menu.name === 'Support Center' ? unreadChatCount : menu.badge;
+                  menu.name === 'Support Center'
+                    ? unreadChatCount
+                    : menu.name === 'Orders'
+                      ? unreadOrderCount
+                      : menu.badge;
 
                 if (!hasSubMenu) {
                   return (

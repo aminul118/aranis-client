@@ -1,11 +1,11 @@
 'use client';
 
+import DeleteConfirmation from '@/components/common/actions/DeleteConfirmation';
 import TableManageMent from '@/components/common/table/TableManageMent';
 import { Button } from '@/components/ui/button';
 import { deleteNavbarBulk, INavItem } from '@/services/navbar/navbar';
 import { Trash2 } from 'lucide-react';
 import { useState } from 'react';
-import { toast } from 'sonner';
 import NavbarColumn from './NavbarColumn';
 
 const NavbarTable = ({ navbars }: { navbars: INavItem[] }) => {
@@ -26,28 +26,16 @@ const NavbarTable = ({ navbars }: { navbars: INavItem[] }) => {
             </div>
           </div>
           <div className="flex gap-2">
-            <Button
-              onClick={async () => {
-                if (
-                  confirm(
-                    `Are you sure you want to delete ${selectedIds.length} items?`,
-                  )
-                ) {
-                  try {
-                    const res = await deleteNavbarBulk(selectedIds);
-                    if (res.success) {
-                      toast.success('Navbar items deleted successfully');
-                      setSelectedIds([]);
-                    }
-                  } catch (error) {
-                    toast.error('Failed to delete items');
-                  }
-                }
-              }}
-              className="rounded-xl bg-red-500 text-[10px] font-black tracking-widest text-white uppercase hover:bg-red-600"
+            <DeleteConfirmation
+              onConfirm={() => deleteNavbarBulk(selectedIds)}
+              onSuccess={() => setSelectedIds([])}
+              title="Delete Selected Items?"
+              description={`Are you sure you want to delete ${selectedIds.length} items? This action cannot be undone.`}
             >
-              <Trash2 size={14} className="mr-2" /> Delete Selected
-            </Button>
+              <Button className="rounded-xl border-none bg-red-500 text-[10px] font-black tracking-widest text-white uppercase shadow-lg shadow-red-500/20 hover:bg-red-600">
+                <Trash2 size={14} className="mr-2" /> Delete Selected
+              </Button>
+            </DeleteConfirmation>
             <Button
               variant="ghost"
               onClick={() => setSelectedIds([])}

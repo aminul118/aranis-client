@@ -96,12 +96,21 @@ const deleteOrderBulk = async (ids: string[]) => {
   return res;
 };
 
+const getUnreadOrdersCount = async () => {
+  return await serverFetch.get<ApiResponse<number>>('/orders/unread-count', {
+    next: {
+      tags: ['order'],
+    },
+  });
+};
+
 export {
   createOrder,
   deleteOrderBulk,
   getAllOrders,
   getMyOrders,
   getSingleOrder,
+  getUnreadOrdersCount,
   trackOrder,
   updateOrderStatus,
 };

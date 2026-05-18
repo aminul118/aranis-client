@@ -28,7 +28,7 @@ const adminSidebarMenu: MenuGroup[] = [
     roles: ['SUPER_ADMIN', 'ADMIN'] as UserRole[],
     menu: [
       { name: 'Support Center', url: '/admin/chat', icon: MessageCircle },
-      { name: 'User Management', url: '/admin/users', icon: Users },
+      { name: 'Users', url: '/admin/users', icon: Users },
     ],
   },
   {

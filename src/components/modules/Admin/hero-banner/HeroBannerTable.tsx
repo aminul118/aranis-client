@@ -1,5 +1,7 @@
 'use client';
 
+import DeleteConfirmation from '@/components/common/actions/DeleteConfirmation';
+
 import TableManageMent from '@/components/common/table/TableManageMent';
 import { Button } from '@/components/ui/button';
 import {
@@ -8,7 +10,6 @@ import {
 } from '@/services/hero-banner/hero-banner';
 import { Trash2 } from 'lucide-react';
 import { useState } from 'react';
-import { toast } from 'sonner';
 import HeroBannerColumn from './HeroBannerColumn';
 
 const HeroBannerTable = ({ banners }: { banners: IHeroBanner[] }) => {
@@ -29,28 +30,16 @@ const HeroBannerTable = ({ banners }: { banners: IHeroBanner[] }) => {
             </div>
           </div>
           <div className="flex gap-2">
-            <Button
-              onClick={async () => {
-                if (
-                  confirm(
-                    `Are you sure you want to delete ${selectedIds.length} banners?`,
-                  )
-                ) {
-                  try {
-                    const res = await deleteHeroBannerBulk(selectedIds);
-                    if (res.success) {
-                      toast.success('Banners deleted successfully');
-                      setSelectedIds([]);
-                    }
-                  } catch (error) {
-                    toast.error('Failed to delete banners');
-                  }
-                }
-              }}
-              className="rounded-xl bg-red-500 text-[10px] font-black tracking-widest text-white uppercase hover:bg-red-600"
+            <DeleteConfirmation
+              onConfirm={() => deleteHeroBannerBulk(selectedIds)}
+              onSuccess={() => setSelectedIds([])}
+              title="Delete Selected Banners?"
+              description={`Are you sure you want to delete ${selectedIds.length} banners? This action cannot be undone.`}
             >
-              <Trash2 size={14} className="mr-2" /> Delete Selected
-            </Button>
+              <Button className="rounded-xl border-none bg-red-500 text-[10px] font-black tracking-widest text-white uppercase shadow-lg shadow-red-500/20 hover:bg-red-600">
+                <Trash2 size={14} className="mr-2" /> Delete Selected
+              </Button>
+            </DeleteConfirmation>
             <Button
               variant="ghost"
               onClick={() => setSelectedIds([])}
