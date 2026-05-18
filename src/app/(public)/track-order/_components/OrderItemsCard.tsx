@@ -1,0 +1,88 @@
+'use client';
+
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
+import { IOrder } from '@/services/order/order.types';
+import { ShoppingBag } from 'lucide-react';
+import Image from 'next/image';
+
+interface OrderItemsCardProps {
+  order: IOrder;
+}
+
+export default function OrderItemsCard({ order }: OrderItemsCardProps) {
+  return (
+    <Card className="border-border/50 border-none bg-[#151722]/80 shadow-2xl backdrop-blur-xl">
+      <CardHeader className="p-6 pb-0 md:p-8">
+        <CardTitle className="flex items-center gap-3 text-xl font-black italic">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-500/10 text-blue-500">
+            <ShoppingBag size={20} />
+          </div>
+          Order Items
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-6 p-6 md:p-8">
+        {order.items.map((item: any, idx: number) => (
+          <div
+            key={idx}
+            className="group flex items-center gap-5 transition-all hover:translate-x-2"
+          >
+            <div className="relative h-20 w-16 overflow-hidden rounded-2xl border border-white/5 bg-white/5 shadow-xl">
+              <Image
+                src={item.product.thumbnails?.[0]}
+                alt={item.product.name}
+                fill
+                className="object-cover transition-transform duration-500 group-hover:scale-110"
+              />
+            </div>
+            <div className="flex-1">
+              <p className="text-lg leading-tight font-black">
+                {item.product.name}
+              </p>
+              <p className="text-muted-foreground mt-1 text-sm font-bold opacity-60">
+                {item.quantity} × ৳{item.price}
+              </p>
+            </div>
+            <p className="text-xl font-black text-blue-500">
+              ৳{item.quantity * item.price}
+            </p>
+          </div>
+        ))}
+        <div className="mt-6 border-t border-white/5 pt-8">
+          <div className="flex items-end justify-between">
+            <div>
+              <p className="text-muted-foreground text-[10px] font-black tracking-widest uppercase opacity-60">
+                Total Amount
+              </p>
+              <p className="text-4xl font-black tracking-tighter text-white">
+                ৳{order.totalPrice}
+              </p>
+            </div>
+            <Badge className="mb-2 rounded-xl border border-blue-500/20 bg-blue-600/10 px-4 py-2 text-blue-500">
+              Incl. Shipping
+            </Badge>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+function Badge({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <span
+      className={cn(
+        'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold',
+        className,
+      )}
+    >
+      {children}
+    </span>
+  );
+}

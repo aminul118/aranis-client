@@ -165,7 +165,24 @@ const CheckoutPage = () => {
           setResendTimer(60);
           toast.success(`Verification code sent to your ${guestMethod}`);
         } else {
-          toast.error(res.message || 'Failed to initiate guest registration');
+          const isAlreadyRegistered =
+            res.message?.toLowerCase().includes('exist') ||
+            res.message?.toLowerCase().includes('register') ||
+            res.message?.toLowerCase().includes('already');
+
+          if (isAlreadyRegistered) {
+            toast.error(
+              'This account is already registered. Please login to place your order.',
+              {
+                duration: 5000,
+              },
+            );
+            setTimeout(() => {
+              router.push('/login?redirect=checkout');
+            }, 2000);
+          } else {
+            toast.error(res.message || 'Failed to initiate guest registration');
+          }
         }
       } catch (error) {
         toast.error('Registration failed');
@@ -838,7 +855,7 @@ const CheckoutPage = () => {
 
       {/* OTP Verification Modal */}
       <Dialog open={showOTPModal} onOpenChange={setShowOTPModal}>
-        <DialogContent className="border-border bg-card/40 max-w-[400px] overflow-hidden rounded-[40px] p-10 backdrop-blur-3xl">
+        <DialogContent className="border-border bg-card/40 max-w-[calc(100%-2rem)] overflow-hidden rounded-3xl p-6 backdrop-blur-3xl sm:max-w-[400px] sm:rounded-[40px] sm:p-10">
           <div className="absolute -top-12 -right-12 h-32 w-32 rounded-full bg-blue-500/10 blur-2xl" />
 
           <DialogHeader className="relative z-10">
@@ -863,30 +880,30 @@ const CheckoutPage = () => {
               <InputOTPGroup className="gap-2">
                 <InputOTPSlot
                   index={0}
-                  className="border-border bg-background/50 focus:bg-background h-14 w-12 rounded-xl border-2 text-xl font-black transition-all focus:border-blue-600"
+                  className="border-border bg-background/50 focus:bg-background h-12 w-10 rounded-xl border-2 text-xl font-black transition-all focus:border-blue-600 sm:h-14 sm:w-12"
                 />
                 <InputOTPSlot
                   index={1}
-                  className="border-border bg-background/50 focus:bg-background h-14 w-12 rounded-xl border-2 text-xl font-black transition-all focus:border-blue-600"
+                  className="border-border bg-background/50 focus:bg-background h-12 w-10 rounded-xl border-2 text-xl font-black transition-all focus:border-blue-600 sm:h-14 sm:w-12"
                 />
                 <InputOTPSlot
                   index={2}
-                  className="border-border bg-background/50 focus:bg-background h-14 w-12 rounded-xl border-2 text-xl font-black transition-all focus:border-blue-600"
+                  className="border-border bg-background/50 focus:bg-background h-12 w-10 rounded-xl border-2 text-xl font-black transition-all focus:border-blue-600 sm:h-14 sm:w-12"
                 />
               </InputOTPGroup>
               <InputOTPSeparator className="text-muted-foreground/20" />
               <InputOTPGroup className="gap-2">
                 <InputOTPSlot
                   index={3}
-                  className="border-border bg-background/50 focus:bg-background h-14 w-12 rounded-xl border-2 text-xl font-black transition-all focus:border-blue-600"
+                  className="border-border bg-background/50 focus:bg-background h-12 w-10 rounded-xl border-2 text-xl font-black transition-all focus:border-blue-600 sm:h-14 sm:w-12"
                 />
                 <InputOTPSlot
                   index={4}
-                  className="border-border bg-background/50 focus:bg-background h-14 w-12 rounded-xl border-2 text-xl font-black transition-all focus:border-blue-600"
+                  className="border-border bg-background/50 focus:bg-background h-12 w-10 rounded-xl border-2 text-xl font-black transition-all focus:border-blue-600 sm:h-14 sm:w-12"
                 />
                 <InputOTPSlot
                   index={5}
-                  className="border-border bg-background/50 focus:bg-background h-14 w-12 rounded-xl border-2 text-xl font-black transition-all focus:border-blue-600"
+                  className="border-border bg-background/50 focus:bg-background h-12 w-10 rounded-xl border-2 text-xl font-black transition-all focus:border-blue-600 sm:h-14 sm:w-12"
                 />
               </InputOTPGroup>
             </InputOTP>
