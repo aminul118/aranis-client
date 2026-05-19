@@ -79,9 +79,12 @@ const VerifyOTPForm = () => {
         toast.error(res.message);
       } else if (res.user) {
         toast.success(res.message || 'Verified successfully');
-        router.push(
-          redirect || getDefaultDashboardRoute(res.user.role as UserRole),
-        );
+        const targetRoute = redirect
+          ? redirect.startsWith('/')
+            ? redirect
+            : `/${redirect}`
+          : getDefaultDashboardRoute(res.user.role as UserRole);
+        router.push(targetRoute);
       } else {
         // This case might happen if OTP verified but user creation is pending (e.g. guest checkout)
         // But for login/register, user should exist by now.
