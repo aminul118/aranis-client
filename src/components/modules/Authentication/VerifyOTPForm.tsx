@@ -1,7 +1,6 @@
 'use client';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import Logo from '@/assets/Logo';
 import SubmitButton from '@/components/common/button/submit-button';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -28,7 +27,6 @@ import {
 } from '@/services/user/user-access';
 import { otpValidation } from '@/zod/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -112,15 +110,11 @@ const VerifyOTPForm = () => {
     <div data-aos="fade-left" className="flex items-center justify-center">
       <Card className="w-lg">
         <CardHeader className="flex flex-col items-center space-y-2 pb-2">
-          <Link href={'/'}>
-            <Logo />
-          </Link>
           <CardTitle className="text-center text-xl font-semibold">
             Verify Your Account
           </CardTitle>
           <p className="text-muted-foreground text-center text-sm">
-            Enter the 6-digit code sent to your email or phone to secure your
-            access.
+            Enter the 6-digit code sent to {identifier} to secure your access.
           </p>
         </CardHeader>
 
