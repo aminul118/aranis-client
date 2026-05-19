@@ -54,8 +54,11 @@ export async function POST(req: NextRequest) {
     // 6. Generate a cute, short 6-character unique ID
     const shortId = Math.random().toString(36).substring(2, 8);
 
-    // Save under the virtual folder "editor"
-    const uniqueFileName = `editor/${shortId}-${baseName}.webp`;
+    // Retrieve destination folder from formData, default to 'editor'
+    const folder = (formData.get('folder') as string | null) || 'editor';
+
+    // Save under the specified virtual folder
+    const uniqueFileName = `${folder}/${shortId}-${baseName}.webp`;
 
     let bufferToUpload: any = buffer;
     let contentType = file.type;
@@ -70,7 +73,7 @@ export async function POST(req: NextRequest) {
     } else {
       // For non-images, keep original name format but cute and clean
       const ext = file.name.split('.').pop() || 'bin';
-      finalFileName = `editor/${shortId}-${baseName}.${ext}`;
+      finalFileName = `${folder}/${shortId}-${baseName}.${ext}`;
     }
 
     // Upload to R2

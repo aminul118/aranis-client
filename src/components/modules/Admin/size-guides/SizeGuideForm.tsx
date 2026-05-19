@@ -51,11 +51,11 @@ const SizeGuideForm = ({ sizeGuide, onSuccess }: Props) => {
   const onSubmit = async (values: FormValues) => {
     // Handle image upload if it's a File (though SingleImageUploader usually returns URL if uploaded via helper)
     // Actually, let's use the same logic as PopupBannerForm
-    const { uploadToCloudinary } = await import('@/lib/cloudinary-upload');
+    const { uploadToR2 } = await import('@/lib/r2-upload');
 
     let imageUrl = values.image;
     if ((values.image as any) instanceof File) {
-      imageUrl = await uploadToCloudinary(values.image as unknown as File);
+      imageUrl = await uploadToR2(values.image as unknown as File);
     }
 
     const payload = { ...values, image: imageUrl };

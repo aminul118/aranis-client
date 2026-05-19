@@ -310,12 +310,8 @@ const ProductForm = ({
   const types = selectedSubCategory?.items || [];
 
   const onSubmit = async (data: FormValues) => {
-    // ── Step 1: Upload all images directly from browser → Cloudinary ──────
-    // Key fix: Browser → Cloudinary (1 hop) instead of Browser → Next.js
-    // → Express → Cloudinary (3 hops). All uploads run in parallel.
-    const { uploadToCloudinary, uploadManyToCloudinary } = await import(
-      '@/lib/cloudinary-upload'
-    );
+    // ── Step 1: Upload all images directly from browser → Cloudflare R2 ──
+    const { uploadManyToR2 } = await import('@/lib/r2-upload');
 
     // Gallery thumbnails — upload new Files in parallel, keep existing URLs
     const galleryFiles: File[] = [];
@@ -325,7 +321,9 @@ const ProductForm = ({
       else if (item instanceof File) galleryFiles.push(item);
     });
     const newGalleryUrls =
-      galleryFiles.length > 0 ? await uploadManyToCloudinary(galleryFiles) : [];
+      galleryFiles.length > 0
+        ? await uploadManyToR2(galleryFiles, 'products')
+        : [];
     const allGalleryUrls = [...galleryExistingUrls, ...newGalleryUrls];
 
     // Variant thumbnails — upload new Files per variant concurrently
@@ -339,7 +337,7 @@ const ProductForm = ({
     const variantUploadResults = await Promise.all(
       variantFileMap.map(async ({ vIdx, files }) => ({
         vIdx,
-        urls: await uploadManyToCloudinary(files),
+        urls: await uploadManyToR2(files, 'products'),
       })),
     );
     const variantNewUrlsMap = new Map(
