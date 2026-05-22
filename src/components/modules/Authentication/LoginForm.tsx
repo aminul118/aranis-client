@@ -74,7 +74,9 @@ const LoginForm = () => {
         if (res.success) {
           toast.success('Logged in successfully');
           if (redirect) {
-            window.location.href = `/${redirect}`;
+            window.location.href = redirect.startsWith('/')
+              ? redirect
+              : `/${redirect}`;
           } else {
             // Fetch user to determine role
             const { getMe } = await import('@/services/user/users');

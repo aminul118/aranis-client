@@ -60,7 +60,24 @@ const RegisterForm = () => {
           `/verify?identifier=${encodeURIComponent(identifier!)}${redirect ? `&redirect=${redirect}` : ''}`,
         );
       } else {
-        toast.error(res.message || 'Failed to create user');
+        const isAlreadyRegistered =
+          res.message?.toLowerCase().includes('exist') ||
+          res.message?.toLowerCase().includes('register') ||
+          res.message?.toLowerCase().includes('already') ||
+          res.message?.toLowerCase().includes('login');
+
+        if (isAlreadyRegistered) {
+          toast.error(
+            res.message ||
+              'This account is already registered. Redirecting to login...',
+            { duration: 5000 },
+          );
+          setTimeout(() => {
+            router.push(`/login${redirect ? `?redirect=${redirect}` : ''}`);
+          }, 2000);
+        } else {
+          toast.error(res.message || 'Failed to create user');
+        }
       }
     } catch (error: any) {
       toast.error('Failed to create user');

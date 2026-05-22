@@ -16,6 +16,7 @@ const DB_TO_SLUG: Record<string, string> = {
   'Smart TV': 'smart-tvs',
   'Bengal Thread': 'bengal-thread',
   'Sadabahar (Stitched.)': 'sadabahar-stitched',
+  'Pakistani Dress': 'pakistani',
 };
 
 const SLUG_TO_DB: Record<string, string> = Object.entries(DB_TO_SLUG).reduce(

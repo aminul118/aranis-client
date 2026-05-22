@@ -62,7 +62,7 @@ const HeroBanner = ({ mainSlides, miniBanners }: HeroBannerProps) => {
         <div className="grid grid-cols-1 gap-3 lg:grid-cols-[1fr_320px]">
           {/* ── Main Carousel ─────────────────────────────────────── */}
           {slides.length > 0 && (
-            <div className="group bg-muted relative h-[340px] overflow-hidden rounded-2xl sm:h-[420px] lg:h-[480px]">
+            <div className="group bg-muted relative aspect-[16/9] w-full overflow-hidden rounded-2xl">
               {/* Slides */}
               <AnimatePresence custom={direction} initial={false}>
                 <motion.div
@@ -89,12 +89,12 @@ const HeroBanner = ({ mainSlides, miniBanners }: HeroBannerProps) => {
                     <div className="absolute inset-0 bg-linear-to-r from-black/75 via-black/40 to-transparent" />
 
                     {/* Text content */}
-                    <div className="absolute inset-0 flex max-w-xl flex-col justify-center px-8 md:px-12">
+                    <div className="absolute inset-0 flex max-w-xl flex-col justify-center px-6 py-4 sm:px-10 sm:py-6 md:px-12 md:py-8">
                       <motion.span
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.2 }}
-                        className="mb-4 inline-block w-fit rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-bold tracking-widest text-white/80 uppercase backdrop-blur-sm"
+                        className="mb-2 inline-block w-fit rounded-full border border-white/20 bg-white/10 px-2 py-0.5 text-[10px] font-bold tracking-widest text-white/80 uppercase backdrop-blur-sm md:mb-4 md:px-3 md:py-1 md:text-xs"
                       >
                         {slide.tag}
                       </motion.span>
@@ -103,7 +103,7 @@ const HeroBanner = ({ mainSlides, miniBanners }: HeroBannerProps) => {
                         initial={{ opacity: 0, y: 15 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.3 }}
-                        className={`mb-3 text-3xl leading-tight font-black whitespace-pre-line text-white sm:text-4xl md:text-5xl`}
+                        className="mb-1.5 text-lg leading-tight font-black whitespace-pre-line text-white sm:text-3xl md:mb-3 md:text-5xl"
                       >
                         {slide.title.split('\n').map((line, i) =>
                           i === 1 ? (
@@ -125,7 +125,7 @@ const HeroBanner = ({ mainSlides, miniBanners }: HeroBannerProps) => {
                         initial={{ opacity: 0, y: 15 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.4 }}
-                        className="mb-6 text-sm leading-relaxed text-white/75 md:text-base"
+                        className="mb-3 text-xs leading-relaxed text-white/75 sm:text-sm md:mb-6 md:text-base"
                       >
                         {slide.subtitle}
                       </motion.p>
@@ -134,7 +134,7 @@ const HeroBanner = ({ mainSlides, miniBanners }: HeroBannerProps) => {
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 0.5 }}
-                        className={`inline-flex items-center gap-2 self-start rounded-full bg-linear-to-r px-6 py-3 text-sm font-bold text-white ${slide.accentColor} shadow-lg transition-opacity hover:opacity-90`}
+                        className={`inline-flex items-center gap-2 self-start rounded-full bg-linear-to-r px-4 py-2 text-xs font-bold text-white sm:px-6 sm:py-3 sm:text-sm ${slide.accentColor} shadow-lg transition-opacity hover:opacity-90`}
                       >
                         {slide.cta} →
                       </motion.span>

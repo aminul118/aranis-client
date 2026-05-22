@@ -1,12 +1,15 @@
 'use client';
 
-import * as React from 'react';
-
 import type { VariantProps } from 'class-variance-authority';
-import type { PlateContentProps, PlateViewProps } from 'platejs/react';
-
 import { cva } from 'class-variance-authority';
-import { PlateContainer, PlateContent, PlateView } from 'platejs/react';
+import type { PlateContentProps, PlateViewProps } from 'platejs/react';
+import {
+  PlateContainer,
+  PlateContent,
+  PlateView,
+  useEditorRef,
+} from 'platejs/react';
+import * as React from 'react';
 
 import { cn } from '@/lib/utils';
 
@@ -96,23 +99,53 @@ export const Editor = ({
   focused,
   variant,
   ref,
+  onPaste,
   ...props
-}: EditorProps & { ref?: React.RefObject<HTMLDivElement | null> }) => (
-  <PlateContent
-    ref={ref}
-    className={cn(
-      editorVariants({
-        disabled,
-        focused,
-        variant,
-      }),
-      className,
-    )}
-    disabled={disabled}
-    disableDefaultStyles
-    {...props}
-  />
-);
+}: EditorProps & { ref?: React.RefObject<HTMLDivElement | null> }) => {
+  const editor = useEditorRef();
+
+  const handlePaste = (event: React.ClipboardEvent<HTMLDivElement>) => {
+    // Call custom onPaste handler if provided
+    if (onPaste) {
+      onPaste(event);
+      if (event.isDefaultPrevented()) return;
+    }
+
+    const text = event.clipboardData?.getData('text/plain');
+    if (text) {
+      event.preventDefault();
+
+      if (text.includes('\n')) {
+        const lines = text.split(/\r?\n/);
+        const fragment = lines.map((line) => ({
+          type: 'p',
+          children: [{ text: line }],
+        }));
+        editor.tf.insertNodes(fragment);
+      } else {
+        editor.tf.insertText(text);
+      }
+    }
+  };
+
+  return (
+    <PlateContent
+      ref={ref}
+      className={cn(
+        editorVariants({
+          disabled,
+          focused,
+          variant,
+        }),
+        className,
+      )}
+      disabled={disabled}
+      disableDefaultStyles
+      onPaste={handlePaste}
+      {...props}
+    />
+  );
+};
 
 Editor.displayName = 'Editor';
 

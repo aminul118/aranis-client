@@ -109,55 +109,97 @@ export default function CheckoutShippingSection({
 
       {user ? (
         <div className="space-y-6">
-          <p className="text-muted-foreground mb-4 text-sm">
-            Choose from your saved addresses (Up to 4)
-          </p>
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            {user.addresses && user.addresses.length > 0 ? (
-              user.addresses.map((addr, idx) => (
-                <button
-                  type="button"
-                  key={idx}
-                  onClick={() => setAddressInput(addr.address)}
-                  className={`flex flex-col items-start gap-2 rounded-2xl border-2 p-4 transition-all ${
-                    addressInput === addr.address
-                      ? 'border-blue-600 bg-blue-500/5'
-                      : 'border-border bg-muted/20 hover:border-blue-500/30'
-                  }`}
-                >
-                  <div className="flex items-center gap-2">
-                    <MapPin
-                      size={16}
-                      className={
-                        addressInput === addr.address
-                          ? 'text-blue-600'
-                          : 'text-muted-foreground'
-                      }
-                    />
-                    <span className="text-sm font-bold tracking-tight">
-                      {addr.title}
-                    </span>
-                  </div>
-                  <p className="text-muted-foreground line-clamp-2 text-left text-xs">
-                    {addr.address}
-                  </p>
-                </button>
-              ))
-            ) : (
-              <div className="col-span-full rounded-2xl border border-amber-500/20 bg-amber-500/5 p-4 text-sm text-amber-600 italic">
-                No addresses found. Please add one in your profile.
+          {/* Customer Details Card */}
+          <div className="rounded-2xl border border-blue-500/10 bg-blue-500/5 p-5">
+            <h3 className="mb-3 text-xs font-black tracking-widest text-blue-600 uppercase">
+              Customer Account Info
+            </h3>
+            <div className="grid grid-cols-1 gap-3 text-xs sm:grid-cols-2">
+              <div>
+                <span className="text-muted-foreground mb-0.5 block">Name</span>
+                <span className="text-foreground font-bold">
+                  {user.firstName} {user.lastName}
+                </span>
               </div>
-            )}
+              <div>
+                <span className="text-muted-foreground mb-0.5 block">
+                  Email / Phone
+                </span>
+                <span className="text-foreground font-bold">
+                  {user.email || user.phone || 'N/A'}
+                </span>
+              </div>
+            </div>
           </div>
-          <div className="mt-6 space-y-2">
+
+          {/* Saved Addresses (Optional Selector) */}
+          <div className="space-y-3">
             <label className="text-muted-foreground text-xs font-black tracking-widest uppercase">
-              Confirm Phone Number
+              Choose from Saved Addresses (Optional)
+            </label>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              {user.addresses && user.addresses.length > 0 ? (
+                user.addresses.map((addr, idx) => (
+                  <button
+                    type="button"
+                    key={idx}
+                    onClick={() => setAddressInput(addr.address)}
+                    className={`flex flex-col items-start gap-2 rounded-2xl border-2 p-4 transition-all ${
+                      addressInput === addr.address
+                        ? 'border-blue-600 bg-blue-500/5'
+                        : 'border-border bg-card hover:border-blue-500/30'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2">
+                      <MapPin
+                        size={16}
+                        className={
+                          addressInput === addr.address
+                            ? 'text-blue-600'
+                            : 'text-muted-foreground'
+                        }
+                      />
+                      <span className="text-sm font-bold tracking-tight">
+                        {addr.title}
+                      </span>
+                    </div>
+                    <p className="text-muted-foreground line-clamp-2 text-left text-xs">
+                      {addr.address}
+                    </p>
+                  </button>
+                ))
+              ) : (
+                <div className="col-span-full rounded-2xl border border-amber-500/20 bg-amber-500/5 p-4 text-xs text-amber-600 italic">
+                  No saved addresses found. You can enter your delivery address
+                  below.
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Delivery Address Input */}
+          <div className="space-y-2">
+            <label className="text-muted-foreground text-xs font-black tracking-widest uppercase">
+              Delivery Address <span className="text-red-500">*</span>
+            </label>
+            <textarea
+              placeholder="House #, Street, City"
+              value={addressInput}
+              onChange={(e) => setAddressInput(e.target.value)}
+              className="bg-muted/50 border-border text-foreground min-h-[80px] w-full rounded-xl border p-4 transition-all outline-none focus:border-blue-500/50"
+            />
+          </div>
+
+          {/* Phone Number Input */}
+          <div className="space-y-2">
+            <label className="text-muted-foreground text-xs font-black tracking-widest uppercase">
+              Confirm Phone Number <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
               value={phoneInput}
               onChange={(e) => setPhoneInput(e.target.value)}
-              placeholder="+880 1XXX XXXXXX"
+              placeholder="01XXXXXXXXX"
               className="bg-muted/50 border-border text-foreground w-full rounded-xl border p-4 transition-all outline-none focus:border-blue-500/50"
             />
           </div>

@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { cn } from '@/lib/utils';
 import { createOffer, getOffers, IOffer } from '@/services/offer/offer';
 import { updateProductBulk } from '@/services/product/product';
 import { Loader2, Plus } from 'lucide-react';
@@ -32,7 +33,10 @@ const BulkDiscountDialog = ({
   onSuccess,
 }: BulkDiscountDialogProps) => {
   const [discount, setDiscount] = useState<string>('20');
-  const [isOffer, setIsOffer] = useState<boolean>(true);
+  const [discountType, setDiscountType] = useState<'percentage' | 'fixed'>(
+    'percentage',
+  );
+  const [isOffer, setIsOffer] = useState<boolean>(false);
   const [existingOffers, setExistingOffers] = useState<IOffer[]>([]);
   const [selectedOfferTag, setSelectedOfferTag] = useState<string>('');
   const [isCreatingNewOffer, setIsCreatingNewOffer] = useState(false);
@@ -52,27 +56,36 @@ const BulkDiscountDialog = ({
         const res = await getOffers();
         if (res.success && res.data.length > 0) {
           setExistingOffers(res.data);
-          // Auto-select first offer and set its discount
-          setSelectedOfferTag(res.data[0].tag);
-          setDiscount(String(res.data[0].discountPercentage));
+          if (isOffer) {
+            // Auto-select first offer and set its discount
+            setSelectedOfferTag(res.data[0].tag);
+            setDiscount(String(res.data[0].discountPercentage));
+            setDiscountType('percentage');
+          }
         }
       };
       fetchOffers();
     }
-  }, [isOpen]);
+  }, [isOpen, isOffer]);
 
   const handleExistingOfferChange = (tag: string) => {
     setSelectedOfferTag(tag);
     const offer = existingOffers.find((o) => o.tag === tag);
     if (offer) {
       setDiscount(String(offer.discountPercentage));
+      setDiscountType('percentage');
     }
   };
 
   const handleApply = async () => {
     const discountVal = Number(discount);
-    if (isNaN(discountVal) || discountVal < 0 || discountVal > 100) {
-      toast.error('Please enter a valid discount percentage (0-100)');
+    if (isNaN(discountVal) || discountVal < 0) {
+      toast.error('Please enter a valid discount value');
+      return;
+    }
+
+    if (discountType === 'percentage' && discountVal > 100) {
+      toast.error('Discount percentage cannot exceed 100%');
       return;
     }
 
@@ -110,12 +123,17 @@ const BulkDiscountDialog = ({
       const res = await updateProductBulk(selectedIds, {
         isOffer: isOffer,
         offerTag: isOffer ? finalTag : '',
-        discountPercentage: discountVal,
-      });
+        discountType: isOffer ? 'percentage' : discountType,
+        discountValue: discountVal,
+      } as any);
 
       if (res.success) {
+        const formattedDiscount =
+          isOffer || discountType === 'percentage'
+            ? `${discountVal}%`
+            : `৳${discountVal}`;
         toast.success(
-          `Successfully applied ${discountVal}% discount to ${selectedIds.length} products`,
+          `Successfully applied ${formattedDiscount} discount to ${selectedIds.length} products`,
         );
         onSuccess();
         onClose();
@@ -144,15 +162,61 @@ const BulkDiscountDialog = ({
 
         <div className="max-h-[60vh] overflow-y-auto pr-2">
           <div className="grid gap-6 py-4">
+            {!isOffer && (
+              <div className="grid gap-2">
+                <Label className="text-[10px] font-bold tracking-widest text-blue-700 uppercase">
+                  Discount Type
+                </Label>
+                <div className="grid grid-cols-2 gap-2 rounded-xl bg-gray-100 p-1 dark:bg-white/5">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setDiscountType('percentage');
+                      setDiscount('20');
+                    }}
+                    className={cn(
+                      'rounded-lg py-2 text-xs font-bold transition-all',
+                      discountType === 'percentage'
+                        ? 'bg-white text-blue-600 shadow-sm dark:bg-zinc-800 dark:text-blue-400'
+                        : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200',
+                    )}
+                  >
+                    Percentage (%)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setDiscountType('fixed');
+                      setDiscount('500');
+                    }}
+                    className={cn(
+                      'rounded-lg py-2 text-xs font-bold transition-all',
+                      discountType === 'fixed'
+                        ? 'bg-white text-blue-600 shadow-sm dark:bg-zinc-800 dark:text-blue-400'
+                        : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200',
+                    )}
+                  >
+                    Fixed Amount (৳)
+                  </button>
+                </div>
+              </div>
+            )}
+
             <div className="grid gap-2">
               <Label className="text-[10px] font-bold tracking-widest text-blue-700 uppercase">
-                Discount Percentage (%)
+                {isOffer || discountType === 'percentage'
+                  ? 'Discount Percentage (%)'
+                  : 'Discount Amount (৳)'}
               </Label>
               <Input
                 type="number"
                 value={discount}
                 onChange={(e) => setDiscount(e.target.value)}
-                placeholder="e.g. 20"
+                placeholder={
+                  isOffer || discountType === 'percentage'
+                    ? 'e.g. 20'
+                    : 'e.g. 500'
+                }
                 className="rounded-xl border-2 focus:border-blue-500"
               />
             </div>
@@ -161,7 +225,17 @@ const BulkDiscountDialog = ({
               <Checkbox
                 id="isOffer"
                 checked={isOffer}
-                onCheckedChange={(checked) => setIsOffer(checked as boolean)}
+                onCheckedChange={(checked) => {
+                  const val = checked as boolean;
+                  setIsOffer(val);
+                  if (val) {
+                    setDiscountType('percentage');
+                    if (existingOffers.length > 0) {
+                      setSelectedOfferTag(existingOffers[0].tag);
+                      setDiscount(String(existingOffers[0].discountPercentage));
+                    }
+                  }
+                }}
               />
               <Label htmlFor="isOffer" className="text-sm font-bold">
                 Apply as Seasonal Offer (Shows on Offers Page)

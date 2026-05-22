@@ -82,7 +82,7 @@ const VerifyOTPForm = () => {
             ? redirect
             : `/${redirect}`
           : getDefaultDashboardRoute(res.user.role as UserRole);
-        router.push(targetRoute);
+        window.location.href = targetRoute;
       } else {
         // This case might happen if OTP verified but user creation is pending (e.g. guest checkout)
         // But for login/register, user should exist by now.

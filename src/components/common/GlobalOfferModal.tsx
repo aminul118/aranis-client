@@ -54,7 +54,7 @@ const GlobalOfferModal = () => {
         if (data?.success && data?.data?.image) {
           setPopup(data.data);
           // Professional entrance delay
-          setTimeout(() => setVisible(true), 1500);
+          setTimeout(() => setVisible(true), 5000);
         }
       } catch {
         // silently fail
@@ -68,7 +68,9 @@ const GlobalOfferModal = () => {
   useEffect(() => {
     if (!visible) return;
 
-    const duration = 12000; // 12 seconds
+    setProgress(100);
+
+    const duration = 10000; // 10 seconds
     const interval = 100;
     const step = (interval / duration) * 100;
 

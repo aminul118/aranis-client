@@ -73,6 +73,8 @@ export interface IProduct {
   buyPrice: number;
   salePrice?: number;
   discountPercentage?: number;
+  discountType?: 'percentage' | 'fixed';
+  discountValue?: number;
   isOffer?: boolean;
   offerTag?: string;
   rating?: number;
