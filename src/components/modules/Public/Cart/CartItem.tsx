@@ -35,13 +35,22 @@ const CartItem = ({
   onUpdateSize,
   onUpdateColor,
 }: CartItemProps) => {
+  const selectedVariant = item.variants?.find(
+    (v) => v.color === item.selectedColor,
+  );
+
   const imageSrc =
-    item.thumbnails?.[0] &&
-    typeof item.thumbnails[0] === 'string' &&
-    item.thumbnails[0] !== '[]' &&
-    item.thumbnails[0] !== ''
-      ? item.thumbnails[0]
-      : '';
+    selectedVariant?.thumbnails?.[0] &&
+    typeof selectedVariant.thumbnails[0] === 'string' &&
+    selectedVariant.thumbnails[0] !== '[]' &&
+    selectedVariant.thumbnails[0] !== ''
+      ? selectedVariant.thumbnails[0]
+      : item.thumbnails?.[0] &&
+          typeof item.thumbnails[0] === 'string' &&
+          item.thumbnails[0] !== '[]' &&
+          item.thumbnails[0] !== ''
+        ? item.thumbnails[0]
+        : '';
 
   const availableColors = Array.from(
     new Set(
@@ -218,7 +227,7 @@ const CartItem = ({
           {/* Pricing */}
           <div className="flex flex-col items-end">
             <div className="flex items-baseline gap-2">
-              {item.salePrice && item.salePrice > 0 && (
+              {(item.salePrice ?? 0) > 0 && (
                 <span className="text-muted-foreground/40 text-sm font-medium line-through">
                   ৳{(item.price * item.quantity).toLocaleString()}
                 </span>
