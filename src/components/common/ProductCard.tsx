@@ -1,5 +1,6 @@
 'use client';
 
+import Image from '@/components/common/SafeImage';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/CartContext';
 import { useUser } from '@/context/UserContext';
@@ -8,7 +9,6 @@ import { cn } from '@/lib/utils';
 import { IProduct } from '@/types';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Heart, ShoppingCart } from 'lucide-react';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
@@ -39,7 +39,7 @@ const ProductCard = ({
       src === 'null' ||
       src === ''
     ) {
-      return 'https://placehold.co/600x800?text=No+Image';
+      return '';
     }
     return src;
   };

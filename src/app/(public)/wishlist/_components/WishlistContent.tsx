@@ -1,10 +1,10 @@
 'use client';
 
+import Image from '@/components/common/SafeImage';
 import { useCart } from '@/context/CartContext';
 import { useWishlist } from '@/context/WishlistContext';
 import { motion } from 'framer-motion';
 import { Heart, Minus, Plus, ShoppingBag, Trash2 } from 'lucide-react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { toast } from 'sonner';
 

@@ -28,7 +28,7 @@ export default function TrackOrderSearch({
       animate={{ opacity: 1, scale: 1 }}
       transition={{ delay: 0.2 }}
     >
-      <Card className="border-border/50 overflow-hidden border-none bg-[#151722]/80 shadow-2xl backdrop-blur-xl">
+      <Card className="border-border/50 bg-card/80 overflow-hidden border shadow-2xl backdrop-blur-xl">
         <CardContent className="p-6 md:p-8">
           <form onSubmit={onTrack} className="flex flex-col gap-6">
             <div className="flex flex-col gap-4 sm:flex-row">
@@ -41,7 +41,7 @@ export default function TrackOrderSearch({
                   placeholder="Enter your Order ID (e.g. 6625...)"
                   value={orderId}
                   onChange={(e) => setOrderId(e.target.value)}
-                  className="border-border/50 h-12 rounded-xl bg-white/5 pl-11 text-sm transition-all focus:bg-white/10 focus:ring-blue-500/20"
+                  className="border-border/50 h-12 rounded-xl bg-black/5 pl-11 text-sm transition-all focus:bg-black/10 focus:ring-blue-500/20 dark:bg-white/5 dark:focus:bg-white/10"
                 />
               </div>
               <Button

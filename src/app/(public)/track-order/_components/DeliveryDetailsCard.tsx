@@ -13,7 +13,7 @@ export default function DeliveryDetailsCard({
   order,
 }: DeliveryDetailsCardProps) {
   return (
-    <Card className="border-border/50 border-none bg-[#151722]/80 shadow-2xl backdrop-blur-xl">
+    <Card className="border-border/50 bg-card/80 text-card-foreground border shadow-2xl backdrop-blur-xl">
       <CardHeader className="p-6 pb-0 md:p-8">
         <CardTitle className="flex items-center gap-3 text-xl font-black italic">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-500/10 text-blue-500">
@@ -27,23 +27,23 @@ export default function DeliveryDetailsCard({
           <p className="text-muted-foreground mb-3 text-[10px] font-black tracking-widest uppercase opacity-60">
             Shipping Destination
           </p>
-          <div className="rounded-2xl border border-white/5 bg-white/5 p-6 shadow-inner transition-all hover:bg-white/10">
-            <p className="text-lg leading-relaxed font-bold text-white/90 italic">
+          <div className="border-border rounded-2xl border bg-black/5 p-6 shadow-inner transition-all hover:bg-black/10 dark:bg-white/5 dark:hover:bg-white/10">
+            <p className="text-card-foreground/90 text-lg leading-relaxed font-bold italic">
               {order.shippingAddress}
             </p>
           </div>
         </div>
 
         <div className="grid grid-cols-2 gap-6">
-          <div className="rounded-2xl border border-white/5 bg-white/5 p-6">
+          <div className="border-border rounded-2xl border bg-black/5 p-6 dark:bg-white/5">
             <p className="text-muted-foreground mb-2 text-[10px] font-black tracking-widest uppercase opacity-60">
               Payment
             </p>
-            <p className="text-lg font-black text-white">
+            <p className="text-card-foreground text-lg font-black">
               {order.paymentMethod}
             </p>
           </div>
-          <div className="rounded-2xl border border-white/5 bg-white/5 p-6">
+          <div className="border-border rounded-2xl border bg-black/5 p-6 dark:bg-white/5">
             <p className="text-muted-foreground mb-2 text-[10px] font-black tracking-widest uppercase opacity-60">
               Status
             </p>

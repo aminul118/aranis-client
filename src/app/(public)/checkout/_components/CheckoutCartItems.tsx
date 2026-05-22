@@ -1,6 +1,6 @@
 'use client';
 
-import Image from 'next/image';
+import Image from '@/components/common/SafeImage';
 
 interface CartItem {
   _id?: string;
@@ -8,6 +8,7 @@ interface CartItem {
   thumbnails?: string[];
   quantity: number;
   selectedSize?: string;
+  selectedColor?: string;
   price: number;
   salePrice?: number;
 }
@@ -21,7 +22,7 @@ export default function CheckoutCartItems({ cart }: CheckoutCartItemsProps) {
     <div className="mb-8 space-y-4">
       {cart.map((item) => (
         <div
-          key={item._id}
+          key={`${item._id}_${item.selectedColor || ''}_${item.selectedSize || ''}`}
           className="group border-border/30 flex items-center justify-between border-b pb-4 last:border-0 last:pb-0"
         >
           <div className="flex items-center gap-4">
@@ -44,6 +45,11 @@ export default function CheckoutCartItems({ cart }: CheckoutCartItemsProps) {
                 {item.selectedSize && (
                   <span className="text-muted-foreground/40 text-[10px] font-bold">
                     Size: {item.selectedSize}
+                  </span>
+                )}
+                {item.selectedColor && (
+                  <span className="text-muted-foreground/40 text-[10px] font-bold">
+                    Color: {item.selectedColor}
                   </span>
                 )}
               </div>

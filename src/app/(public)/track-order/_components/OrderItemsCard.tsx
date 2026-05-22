@@ -1,10 +1,10 @@
 'use client';
 
+import Image from '@/components/common/SafeImage';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import { IOrder } from '@/services/order/order.types';
 import { ShoppingBag } from 'lucide-react';
-import Image from 'next/image';
 
 interface OrderItemsCardProps {
   order: IOrder;
@@ -12,7 +12,7 @@ interface OrderItemsCardProps {
 
 export default function OrderItemsCard({ order }: OrderItemsCardProps) {
   return (
-    <Card className="border-border/50 border-none bg-[#151722]/80 shadow-2xl backdrop-blur-xl">
+    <Card className="border-border/50 bg-card/80 text-card-foreground border shadow-2xl backdrop-blur-xl">
       <CardHeader className="p-6 pb-0 md:p-8">
         <CardTitle className="flex items-center gap-3 text-xl font-black italic">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-500/10 text-blue-500">
@@ -27,7 +27,7 @@ export default function OrderItemsCard({ order }: OrderItemsCardProps) {
             key={idx}
             className="group flex items-center gap-5 transition-all hover:translate-x-2"
           >
-            <div className="relative h-20 w-16 overflow-hidden rounded-2xl border border-white/5 bg-white/5 shadow-xl">
+            <div className="border-border relative h-20 w-16 overflow-hidden rounded-2xl border bg-black/5 shadow-xl dark:bg-white/5">
               <Image
                 src={item.product.thumbnails?.[0]}
                 alt={item.product.name}
@@ -36,11 +36,13 @@ export default function OrderItemsCard({ order }: OrderItemsCardProps) {
               />
             </div>
             <div className="flex-1">
-              <p className="text-lg leading-tight font-black">
+              <p className="text-card-foreground text-lg leading-tight font-black">
                 {item.product.name}
               </p>
               <p className="text-muted-foreground mt-1 text-sm font-bold opacity-60">
                 {item.quantity} × ৳{item.price}
+                {item.size && ` • Size: ${item.size}`}
+                {item.color && ` • Color: ${item.color}`}
               </p>
             </div>
             <p className="text-xl font-black text-blue-500">
@@ -48,13 +50,13 @@ export default function OrderItemsCard({ order }: OrderItemsCardProps) {
             </p>
           </div>
         ))}
-        <div className="mt-6 border-t border-white/5 pt-8">
+        <div className="border-border mt-6 border-t pt-8">
           <div className="flex items-end justify-between">
             <div>
               <p className="text-muted-foreground text-[10px] font-black tracking-widest uppercase opacity-60">
                 Total Amount
               </p>
-              <p className="text-4xl font-black tracking-tighter text-white">
+              <p className="text-card-foreground text-4xl font-black tracking-tighter">
                 ৳{order.totalPrice}
               </p>
             </div>

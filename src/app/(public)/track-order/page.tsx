@@ -12,7 +12,7 @@ export default function TrackOrderPage() {
 
       <div className="mx-auto max-w-4xl">
         <div className="mb-10 text-center">
-          <h1 className="mb-4 text-3xl font-black tracking-tight text-white md:text-5xl">
+          <h1 className="text-foreground mb-4 text-3xl font-black tracking-tight md:text-5xl">
             Track Your <span className="text-blue-500">Journey</span>
           </h1>
           <p className="text-muted-foreground mx-auto max-w-lg text-sm md:text-base">

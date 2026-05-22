@@ -1,9 +1,9 @@
 'use client';
 
+import Image from '@/components/common/SafeImage';
 import { ICartItem } from '@/types';
 import { motion } from 'framer-motion';
 import { Minus, Plus, Trash2 } from 'lucide-react';
-import Image from 'next/image';
 
 interface CartItemProps {
   item: ICartItem;
@@ -41,7 +41,7 @@ const CartItem = ({
     item.thumbnails[0] !== '[]' &&
     item.thumbnails[0] !== ''
       ? item.thumbnails[0]
-      : 'https://placehold.co/600x800?text=No+Image';
+      : '';
 
   const availableColors = Array.from(
     new Set(

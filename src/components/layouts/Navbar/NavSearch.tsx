@@ -1,10 +1,10 @@
 'use client';
 
+import Image from '@/components/common/SafeImage';
 import envVars from '@/config/env.config';
 import { cn } from '@/lib/utils';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowRight, Loader2, Package, Search, X } from 'lucide-react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';

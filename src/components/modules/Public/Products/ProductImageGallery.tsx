@@ -1,7 +1,7 @@
 'use client';
 
+import Image from '@/components/common/SafeImage';
 import { AnimatePresence, motion } from 'framer-motion';
-import Image from 'next/image';
 import { useCallback, useRef, useState } from 'react';
 
 interface ProductImageGalleryProps {

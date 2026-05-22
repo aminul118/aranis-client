@@ -1,5 +1,6 @@
 'use client';
 
+import Image from '@/components/common/SafeImage';
 import HtmlContent from '@/components/rich-text/core/html-content';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -34,7 +35,6 @@ import {
   Share2,
   ShoppingCart,
 } from 'lucide-react';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
