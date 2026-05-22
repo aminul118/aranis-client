@@ -125,6 +125,7 @@ const SizeGuideForm = ({ sizeGuide, onSuccess }: Props) => {
                 <SingleImageUploader
                   defaultValue={field.value}
                   onChange={(file) => field.onChange(file)}
+                  recommendation="Recommended: Landscape or Square (e.g. 1200x900 px, 4:3)"
                 />
               </FormControl>
               <FormMessage />

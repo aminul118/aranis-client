@@ -7,9 +7,14 @@ import { useEffect } from 'react';
 interface ImageDropProps {
   onChange: (file: File | null) => void;
   defaultValue?: string;
+  recommendation?: string;
 }
 
-const SingleImageUploader = ({ onChange, defaultValue }: ImageDropProps) => {
+const SingleImageUploader = ({
+  onChange,
+  defaultValue,
+  recommendation,
+}: ImageDropProps) => {
   const maxSizeMB = 2;
   const maxSize = maxSizeMB * 1024 * 1024;
 
@@ -102,6 +107,11 @@ const SingleImageUploader = ({ onChange, defaultValue }: ImageDropProps) => {
               <p className="text-muted-foreground text-xs">
                 SVG, PNG, JPG or GIF (max. {maxSizeMB}MB)
               </p>
+              {recommendation && (
+                <p className="mt-2 rounded-full bg-blue-500/10 px-3 py-1 text-[10px] font-black tracking-wider text-blue-600 uppercase dark:bg-blue-500/20 dark:text-blue-400">
+                  {recommendation}
+                </p>
+              )}
               {/* IMPORTANT: type="button" so this doesn't submit the parent form */}
               <Button
                 type="button"

@@ -233,6 +233,7 @@ const SiteSettingsForm = ({ settings }: Props) => {
                         <SingleImageUploader
                           defaultValue={field.value}
                           onChange={(file) => field.onChange(file)}
+                          recommendation="Recommended: Landscape logo (e.g. 300x100 px, 3:1)"
                         />
                       </FormControl>
                       <FormMessage />
@@ -361,6 +362,7 @@ const SiteSettingsForm = ({ settings }: Props) => {
                           <SingleImageUploader
                             defaultValue={field.value}
                             onChange={(file) => field.onChange(file)}
+                            recommendation="Recommended: Landscape (e.g. 1200x630 px, 1.91:1)"
                           />
                         </FormControl>
                         <FormMessage />

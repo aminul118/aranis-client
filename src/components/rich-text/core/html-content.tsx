@@ -3,7 +3,7 @@
 import { BaseEditorKit } from '@/components/rich-text/kits/editor-base-kit';
 import { EditorStatic } from '@/components/rich-text/ui/editor-static';
 import { createSlateEditor } from 'platejs';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 interface IHtml {
   content: string;
@@ -11,6 +11,12 @@ interface IHtml {
 }
 
 const HtmlContent = ({ content, className }: IHtml) => {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const { isPlate, value } = useMemo(() => {
     if (!content || typeof content !== 'string')
       return { isPlate: false, value: null };
@@ -30,8 +36,14 @@ const HtmlContent = ({ content, className }: IHtml) => {
   }, [isPlate]);
 
   if (isPlate && staticEditor) {
+    // Server renders an empty placeholder; client fills in PlateStatic after
+    // mount — prevents the className mismatch hydration error from PlateStatic
+    // adding classes (m-0 px-0 py-1) that the server never emitted.
+    if (!mounted) {
+      return <div className={className} suppressHydrationWarning />;
+    }
     return (
-      <div className={className}>
+      <div className={className} suppressHydrationWarning>
         <EditorStatic value={value} editor={staticEditor} variant="none" />
       </div>
     );

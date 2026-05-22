@@ -1,5 +1,6 @@
 'use client';
 
+import DeleteConfirmation from '@/components/common/actions/DeleteConfirmation';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -300,13 +301,19 @@ function TableManageMent<T>(props: TableManageMentProps<T>) {
                           )}
 
                           {onDelete && (
-                            <DropdownMenuItem
-                              onClick={() => onDelete(item)}
-                              className="text-destructive"
+                            <DeleteConfirmation
+                              onConfirm={() => Promise.resolve(onDelete(item))}
+                              title="Delete this item?"
+                              description="This action cannot be undone. This will permanently remove this record."
                             >
-                              <Trash className="mr-2 h-4 w-4" />
-                              Delete
-                            </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onSelect={(e) => e.preventDefault()}
+                                className="text-destructive cursor-pointer"
+                              >
+                                <Trash className="mr-2 h-4 w-4" />
+                                Delete
+                              </DropdownMenuItem>
+                            </DeleteConfirmation>
                           )}
                         </DropdownMenuContent>
                       </DropdownMenu>

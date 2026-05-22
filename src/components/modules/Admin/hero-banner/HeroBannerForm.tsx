@@ -128,6 +128,7 @@ const HeroBannerForm = ({ banner }: Props) => {
                 <SingleImageUploader
                   defaultValue={field.value}
                   onChange={(file) => field.onChange(file)}
+                  recommendation="Recommended: Landscape (e.g. 1920x800 px, 16:9)"
                 />
               </FormControl>
               <FormMessage />

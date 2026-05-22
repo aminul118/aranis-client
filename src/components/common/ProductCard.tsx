@@ -99,11 +99,15 @@ const ProductCard = ({
               % OFF
             </div>
           )}
-          {product.isOffer && product.offerTag && (
-            <div className="rounded-full bg-blue-500 px-2.5 py-1 text-[9px] font-black tracking-tight text-white uppercase shadow-sm">
-              {product.offerTag}
-            </div>
-          )}
+          {product.isOffer &&
+            product.offerTag &&
+            !['website', 'show website'].includes(
+              product.offerTag.toLowerCase().trim(),
+            ) && (
+              <div className="rounded-full bg-blue-500 px-2.5 py-1 text-[9px] font-black tracking-tight text-white uppercase shadow-sm">
+                {product.offerTag}
+              </div>
+            )}
         </div>
 
         {/* Wishlist - Heart floating with soft glow */}

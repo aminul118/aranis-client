@@ -117,14 +117,13 @@ const LocationTable = ({
         onSelectionChange={setSelectedIds}
         onEdit={handleEdit}
         onDelete={async (loc) => {
-          if (confirm('Are you sure you want to delete this outlet?')) {
-            try {
-              await deleteLocation(loc._id as string);
-              toast.success('Outlet deleted successfully');
-              if (onRefresh) onRefresh();
-            } catch (error) {
-              toast.error('Failed to delete outlet');
-            }
+          // Wrapped via DeleteConfirmation in row actions column — no inline confirm needed
+          try {
+            await deleteLocation(loc._id as string);
+            toast.success('Outlet deleted successfully');
+            if (onRefresh) onRefresh();
+          } catch (error) {
+            toast.error('Failed to delete outlet');
           }
         }}
       />

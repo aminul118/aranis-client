@@ -1,5 +1,6 @@
 'use client';
 
+import DeleteConfirmation from '@/components/common/actions/DeleteConfirmation';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -60,25 +61,6 @@ export default function RestockRequestsPage() {
     }
   };
 
-  const handleBulkDelete = async () => {
-    if (
-      confirm(`Are you sure you want to delete ${selectedIds.length} requests?`)
-    ) {
-      try {
-        const res = await deleteRestockRequestBulk(selectedIds);
-        if (res.success) {
-          toast.success('Requests deleted successfully');
-          setRequests((prev) =>
-            prev.filter((r) => !selectedIds.includes(r._id)),
-          );
-          setSelectedIds([]);
-        }
-      } catch (error) {
-        toast.error('Failed to delete requests');
-      }
-    }
-  };
-
   const toggleSelectAll = () => {
     if (selectedIds.length === requests.length) {
       setSelectedIds([]);
@@ -130,12 +112,22 @@ export default function RestockRequestsPage() {
               </div>
             </div>
             <div className="flex gap-2">
-              <Button
-                onClick={handleBulkDelete}
-                className="rounded-xl bg-red-500 text-[10px] font-black tracking-widest text-white uppercase hover:bg-red-600"
+              <DeleteConfirmation
+                onConfirm={() => deleteRestockRequestBulk(selectedIds)}
+                onSuccess={() => {
+                  setRequests((prev) =>
+                    prev.filter((r) => !selectedIds.includes(r._id)),
+                  );
+                  setSelectedIds([]);
+                }}
+                title="Delete Selected Requests?"
+                description={`This action cannot be undone. The selected restock requests will be permanently removed.`}
+                count={selectedIds.length}
               >
-                <Trash2 size={14} className="mr-2" /> Delete Selected
-              </Button>
+                <Button className="rounded-xl bg-red-500 text-[10px] font-black tracking-widest text-white uppercase hover:bg-red-600">
+                  <Trash2 size={14} className="mr-2" /> Delete Selected
+                </Button>
+              </DeleteConfirmation>
               <Button
                 variant="ghost"
                 onClick={() => setSelectedIds([])}

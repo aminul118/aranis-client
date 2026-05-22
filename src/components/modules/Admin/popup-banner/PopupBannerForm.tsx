@@ -99,6 +99,7 @@ const PopupBannerForm = ({ banner, onSuccess }: Props) => {
                 <SingleImageUploader
                   defaultValue={field.value}
                   onChange={(file) => field.onChange(file)}
+                  recommendation="Recommended: Portrait or Square (e.g. 800x1000 px, 4:5)"
                 />
               </FormControl>
               <p className="text-muted-foreground mt-1 text-xs">

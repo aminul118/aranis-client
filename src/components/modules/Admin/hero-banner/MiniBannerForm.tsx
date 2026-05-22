@@ -122,6 +122,7 @@ const MiniBannerForm = ({ banner }: Props) => {
                 <SingleImageUploader
                   defaultValue={field.value}
                   onChange={(file) => field.onChange(file)}
+                  recommendation="Recommended: Square or Landscape (e.g. 600x600 px, 1:1)"
                 />
               </FormControl>
               <FormMessage />

@@ -49,12 +49,12 @@ const ProductImageGallery = ({
   const currentIdx = thumbnails.indexOf(selectedImage);
 
   return (
-    <div className="flex flex-col-reverse gap-4 select-none lg:h-[700px] lg:flex-row">
-      {/* ── Thumbnail Strip (Left side on desktop, bottom on mobile) ── */}
+    <div className="flex gap-3 select-none">
+      {/* ── Left Thumbnail Strip ─────────────────────────────────────────── */}
       {hasMultiple && (
         <div
           ref={thumbsRef}
-          className="scrollbar-none flex snap-x gap-3 overflow-x-auto px-1 py-2 lg:w-24 lg:snap-y lg:flex-col lg:overflow-y-auto"
+          className="scrollbar-none flex w-[72px] shrink-0 flex-col gap-2 overflow-y-auto py-0.5"
         >
           {thumbnails.map((img, idx) => {
             const active = selectedImage === img;
@@ -65,10 +65,10 @@ const ProductImageGallery = ({
                 aria-label={`View image ${idx + 1}`}
                 onClick={() => handleSelectImage(img)}
                 className={[
-                  'relative h-20 w-16 shrink-0 snap-start overflow-hidden rounded-2xl border-2 shadow-sm transition-all duration-300 lg:h-24 lg:w-full',
+                  'relative aspect-[4/5] w-full shrink-0 overflow-hidden rounded-xl border-2 shadow-sm transition-all duration-300',
                   active
-                    ? 'scale-105 border-blue-500 ring-4 shadow-blue-500/25 ring-blue-500/20'
-                    : 'border-border/40 opacity-55 hover:scale-[1.03] hover:border-blue-500/40 hover:opacity-100',
+                    ? 'border-blue-500 ring-2 shadow-blue-500/20 ring-blue-500/30'
+                    : 'border-border/40 opacity-60 hover:border-blue-400/50 hover:opacity-100',
                 ].join(' ')}
               >
                 <Image
@@ -78,23 +78,20 @@ const ProductImageGallery = ({
                   draggable={false}
                   className="pointer-events-none object-cover"
                 />
-                {/* Active overlay shimmer */}
-                {active && (
-                  <div className="absolute inset-0 bg-blue-500/10 backdrop-blur-[1px]" />
-                )}
+                {active && <div className="absolute inset-0 bg-blue-500/10" />}
               </button>
             );
           })}
         </div>
       )}
 
-      {/* ── Main Viewer ─────────────────────────────────────────────────── */}
+      {/* ── Main Viewer ───────────────────────────────────────────────────── */}
       <div
         ref={containerRef}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         onMouseMove={handleMouseMove}
-        className="border-border/50 bg-secondary/30 relative min-h-[400px] flex-1 cursor-crosshair overflow-hidden rounded-4xl border backdrop-blur-sm"
+        className="border-border/50 bg-secondary/30 relative aspect-[4/5] flex-1 cursor-crosshair overflow-hidden rounded-3xl border backdrop-blur-sm"
         style={{ isolation: 'isolate' }}
       >
         {/* Crossfade switcher */}
@@ -128,7 +125,7 @@ const ProductImageGallery = ({
 
         {/* Sale badge */}
         {saleBadge && (
-          <div className="absolute top-6 left-6 z-10">{saleBadge}</div>
+          <div className="absolute top-4 left-4 z-10">{saleBadge}</div>
         )}
 
         {/* Zoom hint */}
@@ -136,7 +133,7 @@ const ProductImageGallery = ({
           initial={{ opacity: 0 }}
           animate={{ opacity: isZoomed ? 0 : 1 }}
           transition={{ duration: 0.3 }}
-          className="pointer-events-none absolute right-4 bottom-14 z-10 flex items-center gap-1.5 rounded-full bg-black/50 px-3 py-1.5 text-[10px] font-bold tracking-wide text-white/80 backdrop-blur-sm"
+          className="pointer-events-none absolute right-3 bottom-10 z-10 flex items-center gap-1.5 rounded-full bg-black/50 px-3 py-1.5 text-[10px] font-bold tracking-wide text-white/80 backdrop-blur-sm"
         >
           <svg
             className="h-3 w-3"
@@ -153,7 +150,7 @@ const ProductImageGallery = ({
 
         {/* Image counter */}
         {hasMultiple && (
-          <div className="absolute right-4 bottom-4 z-10 rounded-full bg-black/60 px-3 py-1.5 text-xs font-bold text-white backdrop-blur-sm">
+          <div className="absolute right-3 bottom-3 z-10 rounded-full bg-black/60 px-3 py-1 text-xs font-bold text-white backdrop-blur-sm">
             {currentIdx + 1} / {thumbnails.length}
           </div>
         )}
