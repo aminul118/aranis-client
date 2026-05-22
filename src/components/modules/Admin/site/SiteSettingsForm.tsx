@@ -174,7 +174,7 @@ const SiteSettingsForm = ({ settings }: Props) => {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-12">
         <Tabs defaultValue="branding" className="w-full">
-          <TabsList className="mb-12 flex h-auto w-fit gap-2 rounded-2xl bg-white/5 p-1.5 backdrop-blur-md">
+          <TabsList className="bg-muted/50 mb-12 flex h-auto w-fit gap-2 rounded-2xl p-1.5 backdrop-blur-md">
             <TabsTrigger
               value="branding"
               className="flex items-center gap-2 rounded-xl px-6 py-2.5 text-xs font-black tracking-widest uppercase transition-all data-[state=active]:bg-blue-600 data-[state=active]:text-white"
@@ -210,16 +210,16 @@ const SiteSettingsForm = ({ settings }: Props) => {
           {/* Branding Tab */}
           <TabsContent value="branding" className="space-y-8 outline-none">
             <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-              <div className="group relative rounded-[32px] border border-white/5 bg-zinc-900/50 p-10 transition-all hover:bg-zinc-900">
+              <div className="group border-border bg-card hover:bg-muted relative rounded-[32px] border p-10 transition-all">
                 <div className="mb-6 flex items-center gap-4">
                   <div className="rounded-2xl bg-blue-500/10 p-4 text-blue-400">
                     <Layout className="h-6 w-6" />
                   </div>
                   <div>
-                    <h4 className="text-xl font-black tracking-tight text-white uppercase italic">
+                    <h4 className="text-foreground text-xl font-black tracking-tight uppercase italic">
                       Identity Logo
                     </h4>
-                    <p className="text-xs font-medium tracking-widest text-zinc-500 uppercase">
+                    <p className="text-muted-foreground text-xs font-medium tracking-widest uppercase">
                       Main website branding asset
                     </p>
                   </div>
@@ -246,7 +246,7 @@ const SiteSettingsForm = ({ settings }: Props) => {
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-600 text-white shadow-xl shadow-blue-600/20">
                   <Info className="h-6 w-6" />
                 </div>
-                <h4 className="text-2xl font-black tracking-tighter text-white italic">
+                <h4 className="text-foreground text-2xl font-black tracking-tighter italic">
                   Branding Guidelines
                 </h4>
                 <ul className="space-y-3">
@@ -257,7 +257,7 @@ const SiteSettingsForm = ({ settings }: Props) => {
                   ].map((text) => (
                     <li
                       key={text}
-                      className="flex items-start gap-3 text-sm font-medium text-zinc-400"
+                      className="text-muted-foreground flex items-start gap-3 text-sm font-medium"
                     >
                       <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-blue-500" />
                       {text}
@@ -272,12 +272,12 @@ const SiteSettingsForm = ({ settings }: Props) => {
           <TabsContent value="seo" className="space-y-8 outline-none">
             <div className="space-y-10">
               <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-                <div className="space-y-8 rounded-[32px] border border-white/5 bg-zinc-900/50 p-10">
+                <div className="border-border bg-card space-y-8 rounded-[32px] border p-10">
                   <div className="flex items-center gap-4">
                     <div className="rounded-2xl bg-emerald-500/10 p-4 text-emerald-400">
                       <Search className="h-6 w-6" />
                     </div>
-                    <h4 className="text-xl font-black tracking-tight text-white uppercase italic">
+                    <h4 className="text-foreground text-xl font-black tracking-tight uppercase italic">
                       Core Metadata
                     </h4>
                   </div>
@@ -292,7 +292,7 @@ const SiteSettingsForm = ({ settings }: Props) => {
                         </FormLabel>
                         <FormControl>
                           <Input
-                            className="h-12 rounded-xl border-white/5 bg-white/5 font-bold focus:border-emerald-500/50"
+                            className="border-border bg-muted/50 h-12 rounded-xl font-bold focus:border-emerald-500/50"
                             {...field}
                           />
                         </FormControl>
@@ -311,7 +311,7 @@ const SiteSettingsForm = ({ settings }: Props) => {
                         </FormLabel>
                         <FormControl>
                           <Input
-                            className="h-12 rounded-xl border-white/5 bg-white/5 font-bold focus:border-emerald-500/50"
+                            className="border-border bg-muted/50 h-12 rounded-xl font-bold focus:border-emerald-500/50"
                             {...field}
                           />
                         </FormControl>
@@ -330,7 +330,7 @@ const SiteSettingsForm = ({ settings }: Props) => {
                         </FormLabel>
                         <FormControl>
                           <Input
-                            className="h-12 rounded-xl border-white/5 bg-white/5 font-bold focus:border-emerald-500/50"
+                            className="border-border bg-muted/50 h-12 rounded-xl font-bold focus:border-emerald-500/50"
                             {...field}
                           />
                         </FormControl>
@@ -340,12 +340,12 @@ const SiteSettingsForm = ({ settings }: Props) => {
                   />
                 </div>
 
-                <div className="space-y-8 rounded-[32px] border border-white/5 bg-zinc-900/50 p-10">
+                <div className="border-border bg-card space-y-8 rounded-[32px] border p-10">
                   <div className="flex items-center gap-4">
                     <div className="rounded-2xl bg-purple-500/10 p-4 text-purple-400">
                       <Share2 className="h-6 w-6" />
                     </div>
-                    <h4 className="text-xl font-black tracking-tight text-white uppercase italic">
+                    <h4 className="text-foreground text-xl font-black tracking-tight uppercase italic">
                       Social Visibility
                     </h4>
                   </div>
@@ -372,7 +372,7 @@ const SiteSettingsForm = ({ settings }: Props) => {
                 </div>
               </div>
 
-              <div className="rounded-[32px] border border-white/5 bg-zinc-900/50 p-10">
+              <div className="border-border bg-card rounded-[32px] border p-10">
                 <FormField
                   control={form.control}
                   name="description"
@@ -384,7 +384,7 @@ const SiteSettingsForm = ({ settings }: Props) => {
                       <FormControl>
                         <Textarea
                           rows={4}
-                          className="rounded-2xl border-white/5 bg-white/5 font-medium focus:border-emerald-500/50"
+                          className="border-border bg-muted/50 rounded-2xl font-medium focus:border-emerald-500/50"
                           {...field}
                         />
                       </FormControl>
@@ -400,7 +400,7 @@ const SiteSettingsForm = ({ settings }: Props) => {
           <TabsContent value="contact" className="space-y-8 outline-none">
             <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
               {/* Phone Card */}
-              <div className="space-y-6 rounded-[32px] border border-white/5 bg-zinc-900/50 p-8 transition-all hover:bg-zinc-900">
+              <div className="border-border bg-card hover:bg-muted space-y-6 rounded-[32px] border p-8 transition-all">
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-500/10 text-amber-400">
                   <Phone className="h-6 w-6" />
                 </div>
@@ -415,7 +415,7 @@ const SiteSettingsForm = ({ settings }: Props) => {
                       <FormControl>
                         <Input
                           placeholder="+880 1XXX-XXXXXX"
-                          className="h-12 border-white/5 bg-white/5 font-bold focus:border-amber-500/50"
+                          className="border-border bg-muted/50 h-12 font-bold focus:border-amber-500/50"
                           {...field}
                         />
                       </FormControl>
@@ -426,7 +426,7 @@ const SiteSettingsForm = ({ settings }: Props) => {
               </div>
 
               {/* Email Card */}
-              <div className="space-y-6 rounded-[32px] border border-white/5 bg-zinc-900/50 p-8 transition-all hover:bg-zinc-900">
+              <div className="border-border bg-card hover:bg-muted space-y-6 rounded-[32px] border p-8 transition-all">
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-500/10 text-blue-400">
                   <Mail className="h-6 w-6" />
                 </div>
@@ -441,7 +441,7 @@ const SiteSettingsForm = ({ settings }: Props) => {
                       <FormControl>
                         <Input
                           placeholder="hello@aranis.com"
-                          className="h-12 border-white/5 bg-white/5 font-bold focus:border-blue-500/50"
+                          className="border-border bg-muted/50 h-12 font-bold focus:border-blue-500/50"
                           {...field}
                         />
                       </FormControl>
@@ -452,7 +452,7 @@ const SiteSettingsForm = ({ settings }: Props) => {
               </div>
 
               {/* Location Card */}
-              <div className="space-y-6 rounded-[32px] border border-white/5 bg-zinc-900/50 p-8 transition-all hover:bg-zinc-900">
+              <div className="border-border bg-card hover:bg-muted space-y-6 rounded-[32px] border p-8 transition-all">
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-500/10 text-emerald-400">
                   <MapPin className="h-6 w-6" />
                 </div>
@@ -467,7 +467,7 @@ const SiteSettingsForm = ({ settings }: Props) => {
                       <FormControl>
                         <Input
                           placeholder="Dhaka, Bangladesh"
-                          className="h-12 border-white/5 bg-white/5 font-bold focus:border-emerald-500/50"
+                          className="border-border bg-muted/50 h-12 font-bold focus:border-emerald-500/50"
                           {...field}
                         />
                       </FormControl>
@@ -487,14 +487,14 @@ const SiteSettingsForm = ({ settings }: Props) => {
                 return (
                   <div
                     key={link.platform}
-                    className="group relative flex flex-col justify-between overflow-hidden rounded-[28px] border border-white/5 bg-zinc-900/40 p-8 transition-all hover:bg-zinc-900 hover:shadow-2xl"
+                    className="group border-border bg-card/80 hover:bg-muted relative flex flex-col justify-between overflow-hidden rounded-[28px] border p-8 transition-all hover:shadow-2xl"
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-4">
-                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/5 text-zinc-400 transition-all group-hover:bg-purple-600/10 group-hover:text-purple-400">
+                        <div className="bg-muted/50 text-muted-foreground flex h-12 w-12 items-center justify-center rounded-2xl transition-all group-hover:bg-purple-600/10 group-hover:text-purple-400">
                           <Icon className="h-6 w-6" />
                         </div>
-                        <span className="text-sm font-black tracking-widest text-zinc-400 uppercase transition-colors group-hover:text-white">
+                        <span className="text-muted-foreground group-hover:text-foreground text-sm font-black tracking-widest uppercase transition-colors">
                           {link.platform}
                         </span>
                       </div>
@@ -525,7 +525,7 @@ const SiteSettingsForm = ({ settings }: Props) => {
                               <div className="relative">
                                 <Input
                                   placeholder={`https://${link.platform.toLowerCase()}.com/thearanis`}
-                                  className="h-12 border-white/5 bg-black/40 pl-4 font-bold text-zinc-300 placeholder:text-zinc-700 focus:border-purple-500/50 focus:ring-purple-500/10"
+                                  className="border-border bg-background text-foreground placeholder:text-muted-foreground h-12 pl-4 font-bold focus:border-purple-500/50 focus:ring-purple-500/10"
                                   {...field}
                                 />
                                 <div className="absolute top-1/2 right-3 -translate-y-1/2 opacity-0 transition-opacity group-hover:opacity-100">
@@ -546,12 +546,12 @@ const SiteSettingsForm = ({ settings }: Props) => {
 
           {/* Policies Tab */}
           <TabsContent value="policies" className="space-y-8 outline-none">
-            <div className="space-y-8 rounded-[32px] border border-white/5 bg-zinc-900/50 p-10">
+            <div className="border-border bg-card space-y-8 rounded-[32px] border p-10">
               <div className="flex items-center gap-4">
                 <div className="rounded-2xl bg-red-500/10 p-4 text-red-400">
                   <Info className="h-6 w-6" />
                 </div>
-                <h4 className="text-xl font-black tracking-tight text-white uppercase italic">
+                <h4 className="text-foreground text-xl font-black tracking-tight uppercase italic">
                   Refund & Return Policies
                 </h4>
               </div>
@@ -569,7 +569,7 @@ const SiteSettingsForm = ({ settings }: Props) => {
                         value={field.value || ''}
                         onChange={(val) => field.onChange(val)}
                         placeholder="Write dynamic refund policy..."
-                        className="rounded-2xl border border-white/5 bg-white/5 p-4"
+                        className="border-border bg-muted/50 rounded-2xl border p-4"
                       />
                     </FormControl>
                     <FormMessage />
@@ -590,7 +590,7 @@ const SiteSettingsForm = ({ settings }: Props) => {
                         value={field.value || ''}
                         onChange={(val) => field.onChange(val)}
                         placeholder="Write dynamic return policy..."
-                        className="rounded-2xl border border-white/5 bg-white/5 p-4"
+                        className="border-border bg-muted/50 rounded-2xl border p-4"
                       />
                     </FormControl>
                     <FormMessage />
@@ -602,10 +602,10 @@ const SiteSettingsForm = ({ settings }: Props) => {
         </Tabs>
 
         {/* Global Action Bar */}
-        <div className="mt-12 flex items-center justify-between border-t border-white/5 pt-12">
-          <div className="flex items-center gap-4 rounded-2xl bg-white/5 px-6 py-3">
+        <div className="border-border mt-12 flex items-center justify-between border-t pt-12">
+          <div className="bg-muted/50 flex items-center gap-4 rounded-2xl px-6 py-3">
             <div className="flex h-2 w-2 animate-pulse rounded-full bg-emerald-500" />
-            <p className="text-[10px] font-black tracking-[0.2em] text-zinc-500 uppercase">
+            <p className="text-muted-foreground text-[10px] font-black tracking-[0.2em] uppercase">
               Live synchronization active
             </p>
           </div>

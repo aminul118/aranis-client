@@ -10,18 +10,19 @@ import { IProduct } from '@/types';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Heart, ShoppingCart } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { toast } from 'sonner';
 
 interface ProductCardProps {
   product: IProduct;
   index?: number;
   viewMode?: 'grid' | 'list';
+  selectedColors?: string[];
 }
 
 const ProductCard = ({
   product,
   index = 0,
   viewMode = 'grid',
+  selectedColors = [],
 }: ProductCardProps) => {
   const router = useRouter();
   const { addToCart } = useCart();
@@ -44,8 +45,29 @@ const ProductCard = ({
     return src;
   };
 
-  const primaryThumbnail = getValidImage(product.thumbnails?.[0]);
-  const secondaryThumbnail = getValidImage(product.thumbnails?.[1]);
+  // Find matching variant based on selected colors
+  const matchedVariant = product.variants?.find((variant) =>
+    selectedColors.some((color) => {
+      const sColor = color.toLowerCase();
+      const vColor = variant.color?.toLowerCase();
+      return vColor
+        ? vColor === sColor ||
+            vColor.includes(sColor) ||
+            sColor.includes(vColor)
+        : false;
+    }),
+  );
+
+  const primaryThumbnail = getValidImage(
+    matchedVariant?.thumbnails?.[0] || product.thumbnails?.[0],
+  );
+  const secondaryThumbnail = getValidImage(
+    matchedVariant?.thumbnails?.[1] || product.thumbnails?.[1],
+  );
+
+  const productUrl = `/products/${product.slug || product._id}${
+    matchedVariant ? `?color=${encodeURIComponent(matchedVariant.color)}` : ''
+  }`;
 
   return (
     <motion.div
@@ -61,7 +83,7 @@ const ProductCard = ({
         'group relative cursor-pointer overflow-hidden bg-white transition-all duration-700 hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.15)] dark:bg-zinc-900/50 dark:hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.4)]',
         isList && 'flex flex-row gap-8',
       )}
-      onClick={() => router.push(`/products/${product.slug || product._id}`)}
+      onClick={() => router.push(productUrl)}
     >
       {/* Image Container */}
       <div
@@ -179,10 +201,7 @@ const ProductCard = ({
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              addToCart(product as any);
-              toast.success(`${product.name} added!`, {
-                className: 'rounded-full bg-zinc-900 text-white font-bold',
-              });
+              router.push(productUrl);
             }}
             className={cn(
               'h-10 w-10 rounded-full border-none transition-all duration-500 active:scale-95',

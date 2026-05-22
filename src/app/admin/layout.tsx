@@ -30,5 +30,5 @@ export default AdminLayout;
 
 // SEO
 export const metadata: Metadata = {
-  title: 'Dashboard | Aminul Islam',
+  title: 'Dashboard | Aranis Admin',
 };

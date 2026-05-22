@@ -1,3 +1,4 @@
+import HtmlContent from '@/components/rich-text/core/html-content';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -218,9 +219,16 @@ export default async function ProductDetailPage({ params }: Props) {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-muted-foreground text-sm leading-relaxed">
-                {product.description || 'No description provided.'}
-              </p>
+              {product.description ? (
+                <HtmlContent
+                  content={product.description}
+                  className="prose prose-sm dark:prose-invert text-muted-foreground max-w-none leading-relaxed"
+                />
+              ) : (
+                <p className="text-muted-foreground text-sm leading-relaxed">
+                  No description provided.
+                </p>
+              )}
             </CardContent>
           </Card>
 

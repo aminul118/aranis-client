@@ -1,6 +1,5 @@
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Trash2, X } from 'lucide-react';
+import { X } from 'lucide-react';
 
 interface ActiveFiltersProps {
   selectedCategory: string;
@@ -121,16 +120,6 @@ const ActiveFilters = ({
           </Badge>
         ))}
       </div>
-
-      <Button
-        variant="ghost"
-        size="sm"
-        onClick={onClearAll}
-        className="h-8 gap-2 rounded-full px-3 text-xs font-bold text-red-500 hover:bg-red-500/10 hover:text-red-600"
-      >
-        <Trash2 size={14} />
-        Clear All
-      </Button>
     </div>
   );
 };

@@ -11,16 +11,40 @@ interface ProductListProps {
   products: IProduct[];
   loading: boolean;
   viewMode: 'grid' | 'list';
+  selectedColors?: string[];
 }
 
-const ProductList = ({ products, loading, viewMode }: ProductListProps) => {
+const ProductList = ({
+  products,
+  loading,
+  viewMode,
+  selectedColors,
+}: ProductListProps) => {
   const router = useRouter();
 
-  if (loading && products.length === 0) {
+  const filteredProducts = products.filter((product) => {
+    if (!selectedColors || selectedColors.length === 0) return true;
+
+    return selectedColors.some((selectedColor) => {
+      const sColor = selectedColor.toLowerCase();
+
+      const matchVariant = product.variants?.some((v) => {
+        const vColor = v.color?.toLowerCase();
+        return vColor
+          ? vColor === sColor ||
+              vColor.includes(sColor) ||
+              sColor.includes(vColor)
+          : false;
+      });
+      return matchVariant;
+    });
+  });
+
+  if (loading && filteredProducts.length === 0) {
     return <div className="h-96 w-full" />;
   }
 
-  if (products.length === 0) {
+  if (filteredProducts.length === 0) {
     return (
       <div className="py-20 text-center">
         <p className="text-muted-foreground text-xl font-medium">
@@ -46,14 +70,18 @@ const ProductList = ({ products, loading, viewMode }: ProductListProps) => {
           : 'grid-cols-1',
       )}
     >
-      {products.map((product) => (
+      {filteredProducts.map((product) => (
         <motion.div
           key={product._id}
           layout
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
         >
-          <ProductCard product={product} viewMode={viewMode} />
+          <ProductCard
+            product={product}
+            viewMode={viewMode}
+            selectedColors={selectedColors}
+          />
         </motion.div>
       ))}
     </div>

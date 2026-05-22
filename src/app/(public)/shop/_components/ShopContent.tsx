@@ -360,6 +360,21 @@ const ShopContent = ({
                 isSidebarOpen={isSidebarOpen}
                 setIsSidebarOpen={setIsSidebarOpen}
                 onUpdateURL={updateURL}
+                onClearAll={handleClearAll}
+                activeFiltersNode={
+                  <ActiveFilters
+                    selectedCategory={selectedCategory}
+                    selectedColors={selectedColors}
+                    selectedSizes={selectedSizes}
+                    selectedQuery={searchParams.get('q') || ''}
+                    selectedMinPrice={selectedMinPrice}
+                    selectedMaxPrice={selectedMaxPrice}
+                    onUpdateURL={updateURL}
+                    onToggleMultiFilter={toggleMultiFilter}
+                    onClearAll={handleClearAll}
+                    isCategoryFixed={!!initialFilters}
+                  />
+                }
               >
                 <FilterSection
                   dbCategories={dbCategories}
@@ -379,18 +394,20 @@ const ShopContent = ({
                 />
               </ShopHeader>
 
-              <ActiveFilters
-                selectedCategory={selectedCategory}
-                selectedColors={selectedColors}
-                selectedSizes={selectedSizes}
-                selectedQuery={searchParams.get('q') || ''}
-                selectedMinPrice={selectedMinPrice}
-                selectedMaxPrice={selectedMaxPrice}
-                onUpdateURL={updateURL}
-                onToggleMultiFilter={toggleMultiFilter}
-                onClearAll={handleClearAll}
-                isCategoryFixed={!!initialFilters}
-              />
+              <div className="block lg:hidden">
+                <ActiveFilters
+                  selectedCategory={selectedCategory}
+                  selectedColors={selectedColors}
+                  selectedSizes={selectedSizes}
+                  selectedQuery={searchParams.get('q') || ''}
+                  selectedMinPrice={selectedMinPrice}
+                  selectedMaxPrice={selectedMaxPrice}
+                  onUpdateURL={updateURL}
+                  onToggleMultiFilter={toggleMultiFilter}
+                  onClearAll={handleClearAll}
+                  isCategoryFixed={!!initialFilters}
+                />
+              </div>
 
               <div className="flex items-start gap-12">
                 <aside className="sticky top-32 hidden w-64 shrink-0 flex-col gap-10 lg:flex">
@@ -417,6 +434,7 @@ const ShopContent = ({
                     products={allProducts}
                     loading={loading}
                     viewMode={viewMode}
+                    selectedColors={selectedColors}
                   />
 
                   {meta && (

@@ -2,6 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/CartContext';
+import { requestOTP } from '@/services/auth/otp/sendOTP';
 import { registerWithOTP } from '@/services/auth/register';
 import { createOrder } from '@/services/order/order';
 import { getMe } from '@/services/user/users';
@@ -183,15 +184,34 @@ export default function CheckoutContent() {
             res.message?.toLowerCase().includes('already');
 
           if (isAlreadyRegistered) {
-            toast.error(
-              'This account is already registered. Please login to place your order.',
-              {
-                duration: 5000,
-              },
-            );
-            setTimeout(() => {
-              router.push('/login?redirect=checkout');
-            }, 2000);
+            const otpRes = await requestOTP(guestInfo.emailOrPhone);
+
+            if (otpRes.success || otpRes.message === 'OTP sent successfully') {
+              localStorage.setItem(
+                'checkout_guest_info',
+                JSON.stringify({
+                  guestInfo,
+                  guestMethod,
+                  paymentMethod,
+                  shippingLocation,
+                  isPlacingPendingOrder: true,
+                }),
+              );
+              toast.success(
+                `Welcome back! Verification code sent to your ${guestMethod}`,
+              );
+              router.push(
+                `/verify?identifier=${encodeURIComponent(guestInfo.emailOrPhone)}&redirect=checkout`,
+              );
+            } else {
+              toast.error(
+                'This account is already registered. Please login to place your order.',
+                { duration: 5000 },
+              );
+              setTimeout(() => {
+                router.push('/login?redirect=checkout');
+              }, 2000);
+            }
           } else {
             toast.error(res.message || 'Failed to initiate guest registration');
           }

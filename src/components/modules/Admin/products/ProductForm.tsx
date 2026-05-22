@@ -207,34 +207,6 @@ const ProductForm = ({
   const watchedDiscountPercentage = form.watch('discountPercentage');
   const watchedIsOffer = form.watch('isOffer');
 
-  // Auto-calculate Discount Percentage when Sale Price changes
-  useEffect(() => {
-    const price = Number(watchedPrice);
-    const salePrice = Number(watchedSalePrice);
-    if (price > 0 && salePrice > 0 && salePrice < price) {
-      const percentage = Math.round(((price - salePrice) / price) * 100);
-      if (percentage !== Number(form.getValues('discountPercentage'))) {
-        form.setValue('discountPercentage', percentage);
-      }
-    } else if (salePrice === 0 || salePrice >= price) {
-      if (Number(form.getValues('discountPercentage')) !== 0) {
-        form.setValue('discountPercentage', 0);
-      }
-    }
-  }, [watchedSalePrice, watchedPrice, form]);
-
-  // Auto-calculate Sale Price when Discount Percentage changes
-  useEffect(() => {
-    const price = Number(watchedPrice);
-    const percentage = Number(watchedDiscountPercentage);
-    if (price > 0 && percentage > 0 && percentage < 100) {
-      const salePrice = Math.round(price - (price * percentage) / 100);
-      if (salePrice !== Number(form.getValues('salePrice'))) {
-        form.setValue('salePrice', salePrice);
-      }
-    }
-  }, [watchedDiscountPercentage, watchedPrice, form]);
-
   const selectedCategory = localCategories.find(
     (c) => c.name === form.watch('category'),
   );
@@ -563,6 +535,21 @@ const ProductForm = ({
                                 'discountPercentage',
                                 newOffer.discountPercentage,
                               );
+                              // Auto update salePrice too
+                              const price = Number(form.getValues('price'));
+                              if (
+                                price > 0 &&
+                                newOffer.discountPercentage > 0
+                              ) {
+                                form.setValue(
+                                  'salePrice',
+                                  Math.round(
+                                    price -
+                                      (price * newOffer.discountPercentage) /
+                                        100,
+                                  ),
+                                );
+                              }
                             }
                           }}
                         />
@@ -589,38 +576,78 @@ const ProductForm = ({
                     </FormItem>
                   )}
                 />
-                <FormField
-                  control={form.control}
-                  name="discountPercentage"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Discount (%)</FormLabel>
-                      <FormControl>
-                        <Input type="number" placeholder="e.g. 20" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
               </div>
             )}
           </div>
 
           <div className="space-y-4">
-            <FormField
-              control={form.control}
-              name="salePrice"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Discounted Price ($)</FormLabel>
-                  <FormControl>
-                    <Input type="number" step="0.01" {...field} />
-                  </FormControl>
-                  <FormDescription>Set to 0 if no discount.</FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="grid grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="discountPercentage"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Discount (%)</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        placeholder="e.g. 20"
+                        {...field}
+                        onChange={(e) => {
+                          field.onChange(e);
+                          const percentage = Number(e.target.value);
+                          const price = Number(form.getValues('price'));
+                          if (price > 0) {
+                            if (percentage > 0 && percentage < 100) {
+                              const salePrice = Math.round(
+                                price - (price * percentage) / 100,
+                              );
+                              form.setValue('salePrice', salePrice);
+                            } else if (percentage === 0) {
+                              form.setValue('salePrice', 0);
+                            }
+                          }
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="salePrice"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Discounted Price ($)</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        step="0.01"
+                        {...field}
+                        onChange={(e) => {
+                          field.onChange(e);
+                          const salePrice = Number(e.target.value);
+                          const price = Number(form.getValues('price'));
+                          if (price > 0) {
+                            if (salePrice > 0 && salePrice < price) {
+                              const percentage = Math.round(
+                                ((price - salePrice) / price) * 100,
+                              );
+                              form.setValue('discountPercentage', percentage);
+                            } else if (salePrice === 0 || salePrice >= price) {
+                              form.setValue('discountPercentage', 0);
+                            }
+                          }
+                        }}
+                      />
+                    </FormControl>
+                    <FormDescription>Set to 0 if no discount.</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
             <FormField
               control={form.control}
               name="slug"

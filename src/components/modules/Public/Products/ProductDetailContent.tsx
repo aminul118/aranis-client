@@ -19,6 +19,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useCart } from '@/context/CartContext';
+import { useUser } from '@/context/UserContext';
 import { useWishlist } from '@/context/WishlistContext';
 import { cn } from '@/lib/utils';
 import { createRestockRequest } from '@/services/restock/restock';
@@ -36,7 +37,7 @@ import {
   Share2,
   ShoppingCart,
 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import ProductImageGallery from './ProductImageGallery';
@@ -46,8 +47,6 @@ interface ProductDetailContentProps {
   settings?: ISiteSetting;
 }
 
-import { useUser } from '@/context/UserContext';
-
 const ProductDetailContent = ({
   product,
   settings,
@@ -56,8 +55,29 @@ const ProductDetailContent = ({
   const { addToCart } = useCart();
   const { user } = useUser();
   const { toggleWishlist, isInWishlist } = useWishlist();
+  const searchParams = useSearchParams();
+  const urlColor = searchParams.get('color');
+
   const [selectedSize, setSelectedSize] = useState(product.sizes[0]);
   const [selectedVariantIndex, setSelectedVariantIndex] = useState(-1);
+
+  // Initialize variant from URL color
+  useEffect(() => {
+    if (urlColor && product.variants) {
+      const sColor = urlColor.toLowerCase();
+      const idx = product.variants.findIndex((v) => {
+        const vColor = v.color?.toLowerCase();
+        return vColor
+          ? vColor === sColor ||
+              vColor.includes(sColor) ||
+              sColor.includes(vColor)
+          : false;
+      });
+      if (idx !== -1) {
+        setSelectedVariantIndex(idx);
+      }
+    }
+  }, [urlColor, product.variants]);
   const [isRequesting, setIsRequesting] = useState(false);
   const currentSelectedColor =
     selectedVariantIndex === -1
