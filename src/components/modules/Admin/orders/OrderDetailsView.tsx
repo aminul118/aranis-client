@@ -459,7 +459,7 @@ const OrderDetailsView = ({ order }: { order: IOrder }) => {
           <div className="flex items-start justify-between border-b-4 border-blue-600 pb-8">
             <div>
               <h1 className="text-4xl font-black tracking-tighter text-blue-600 uppercase">
-                Aranis
+                The Aranis
               </h1>
               <p className="text-sm font-bold tracking-widest text-gray-500 uppercase">
                 Premium E-commerce
@@ -589,7 +589,7 @@ const OrderDetailsView = ({ order }: { order: IOrder }) => {
                   Shipping
                 </span>
                 <span className="text-[10px] font-bold tracking-widest text-emerald-500 uppercase">
-                  Free
+                  {Number(order.shippingCharge).toFixed(2)}
                 </span>
               </div>
               <div className="flex items-center justify-between border-t-2 border-blue-600 pt-4">
@@ -597,7 +597,7 @@ const OrderDetailsView = ({ order }: { order: IOrder }) => {
                   Grand Total
                 </span>
                 <span className="text-2xl font-black tracking-tighter text-blue-600">
-                  ৳{order.totalPrice.toFixed(2)}
+                  ৳{Number(order.totalPrice + order.shippingCharge).toFixed(2)}
                 </span>
               </div>
             </div>

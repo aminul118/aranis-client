@@ -41,7 +41,7 @@ export interface IOrder {
   shippingAddress: string;
   paymentMethod: PaymentMethod;
   paymentStatus: PaymentStatus;
-  shippingCharge?: number;
+  shippingCharge: number;
   contactPhone?: string;
   isDeleted?: boolean;
   rejectionNote?: string;
