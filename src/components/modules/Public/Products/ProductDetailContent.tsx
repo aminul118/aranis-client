@@ -22,6 +22,7 @@ import { useCart } from '@/context/CartContext';
 import { useWishlist } from '@/context/WishlistContext';
 import { cn } from '@/lib/utils';
 import { createRestockRequest } from '@/services/restock/restock';
+import { ISiteSetting } from '@/services/settings/settings';
 import { IProduct, IVariantSize } from '@/types';
 import { motion } from 'framer-motion';
 import {
@@ -40,8 +41,6 @@ import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import ProductImageGallery from './ProductImageGallery';
 
-import { ISiteSetting } from '@/services/settings/settings';
-
 interface ProductDetailContentProps {
   product: IProduct;
   settings?: ISiteSetting;
@@ -58,9 +57,17 @@ const ProductDetailContent = ({
   const { user } = useUser();
   const { toggleWishlist, isInWishlist } = useWishlist();
   const [selectedSize, setSelectedSize] = useState(product.sizes[0]);
-  const isWishlisted = isInWishlist(product._id as string);
   const [selectedVariantIndex, setSelectedVariantIndex] = useState(-1);
   const [isRequesting, setIsRequesting] = useState(false);
+  const currentSelectedColor =
+    selectedVariantIndex === -1
+      ? product.color
+      : product.variants?.[selectedVariantIndex]?.color;
+  const isWishlisted = isInWishlist(
+    product._id as string,
+    currentSelectedColor,
+    selectedSize,
+  );
 
   // Auto-select available size when variant changes
   useEffect(() => {
@@ -253,7 +260,9 @@ const ProductDetailContent = ({
             </Badge>
             <div className="flex items-center gap-4">
               <button
-                onClick={() => toggleWishlist(product)}
+                onClick={() =>
+                  toggleWishlist(product, currentSelectedColor, selectedSize)
+                }
                 className={`border-border/50 hover:bg-muted rounded-full border p-2.5 transition-all ${isWishlisted ? 'bg-red-50 text-red-500' : 'text-muted-foreground'}`}
               >
                 <Heart
@@ -515,6 +524,15 @@ const ProductDetailContent = ({
                   })();
 
                   const isStockOut = sizeStock === 0;
+                  const selectedColor =
+                    selectedVariantIndex === -1
+                      ? product.color
+                      : product.variants?.[selectedVariantIndex]?.color;
+                  const isWishlisted = isInWishlist(
+                    product._id as string,
+                    selectedColor,
+                    size,
+                  );
 
                   return (
                     <button

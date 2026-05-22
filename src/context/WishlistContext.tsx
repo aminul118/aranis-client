@@ -13,10 +13,18 @@ import { toast } from 'sonner';
 
 interface WishlistContextType {
   wishlist: IWishlistItem[];
-  toggleWishlist: (product: IProduct) => Promise<void>;
+  toggleWishlist: (
+    product: IProduct,
+    selectedColor?: string,
+    selectedSize?: string,
+  ) => Promise<void>;
   updateQuantity: (id: string, quantity: number) => Promise<void>;
   removeFromWishlist: (id: string) => Promise<void>;
-  isInWishlist: (productId: string) => boolean;
+  isInWishlist: (
+    productId: string,
+    selectedColor?: string,
+    selectedSize?: string,
+  ) => boolean;
   wishlistCount: number;
 }
 
@@ -55,15 +63,25 @@ export const WishlistProvider: React.FC<{ children: React.ReactNode }> = ({
     try {
       const res = await getMyWishlist();
       const serverItems = res?.data || [];
-      const serverProductIds = new Set(
+      const serverIdentifiers = new Set(
         serverItems
           .filter((item) => item && item.product)
-          .map((item) => item.product._id),
+          .map(
+            (item) =>
+              `${item.product._id}-${item.selectedColor || ''}-${item.selectedSize || ''}`,
+          ),
       );
 
       for (const item of localItems) {
-        if (item && item.product && !serverProductIds.has(item.product._id)) {
-          await toggleWishlistService(item.product._id as string);
+        if (item && item.product) {
+          const identifier = `${item.product._id}-${item.selectedColor || ''}-${item.selectedSize || ''}`;
+          if (!serverIdentifiers.has(identifier)) {
+            await toggleWishlistService(
+              item.product._id as string,
+              item.selectedColor,
+              item.selectedSize,
+            );
+          }
         }
       }
       localStorage.removeItem(GUEST_WISHLIST_KEY);
@@ -115,18 +133,30 @@ export const WishlistProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }, [user]);
 
-  const toggleWishlist = async (product: IProduct) => {
+  const toggleWishlist = async (
+    product: IProduct,
+    selectedColor?: string,
+    selectedSize?: string,
+  ) => {
     if (user) {
       // Optimistic Update: instantly add/remove from local state
       const isExist = wishlist.some(
-        (item) => item?.product?._id === product._id,
+        (item) =>
+          item?.product?._id === product._id &&
+          item.selectedColor === selectedColor &&
+          item.selectedSize === selectedSize,
       );
       const originalWishlist = [...wishlist];
 
       let updatedWishlist: IWishlistItem[];
       if (isExist) {
         updatedWishlist = wishlist.filter(
-          (item) => item?.product?._id !== product._id,
+          (item) =>
+            !(
+              item?.product?._id === product._id &&
+              item.selectedColor === selectedColor &&
+              item.selectedSize === selectedSize
+            ),
         );
       } else {
         const newItem: IWishlistItem = {
@@ -134,6 +164,8 @@ export const WishlistProvider: React.FC<{ children: React.ReactNode }> = ({
           user: user._id as string,
           product,
           quantity: 1,
+          selectedColor,
+          selectedSize,
           createdAt: new Date().toISOString(),
         };
         updatedWishlist = [...wishlist, newItem];
@@ -143,7 +175,11 @@ export const WishlistProvider: React.FC<{ children: React.ReactNode }> = ({
       setWishlist(updatedWishlist);
 
       try {
-        const res = await toggleWishlistService(product._id as string);
+        const res = await toggleWishlistService(
+          product._id as string,
+          selectedColor,
+          selectedSize,
+        );
         if (res.success) {
           await fetchWishlist();
           const action =
@@ -162,21 +198,35 @@ export const WishlistProvider: React.FC<{ children: React.ReactNode }> = ({
     } else {
       // Guest Toggle
       const isExist = wishlist.some(
-        (item) => item && item.product && item.product._id === product._id,
+        (item) =>
+          item &&
+          item.product &&
+          item.product._id === product._id &&
+          item.selectedColor === selectedColor &&
+          item.selectedSize === selectedSize,
       );
       let updatedWishlist: IWishlistItem[];
 
       if (isExist) {
         updatedWishlist = wishlist.filter(
-          (item) => item && item.product && item.product._id !== product._id,
+          (item) =>
+            !(
+              item &&
+              item.product &&
+              item.product._id === product._id &&
+              item.selectedColor === selectedColor &&
+              item.selectedSize === selectedSize
+            ),
         );
         toast.success(`"${product.name}" removed from wishlist`);
       } else {
         const newItem: IWishlistItem = {
-          _id: product._id as string, // use product id as item id for guest
+          _id: `${product._id}_${selectedColor || ''}_${selectedSize || ''}_${Date.now()}`, // unique id for guest
           user: 'guest',
           product,
           quantity: 1,
+          selectedColor,
+          selectedSize,
           createdAt: new Date().toISOString(),
         };
         updatedWishlist = [...wishlist, newItem];
@@ -235,10 +285,25 @@ export const WishlistProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-  const isInWishlist = (productId: string) => {
-    return wishlist.some(
-      (item) => item && item.product && item.product._id === productId,
-    );
+  const isInWishlist = (
+    productId: string,
+    selectedColor?: string,
+    selectedSize?: string,
+  ) => {
+    return wishlist.some((item) => {
+      if (!item || !item.product || item.product._id !== productId)
+        return false;
+
+      // If no specific color/size is requested (e.g. from ProductCard),
+      // just return true if the product exists in the wishlist at all.
+      if (selectedColor === undefined && selectedSize === undefined)
+        return true;
+
+      return (
+        item.selectedColor === selectedColor &&
+        item.selectedSize === selectedSize
+      );
+    });
   };
 
   // Calculate total count based only on items with valid products

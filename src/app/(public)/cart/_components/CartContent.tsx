@@ -5,6 +5,8 @@ import CartSummary from '@/components/modules/Public/Cart/CartSummary';
 import EmptyCart from '@/components/modules/Public/Cart/EmptyCart';
 import { useCart } from '@/context/CartContext';
 import { AnimatePresence } from 'framer-motion';
+import { ShoppingBag } from 'lucide-react';
+import Link from 'next/link';
 import { useState } from 'react';
 
 export default function CartContent() {
@@ -43,16 +45,28 @@ export default function CartContent() {
   return (
     <div className="bg-background min-h-screen pt-32 pb-24">
       <div className="container mx-auto px-4">
-        <div className="mb-16">
-          <h1 className="flex items-center gap-4 text-5xl font-black tracking-tighter uppercase italic">
-            Shopping Bag
-            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600/10 text-sm font-black tracking-normal text-blue-600 backdrop-blur-sm">
-              {cart.length}
-            </span>
-          </h1>
-          <p className="text-muted-foreground/60 mt-2 text-lg font-medium">
-            Review your selection and proceed to secure checkout.
-          </p>
+        <div className="mb-16 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
+          <div className="space-y-2">
+            <h1 className="flex items-center gap-4 text-5xl font-black tracking-tighter uppercase italic">
+              Shopping Bag
+              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600/10 text-sm font-black tracking-normal text-blue-600 backdrop-blur-sm">
+                {cart.length}
+              </span>
+            </h1>
+            <p className="text-muted-foreground/60 text-lg font-medium">
+              Review your selection and proceed to secure checkout.
+            </p>
+          </div>
+          <Link
+            href="/shop"
+            className="group flex items-center gap-3 rounded-full border border-blue-600/20 bg-blue-600/5 px-8 py-3 text-sm font-black tracking-widest text-blue-600 uppercase transition-all hover:bg-blue-600 hover:text-white"
+          >
+            Continue Shopping{' '}
+            <ShoppingBag
+              size={18}
+              className="transition-transform group-hover:-translate-y-0.5"
+            />
+          </Link>
         </div>
 
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-3">

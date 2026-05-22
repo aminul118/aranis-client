@@ -144,6 +144,11 @@ const ProductsColumn: Column<IProduct>[] = [
           <span className="text-muted-foreground text-xs">
             {p.category} · {p.subCategory}
           </span>
+          {p.isOffer && (
+            <span className="mt-1 w-max rounded bg-purple-500/10 px-1.5 py-0.5 text-[10px] font-bold tracking-wider text-purple-500 uppercase">
+              Special Offer
+            </span>
+          )}
         </div>
       </Link>
     ),

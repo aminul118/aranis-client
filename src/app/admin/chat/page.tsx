@@ -320,8 +320,9 @@ export default function AdminChatPage() {
                   msg.sender === admin?._id ||
                   msg.sender?._id === admin?._id ||
                   msg.senderRole === 'ADMIN' ||
-                  (typeof msg.sender === 'object' &&
-                    msg.sender.role === 'ADMIN');
+                  (msg.sender &&
+                    typeof msg.sender === 'object' &&
+                    (msg.sender as any).role === 'ADMIN');
                 return (
                   <div
                     key={i}

@@ -81,9 +81,10 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
       if (existingItem) {
         return prevCart.map((item) =>
           item._id === product._id &&
+          item._id === product._id &&
           item.selectedColor === selectedColor &&
           item.selectedSize === selectedSize
-            ? { ...item, quantity: item.quantity + 1 }
+            ? { ...item, quantity: Math.min(item.quantity + 1, 20) }
             : item,
         );
       }
@@ -118,12 +119,13 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
     selectedSize?: string,
   ) => {
     if (quantity < 1) return;
+    const finalQuantity = Math.min(quantity, 20);
     setCart((prevCart) =>
       prevCart.map((item) =>
         item._id === id &&
         item.selectedColor === selectedColor &&
         item.selectedSize === selectedSize
-          ? { ...item, quantity }
+          ? { ...item, quantity: finalQuantity }
           : item,
       ),
     );

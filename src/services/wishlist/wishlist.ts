@@ -10,13 +10,19 @@ export interface IWishlistItem {
   product: IProduct;
   quantity: number;
   createdAt: string;
+  selectedColor?: string;
+  selectedSize?: string;
 }
 
-export const toggleWishlist = async (productId: string) => {
+export const toggleWishlist = async (
+  productId: string,
+  selectedColor?: string,
+  selectedSize?: string,
+) => {
   const res = await serverFetch.post<
     ApiResponse<{ action: 'added' | 'removed' }>
   >('/wishlist/toggle', {
-    body: JSON.stringify({ productId }),
+    body: JSON.stringify({ productId, selectedColor, selectedSize }),
     headers: {
       'Content-Type': 'application/json',
     },
