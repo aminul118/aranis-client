@@ -5,13 +5,6 @@ import HtmlContent from '@/components/rich-text/core/html-content';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
-import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -60,6 +53,16 @@ const ProductDetailContent = ({
 
   const [selectedSize, setSelectedSize] = useState(product.sizes[0]);
   const [selectedVariantIndex, setSelectedVariantIndex] = useState(-1);
+
+  const getYoutubeEmbedUrl = (url: string) => {
+    if (!url) return '';
+    const match = url.match(
+      /(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/,
+    );
+    const videoId = match ? match[1] : url.split('/').pop() || '';
+    const origin = typeof window !== 'undefined' ? window.location.origin : '';
+    return `https://www.youtube.com/embed/${videoId}${origin ? `?origin=${encodeURIComponent(origin)}` : ''}`;
+  };
 
   // Initialize variant from URL color
   useEffect(() => {
@@ -475,56 +478,6 @@ const ProductDetailContent = ({
                 <h3 className="text-foreground text-sm font-black tracking-widest uppercase">
                   Select Size
                 </h3>
-                {product.sizeGuide && (
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      <button className="group flex items-center gap-2 rounded-full bg-blue-500/5 px-4 py-2 text-xs font-black tracking-widest text-blue-600 transition-all hover:bg-blue-500/10 active:scale-95">
-                        <Ruler
-                          size={14}
-                          className="transition-transform group-hover:rotate-12"
-                        />
-                        SIZE GUIDE
-                      </button>
-                    </DialogTrigger>
-                    <DialogContent className="max-w-3xl overflow-hidden rounded-[40px] border-none bg-white/95 p-0 shadow-2xl backdrop-blur-xl dark:bg-zinc-900/95">
-                      <DialogHeader className="p-8 pb-0">
-                        <div className="flex items-center justify-between">
-                          <DialogTitle className="flex items-center gap-3 text-3xl font-black tracking-tighter uppercase italic">
-                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-500/10 text-blue-500">
-                              <Ruler size={20} />
-                            </div>
-                            {(product.sizeGuide as any).name || 'Size Guide'}
-                          </DialogTitle>
-                        </div>
-                        <p className="text-muted-foreground/60 mt-2 text-sm font-medium">
-                          Find your perfect fit with our artisanal measurement
-                          guide
-                        </p>
-                      </DialogHeader>
-                      <div className="relative aspect-[4/5] w-full p-8 md:aspect-video">
-                        <div className="group relative h-full w-full overflow-hidden rounded-3xl border-2 border-zinc-200 bg-zinc-50 transition-all hover:border-blue-500/20 dark:border-zinc-800 dark:bg-zinc-950">
-                          <Image
-                            src={(product.sizeGuide as any).image}
-                            alt={
-                              (product.sizeGuide as any).name || 'Size Guide'
-                            }
-                            fill
-                            className="object-contain p-4 transition-transform duration-700 group-hover:scale-105"
-                            priority
-                          />
-                        </div>
-                      </div>
-                      <div className="flex flex-col items-center justify-center gap-2 border-t border-zinc-200 bg-zinc-50 p-6 dark:border-zinc-800 dark:bg-zinc-950">
-                        <p className="text-[10px] font-black tracking-[0.3em] text-zinc-400 uppercase">
-                          Measurements are in inches • Artisanal Craftsmanship
-                        </p>
-                        <div className="flex h-1.5 w-24 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-800">
-                          <div className="animate-shimmer h-full w-1/2 bg-linear-to-r from-transparent via-blue-500/50 to-transparent" />
-                        </div>
-                      </div>
-                    </DialogContent>
-                  </Dialog>
-                )}
               </div>
               <div className="flex flex-wrap gap-3">
                 {product.sizes.map((size) => {
@@ -596,6 +549,28 @@ const ProductDetailContent = ({
                   );
                 })}
               </div>
+
+              {/* Inline Size Guide Display */}
+              {product.sizeGuide && (
+                <div className="mt-8 overflow-hidden rounded-3xl border-2 border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950">
+                  <div className="flex items-center gap-3 border-b border-zinc-200 p-4 dark:border-zinc-800">
+                    <Ruler size={16} className="text-blue-500" />
+                    <span className="text-sm font-bold tracking-widest uppercase">
+                      {(product.sizeGuide as any).name || 'Size Guide'}
+                    </span>
+                  </div>
+                  <div className="relative aspect-auto w-full">
+                    <Image
+                      src={(product.sizeGuide as any).image}
+                      alt={(product.sizeGuide as any).name || 'Size Guide'}
+                      width={800}
+                      height={600}
+                      className="h-auto w-full object-contain p-2"
+                      priority
+                    />
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
@@ -730,11 +705,12 @@ const ProductDetailContent = ({
                     <iframe
                       width="100%"
                       height="100%"
-                      src={`https://www.youtube.com/embed/${product.videoUrl.split('v=')[1]?.split('&')[0] || product.videoUrl.split('/').pop()}`}
+                      src={getYoutubeEmbedUrl(product.videoUrl)}
                       title="Product Video"
                       frameBorder="0"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                       allowFullScreen
+                      referrerPolicy="origin"
                     ></iframe>
                   </div>
                   <p className="text-muted-foreground mt-4 text-center text-sm font-medium italic">

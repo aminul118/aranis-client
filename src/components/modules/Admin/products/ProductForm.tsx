@@ -719,7 +719,14 @@ const ProductForm = ({
                         </SelectContent>
                       </Select>
                       <FormDescription>
-                        Select a size guide to show on the product details page.
+                        Select a size guide to display inline on the product
+                        details page. <br />
+                        <span className="font-bold text-blue-500">
+                          Tip:
+                        </span>{' '}
+                        For the best visual appearance, ensure the uploaded size
+                        guide image has a clean white or transparent background
+                        and clear typography.
                       </FormDescription>
                     </div>
 

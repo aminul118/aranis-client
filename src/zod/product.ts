@@ -69,6 +69,7 @@ export const productSchema = z.object({
   featured: z.boolean().default(false),
   sku: z.string().optional(),
   videoUrl: z.string().url('Invalid URL').optional().or(z.literal('')),
+  sizeGuide: z.string().optional().or(z.literal('')),
 });
 
 export const addProductSchema = productSchema;
