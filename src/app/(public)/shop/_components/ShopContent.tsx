@@ -10,7 +10,7 @@ import { getProductPriceRange, getProducts } from '@/services/product/product';
 import { IMeta, IProduct } from '@/types';
 import { motion } from 'framer-motion';
 import { Gift } from 'lucide-react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import NProgress from 'nprogress';
 import {
   useEffect,
@@ -44,6 +44,7 @@ const ShopContent = ({
 }: ShopContentProps) => {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const pathname = usePathname();
   const [isPending, startTransition] = useReactTransition();
   const [pendingAction, setPendingAction] = useState<string | null>(null);
   const [allProducts, setAllProducts] = useState<IProduct[]>([]);
@@ -242,7 +243,7 @@ const ShopContent = ({
     startTransition(() => {
       if (initialFilters) {
         // We are on a clean category page (e.g. /pakistani). Keep the path completely intact!
-        router.push(`${window.location.pathname}${queryStr}`);
+        router.push(`${pathname}${queryStr}`);
       } else if (hasStructuralChange) {
         const nextPath = generateShopPath(
           nextCategory,
@@ -251,7 +252,7 @@ const ShopContent = ({
         );
         router.push(`${nextPath}${queryStr}`);
       } else {
-        router.push(`${queryStr}`, { scroll: false });
+        router.push(`${pathname}${queryStr}`, { scroll: false });
       }
     });
   };

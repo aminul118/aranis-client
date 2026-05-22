@@ -144,52 +144,6 @@ const GlobalOfferModal = () => {
               </Link>
             </div>
 
-            {/* Content Area */}
-            <div className="relative p-8 text-center sm:p-10">
-              {popup.title && (
-                <motion.h3
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 }}
-                  className="mb-6 text-2xl font-black tracking-tighter text-white uppercase italic sm:text-4xl"
-                >
-                  {popup.title}
-                </motion.h3>
-              )}
-
-              {popup.link && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.5 }}
-                >
-                  <Link
-                    href={popup.link}
-                    onClick={handleClose}
-                    className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full bg-blue-600 px-10 py-4 text-sm font-black tracking-[0.2em] text-white uppercase shadow-2xl shadow-blue-500/40 transition-all hover:bg-blue-700 hover:shadow-blue-500/60 active:scale-95"
-                  >
-                    <span className="relative z-10">Experience Now</span>
-                    <motion.div
-                      animate={{
-                        scale: [1, 1.5, 1],
-                        opacity: [0.3, 0.1, 0.3],
-                      }}
-                      transition={{
-                        duration: 2,
-                        repeat: Infinity,
-                        ease: 'easeInOut',
-                      }}
-                      className="absolute inset-0 bg-white"
-                    />
-                  </Link>
-                </motion.div>
-              )}
-
-              <p className="text-muted-foreground/40 mt-8 text-[10px] font-black tracking-widest uppercase">
-                Limited Time Opportunity
-              </p>
-            </div>
-
             {/* Progress Bar */}
             <div className="absolute bottom-0 left-0 h-1.5 w-full bg-white/5">
               <motion.div

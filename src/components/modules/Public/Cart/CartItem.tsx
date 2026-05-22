@@ -4,6 +4,7 @@ import Image from '@/components/common/SafeImage';
 import { ICartItem } from '@/types';
 import { motion } from 'framer-motion';
 import { Minus, Plus, Trash2 } from 'lucide-react';
+import Link from 'next/link';
 
 interface CartItemProps {
   item: ICartItem;
@@ -69,7 +70,10 @@ const CartItem = ({
       className="group border-border bg-card/40 relative flex flex-col gap-6 overflow-hidden rounded-[32px] border p-5 backdrop-blur-xl transition-all hover:border-blue-500/30 hover:shadow-2xl hover:shadow-blue-500/5 sm:flex-row"
     >
       {/* Product Image */}
-      <div className="bg-muted relative aspect-[4/5] w-full shrink-0 overflow-hidden rounded-2xl sm:w-32">
+      <Link
+        href={`/products/${item.slug || item._id}`}
+        className="bg-muted relative block aspect-[4/5] w-full shrink-0 overflow-hidden rounded-2xl sm:w-32"
+      >
         <Image
           src={imageSrc}
           alt={item.name}
@@ -81,14 +85,16 @@ const CartItem = ({
             Sale
           </div>
         )}
-      </div>
+      </Link>
 
       <div className="flex flex-1 flex-col justify-between py-1">
         <div className="flex items-start justify-between gap-4">
           <div className="space-y-1">
-            <h3 className="text-foreground text-xl font-black tracking-tight transition-colors group-hover:text-blue-600">
-              {item.name}
-            </h3>
+            <Link href={`/products/${item.slug || item._id}`}>
+              <h3 className="text-foreground text-xl font-black tracking-tight transition-colors group-hover:text-blue-600 hover:text-blue-600">
+                {item.name}
+              </h3>
+            </Link>
             <div className="mt-2 flex flex-wrap items-center gap-3">
               {item.sizes && item.sizes.length > 0 ? (
                 <div className="flex items-center gap-1.5">

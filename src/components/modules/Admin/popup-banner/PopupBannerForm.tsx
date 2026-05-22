@@ -25,7 +25,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 const popupBannerSchema = z.object({
-  image: z.string().min(1, 'Image is required'),
+  image: z.any().refine((val) => val, 'Image is required'),
   link: z.string().optional().or(z.literal('')),
   title: z.string().optional().or(z.literal('')),
   isActive: z.boolean().default(true),
@@ -54,10 +54,24 @@ const PopupBannerForm = ({ banner, onSuccess }: Props) => {
   });
 
   const onSubmit = async (values: FormValues) => {
+    let imageUrl = values.image;
+
+    if (values.image instanceof File) {
+      const { uploadManyToR2 } = await import('@/lib/r2-upload');
+      const urls = await uploadManyToR2([values.image], 'popup-banners');
+      if (urls && urls.length > 0) {
+        imageUrl = urls[0];
+      }
+    }
+
+    const payload = {
+      ...values,
+      image: imageUrl,
+    } as IPopupBanner;
+
     if (isEdit && banner) {
       await executePost({
-        action: () =>
-          updatePopupBanner(values as IPopupBanner, banner._id as string),
+        action: () => updatePopupBanner(payload, banner._id as string),
         success: {
           onSuccess: () => {
             router.refresh();
@@ -69,7 +83,7 @@ const PopupBannerForm = ({ banner, onSuccess }: Props) => {
       });
     } else {
       await executePost({
-        action: () => createPopupBanner(values as IPopupBanner),
+        action: () => createPopupBanner(payload),
         success: {
           onSuccess: () => {
             router.refresh();
