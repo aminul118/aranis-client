@@ -108,17 +108,23 @@ const Footer = ({
                 <div className="rounded-lg bg-emerald-500/10 p-2 text-emerald-400">
                   <Phone size={14} />
                 </div>
-                <p className="text-sm font-bold text-slate-400">
+                <a
+                  href={`tel:${siteSettings?.contactNumber || '+8801886877730'}`}
+                  className="text-sm font-bold text-slate-400 transition-colors hover:text-emerald-400"
+                >
                   {siteSettings?.contactNumber || '+880 1886-877730'}
-                </p>
+                </a>
               </div>
               <div className="flex items-center gap-3">
                 <div className="rounded-lg bg-amber-500/10 p-2 text-amber-400">
                   <Mail size={14} />
                 </div>
-                <p className="text-sm font-bold text-slate-400">
+                <a
+                  href={`mailto:${siteSettings?.email || 'hello@aranis.com'}`}
+                  className="text-sm font-bold text-slate-400 transition-colors hover:text-amber-400"
+                >
                   {siteSettings?.email || 'hello@aranis.com'}
-                </p>
+                </a>
               </div>
             </div>
           </div>
