@@ -22,13 +22,13 @@ const GlobalOfferModal = () => {
   const [progress, setProgress] = useState(100);
 
   useEffect(() => {
-    // Show once every 24 hours
+    // Show once every 12 hours
     const dismissedAt = localStorage.getItem(STORAGE_KEY);
     if (dismissedAt) {
       const now = new Date().getTime();
       const lastDismissed = parseInt(dismissedAt);
       const hoursSinceDismissed = (now - lastDismissed) / (1000 * 60 * 60);
-      if (hoursSinceDismissed < 24) return;
+      if (hoursSinceDismissed < 12) return;
     }
 
     const fetchPopup = async () => {
