@@ -7,13 +7,7 @@ import { ApiResponse } from '@/types';
 export interface IHeroBanner {
   _id?: string;
   image: string;
-  tag: string;
-  title: string;
-  subtitle: string;
-  cta: string;
-  ctaHref: string;
-  accentColor: string;
-  bgGlow: string;
+  link?: string;
   order: number;
   isActive: boolean;
   isDeleted?: boolean;
@@ -22,10 +16,7 @@ export interface IHeroBanner {
 export interface IMiniBanner {
   _id?: string;
   image: string;
-  label: string;
-  title: string;
-  href: string;
-  accent: string;
+  link?: string;
   order: number;
   isActive: boolean;
   isDeleted?: boolean;

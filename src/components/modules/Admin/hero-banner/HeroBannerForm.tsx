@@ -35,13 +35,7 @@ const heroBannerSchema = z.object({
           (typeof val === 'object' && val !== null)),
       'Image is required',
     ),
-  tag: z.string().optional().or(z.literal('')),
-  title: z.string().optional().or(z.literal('')),
-  subtitle: z.string().optional().or(z.literal('')),
-  cta: z.string().optional().or(z.literal('')),
-  ctaHref: z.string().optional().or(z.literal('')),
-  accentColor: z.string().optional().or(z.literal('')),
-  bgGlow: z.string().optional().or(z.literal('')),
+  link: z.string().optional().or(z.literal('')),
   order: z.coerce.number().default(0),
   isActive: z.boolean().default(true),
 });
@@ -61,13 +55,7 @@ const HeroBannerForm = ({ banner }: Props) => {
     resolver: zodResolver(heroBannerSchema) as any,
     defaultValues: {
       image: banner?.image || '',
-      tag: banner?.tag || '',
-      title: banner?.title || '',
-      subtitle: banner?.subtitle || '',
-      cta: banner?.cta || 'Shop Now',
-      ctaHref: banner?.ctaHref || '/shop',
-      accentColor: banner?.accentColor || 'from-blue-600 to-cyan-400',
-      bgGlow: banner?.bgGlow || 'bg-blue-600/20',
+      link: banner?.link || '',
       order: banner?.order ?? 0,
       isActive: banner?.isActive ?? true,
     },
@@ -128,7 +116,7 @@ const HeroBannerForm = ({ banner }: Props) => {
                 <SingleImageUploader
                   defaultValue={field.value}
                   onChange={(file) => field.onChange(file)}
-                  recommendation="Recommended: Landscape (e.g. 1920x800 px, 16:9)"
+                  recommendation="Recommended Size: 1920x1080px (16:9 aspect ratio) to ensure it spans full width on all devices. Keep important content centered for smaller screens."
                 />
               </FormControl>
               <FormMessage />
@@ -139,12 +127,12 @@ const HeroBannerForm = ({ banner }: Props) => {
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           <FormField
             control={form.control}
-            name="tag"
+            name="link"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Tag / Badge</FormLabel>
+                <FormLabel>Link (URL)</FormLabel>
                 <FormControl>
-                  <Input placeholder="e.g. New Collection 2026" {...field} />
+                  <Input placeholder="/shop" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -158,105 +146,6 @@ const HeroBannerForm = ({ banner }: Props) => {
                 <FormLabel>Display Order</FormLabel>
                 <FormControl>
                   <Input type="number" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-
-        <FormField
-          control={form.control}
-          name="title"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Title</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="e.g. Elevate Your\nSignature Style"
-                  {...field}
-                />
-              </FormControl>
-              <p className="text-muted-foreground mt-1 text-xs">
-                Use \n to break the title into two lines (second line gets the
-                accent color).
-              </p>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="subtitle"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Subtitle</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="e.g. Up to 40% OFF on premium fashion picks."
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          <FormField
-            control={form.control}
-            name="cta"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>CTA Button Text</FormLabel>
-                <FormControl>
-                  <Input placeholder="e.g. Shop Now" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="ctaHref"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>CTA Link (URL)</FormLabel>
-                <FormControl>
-                  <Input placeholder="/shop" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          <FormField
-            control={form.control}
-            name="accentColor"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Accent Color (Tailwind gradient)</FormLabel>
-                <FormControl>
-                  <Input placeholder="from-blue-600 to-cyan-400" {...field} />
-                </FormControl>
-                <p className="text-muted-foreground mt-1 text-xs">
-                  Applied to title second line & CTA button gradient.
-                </p>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="bgGlow"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Background Glow (Tailwind class)</FormLabel>
-                <FormControl>
-                  <Input placeholder="bg-blue-600/20" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

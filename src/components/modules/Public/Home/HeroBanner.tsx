@@ -75,70 +75,19 @@ const HeroBanner = ({ mainSlides, miniBanners }: HeroBannerProps) => {
                   transition={{ duration: 0.55, ease: 'easeInOut' }}
                   className="absolute inset-0"
                 >
-                  <Link href={slide.ctaHref} className="block h-full w-full">
+                  <Link
+                    href={slide.link || '#'}
+                    className="block h-full w-full"
+                  >
                     {/* Background image */}
                     <Image
                       src={slide.image}
-                      alt={slide.title}
+                      alt="Hero Banner"
                       fill
                       className="object-cover object-top"
                       priority
                       sizes="(max-width: 1024px) 100vw, 75vw"
                     />
-                    {/* Gradient overlay */}
-                    <div className="absolute inset-0 bg-linear-to-r from-black/75 via-black/40 to-transparent" />
-
-                    {/* Text content */}
-                    <div className="absolute inset-0 flex max-w-xl flex-col justify-center px-6 py-4 sm:px-10 sm:py-6 md:px-12 md:py-8">
-                      <motion.span
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.2 }}
-                        className="mb-2 inline-block w-fit rounded-full border border-white/20 bg-white/10 px-2 py-0.5 text-[10px] font-bold tracking-widest text-white/80 uppercase backdrop-blur-sm md:mb-4 md:px-3 md:py-1 md:text-xs"
-                      >
-                        {slide.tag}
-                      </motion.span>
-
-                      <motion.h1
-                        initial={{ opacity: 0, y: 15 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.3 }}
-                        className="mb-1.5 text-lg leading-tight font-black whitespace-pre-line text-white sm:text-3xl md:mb-3 md:text-5xl"
-                      >
-                        {slide.title.split('\n').map((line, i) =>
-                          i === 1 ? (
-                            <span
-                              key={i}
-                              className={`block bg-linear-to-r bg-clip-text text-transparent ${slide.accentColor}`}
-                            >
-                              {line}
-                            </span>
-                          ) : (
-                            <span key={i} className="block">
-                              {line}
-                            </span>
-                          ),
-                        )}
-                      </motion.h1>
-
-                      <motion.p
-                        initial={{ opacity: 0, y: 15 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.4 }}
-                        className="mb-3 text-xs leading-relaxed text-white/75 sm:text-sm md:mb-6 md:text-base"
-                      >
-                        {slide.subtitle}
-                      </motion.p>
-
-                      <motion.span
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 0.5 }}
-                        className={`inline-flex items-center gap-2 self-start rounded-full bg-linear-to-r px-4 py-2 text-xs font-bold text-white sm:px-6 sm:py-3 sm:text-sm ${slide.accentColor} shadow-lg transition-opacity hover:opacity-90`}
-                      >
-                        {slide.cta} →
-                      </motion.span>
-                    </div>
                   </Link>
                 </motion.div>
               </AnimatePresence>
@@ -192,7 +141,7 @@ const HeroBanner = ({ mainSlides, miniBanners }: HeroBannerProps) => {
                 <div className="absolute right-0 bottom-0 left-0 z-20 h-0.5 bg-white/10">
                   <motion.div
                     key={current}
-                    className={`h-full bg-linear-to-r ${slide.accentColor}`}
+                    className={`h-full bg-white`}
                     initial={{ width: '0%' }}
                     animate={{ width: '100%' }}
                     transition={{
@@ -211,30 +160,16 @@ const HeroBanner = ({ mainSlides, miniBanners }: HeroBannerProps) => {
               {minis.map((banner, i) => (
                 <Link
                   key={banner._id ?? i}
-                  href={banner.href}
+                  href={banner.link || '#'}
                   className="group relative block flex-1 overflow-hidden rounded-2xl"
                 >
                   <Image
                     src={banner.image}
-                    alt={banner.title}
+                    alt="Mini Banner"
                     fill
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                     sizes="320px"
                   />
-                  <div
-                    className={`absolute inset-0 bg-linear-to-br ${banner.accent}`}
-                  />
-                  <div className="absolute inset-0 flex flex-col justify-end p-5">
-                    <span className="mb-1 text-[10px] font-bold tracking-widest text-white/70 uppercase">
-                      {banner.label}
-                    </span>
-                    <p className="text-lg leading-tight font-black text-white">
-                      {banner.title}
-                    </p>
-                    <span className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-white/80 transition-all group-hover:gap-2">
-                      Shop now →
-                    </span>
-                  </div>
                 </Link>
               ))}
             </div>
@@ -247,27 +182,16 @@ const HeroBanner = ({ mainSlides, miniBanners }: HeroBannerProps) => {
             {minis.map((banner, i) => (
               <Link
                 key={(banner._id ?? i) + '-m'}
-                href={banner.href}
+                href={banner.link || '#'}
                 className="group relative h-28 overflow-hidden rounded-xl"
               >
                 <Image
                   src={banner.image}
-                  alt={banner.title}
+                  alt="Mini Banner"
                   fill
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
                   sizes="50vw"
                 />
-                <div
-                  className={`absolute inset-0 bg-linear-to-br ${banner.accent}`}
-                />
-                <div className="absolute inset-0 flex flex-col justify-end p-3">
-                  <p className="text-sm leading-tight font-black text-white">
-                    {banner.title}
-                  </p>
-                  <span className="mt-0.5 text-xs text-white/80">
-                    Shop now →
-                  </span>
-                </div>
               </Link>
             ))}
           </div>

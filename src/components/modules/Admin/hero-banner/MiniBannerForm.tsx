@@ -35,10 +35,7 @@ const miniBannerSchema = z.object({
           (typeof val === 'object' && val !== null)),
       'Image is required',
     ),
-  label: z.string().optional().or(z.literal('')),
-  title: z.string().optional().or(z.literal('')),
-  href: z.string().optional().or(z.literal('')),
-  accent: z.string().optional().or(z.literal('')),
+  link: z.string().optional().or(z.literal('')),
   order: z.coerce.number().default(0),
   isActive: z.boolean().default(true),
 });
@@ -58,10 +55,7 @@ const MiniBannerForm = ({ banner }: Props) => {
     resolver: zodResolver(miniBannerSchema) as any,
     defaultValues: {
       image: banner?.image || '',
-      label: banner?.label || '',
-      title: banner?.title || '',
-      href: banner?.href || '/shop',
-      accent: banner?.accent || 'from-purple-600/80 to-indigo-800/90',
+      link: banner?.link || '',
       order: banner?.order ?? 0,
       isActive: banner?.isActive ?? true,
     },
@@ -122,7 +116,7 @@ const MiniBannerForm = ({ banner }: Props) => {
                 <SingleImageUploader
                   defaultValue={field.value}
                   onChange={(file) => field.onChange(file)}
-                  recommendation="Recommended: Square or Landscape (e.g. 600x600 px, 1:1)"
+                  recommendation="Recommended Size: 600x400px (3:2 aspect ratio) for best display on all devices."
                 />
               </FormControl>
               <FormMessage />
@@ -133,12 +127,12 @@ const MiniBannerForm = ({ banner }: Props) => {
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           <FormField
             control={form.control}
-            name="label"
+            name="link"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Small Label</FormLabel>
+                <FormLabel>Link (URL)</FormLabel>
                 <FormControl>
-                  <Input placeholder="e.g. Featured Picks" {...field} />
+                  <Input placeholder="/shop" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -158,54 +152,6 @@ const MiniBannerForm = ({ banner }: Props) => {
             )}
           />
         </div>
-
-        <FormField
-          control={form.control}
-          name="title"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Title</FormLabel>
-              <FormControl>
-                <Input placeholder="e.g. Staff Favourites" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="href"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Link (URL)</FormLabel>
-              <FormControl>
-                <Input placeholder="/shop?featured=true" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="accent"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Accent Gradient (Tailwind)</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="from-purple-600/80 to-indigo-800/90"
-                  {...field}
-                />
-              </FormControl>
-              <p className="text-muted-foreground mt-1 text-xs">
-                Applied as an overlay gradient on the banner image.
-              </p>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
 
         <FormField
           control={form.control}

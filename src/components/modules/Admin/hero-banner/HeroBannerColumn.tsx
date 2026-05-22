@@ -17,7 +17,7 @@ const HeroBannerColumn: Column<IHeroBanner>[] = [
       <div className="bg-muted relative h-10 w-16 overflow-hidden rounded">
         <Image
           src={b.image}
-          alt={b.title}
+          alt="Hero Banner"
           fill
           className="object-cover"
           sizes="64px"
@@ -26,16 +26,11 @@ const HeroBannerColumn: Column<IHeroBanner>[] = [
     ),
   },
   {
-    header: 'Tag',
+    header: 'Link',
     accessor: (b) => (
-      <span className="text-muted-foreground text-xs">{b.tag}</span>
+      <span className="text-sm font-semibold">{b.link || 'N/A'}</span>
     ),
-    sortKey: 'tag',
-  },
-  {
-    header: 'Title',
-    accessor: (b) => <span className="text-sm font-semibold">{b.title}</span>,
-    sortKey: 'title',
+    sortKey: 'link',
   },
   {
     header: 'Order',
