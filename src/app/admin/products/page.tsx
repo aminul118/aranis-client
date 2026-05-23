@@ -1,4 +1,3 @@
-import TableFilters from '@/components/common/table/TableFilters';
 import ClientTableWrapper from '@/components/common/wrapper/ClientTableWrapper';
 import ProductsTable from '@/components/modules/Admin/products/ProductsTable';
 import { Button } from '@/components/ui/button';
@@ -18,7 +17,7 @@ const ProductPage = async ({ searchParams }: SearchParams) => {
   const [productsRes, categoriesRes, colorsRes, sizeGuidesRes, offersRes] =
     await Promise.all([
       getProducts(params),
-      getCategories({}),
+      getCategories({ limit: '1000' }),
       getColors({}),
       getAllSizeGuides(),
       getOffers({}),
@@ -30,7 +29,6 @@ const ProductPage = async ({ searchParams }: SearchParams) => {
       meta={productsRes.meta}
       action={<Actions />}
     >
-      <TableFilters />
       <ProductsTable
         products={productsRes.data || []}
         categories={categoriesRes.data || []}

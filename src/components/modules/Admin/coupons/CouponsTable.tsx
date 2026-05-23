@@ -1,6 +1,7 @@
 'use client';
 
 import DeleteConfirmation from '@/components/common/actions/DeleteConfirmation';
+import TableFilters from '@/components/common/table/TableFilters';
 import TableManageMent from '@/components/common/table/TableManageMent';
 import { Button } from '@/components/ui/button';
 import { deleteCouponBulk, ICoupon } from '@/services/coupon/coupon';
@@ -46,6 +47,7 @@ const CouponsTable = ({ coupons }: { coupons: ICoupon[] }) => {
           </div>
         </div>
       )}
+      <TableFilters />
       <TableManageMent
         columns={CouponColumns}
         data={coupons || []}

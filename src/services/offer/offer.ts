@@ -1,5 +1,6 @@
 'use server';
 
+import { revalidate } from '@/lib/revalidate';
 import serverFetch from '@/lib/server-fetch';
 import { ApiResponse } from '@/types';
 import { revalidatePath } from 'next/cache';
@@ -20,6 +21,7 @@ const triggerRevalidations = () => {
     revalidatePath('/offers');
     revalidatePath('/shop');
     revalidatePath('/');
+    revalidate('product');
   } catch (error) {
     console.error('Failed to trigger Next.js cache revalidations:', error);
   }

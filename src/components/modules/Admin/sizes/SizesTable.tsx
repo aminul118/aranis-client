@@ -1,17 +1,15 @@
 'use client';
 
 import DeleteConfirmation from '@/components/common/actions/DeleteConfirmation';
-
 import TableFilters from '@/components/common/table/TableFilters';
 import TableManageMent from '@/components/common/table/TableManageMent';
 import { Button } from '@/components/ui/button';
-import { deleteUserBulk } from '@/services/user/users';
-import { IUser } from '@/types/api.types';
+import { deleteSizeBulk, ISize } from '@/services/size/size';
 import { Trash2 } from 'lucide-react';
 import { useState } from 'react';
-import UsersColumn from './UsersColumn';
+import SizesColumn from './SizesColumn';
 
-const UsersTable = ({ users }: { users: IUser[] }) => {
+const SizesTable = ({ sizes }: { sizes: ISize[] }) => {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
   return (
@@ -24,16 +22,16 @@ const UsersTable = ({ users }: { users: IUser[] }) => {
             </div>
             <div>
               <p className="text-[10px] font-black tracking-widest uppercase">
-                Users Selected
+                Sizes Selected
               </p>
             </div>
           </div>
           <div className="flex gap-2">
             <DeleteConfirmation
-              onConfirm={() => deleteUserBulk(selectedIds)}
+              onConfirm={() => deleteSizeBulk(selectedIds)}
               onSuccess={() => setSelectedIds([])}
-              title="Delete Selected Users?"
-              description={`Are you sure you want to delete ${selectedIds.length} users? This action cannot be undone.`}
+              title="Delete Selected Sizes?"
+              description={`Are you sure you want to delete ${selectedIds.length} sizes? This action cannot be undone.`}
             >
               <Button className="rounded-xl border-none bg-red-500 text-[10px] font-black tracking-widest text-white uppercase shadow-lg shadow-red-500/20 hover:bg-red-600">
                 <Trash2 size={14} className="mr-2" /> Delete Selected
@@ -51,9 +49,10 @@ const UsersTable = ({ users }: { users: IUser[] }) => {
       )}
       <TableFilters />
       <TableManageMent
-        columns={UsersColumn}
-        data={users}
-        getRowKey={(u) => u._id}
+        columns={SizesColumn}
+        data={sizes || []}
+        getRowKey={(c) => c._id as string}
+        emptyMessage="No size found"
         selectedIds={selectedIds}
         onSelectionChange={setSelectedIds}
       />
@@ -61,4 +60,4 @@ const UsersTable = ({ users }: { users: IUser[] }) => {
   );
 };
 
-export default UsersTable;
+export default SizesTable;

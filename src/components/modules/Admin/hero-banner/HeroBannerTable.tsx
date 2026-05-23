@@ -2,6 +2,7 @@
 
 import DeleteConfirmation from '@/components/common/actions/DeleteConfirmation';
 
+import TableFilters from '@/components/common/table/TableFilters';
 import TableManageMent from '@/components/common/table/TableManageMent';
 import { Button } from '@/components/ui/button';
 import {
@@ -50,6 +51,7 @@ const HeroBannerTable = ({ banners }: { banners: IHeroBanner[] }) => {
           </div>
         </div>
       )}
+      <TableFilters />
       <TableManageMent
         columns={HeroBannerColumn}
         data={banners || []}

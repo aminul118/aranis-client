@@ -1,6 +1,7 @@
 'use client';
 
 import DeleteConfirmation from '@/components/common/actions/DeleteConfirmation';
+import TableFilters from '@/components/common/table/TableFilters';
 import TableManageMent from '@/components/common/table/TableManageMent';
 import { Button } from '@/components/ui/button';
 import { deleteNavbarBulk, INavItem } from '@/services/navbar/navbar';
@@ -46,6 +47,7 @@ const NavbarTable = ({ navbars }: { navbars: INavItem[] }) => {
           </div>
         </div>
       )}
+      <TableFilters />
       <TableManageMent
         columns={NavbarColumn}
         data={navbars || []}

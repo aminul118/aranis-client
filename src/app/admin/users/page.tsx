@@ -1,4 +1,3 @@
-import TableFilters from '@/components/common/table/TableFilters';
 import ClientTableWrapper from '@/components/common/wrapper/ClientTableWrapper';
 import NewUserModal from '@/components/modules/Admin/users/NewUserModal';
 import UsersTable from '@/components/modules/Admin/users/UsersTable';
@@ -19,7 +18,6 @@ const UsersPage = async ({ searchParams }: SearchParams) => {
         meta={meta}
         action={<NewUserModal />}
       >
-        <TableFilters />
         <UsersTable users={data} />
       </ClientTableWrapper>
     </>

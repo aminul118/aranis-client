@@ -4,12 +4,14 @@ import { getCategories } from '@/services/category/category';
 import { getColors } from '@/services/color/color';
 import { getOffers } from '@/services/offer/offer';
 import { getAllSizeGuides } from '@/services/size-guide/size-guide';
+import { getSizes } from '@/services/size/size';
 
 export default async function CreateProductPage() {
-  const [categoriesRes, colorsRes, sizeGuidesRes, offersRes] =
+  const [categoriesRes, colorsRes, sizesRes, sizeGuidesRes, offersRes] =
     await Promise.all([
-      getCategories({}),
+      getCategories({ limit: '1000' }),
       getColors({}),
+      getSizes({ sort: 'order' }),
       getAllSizeGuides(),
       getOffers({}),
     ]);
@@ -19,6 +21,7 @@ export default async function CreateProductPage() {
       <ProductForm
         categories={categoriesRes.data || []}
         colors={colorsRes.data || []}
+        sizes={sizesRes.data || []}
         sizeGuides={sizeGuidesRes.data || []}
         offers={offersRes.data || []}
       />

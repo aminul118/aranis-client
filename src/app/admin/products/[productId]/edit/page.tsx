@@ -5,6 +5,7 @@ import { getColors } from '@/services/color/color';
 import { getOffers } from '@/services/offer/offer';
 import { getSingleProduct } from '@/services/product/product';
 import { getAllSizeGuides } from '@/services/size-guide/size-guide';
+import { getSizes } from '@/services/size/size';
 
 export default async function EditProductPage({
   params,
@@ -12,14 +13,21 @@ export default async function EditProductPage({
   params: { productId: string };
 }) {
   const { productId } = await params;
-  const [categoriesRes, colorsRes, productRes, sizeGuidesRes, offersRes] =
-    await Promise.all([
-      getCategories({}),
-      getColors({}),
-      getSingleProduct(productId),
-      getAllSizeGuides(),
-      getOffers({}),
-    ]);
+  const [
+    categoriesRes,
+    colorsRes,
+    productRes,
+    sizesRes,
+    sizeGuidesRes,
+    offersRes,
+  ] = await Promise.all([
+    getCategories({ limit: '1000' }),
+    getColors({}),
+    getSingleProduct(productId),
+    getSizes({ sort: 'order' }),
+    getAllSizeGuides(),
+    getOffers({}),
+  ]);
 
   return (
     <ClientTableWrapper tableTitle="Edit product">
@@ -27,6 +35,7 @@ export default async function EditProductPage({
         product={productRes.data}
         categories={categoriesRes.data || []}
         colors={colorsRes.data || []}
+        sizes={sizesRes.data || []}
         sizeGuides={sizeGuidesRes.data || []}
         offers={offersRes.data || []}
       />

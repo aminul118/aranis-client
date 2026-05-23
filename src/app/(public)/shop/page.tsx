@@ -13,7 +13,7 @@ export default ShopPage;
 export async function generateMetadata(): Promise<Metadata> {
   const [settingsRes, navItemsRes] = await Promise.all([
     getSiteSettings(),
-    getNavbars({}),
+    getNavbars({ limit: '1000' }),
   ]);
 
   const settings = settingsRes?.data;

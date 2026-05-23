@@ -55,10 +55,11 @@ const adminSidebarMenu: MenuGroup[] = [
       { name: 'Navbar', url: '/admin/navbar', icon: MenuIcon },
       { name: 'Categories', url: '/admin/categories', icon: Layers },
       { name: 'Colors', url: '/admin/colors', icon: Palette },
+      { name: 'Sizes', url: '/admin/sizes', icon: Ruler },
+      { name: 'Size Guides', url: '/admin/size-guides', icon: Ruler },
       { name: 'Hero Banners', url: '/admin/hero-banners', icon: ImageIcon },
       { name: 'Mini Banners', url: '/admin/mini-banners', icon: ImageIcon },
       { name: 'Popup Banner', url: '/admin/popup-banners', icon: Megaphone },
-      { name: 'Size Guides', url: '/admin/size-guides', icon: Ruler },
     ],
   },
 ];

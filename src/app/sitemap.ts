@@ -8,7 +8,7 @@ import { MetadataRoute } from 'next';
 const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
   // 1) Fetch dynamic data
   const [navRes, productsRes] = await Promise.all([
-    getNavbars({}),
+    getNavbars({ limit: '1000' }),
     getProducts({ limit: '1000' }), // Fetch a large batch for sitemap
   ]);
 

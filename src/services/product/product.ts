@@ -33,7 +33,7 @@ const getProducts = async (query: Record<string, string>) => {
     query,
     next: {
       tags: ['product'],
-      revalidate: 86400,
+      revalidate: 0,
     },
   });
 };
@@ -42,7 +42,7 @@ const getSingleProduct = async (id: string) => {
   return await serverFetch.get<ApiResponse<IProduct>>(`/products/${id}`, {
     next: {
       tags: [`product-${id}`],
-      revalidate: 86400,
+      revalidate: 0,
     },
   });
 };
@@ -60,7 +60,7 @@ const getBestSellingProducts = async () => {
     query: { sort: '-soldCount', limit: '12' },
     next: {
       tags: ['product', 'best-selling'],
-      revalidate: 86400,
+      revalidate: 0,
     },
   });
 };
@@ -70,7 +70,7 @@ const getNewArrivals = async () => {
     query: { sort: '-createdAt', limit: '12' },
     next: {
       tags: ['product', 'new-arrivals'],
-      revalidate: 86400,
+      revalidate: 0,
     },
   });
 };
@@ -80,7 +80,7 @@ const getTopRatedProducts = async () => {
     query: { sort: '-rating', limit: '12' },
     next: {
       tags: ['product', 'top-rated'],
-      revalidate: 86400,
+      revalidate: 0,
     },
   });
 };

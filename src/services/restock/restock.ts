@@ -23,9 +23,12 @@ export const createRestockRequest = async (productId: string) => {
   return res;
 };
 
-export const getRestockRequests = async () => {
+export const getRestockRequests = async (
+  params: Record<string, string> = {},
+) => {
+  const query = new URLSearchParams(params).toString();
   return await serverFetch.get<ApiResponse<IRestockRequest[]>>(
-    '/restock-request',
+    `/restock-request${query ? `?${query}` : ''}`,
     {
       next: { tags: ['restock'] },
     },

@@ -1,3 +1,4 @@
+import { toUrlSlug } from '@/lib/url-slugs';
 import { getNavbars } from '@/services/navbar/navbar';
 import { getSiteSettings } from '@/services/settings/settings';
 import { Metadata } from 'next';
@@ -10,7 +11,7 @@ export async function generateDynamicMeta(
 ): Promise<Metadata> {
   const [settingsRes, navItemsRes] = await Promise.all([
     getSiteSettings(),
-    getNavbars({}),
+    getNavbars({ limit: '1000' }),
   ]);
 
   const settings = settingsRes?.data;
@@ -48,7 +49,7 @@ export async function generateCategorizedMeta(
 
   const [settingsRes, navItemsRes] = await Promise.all([
     getSiteSettings(),
-    getNavbars({}),
+    getNavbars({ limit: '1000' }),
   ]);
 
   const settings = settingsRes?.data;
@@ -56,28 +57,63 @@ export async function generateCategorizedMeta(
 
   // 1. Find the Category (Primary Nav Item)
   const categorySlug = slugs[0]?.toLowerCase();
-  const categoryItem = navItems.find(
+  let categoryItem = navItems.find(
     (item) =>
-      item.title.toLowerCase() === categorySlug ||
+      toUrlSlug(item.title) === categorySlug ||
       item.href.replace(/^\//, '').toLowerCase() === categorySlug,
   );
 
-  // 2. Find the Sub-Category
-  const subCategorySlug = slugs[1]?.toLowerCase();
-  const subCategoryItem = categoryItem?.subItems?.find(
-    (sub) =>
-      sub.title.toLowerCase() === subCategorySlug ||
-      (sub.href &&
-        sub.href.split('/').pop()?.toLowerCase() === subCategorySlug),
-  );
+  let subCategoryItem: any;
+  let typeItem: any;
 
-  // 3. Find the Type/Item
-  const typeSlug = slugs[2]?.toLowerCase();
-  const typeItem = subCategoryItem?.items.find(
-    (item) =>
-      item.toLowerCase() === typeSlug ||
-      item.replace(/\s+/g, '-').toLowerCase() === typeSlug,
-  );
+  if (categoryItem) {
+    // 2. Find the Sub-Category
+    const subCategorySlug = slugs[1]?.toLowerCase();
+    subCategoryItem = categoryItem?.subItems?.find(
+      (sub) =>
+        toUrlSlug(sub.title) === subCategorySlug ||
+        (sub.href &&
+          sub.href.split('/').pop()?.toLowerCase() === subCategorySlug),
+    );
+
+    // 3. Find the Type/Item
+    const typeSlug = slugs[2]?.toLowerCase();
+    typeItem = subCategoryItem?.items.find(
+      (item: string) => toUrlSlug(item) === typeSlug,
+    );
+  } else if (slugs.length === 1) {
+    // Search subItems across all navItems
+    let found = false;
+    for (const item of navItems) {
+      const matchedSub = item.subItems?.find(
+        (sub: any) =>
+          toUrlSlug(sub.title) === categorySlug ||
+          (sub.href &&
+            sub.href.split('/').pop()?.toLowerCase() === categorySlug),
+      );
+
+      if (matchedSub) {
+        categoryItem = item;
+        subCategoryItem = matchedSub;
+        found = true;
+        break;
+      }
+
+      for (const sub of item.subItems || []) {
+        const matchedType = sub.items?.find(
+          (i: string) => toUrlSlug(i) === categorySlug,
+        );
+        if (matchedType) {
+          categoryItem = item;
+          subCategoryItem = sub;
+          typeItem = matchedType;
+          found = true;
+          break;
+        }
+      }
+      if (found) break;
+    }
+  }
 
   // Construct Semantic Title & Metadata
   // Hierarchy: SubCategory SEO -> Category SEO -> Semantic Generation -> Fallback

@@ -171,8 +171,8 @@ const ShopContent = ({
     const fetchMetadata = async () => {
       try {
         const [colorRes, catRes, priceRes] = await Promise.all([
-          getColors({ limit: '100' }),
-          getCategories({ limit: '100' }),
+          getColors({ limit: '1000' }),
+          getCategories({ limit: '1000' }),
           getProductPriceRange(),
         ]);
 

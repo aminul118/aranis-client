@@ -1,5 +1,6 @@
-import { normalizeSlug } from '@/lib/url-slugs';
+import { resolveSlugs } from '@/lib/url-slugs';
 import { generateCategorizedMeta } from '@/seo/generateDynamicMeta';
+import { getCategories } from '@/services/category/category';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import ShopContent from '../shop/_components/ShopContent';
@@ -26,10 +27,11 @@ const DynamicShopPage = async ({ params }: Props) => {
     notFound();
   }
 
-  // slug = ['men', 'shirts', 'formal']
-  const category = slug[0] ? normalizeSlug(slug[0]) : 'All';
-  const subCategory = slug[1] ? normalizeSlug(slug[1]) : '';
-  const type = slug[2] ? normalizeSlug(slug[2]) : '';
+  // Fetch live categories to correctly map dynamic slugs back to original DB names
+  const categoriesRes = await getCategories({ limit: '1000' });
+  const categories = categoriesRes?.data || [];
+
+  const { category, subCategory, type } = resolveSlugs(slug, categories);
 
   return (
     <ShopContent

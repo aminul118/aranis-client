@@ -1,6 +1,7 @@
 'use client';
 
 import DeleteConfirmation from '@/components/common/actions/DeleteConfirmation';
+import TableFilters from '@/components/common/table/TableFilters';
 import TableManageMent from '@/components/common/table/TableManageMent';
 import { Button } from '@/components/ui/button';
 import { useUser } from '@/context/UserContext';
@@ -50,6 +51,7 @@ const OrdersTable = ({ orders }: { orders: IOrder[] }) => {
           </div>
         </div>
       )}
+      <TableFilters />
       <TableManageMent
         columns={OrdersColumn}
         data={orders || []}

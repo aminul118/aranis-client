@@ -20,7 +20,7 @@ const CategoryBar = () => {
 
   useEffect(() => {
     const fetchNav = async () => {
-      const res = await getNavbars({});
+      const res = await getNavbars({ limit: '1000' });
       if (res?.success) {
         const sortedItems = (res.data || []).sort(
           (a, b) => (a.order || 0) - (b.order || 0),

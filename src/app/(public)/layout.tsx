@@ -21,7 +21,7 @@ const RootLayout = async ({ children }: Children) => {
   }
 
   const [navItemsRes, siteSettingsRes] = await Promise.all([
-    getNavbars({}),
+    getNavbars({ limit: '1000' }),
     getSiteSettings(),
   ]);
 

@@ -34,6 +34,7 @@ import { ICategory } from '@/services/category/category';
 import { IColor } from '@/services/color/color';
 import { IOffer } from '@/services/offer/offer';
 import { createProduct, updateProduct } from '@/services/product/product';
+import { ISize } from '@/services/size/size';
 import { IProduct, ISizeGuide } from '@/types';
 import { addProductSchema, updateProductSchema } from '@/zod/product';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -87,6 +88,7 @@ interface Props {
   product?: IProduct;
   categories: ICategory[];
   colors: IColor[];
+  sizes: ISize[];
   sizeGuides: ISizeGuide[];
   offers: IOffer[];
   onSuccess?: () => void;
@@ -96,6 +98,7 @@ const ProductForm = ({
   product,
   categories,
   colors,
+  sizes,
   sizeGuides,
   offers,
   onSuccess,
@@ -975,25 +978,25 @@ const ProductForm = ({
               <FormItem>
                 <FormLabel>Available Sizes</FormLabel>
                 <div className="border-border/50 bg-muted/10 flex flex-wrap gap-2 rounded-xl border p-4">
-                  {['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL'].map((size) => (
+                  {sizes.map((size) => (
                     <button
-                      key={size}
+                      key={size._id}
                       type="button"
                       onClick={() => {
                         const current = field.value || [];
-                        const updated = current.includes(size)
-                          ? current.filter((s: string) => s !== size)
-                          : [...current, size];
+                        const updated = current.includes(size.name)
+                          ? current.filter((s: string) => s !== size.name)
+                          : [...current, size.name];
                         field.onChange(updated);
                       }}
                       className={cn(
-                        'min-w-[3rem] rounded-lg border px-4 py-2 text-xs font-black transition-all',
-                        field.value?.includes(size)
+                        'min-w-[3rem] cursor-pointer rounded-lg border px-4 py-2 text-xs font-black transition-all',
+                        field.value?.includes(size.name)
                           ? 'bg-foreground text-background border-foreground shadow-md'
                           : 'border-border/50 bg-background text-muted-foreground hover:border-foreground/30',
                       )}
                     >
-                      {size}
+                      {size.name}
                     </button>
                   ))}
                 </div>
