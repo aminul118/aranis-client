@@ -40,9 +40,9 @@ const LocationsPage = () => {
               <Plus className="mr-2 h-4 w-4" /> Add Outlet
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-2xl border-white/5 bg-[#0a0b10] p-0">
+          <DialogContent className="max-w-2xl border-gray-200 bg-white p-0 dark:border-white/5 dark:bg-[#0a0b10]">
             <DialogHeader className="p-8 pb-0">
-              <DialogTitle className="flex items-center gap-3 text-2xl font-black text-white uppercase italic">
+              <DialogTitle className="flex items-center gap-3 text-2xl font-black text-gray-900 uppercase italic dark:text-white">
                 <div className="rounded-xl bg-blue-500/10 p-2.5 text-blue-400">
                   <MapPin size={24} />
                 </div>

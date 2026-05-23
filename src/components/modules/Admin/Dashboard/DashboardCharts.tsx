@@ -24,7 +24,7 @@ interface DashboardChartsProps {
 const DashboardCharts = ({ revenueTrend }: DashboardChartsProps) => {
   if (!revenueTrend || revenueTrend.length === 0) {
     return (
-      <Card className="flex h-[300px] items-center justify-center border-none bg-[#151722] text-white/50">
+      <Card className="flex h-[300px] items-center justify-center border-none bg-white text-gray-500 shadow-xl dark:bg-[#151722] dark:text-white/50 dark:shadow-2xl">
         No trend data available for the last 30 days
       </Card>
     );
@@ -33,9 +33,9 @@ const DashboardCharts = ({ revenueTrend }: DashboardChartsProps) => {
   return (
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
       {/* Revenue Trend Area Chart */}
-      <Card className="overflow-hidden border-none bg-[#151722] shadow-2xl">
+      <Card className="overflow-hidden border-none bg-white shadow-xl dark:bg-[#151722] dark:shadow-2xl">
         <CardHeader className="pb-4">
-          <CardTitle className="text-lg font-black tracking-tight text-white">
+          <CardTitle className="text-lg font-black tracking-tight text-gray-900 dark:text-white">
             Revenue Trend (last 30 days)
           </CardTitle>
         </CardHeader>
@@ -85,9 +85,9 @@ const DashboardCharts = ({ revenueTrend }: DashboardChartsProps) => {
       </Card>
 
       {/* Orders Bar Chart */}
-      <Card className="overflow-hidden border-none bg-[#151722] shadow-2xl">
+      <Card className="overflow-hidden border-none bg-white shadow-xl dark:bg-[#151722] dark:shadow-2xl">
         <CardHeader className="pb-4">
-          <CardTitle className="text-lg font-black tracking-tight text-white">
+          <CardTitle className="text-lg font-black tracking-tight text-gray-900 dark:text-white">
             Orders Volume
           </CardTitle>
         </CardHeader>

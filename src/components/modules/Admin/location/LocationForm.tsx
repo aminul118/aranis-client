@@ -76,7 +76,7 @@ const LocationForm = ({ location, onSuccess }: Props) => {
 
   return (
     <div className="space-y-8">
-      <div className="rounded-3xl border border-white/5 bg-[#0a0b10] p-6 shadow-2xl backdrop-blur-3xl">
+      <div className="rounded-3xl border border-gray-200 bg-white p-6 shadow-xl backdrop-blur-3xl dark:border-white/5 dark:bg-[#0a0b10] dark:shadow-2xl">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -92,12 +92,12 @@ const LocationForm = ({ location, onSuccess }: Props) => {
                       <div className="relative">
                         <Input
                           placeholder="Main Branch - Banani"
-                          className="h-12 border-white/5 bg-white/5 pl-10 font-bold focus:border-blue-500/50"
+                          className="h-12 border-gray-200 bg-gray-50 pl-10 font-bold focus:border-blue-500/50 dark:border-white/5 dark:bg-white/5"
                           {...field}
                         />
                         <MapPin
                           size={16}
-                          className="absolute top-1/2 left-3.5 -translate-y-1/2 text-zinc-600"
+                          className="absolute top-1/2 left-3.5 -translate-y-1/2 text-zinc-400 dark:text-zinc-600"
                         />
                       </div>
                     </FormControl>
@@ -118,12 +118,12 @@ const LocationForm = ({ location, onSuccess }: Props) => {
                       <div className="relative">
                         <Input
                           placeholder="+880 1XXX-XXXXXX"
-                          className="h-12 border-white/5 bg-white/5 pl-10 font-bold focus:border-emerald-500/50"
+                          className="h-12 border-gray-200 bg-gray-50 pl-10 font-bold focus:border-emerald-500/50 dark:border-white/5 dark:bg-white/5"
                           {...field}
                         />
                         <Phone
                           size={16}
-                          className="absolute top-1/2 left-3.5 -translate-y-1/2 text-zinc-600"
+                          className="absolute top-1/2 left-3.5 -translate-y-1/2 text-zinc-400 dark:text-zinc-600"
                         />
                       </div>
                     </FormControl>
@@ -144,7 +144,7 @@ const LocationForm = ({ location, onSuccess }: Props) => {
                   <FormControl>
                     <Input
                       placeholder="Block E, Road 11, Banani, Dhaka"
-                      className="h-12 border-white/5 bg-white/5 font-bold focus:border-blue-500/50"
+                      className="h-12 border-gray-200 bg-gray-50 font-bold focus:border-blue-500/50 dark:border-white/5 dark:bg-white/5"
                       {...field}
                     />
                   </FormControl>
@@ -166,12 +166,12 @@ const LocationForm = ({ location, onSuccess }: Props) => {
                       <div className="relative">
                         <Input
                           placeholder="10:00 AM - 10:00 PM"
-                          className="h-12 border-white/5 bg-white/5 pl-10 font-bold focus:border-amber-500/50"
+                          className="h-12 border-gray-200 bg-gray-50 pl-10 font-bold focus:border-amber-500/50 dark:border-white/5 dark:bg-white/5"
                           {...field}
                         />
                         <Clock
                           size={16}
-                          className="absolute top-1/2 left-3.5 -translate-y-1/2 text-zinc-600"
+                          className="absolute top-1/2 left-3.5 -translate-y-1/2 text-zinc-400 dark:text-zinc-600"
                         />
                       </div>
                     </FormControl>
@@ -188,8 +188,8 @@ const LocationForm = ({ location, onSuccess }: Props) => {
                     <FormLabel className="text-[10px] font-black tracking-[0.2em] text-zinc-500 uppercase italic">
                       Status
                     </FormLabel>
-                    <div className="flex h-12 items-center justify-between rounded-xl border border-white/5 bg-white/5 px-4">
-                      <span className="text-xs font-bold text-zinc-400">
+                    <div className="flex h-12 items-center justify-between rounded-xl border border-gray-200 bg-gray-50 px-4 dark:border-white/5 dark:bg-white/5">
+                      <span className="text-xs font-bold text-zinc-500 dark:text-zinc-400">
                         Outlet is active and visible
                       </span>
                       <FormControl>
@@ -205,7 +205,7 @@ const LocationForm = ({ location, onSuccess }: Props) => {
               />
             </div>
 
-            <div className="mt-8 flex justify-end border-t border-white/5 pt-8">
+            <div className="mt-8 flex justify-end border-t border-gray-200 pt-8 dark:border-white/5">
               <SubmitButton
                 loading={form.formState.isSubmitting}
                 text={location?._id ? 'Sync Changes' : 'Create Outlet'}

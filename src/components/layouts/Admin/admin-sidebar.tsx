@@ -11,14 +11,14 @@ import Menu from './Menu';
 
 const AdminSidebar = ({ user, logoUrl }: { user: IUser; logoUrl?: string }) => {
   return (
-    <Sidebar collapsible="offcanvas" className="bg-black! text-white!">
+    <Sidebar collapsible="offcanvas" className="text-gray-900 text-white!">
       {/* Header */}
       <SidebarHeader>
         <div className="flex items-center gap-2 px-4 py-4">
           <Logo className="origin-left scale-90" logoUrl={logoUrl} />
         </div>
       </SidebarHeader>
-      <Separator className="bg-white/10" />
+      <Separator className="bg-gray-200 dark:bg-white/10" />
       <SidebarContent>
         {/* Sidebar Menu — passes user role for dynamic filtering */}
         <Menu user={user} />

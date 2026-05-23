@@ -48,56 +48,54 @@ const HeaderUser = ({ user }: Props) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        {/* ✅ Always dark avatar styling */}
-        <Avatar className="h-9 w-9 cursor-pointer border-2 border-white/15 transition-all hover:border-white/30">
+        <Avatar className="h-9 w-9 cursor-pointer border-2 border-gray-200 transition-all hover:border-gray-300 dark:border-white/15 dark:hover:border-white/30">
           <AvatarImage
             src={user?.picture ? user?.picture : '/profile.jpg'}
             alt={user?.fullName}
           />
-          <AvatarFallback className="bg-white/10 text-white">
+          <AvatarFallback className="bg-gray-100 text-gray-900 dark:bg-white/10 dark:text-white">
             {initials}
           </AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
 
-      {/* ✅ Always dark dropdown (ignores theme) */}
       <DropdownMenuContent
-        className="w-64 rounded-xl border border-white/10 bg-[#0b0b0b] p-2 text-white shadow-xl"
+        className="w-64 rounded-xl border border-gray-200 bg-white p-2 text-gray-900 shadow-xl dark:border-white/10 dark:bg-[#0b0b0b] dark:text-white"
         align="end"
         sideOffset={8}
       >
         <DropdownMenuLabel className="p-2 font-normal">
           <div className="flex items-center gap-3">
-            <Avatar className="h-10 w-10 border border-white/10">
+            <Avatar className="h-10 w-10 border border-gray-200 dark:border-white/10">
               <AvatarImage
                 src={user?.picture ? user?.picture : '/profile.jpg'}
                 alt={user?.fullName}
               />
-              <AvatarFallback className="bg-white/10 text-white">
+              <AvatarFallback className="bg-gray-100 text-gray-900 dark:bg-white/10 dark:text-white">
                 {initials}
               </AvatarFallback>
             </Avatar>
 
             <div className="flex flex-col space-y-0.5">
-              <span className="truncate text-sm leading-none font-bold text-white">
+              <span className="truncate text-sm leading-none font-bold text-gray-900 dark:text-white">
                 {user?.fullName}
               </span>
-              <span className="truncate text-[11px] leading-none text-white/60">
+              <span className="truncate text-[11px] leading-none text-gray-500 dark:text-white/60">
                 {user?.email}
               </span>
             </div>
           </div>
         </DropdownMenuLabel>
 
-        <DropdownMenuSeparator className="my-2 bg-white/10" />
+        <DropdownMenuSeparator className="my-2 bg-gray-100 dark:bg-white/10" />
 
         <DropdownMenuGroup className="space-y-1">
           <DropdownMenuItem asChild>
             <Link
               href="/settings/profile"
-              className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-white/90 transition-colors hover:bg-white/10 hover:text-white focus:bg-white/10"
+              className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 dark:text-white/90 dark:hover:bg-white/10 dark:hover:text-white dark:focus:bg-white/10"
             >
-              <User className="h-4 w-4 text-white/60" />
+              <User className="h-4 w-4 text-gray-500 dark:text-white/60" />
               <span className="text-sm">My Profile</span>
             </Link>
           </DropdownMenuItem>
@@ -106,9 +104,9 @@ const HeaderUser = ({ user }: Props) => {
             <DropdownMenuItem asChild>
               <Link
                 href={dashboardRoute}
-                className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-white/90 transition-colors hover:bg-white/10 hover:text-white focus:bg-white/10"
+                className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 dark:text-white/90 dark:hover:bg-white/10 dark:hover:text-white dark:focus:bg-white/10"
               >
-                <LayoutDashboard className="h-4 w-4 text-white/60" />
+                <LayoutDashboard className="h-4 w-4 text-gray-500 dark:text-white/60" />
                 <span className="text-sm">Dashboard</span>
               </Link>
             </DropdownMenuItem>
@@ -117,9 +115,9 @@ const HeaderUser = ({ user }: Props) => {
           <DropdownMenuItem asChild>
             <Link
               href="/settings/password"
-              className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-white/90 transition-colors hover:bg-white/10 hover:text-white focus:bg-white/10"
+              className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 dark:text-white/90 dark:hover:bg-white/10 dark:hover:text-white dark:focus:bg-white/10"
             >
-              <Lock className="h-4 w-4 text-white/60" />
+              <Lock className="h-4 w-4 text-gray-500 dark:text-white/60" />
               <span className="text-sm">Password</span>
             </Link>
           </DropdownMenuItem>
@@ -127,18 +125,17 @@ const HeaderUser = ({ user }: Props) => {
           <DropdownMenuItem asChild>
             <Link
               href="/settings/appearance"
-              className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-white/90 transition-colors hover:bg-white/10 hover:text-white focus:bg-white/10"
+              className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 dark:text-white/90 dark:hover:bg-white/10 dark:hover:text-white dark:focus:bg-white/10"
             >
-              <Palette className="h-4 w-4 text-white/60" />
+              <Palette className="h-4 w-4 text-gray-500 dark:text-white/60" />
               <span className="text-sm">Appearance</span>
             </Link>
           </DropdownMenuItem>
 
-          {/* ✅ Keep link visible on dark always */}
           <DropdownMenuItem asChild>
             <Link
               href="/user/chat"
-              className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 font-medium text-blue-400 transition-colors hover:bg-white/10 hover:text-blue-300 focus:bg-white/10"
+              className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 font-medium text-blue-600 transition-colors hover:bg-blue-50 hover:text-blue-700 focus:bg-blue-50 dark:text-blue-400 dark:hover:bg-white/10 dark:hover:text-blue-300 dark:focus:bg-white/10"
             >
               <MessageCircle className="h-4 w-4" />
               <span className="text-sm">Live Support Chat</span>
@@ -146,7 +143,7 @@ const HeaderUser = ({ user }: Props) => {
           </DropdownMenuItem>
         </DropdownMenuGroup>
 
-        <DropdownMenuSeparator className="my-2 bg-white/10" />
+        <DropdownMenuSeparator className="my-2 bg-gray-100 dark:bg-white/10" />
 
         <div className="px-1">
           {/* If LogOutDropDown has theme colors inside, paste it and I’ll dark-force it too */}

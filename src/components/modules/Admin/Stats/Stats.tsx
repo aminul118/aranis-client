@@ -93,7 +93,7 @@ const Stats = ({ stats }: StatsProps) => {
         {metrics.map((metric) => (
           <Card
             key={metric.title}
-            className="border-none bg-[#151722] shadow-2xl transition-all hover:scale-[1.02]"
+            className="border-none bg-white shadow-xl transition-all hover:scale-[1.02] dark:bg-[#151722] dark:shadow-2xl"
           >
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-muted-foreground text-xs font-black tracking-widest uppercase">
@@ -104,7 +104,7 @@ const Stats = ({ stats }: StatsProps) => {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-black tracking-tighter text-white">
+              <div className="text-3xl font-black tracking-tighter text-gray-900 dark:text-white">
                 {metric.value}
               </div>
               <p className="text-muted-foreground mt-1 text-xs font-medium">
@@ -117,55 +117,55 @@ const Stats = ({ stats }: StatsProps) => {
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
         {/* Order Performance (Time-based) */}
-        <Card className="col-span-1 border-none bg-[#151722] shadow-2xl">
+        <Card className="col-span-1 border-none bg-white shadow-xl dark:bg-[#151722] dark:shadow-2xl">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-lg font-black text-white">
+            <CardTitle className="flex items-center gap-2 text-lg font-black text-gray-900 dark:text-white">
               <Calendar className="text-blue-500" size={20} />
               Order Velocity
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
-              <div className="rounded-2xl bg-white/5 p-4 transition-colors hover:bg-white/10">
+              <div className="rounded-2xl bg-gray-50 p-4 transition-colors hover:bg-gray-100 dark:bg-white/5 dark:hover:bg-white/10">
                 <p className="text-muted-foreground text-xs font-bold tracking-wider uppercase">
                   Today
                 </p>
-                <p className="text-2xl font-black text-white">
+                <p className="text-2xl font-black text-gray-900 dark:text-white">
                   {timeBasedOrders.today}
                 </p>
               </div>
-              <div className="rounded-2xl bg-white/5 p-4 transition-colors hover:bg-white/10">
+              <div className="rounded-2xl bg-gray-50 p-4 transition-colors hover:bg-gray-100 dark:bg-white/5 dark:hover:bg-white/10">
                 <p className="text-muted-foreground text-xs font-bold tracking-wider uppercase">
                   7 Days
                 </p>
-                <p className="text-2xl font-black text-white">
+                <p className="text-2xl font-black text-gray-900 dark:text-white">
                   {timeBasedOrders.last7Days}
                 </p>
               </div>
-              <div className="rounded-2xl bg-white/5 p-4 transition-colors hover:bg-white/10">
+              <div className="rounded-2xl bg-gray-50 p-4 transition-colors hover:bg-gray-100 dark:bg-white/5 dark:hover:bg-white/10">
                 <p className="text-muted-foreground text-xs font-bold tracking-wider uppercase">
                   15 Days
                 </p>
-                <p className="text-2xl font-black text-white">
+                <p className="text-2xl font-black text-gray-900 dark:text-white">
                   {timeBasedOrders.last15Days}
                 </p>
               </div>
-              <div className="rounded-2xl bg-white/5 p-4 transition-colors hover:bg-white/10">
+              <div className="rounded-2xl bg-gray-50 p-4 transition-colors hover:bg-gray-100 dark:bg-white/5 dark:hover:bg-white/10">
                 <p className="text-muted-foreground text-xs font-bold tracking-wider uppercase">
                   30 Days
                 </p>
-                <p className="text-2xl font-black text-white">
+                <p className="text-2xl font-black text-gray-900 dark:text-white">
                   {timeBasedOrders.last30Days}
                 </p>
               </div>
             </div>
 
-            <div className="mt-4 space-y-3 border-t border-white/5 pt-4">
+            <div className="mt-4 space-y-3 border-t border-gray-100 pt-4 dark:border-white/5">
               <div className="flex items-center justify-between">
                 <span className="text-muted-foreground flex items-center gap-2 text-sm font-bold">
                   <Clock className="text-yellow-500" size={16} /> Processing
                 </span>
-                <span className="text-lg font-black text-white">
+                <span className="text-lg font-black text-gray-900 dark:text-white">
                   {orderStatusDistribution.Processing || 0}
                 </span>
               </div>
@@ -173,7 +173,7 @@ const Stats = ({ stats }: StatsProps) => {
                 <span className="text-muted-foreground flex items-center gap-2 text-sm font-bold">
                   <UserCheck className="text-blue-500" size={16} /> Active Users
                 </span>
-                <span className="text-lg font-black text-white">
+                <span className="text-lg font-black text-gray-900 dark:text-white">
                   {user.activeCount}
                 </span>
               </div>
@@ -182,9 +182,9 @@ const Stats = ({ stats }: StatsProps) => {
         </Card>
 
         {/* Operational Status (Pie-style bars) */}
-        <Card className="col-span-1 border-none bg-[#151722] shadow-2xl lg:col-span-2">
+        <Card className="col-span-1 border-none bg-white shadow-xl lg:col-span-2 dark:bg-[#151722] dark:shadow-2xl">
           <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle className="flex items-center gap-2 text-lg font-black text-white">
+            <CardTitle className="flex items-center gap-2 text-lg font-black text-gray-900 dark:text-white">
               <PieChart className="text-purple-500" size={20} />
               Status Distribution
             </CardTitle>
@@ -224,7 +224,7 @@ const Stats = ({ stats }: StatsProps) => {
                 },
               ].map((status) => (
                 <div key={status.label} className="space-y-2">
-                  <div className="flex justify-between text-sm font-black text-white">
+                  <div className="flex justify-between text-sm font-black text-gray-900 dark:text-white">
                     <span>{status.label}</span>
                     <span className="text-muted-foreground">
                       {status.count}{' '}
@@ -234,7 +234,7 @@ const Stats = ({ stats }: StatsProps) => {
                       </span>
                     </span>
                   </div>
-                  <div className="h-2 w-full overflow-hidden rounded-full bg-white/5">
+                  <div className="h-2 w-full overflow-hidden rounded-full bg-gray-100 dark:bg-white/5">
                     <div
                       className={cn(
                         'h-full transition-all duration-1000',
@@ -256,7 +256,7 @@ const Stats = ({ stats }: StatsProps) => {
       <div className="space-y-6">
         <div className="flex items-center gap-3">
           <TrendingUp className="text-blue-500" size={24} />
-          <h2 className="text-2xl font-black tracking-tight text-white">
+          <h2 className="text-2xl font-black tracking-tight text-gray-900 dark:text-white">
             Strategic Analytics
           </h2>
         </div>
@@ -265,7 +265,7 @@ const Stats = ({ stats }: StatsProps) => {
 
       {/* Secondary Metrics / Notifications Area */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-4">
-        <Card className="border-none bg-[#151722] p-6 shadow-2xl">
+        <Card className="border-none bg-white p-6 shadow-xl dark:bg-[#151722] dark:shadow-2xl">
           <div className="flex items-center gap-4">
             <div className="rounded-2xl bg-blue-500/10 p-3">
               <Box className="h-6 w-6 text-blue-500" />
@@ -274,13 +274,13 @@ const Stats = ({ stats }: StatsProps) => {
               <p className="text-muted-foreground text-xs font-black tracking-wider uppercase">
                 Catalog
               </p>
-              <p className="text-xl font-black text-white">
+              <p className="text-xl font-black text-gray-900 dark:text-white">
                 {productCount} Products
               </p>
             </div>
           </div>
         </Card>
-        <Card className="border-none bg-[#151722] p-6 shadow-2xl">
+        <Card className="border-none bg-white p-6 shadow-xl dark:bg-[#151722] dark:shadow-2xl">
           <div className="flex items-center gap-4">
             <div className="rounded-2xl bg-purple-500/10 p-3">
               <ShoppingBag className="h-6 w-6 text-purple-500" />
@@ -289,13 +289,13 @@ const Stats = ({ stats }: StatsProps) => {
               <p className="text-muted-foreground text-xs font-black tracking-wider uppercase">
                 Volume
               </p>
-              <p className="text-xl font-black text-white">
+              <p className="text-xl font-black text-gray-900 dark:text-white">
                 {orderCount} Sales
               </p>
             </div>
           </div>
         </Card>
-        <Card className="border-none bg-[#151722] p-6 shadow-2xl lg:col-span-2">
+        <Card className="border-none bg-white p-6 shadow-xl lg:col-span-2 dark:bg-[#151722] dark:shadow-2xl">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="rounded-2xl bg-orange-500/10 p-3">
@@ -305,7 +305,7 @@ const Stats = ({ stats }: StatsProps) => {
                 <p className="text-muted-foreground text-xs font-black tracking-wider uppercase">
                   Client Base
                 </p>
-                <p className="text-xl font-black text-white">
+                <p className="text-xl font-black text-gray-900 dark:text-white">
                   {user.totalCount} Registered
                 </p>
               </div>
@@ -315,7 +315,7 @@ const Stats = ({ stats }: StatsProps) => {
                 {[1, 2, 3, 4].map((i) => (
                   <div
                     key={i}
-                    className="h-8 w-8 rounded-full border-2 border-[#151722] bg-white/10"
+                    className="h-8 w-8 rounded-full border-2 border-gray-100 bg-gray-200 dark:border-[#151722] dark:bg-white/10"
                   />
                 ))}
               </div>

@@ -21,7 +21,7 @@ const LogOutDropDown = ({ className }: { className?: string }) => {
 
   return (
     <DropdownMenuItem
-      className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-red-400 transition-colors hover:bg-red-500/10 hover:text-red-300 focus:bg-red-500/10 focus:text-red-300"
+      className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-red-600 transition-colors hover:bg-red-50 hover:text-red-700 focus:bg-red-50 focus:text-red-700 dark:text-red-400 dark:hover:bg-red-500/10 dark:hover:text-red-300 dark:focus:bg-red-500/10 dark:focus:text-red-300"
       onClick={handleLogout}
       disabled={loading}
     >
