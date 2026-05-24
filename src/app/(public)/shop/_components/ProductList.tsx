@@ -27,6 +27,11 @@ const ProductList = ({
 
     return selectedColors.some((selectedColor) => {
       const sColor = selectedColor.toLowerCase();
+      const matchMain = product.color
+        ? product.color.toLowerCase() === sColor ||
+          product.color.toLowerCase().includes(sColor) ||
+          sColor.includes(product.color.toLowerCase())
+        : false;
 
       const matchVariant = product.variants?.some((v) => {
         const vColor = v.color?.toLowerCase();
@@ -36,7 +41,8 @@ const ProductList = ({
               sColor.includes(vColor)
           : false;
       });
-      return matchVariant;
+
+      return matchMain || matchVariant;
     });
   });
 

@@ -5,6 +5,12 @@ import HtmlContent from '@/components/rich-text/core/html-content';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -550,25 +556,42 @@ const ProductDetailContent = ({
                 })}
               </div>
 
-              {/* Inline Size Guide Display */}
+              {/* Size Guide Button */}
               {product.sizeGuide && (
-                <div className="mt-8 overflow-hidden rounded-3xl border-2 border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950">
-                  <div className="flex items-center gap-3 border-b border-zinc-200 p-4 dark:border-zinc-800">
-                    <Ruler size={16} className="text-blue-500" />
-                    <span className="text-sm font-bold tracking-widest uppercase">
-                      {(product.sizeGuide as any).name || 'Size Guide'}
-                    </span>
-                  </div>
-                  <div className="relative aspect-auto w-full">
-                    <Image
-                      src={(product.sizeGuide as any).image}
-                      alt={(product.sizeGuide as any).name || 'Size Guide'}
-                      width={800}
-                      height={600}
-                      className="h-auto w-full object-contain p-2"
-                      priority
-                    />
-                  </div>
+                <div className="mt-6">
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="w-full rounded-xl border-2 border-zinc-200 font-bold text-zinc-600 transition-all hover:bg-zinc-50 sm:w-auto dark:border-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-900"
+                      >
+                        <Ruler size={16} className="mr-2 text-blue-500" />
+                        {(product.sizeGuide as any).name || 'View Size Guide'}
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-3xl overflow-hidden border-none bg-transparent p-0 shadow-none">
+                      <div className="relative overflow-hidden rounded-3xl bg-white shadow-2xl dark:bg-zinc-950">
+                        <div className="flex items-center gap-3 border-b border-zinc-100 p-4 dark:border-zinc-800">
+                          <Ruler size={16} className="text-blue-500" />
+                          <DialogTitle className="m-0 text-sm font-bold tracking-widest uppercase">
+                            {(product.sizeGuide as any).name || 'Size Guide'}
+                          </DialogTitle>
+                        </div>
+                        <div className="relative aspect-auto max-h-[80vh] w-full overflow-y-auto">
+                          <Image
+                            src={(product.sizeGuide as any).image}
+                            alt={
+                              (product.sizeGuide as any).name || 'Size Guide'
+                            }
+                            width={800}
+                            height={600}
+                            className="h-auto w-full object-contain p-2"
+                            priority
+                          />
+                        </div>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
                 </div>
               )}
             </div>

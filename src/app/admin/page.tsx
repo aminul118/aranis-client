@@ -14,11 +14,9 @@ const AdminHomePage = async () => {
   const user = userRes?.data;
 
   return (
-    <section className="mx-auto w-full space-y-10 px-4">
+    <section className="mx-auto w-full space-y-10 px-4 pt-4">
       {user && <SetPasswordPrompt user={user} />}
-      <GradientTitle
-        title={`Welcome back, ${user?.fullName?.split(' ')[0] || 'Admin'}`}
-      />
+      <GradientTitle title={`Welcome back, ${user?.fullName || 'Admin'}`} />
       <Stats stats={stats} />
     </section>
   );

@@ -124,7 +124,9 @@ const ShopHeader = ({
             )}
             <Button
               variant="outline"
-              onClick={() => window.location.reload()}
+              onClick={() => {
+                window.location.href = window.location.pathname;
+              }}
               className="h-12 rounded-full border border-black/10 bg-white/70 px-5 font-bold text-zinc-800 shadow-sm transition-all hover:bg-black/5 dark:border-white/10 dark:bg-white/[0.03] dark:text-white dark:hover:bg-white/[0.05]"
             >
               <RefreshCw className="mr-2 h-4 w-4" />
@@ -166,7 +168,7 @@ const ShopHeader = ({
                     size="sm"
                     variant="ghost"
                     onClick={() => {
-                      window.location.reload();
+                      window.location.href = window.location.pathname;
                     }}
                     className="h-8 rounded-full bg-white/10 px-3 text-xs font-bold text-white hover:bg-white/20"
                   >
