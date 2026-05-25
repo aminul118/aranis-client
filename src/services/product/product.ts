@@ -10,6 +10,14 @@ export const createProduct = async (
   const res = await serverFetch.post<ApiResponse<IProduct>>('/products', {
     body: payload,
   });
+  try {
+    const { revalidatePath } = require('next/cache');
+    revalidatePath('/offers');
+    revalidatePath('/shop');
+    revalidatePath('/');
+  } catch (e) {
+    console.error(e);
+  }
   revalidate('product');
   return res;
 };
@@ -24,6 +32,14 @@ export const updateProduct = async (
       body: payload,
     },
   );
+  try {
+    const { revalidatePath } = require('next/cache');
+    revalidatePath('/offers');
+    revalidatePath('/shop');
+    revalidatePath('/');
+  } catch (e) {
+    console.error(e);
+  }
   revalidate('product');
   return res;
 };
@@ -51,6 +67,14 @@ const deleteProduct = async (id: string) => {
   const res = await serverFetch.delete<ApiResponse<IProduct>>(
     `/products/${id}`,
   );
+  try {
+    const { revalidatePath } = require('next/cache');
+    revalidatePath('/offers');
+    revalidatePath('/shop');
+    revalidatePath('/');
+  } catch (e) {
+    console.error(e);
+  }
   revalidate('product');
   return res;
 };
@@ -95,6 +119,14 @@ const updateProductBulk = async (ids: string[], data: Partial<IProduct>) => {
       },
     },
   );
+  try {
+    const { revalidatePath } = require('next/cache');
+    revalidatePath('/offers');
+    revalidatePath('/shop');
+    revalidatePath('/');
+  } catch (e) {
+    console.error(e);
+  }
   revalidate('product');
   return res;
 };
@@ -109,6 +141,14 @@ const deleteProductBulk = async (ids: string[]) => {
       },
     },
   );
+  try {
+    const { revalidatePath } = require('next/cache');
+    revalidatePath('/offers');
+    revalidatePath('/shop');
+    revalidatePath('/');
+  } catch (e) {
+    console.error(e);
+  }
   revalidate('product');
   return res;
 };
