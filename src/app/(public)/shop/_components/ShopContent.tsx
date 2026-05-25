@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils';
 import { getCategories, ICategory } from '@/services/category/category';
 import { getColors, IColor } from '@/services/color/color';
 import { getProductPriceRange, getProducts } from '@/services/product/product';
+import { getSizes, ISize } from '@/services/size/size';
 import { IMeta, IProduct } from '@/types';
 import { motion } from 'framer-motion';
 import { Gift } from 'lucide-react';
@@ -26,6 +27,7 @@ import ShopHeader from './ShopHeader';
 let cachedColors: IColor[] | null = null;
 let cachedCategories: ICategory[] | null = null;
 let cachedPriceRange: { minPrice: number; maxPrice: number } | null = null;
+let cachedSizes: ISize[] | null = null;
 
 interface ShopContentProps {
   initialFilters?: {
@@ -59,6 +61,7 @@ const ShopContent = ({
   const [dbCategories, setDbCategories] = useState<ICategory[]>(
     cachedCategories || [],
   );
+  const [dbSizes, setDbSizes] = useState<ISize[]>(cachedSizes || []);
   const [priceRange, setPriceRange] = useState<{
     minPrice: number;
     maxPrice: number;
@@ -170,10 +173,11 @@ const ShopContent = ({
   useEffect(() => {
     const fetchMetadata = async () => {
       try {
-        const [colorRes, catRes, priceRes] = await Promise.all([
+        const [colorRes, catRes, priceRes, sizeRes] = await Promise.all([
           getColors({ limit: '1000' }),
           getCategories({ limit: '1000' }),
           getProductPriceRange(),
+          getSizes({ limit: '1000' }),
         ]);
 
         if (colorRes.data) {
@@ -187,6 +191,10 @@ const ShopContent = ({
         if (priceRes.data) {
           cachedPriceRange = priceRes.data;
           setPriceRange(priceRes.data);
+        }
+        if (sizeRes.data) {
+          cachedSizes = sizeRes.data;
+          setDbSizes(sizeRes.data);
         }
       } catch (error) {
         console.error('Failed to fetch filter metadata', error);
@@ -379,6 +387,7 @@ const ShopContent = ({
                 <FilterSection
                   dbCategories={dbCategories}
                   dbColors={dbColors}
+                  dbSizes={dbSizes}
                   selectedCategory={selectedCategory}
                   selectedSubCategory={selectedSubCategory}
                   selectedType={selectedType}
@@ -414,6 +423,7 @@ const ShopContent = ({
                   <FilterSection
                     dbCategories={dbCategories}
                     dbColors={dbColors}
+                    dbSizes={dbSizes}
                     selectedCategory={selectedCategory}
                     selectedSubCategory={selectedSubCategory}
                     selectedType={selectedType}

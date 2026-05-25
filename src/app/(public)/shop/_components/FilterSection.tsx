@@ -12,6 +12,7 @@ import { Slider } from '@/components/ui/slider';
 import { cn } from '@/lib/utils';
 import { ICategory } from '@/services/category/category';
 import { IColor } from '@/services/color/color';
+import { ISize } from '@/services/size/size';
 import { motion } from 'framer-motion';
 import { Check } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -19,6 +20,7 @@ import { useEffect, useState } from 'react';
 interface FilterSectionProps {
   dbCategories: ICategory[];
   dbColors: IColor[];
+  dbSizes: ISize[];
   selectedCategory: string;
   selectedSubCategory: string;
   selectedType: string;
@@ -43,6 +45,7 @@ const heading =
 const FilterSection = ({
   dbCategories,
   dbColors,
+  dbSizes,
   selectedCategory,
   selectedSubCategory,
   selectedType,
@@ -83,7 +86,9 @@ const FilterSection = ({
     setLocalRange([activeMin, activeMax]);
   }, [activeMin, activeMax, globalMin, globalMax]);
 
-  const sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
+  const sizes = [...dbSizes]
+    .sort((a, b) => (a.order || 0) - (b.order || 0))
+    .map((s) => s.name);
 
   const sortOptions = [
     { label: 'Newest First', value: '-createdAt' },
@@ -420,7 +425,7 @@ const FilterSection = ({
       <div className={cn(card, 'p-5')}>
         <div className={heading}>Sizes</div>
 
-        <div className="grid grid-cols-3 gap-2">
+        <div className="flex flex-wrap gap-2">
           {sizes.map((size) => {
             const active = selectedSizes.includes(size);
 
@@ -432,7 +437,7 @@ const FilterSection = ({
               >
                 <Button
                   className={cn(
-                    'w-full rounded-2xl font-semibold transition-all duration-300',
+                    'rounded-2xl px-4 font-semibold transition-all duration-300',
                     active
                       ? 'bg-primary/10 dark:bg-primary/20 text-primary shadow-[0_0_0_1px_rgba(99,102,241,0.35)]'
                       : 'bg-black/[0.03] text-zinc-700 hover:bg-black/[0.06] hover:text-zinc-900 dark:bg-white/[0.04] dark:text-zinc-300 dark:hover:bg-white/[0.07] dark:hover:text-white',
