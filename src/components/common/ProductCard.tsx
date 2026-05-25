@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/CartContext';
 import { useUser } from '@/context/UserContext';
 import { useWishlist } from '@/context/WishlistContext';
-import { cn } from '@/lib/utils';
+import { cn, extractPlainText } from '@/lib/utils';
 import { IProduct } from '@/types';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Heart, ShoppingCart } from 'lucide-react';
@@ -173,7 +173,7 @@ const ProductCard = ({
 
         {isList && (
           <p className="text-muted-foreground mb-6 line-clamp-2 text-xs leading-relaxed">
-            {product.description}
+            {extractPlainText(product.description)}
           </p>
         )}
 
