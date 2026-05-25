@@ -1,6 +1,14 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { cn } from '@/lib/utils';
 import { IStats } from '@/types';
 import {
@@ -10,12 +18,15 @@ import {
   Box,
   Calendar,
   Clock,
+  PackageSearch,
   PieChart,
   ShoppingBag,
   TrendingUp,
   UserCheck,
   Users,
+  X,
 } from 'lucide-react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import DashboardCharts from '../Dashboard/DashboardCharts';
 import StatsSkeleton from './StatsSkeleton';
 
@@ -24,6 +35,10 @@ interface StatsProps {
 }
 
 const Stats = ({ stats }: StatsProps) => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const currentFilter = searchParams.get('dateFilter') || 'overall';
+
   if (!stats) return <StatsSkeleton />;
 
   const {
@@ -32,6 +47,7 @@ const Stats = ({ stats }: StatsProps) => {
     totalStockValue = 0,
     totalSaleValue = 0,
     lowStockCount = 0,
+    restockRequestCount = 0,
     orderCount = 0,
     productCount = 0,
     orderStatusDistribution = {
@@ -51,6 +67,21 @@ const Stats = ({ stats }: StatsProps) => {
     },
   } = stats;
 
+  const handleFilterChange = (value: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (value && value !== 'overall') {
+      params.set('dateFilter', value);
+    } else {
+      params.delete('dateFilter');
+    }
+    router.push(`?${params.toString()}`);
+  };
+
+  const handleCustomDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    handleFilterChange(value);
+  };
+
   const metrics = [
     {
       title: 'Total Revenue',
@@ -69,12 +100,12 @@ const Stats = ({ stats }: StatsProps) => {
       bg: 'bg-blue-500/10',
     },
     {
-      title: 'Inventory Value',
-      value: `৳${totalStockValue.toLocaleString()}`,
-      description: 'Current asset valuation',
-      icon: Box,
-      color: 'text-purple-500',
-      bg: 'bg-purple-500/10',
+      title: 'Stock Requests',
+      value: restockRequestCount.toLocaleString(),
+      description: 'Customer restock requests',
+      icon: PackageSearch,
+      color: 'text-rose-500',
+      bg: 'bg-rose-500/10',
     },
     {
       title: 'Potential Sales',
@@ -88,6 +119,65 @@ const Stats = ({ stats }: StatsProps) => {
 
   return (
     <div className="mx-auto w-full space-y-10 pb-20">
+      {/* Date Filter Bar */}
+      <div className="flex flex-col items-center justify-between gap-4 rounded-2xl bg-white p-4 shadow-xl sm:flex-row dark:bg-[#151722] dark:shadow-2xl">
+        <div className="flex items-center gap-3">
+          <Calendar className="text-blue-500" size={24} />
+          <h2 className="text-xl font-black tracking-tight text-gray-900 dark:text-white">
+            Overview Dashboard
+          </h2>
+        </div>
+        <div className="flex w-full flex-wrap items-center gap-3 sm:w-auto">
+          {currentFilter !== 'overall' && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => handleFilterChange('overall')}
+              className="h-11 rounded-xl px-3 font-bold text-red-500 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-500/10"
+            >
+              <X className="mr-2 h-4 w-4" />
+              Clear Filter
+            </Button>
+          )}
+          <Select
+            value={
+              currentFilter.match(/^\d{4}-\d{2}-\d{2}$/)
+                ? 'custom'
+                : currentFilter
+            }
+            onValueChange={handleFilterChange}
+          >
+            <SelectTrigger className="h-11 w-full rounded-xl border-none bg-gray-50 font-bold sm:w-[180px] dark:bg-white/5">
+              <SelectValue placeholder="Select Date Range" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="overall">Overall (All Time)</SelectItem>
+              <SelectItem value="today">Today</SelectItem>
+              <SelectItem value="yesterday">Yesterday</SelectItem>
+              <SelectItem value="3days">Last 3 Days</SelectItem>
+              <SelectItem value="7days">Last 7 Days</SelectItem>
+              <SelectItem value="15days">Last 15 Days</SelectItem>
+              <SelectItem value="1month">Last 1 Month</SelectItem>
+              <SelectItem value="2month">Last 2 Months</SelectItem>
+              <SelectItem value="3month">Last 3 Months</SelectItem>
+              <SelectItem value="custom">Custom Date</SelectItem>
+            </SelectContent>
+          </Select>
+
+          {(currentFilter === 'custom' ||
+            currentFilter.match(/^\d{4}-\d{2}-\d{2}$/)) && (
+            <input
+              type="date"
+              value={
+                currentFilter.match(/^\d{4}-\d{2}-\d{2}$/) ? currentFilter : ''
+              }
+              onChange={handleCustomDateChange}
+              className="h-11 w-full rounded-xl border-none bg-gray-50 px-4 text-sm font-bold text-gray-900 outline-none focus:ring-2 focus:ring-blue-500 sm:w-auto dark:bg-white/5 dark:text-white"
+            />
+          )}
+        </div>
+      </div>
+
       {/* Prime Metrics Grid */}
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {metrics.map((metric) => (

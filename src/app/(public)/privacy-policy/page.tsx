@@ -128,26 +128,6 @@ const PrivacyPolicyPage = () => {
                 a cookie is being sent.
               </p>
             </section>
-
-            <section className="border-border/50 space-y-4 border-t pt-10">
-              <h2 className="text-foreground text-sm font-black tracking-widest uppercase">
-                Contact Us
-              </h2>
-              <p>
-                If you have any questions about this Privacy Policy, please
-                contact us:
-              </p>
-              <ul className="list-none space-y-2 p-0">
-                <li className="flex items-center gap-2">
-                  <span className="text-foreground font-bold">Email:</span>{' '}
-                  privacy@Aranis.com
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="text-foreground font-bold">Address:</span>{' '}
-                  123 Luxury Avenue, Suite 100, Digital City
-                </li>
-              </ul>
-            </section>
           </div>
         </div>
       </div>

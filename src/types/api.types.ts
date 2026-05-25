@@ -146,6 +146,7 @@ export interface IStats {
   totalStockValue: number;
   totalSaleValue: number;
   lowStockCount: number;
+  restockRequestCount: number;
   orderStatusDistribution: {
     Pending: number;
     Processing: number;

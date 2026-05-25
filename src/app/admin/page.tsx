@@ -7,8 +7,16 @@ import { Metadata } from 'next';
 
 export const dynamic = 'force-dynamic';
 
-const AdminHomePage = async () => {
-  const [statsRes, userRes] = await Promise.all([getAdminStats(), getMe()]);
+const AdminHomePage = async ({
+  searchParams,
+}: {
+  searchParams: Promise<{ dateFilter?: string }>;
+}) => {
+  const resolvedSearchParams = await searchParams;
+  const [statsRes, userRes] = await Promise.all([
+    getAdminStats(resolvedSearchParams as Record<string, string>),
+    getMe(),
+  ]);
 
   const stats = statsRes?.data;
   const user = userRes?.data;
