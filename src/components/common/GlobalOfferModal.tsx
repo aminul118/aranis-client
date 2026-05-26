@@ -7,8 +7,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
-const STORAGE_KEY = 'aranis_popup_dismissed_at';
-
 interface PopupData {
   _id: string;
   image: string;
@@ -22,15 +20,6 @@ const GlobalOfferModal = () => {
   const [progress, setProgress] = useState(100);
 
   useEffect(() => {
-    // Show once every 12 hours
-    const dismissedAt = localStorage.getItem(STORAGE_KEY);
-    if (dismissedAt) {
-      const now = new Date().getTime();
-      const lastDismissed = parseInt(dismissedAt);
-      const hoursSinceDismissed = (now - lastDismissed) / (1000 * 60 * 60);
-      if (hoursSinceDismissed < 12) return;
-    }
-
     const fetchPopup = async () => {
       try {
         const baseUrl =
@@ -88,7 +77,6 @@ const GlobalOfferModal = () => {
   }, [visible]);
 
   const handleClose = () => {
-    localStorage.setItem(STORAGE_KEY, new Date().getTime().toString());
     setVisible(false);
   };
 

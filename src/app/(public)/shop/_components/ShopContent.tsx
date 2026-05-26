@@ -103,6 +103,9 @@ const ShopContent = ({
         setLoading(true);
       }
       NProgress.start();
+
+      let updatedHasInitial = hasInitialProducts;
+
       try {
         const query: Record<string, string> = {};
         searchParams.forEach((value, key) => {
@@ -143,16 +146,23 @@ const ShopContent = ({
           !searchParams.get('maxPrice') &&
           !searchParams.get('q') &&
           !searchParams.get('sort');
-        if (isQueryEmpty && hasInitialProducts === null) {
-          setHasInitialProducts(data && data.length > 0);
+
+        if (hasInitialProducts === null) {
+          if (data && data.length > 0) {
+            updatedHasInitial = true;
+          } else {
+            updatedHasInitial = !isQueryEmpty;
+          }
+          setHasInitialProducts(updatedHasInitial);
         }
       } catch (error) {
         console.error('Failed to fetch products', error);
         if (hasInitialProducts === null) {
+          updatedHasInitial = false;
           setHasInitialProducts(false);
         }
       } finally {
-        if (hasInitialProducts === null) {
+        if (hasInitialProducts === null && updatedHasInitial === null) {
           setHasInitialProducts(false);
         }
         setLoading(false);
@@ -222,10 +232,16 @@ const ShopContent = ({
         return; // Don't add to URL params
       }
 
-      if (key === 'category') nextCategory = value || 'All';
-      else if (key === 'subCategory') nextSubCategory = value || '';
-      else if (key === 'type' || key === 'item') nextType = value || '';
-      else {
+      if (!isOfferPage) {
+        if (key === 'category') nextCategory = value || 'All';
+        else if (key === 'subCategory') nextSubCategory = value || '';
+        else if (key === 'type' || key === 'item') nextType = value || '';
+      }
+
+      if (
+        isOfferPage ||
+        !['category', 'subCategory', 'type', 'item'].includes(key)
+      ) {
         if (value === null || value === 'All' || value === '') {
           params.delete(key);
         } else {
@@ -240,17 +256,19 @@ const ShopContent = ({
       params.delete('page');
     }
 
-    params.delete('category');
-    params.delete('subCategory');
-    params.delete('type');
-    params.delete('item');
+    if (!isOfferPage) {
+      params.delete('category');
+      params.delete('subCategory');
+      params.delete('type');
+      params.delete('item');
+    }
 
     const searchStr = params.toString();
     const queryStr = searchStr ? `?${searchStr}` : '';
 
     startTransition(() => {
-      if (initialFilters) {
-        // We are on a clean category page (e.g. /pakistani). Keep the path completely intact!
+      if (initialFilters || isOfferPage) {
+        // We are on a clean category page (e.g. /pakistani) or the offers page. Keep the path completely intact!
         router.push(`${pathname}${queryStr}`);
       } else if (hasStructuralChange) {
         const nextPath = generateShopPath(

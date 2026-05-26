@@ -1,4 +1,4 @@
-import { getOffers } from '@/services/offer/offer';
+import { getActiveOffer, getOffers } from '@/services/offer/offer';
 import { Metadata } from 'next';
 import ShopContent from '../shop/_components/ShopContent';
 import OfferCountdown from './_components/OfferCountdown';
@@ -24,18 +24,23 @@ const OffersPage = async ({ searchParams }: Props) => {
     if (res.data && res.data.length > 0) {
       activeOffer = res.data[0];
     }
-  } else {
-    // Try to get any active offer if no specific tag is provided
-    const res = await getOffers({ isActive: true });
-    if (res.data && res.data.length > 0) {
-      activeOffer = res.data[0];
+  }
+
+  // If no tag provided, or the provided tag was invalid/expired, try to get the active offer
+  if (!activeOffer) {
+    const res = await getActiveOffer();
+    if (res.data) {
+      activeOffer = res.data;
     }
   }
+
+  // Use the verified active offer's tag, otherwise fall back to undefined to show all offers
+  const verifiedTag = activeOffer?.tag;
 
   return (
     <div className="bg-background min-h-screen pt-12 pb-24">
       {activeOffer && <OfferCountdown offer={activeOffer} />}
-      <ShopContent isOfferPage={true} offerTag={tag} />
+      <ShopContent isOfferPage={true} offerTag={verifiedTag} />
     </div>
   );
 };

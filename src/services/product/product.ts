@@ -47,10 +47,6 @@ export const updateProduct = async (
 const getProducts = async (query: Record<string, string>) => {
   return await serverFetch.get<ApiResponse<IProduct[]>>('/products', {
     query,
-    next: {
-      tags: ['product'],
-      revalidate: 0,
-    },
   });
 };
 
