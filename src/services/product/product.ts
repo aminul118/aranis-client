@@ -47,14 +47,14 @@ export const updateProduct = async (
 const getProducts = async (query: Record<string, string>) => {
   return await serverFetch.get<ApiResponse<IProduct[]>>('/products', {
     query,
+    next: { tags: ['product'] },
   });
 };
 
 const getSingleProduct = async (id: string) => {
   return await serverFetch.get<ApiResponse<IProduct>>(`/products/${id}`, {
     next: {
-      tags: [`product-${id}`],
-      revalidate: 0,
+      tags: [`product-${id}`, 'product'],
     },
   });
 };
@@ -80,7 +80,6 @@ const getBestSellingProducts = async () => {
     query: { sort: '-soldCount', limit: '12' },
     next: {
       tags: ['product', 'best-selling'],
-      revalidate: 0,
     },
   });
 };
@@ -90,7 +89,6 @@ const getNewArrivals = async () => {
     query: { sort: '-createdAt', limit: '12' },
     next: {
       tags: ['product', 'new-arrivals'],
-      revalidate: 0,
     },
   });
 };
@@ -100,7 +98,6 @@ const getTopRatedProducts = async () => {
     query: { sort: '-rating', limit: '12' },
     next: {
       tags: ['product', 'top-rated'],
-      revalidate: 0,
     },
   });
 };

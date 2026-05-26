@@ -22,6 +22,7 @@ const triggerRevalidations = () => {
     revalidatePath('/shop');
     revalidatePath('/');
     revalidate('product');
+    revalidate('offer');
   } catch (error) {
     console.error('Failed to trigger Next.js cache revalidations:', error);
   }
@@ -40,7 +41,9 @@ export const createOffer = async (payload: Partial<IOffer>) => {
 
 export const getOffers = async (params: Record<string, any> = {}) => {
   const query = new URLSearchParams(params).toString();
-  return await serverFetch.get<ApiResponse<IOffer[]>>(`/offers?${query}`);
+  return await serverFetch.get<ApiResponse<IOffer[]>>(`/offers?${query}`, {
+    next: { tags: ['offer'] },
+  });
 };
 
 export const updateOffer = async (id: string, payload: Partial<IOffer>) => {
@@ -83,5 +86,7 @@ export const applyOfferToAll = async (tag: string) => {
 };
 
 export const getActiveOffer = async () => {
-  return await serverFetch.get<ApiResponse<IOffer>>('/offers/active');
+  return await serverFetch.get<ApiResponse<IOffer>>('/offers/active', {
+    next: { tags: ['offer'] },
+  });
 };
