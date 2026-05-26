@@ -18,7 +18,7 @@ const ProductPage = async ({ searchParams }: SearchParams) => {
     await Promise.all([
       getProducts(params),
       getCategories({ limit: '1000' }),
-      getColors({}),
+      getColors({ limit: '1000' }),
       getAllSizeGuides(),
       getOffers({}),
     ]);

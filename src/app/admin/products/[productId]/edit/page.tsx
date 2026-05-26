@@ -22,9 +22,9 @@ export default async function EditProductPage({
     offersRes,
   ] = await Promise.all([
     getCategories({ limit: '1000' }),
-    getColors({}),
+    getColors({ limit: '1000' }),
     getSingleProduct(productId),
-    getSizes({ sort: 'order' }),
+    getSizes({ sort: 'order', limit: '1000' }),
     getAllSizeGuides(),
     getOffers({}),
   ]);

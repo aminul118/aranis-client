@@ -873,43 +873,6 @@ const ProductForm = ({
           />
         </div>
 
-        <FormField
-          control={form.control}
-          name="description"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Description</FormLabel>
-              <FormControl>
-                <PlateRichEditor
-                  value={field.value}
-                  onChange={field.onChange}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="details"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Product Details</FormLabel>
-              <FormControl>
-                <PlateRichEditor
-                  value={field.value}
-                  onChange={field.onChange}
-                />
-              </FormControl>
-              <FormDescription>
-                Use headings, lists, and formatting to design your product
-                details page.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
         {/* Product Color & Sizes */}
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           <FormField
@@ -977,7 +940,7 @@ const ProductForm = ({
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Available Sizes</FormLabel>
-                <div className="border-border/50 bg-muted/10 flex flex-wrap gap-2 rounded-xl border p-4">
+                <div className="border-border/50 bg-muted/10 flex flex-wrap items-center gap-2 rounded-xl border p-4">
                   {sizes.map((size) => (
                     <button
                       key={size._id}
@@ -990,7 +953,7 @@ const ProductForm = ({
                         field.onChange(updated);
                       }}
                       className={cn(
-                        'min-w-[3rem] cursor-pointer rounded-lg border px-4 py-2 text-xs font-black transition-all',
+                        'flex h-10 min-w-[3rem] cursor-pointer items-center justify-center rounded-lg border px-4 text-xs font-black transition-all',
                         field.value?.includes(size.name)
                           ? 'bg-foreground text-background border-foreground shadow-md'
                           : 'border-border/50 bg-background text-muted-foreground hover:border-foreground/30',
@@ -1286,6 +1249,44 @@ const ProductForm = ({
             </div>
           )}
         </div>
+
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Description</FormLabel>
+              <FormControl>
+                <PlateRichEditor
+                  value={field.value}
+                  onChange={field.onChange}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="details"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Product Details</FormLabel>
+              <FormControl>
+                <PlateRichEditor
+                  value={field.value}
+                  onChange={field.onChange}
+                />
+              </FormControl>
+              <FormDescription>
+                Use headings, lists, and formatting to design your product
+                details page.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <div className="flex justify-end pt-4">
           <SubmitButton

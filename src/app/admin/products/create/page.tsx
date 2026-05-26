@@ -10,8 +10,8 @@ export default async function CreateProductPage() {
   const [categoriesRes, colorsRes, sizesRes, sizeGuidesRes, offersRes] =
     await Promise.all([
       getCategories({ limit: '1000' }),
-      getColors({}),
-      getSizes({ sort: 'order' }),
+      getColors({ limit: '1000' }),
+      getSizes({ sort: 'order', limit: '1000' }),
       getAllSizeGuides(),
       getOffers({}),
     ]);
