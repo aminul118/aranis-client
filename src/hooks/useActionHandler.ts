@@ -34,9 +34,10 @@ const useActionHandler = () => {
 
     setIsPending(true);
     let toastId: string | number | undefined;
-    if (success?.loadingText) {
-      toastId = toast.loading(success.loadingText);
-    }
+    // Removed toast.loading to rely on button spinners instead
+    // if (success?.loadingText) {
+    //   toastId = toast.loading(success.loadingText);
+    // }
 
     try {
       const res = await action();

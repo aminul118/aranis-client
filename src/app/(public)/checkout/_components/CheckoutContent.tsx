@@ -249,18 +249,19 @@ export default function CheckoutContent() {
 
       const orderPayload = {
         items: cart.map((item) => ({
+          itemType: (item as any).itemType || 'Product',
           product: item._id as string,
           quantity: item.quantity,
           price:
             item.salePrice && item.salePrice > 0 ? item.salePrice : item.price,
-          color: item.selectedColor,
-          size: item.selectedSize,
+          color: item.selectedColor || undefined,
+          size: item.selectedSize || undefined,
         })),
         totalPrice: activeTotalPrice,
         subTotal: subtotal,
         discount: discount,
         shippingCharge: activeShippingCharge,
-        couponCode: couponCode,
+        couponCode: couponCode || undefined,
         shippingAddress,
         contactPhone: contactPhone || phoneInput,
         paymentMethod: activePaymentMethod,

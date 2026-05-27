@@ -1,6 +1,7 @@
 import { MenuGroup, UserRole } from '@/types/admin-menu';
 import {
   BellRing,
+  Gift,
   Globe,
   ImageIcon,
   Layers,
@@ -36,6 +37,7 @@ const adminSidebarMenu: MenuGroup[] = [
     roles: ['SUPER_ADMIN', 'ADMIN'] as UserRole[],
     menu: [
       { name: 'Products', url: '/admin/products', icon: Package },
+      { name: 'Gift Cards', url: '/admin/gift-cards', icon: Gift },
       { name: 'Offers', url: '/admin/offers', icon: TicketPercent },
       { name: 'Coupons', url: '/admin/coupons', icon: TicketPercent },
       { name: 'Orders', url: '/admin/orders', icon: ShoppingCart },

@@ -89,7 +89,11 @@ const OrderPrint = ({ order }: { order: IOrder }) => {
                   <td className="py-6">
                     <div className="relative h-12 w-12 overflow-hidden rounded border border-gray-100">
                       <Image
-                        src={product?.thumbnails?.[0] || '/placeholder.jpg'}
+                        src={
+                          product?.thumbnails?.[0] ||
+                          (product as any)?.image ||
+                          '/placeholder.jpg'
+                        }
                         alt={product?.name || 'Product Deleted'}
                         fill
                         className="object-cover"

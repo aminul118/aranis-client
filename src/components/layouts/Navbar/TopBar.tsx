@@ -32,7 +32,7 @@ const TopBar = ({ siteSettings }: { siteSettings?: any }) => {
     },
     {
       name: 'Gift Card',
-      href: '/gift-card',
+      href: '/gift-cards',
       icon: Gift,
       iconColor: 'text-purple-500',
     },

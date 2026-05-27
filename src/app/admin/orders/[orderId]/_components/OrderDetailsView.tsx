@@ -359,6 +359,7 @@ const OrderDetailsView = ({ order }: { order: IOrder }) => {
                                 <Image
                                   src={
                                     product?.thumbnails?.[0] ||
+                                    (product as any)?.image ||
                                     '/placeholder.jpg'
                                   }
                                   alt={product?.name || 'Product Deleted'}

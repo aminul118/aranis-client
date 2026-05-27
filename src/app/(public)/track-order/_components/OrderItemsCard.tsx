@@ -29,7 +29,7 @@ export default function OrderItemsCard({ order }: OrderItemsCardProps) {
           >
             <div className="border-border relative h-20 w-16 overflow-hidden rounded-2xl border bg-black/5 shadow-xl dark:bg-white/5">
               <Image
-                src={item.product.thumbnails?.[0]}
+                src={item.product.thumbnails?.[0] || item.product.image}
                 alt={item.product.name}
                 fill
                 className="object-cover transition-transform duration-500 group-hover:scale-110"
