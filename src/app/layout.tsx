@@ -19,6 +19,14 @@ const MainLayout = ({ children }: Children) => {
       className={fonts.spaceGrotesk.variable}
       suppressHydrationWarning
     >
+      <head>
+        <link
+          rel="preconnect"
+          href="https://cdn.thearanis.com"
+          crossOrigin="anonymous"
+        />
+        <link rel="dns-prefetch" href="https://cdn.thearanis.com" />
+      </head>
       <GoogleAnalytics gaId={envVars.analytics.googleAnalytics} />
       <body className={fonts.spaceGrotesk.className} suppressHydrationWarning>
         <TopLoadingBar />

@@ -256,9 +256,9 @@ const ProductDetailContent = ({
         {/* Artisanal Details Section - Moved here */}
         {product.details && (
           <div className="border-border/50 hidden border-t pt-8 lg:block">
-            <h3 className="text-foreground mb-4 text-xs font-black tracking-[0.2em] uppercase">
+            <h2 className="text-foreground mb-4 text-xs font-black tracking-[0.2em] uppercase">
               Artisanal Details
-            </h3>
+            </h2>
             <HtmlContent
               content={
                 Array.isArray(product.details)
@@ -292,6 +292,7 @@ const ProductDetailContent = ({
                 onClick={() =>
                   toggleWishlist(product, currentSelectedColor, selectedSize)
                 }
+                aria-label="Toggle wishlist"
                 className={`border-border/50 hover:bg-muted rounded-full border p-2.5 transition-all ${isWishlisted ? 'bg-red-50 text-red-500' : 'text-muted-foreground'}`}
               >
                 <Heart
@@ -301,7 +302,10 @@ const ProductDetailContent = ({
               </button>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button className="border-border/50 text-muted-foreground hover:bg-muted rounded-full border p-2.5 transition-all outline-none">
+                  <button
+                    aria-label="Share product"
+                    className="border-border/50 text-muted-foreground hover:bg-muted rounded-full border p-2.5 transition-all outline-none"
+                  >
                     <Share2 size={20} />
                   </button>
                 </DropdownMenuTrigger>
@@ -385,9 +389,9 @@ const ProductDetailContent = ({
             {product.variants && product.variants.length > 0 && (
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-foreground text-sm font-black tracking-[0.2em] uppercase">
+                  <h2 className="text-foreground text-sm font-black tracking-[0.2em] uppercase">
                     Select Color
-                  </h3>
+                  </h2>
                   <Badge
                     variant="secondary"
                     className="rounded-lg px-3 py-1 text-[10px] font-black tracking-tighter uppercase"
@@ -412,6 +416,7 @@ const ProductDetailContent = ({
                       src={product.thumbnails?.[0] || '/placeholder.jpg'}
                       alt={product.color}
                       fill
+                      sizes="80px"
                       className="object-cover transition-transform duration-700 group-hover:scale-110"
                     />
                     <div
@@ -451,6 +456,7 @@ const ProductDetailContent = ({
                         src={variant.thumbnails?.[0] || product.thumbnails?.[0]}
                         alt={variant.color}
                         fill
+                        sizes="80px"
                         className="object-cover transition-transform duration-700 group-hover:scale-110"
                       />
                       <div
@@ -481,9 +487,9 @@ const ProductDetailContent = ({
             {/* Size Selection */}
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <h3 className="text-foreground text-sm font-black tracking-widest uppercase">
+                <h2 className="text-foreground text-sm font-black tracking-widest uppercase">
                   Select Size
-                </h3>
+                </h2>
               </div>
               <div className="flex flex-wrap gap-3">
                 {product.sizes.map((size) => {
@@ -627,7 +633,7 @@ const ProductDetailContent = ({
                     onClick={() => handleAddToCart(false)}
                     size="lg"
                     variant="outline"
-                    className="flex-1 rounded-2xl border-2 border-blue-600 py-4 text-sm font-black text-blue-600 transition-all hover:bg-blue-50 active:scale-[0.98]"
+                    className="flex-1 rounded-2xl border-2 border-blue-700 py-4 text-sm font-black text-blue-700 transition-all hover:bg-blue-50 active:scale-[0.98] dark:border-blue-500 dark:text-blue-500 dark:hover:bg-blue-500/10"
                   >
                     Add to Cart <ShoppingCart className="ml-2 h-4 w-4" />
                   </Button>
@@ -694,9 +700,9 @@ const ProductDetailContent = ({
               <TabsContent value="description" className="mt-0">
                 <div className="space-y-8">
                   <div>
-                    <h3 className="text-foreground mb-4 text-xs font-black tracking-[0.2em] uppercase">
+                    <h2 className="text-foreground mb-4 text-xs font-black tracking-[0.2em] uppercase">
                       The Narrative
-                    </h3>
+                    </h2>
                     <HtmlContent
                       content={product.description}
                       className="prose prose-sm dark:prose-invert text-muted-foreground/80 max-w-none text-base leading-relaxed font-medium"
@@ -706,9 +712,9 @@ const ProductDetailContent = ({
                   {/* Mobile Artisanal Details */}
                   {product.details && (
                     <div className="lg:hidden">
-                      <h3 className="text-foreground mb-4 text-xs font-black tracking-[0.2em] uppercase">
+                      <h2 className="text-foreground mb-4 text-xs font-black tracking-[0.2em] uppercase">
                         Artisanal Details
-                      </h3>
+                      </h2>
                       <HtmlContent
                         content={
                           Array.isArray(product.details)

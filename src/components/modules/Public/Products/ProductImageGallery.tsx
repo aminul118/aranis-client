@@ -75,6 +75,7 @@ const ProductImageGallery = ({
                   src={img}
                   alt={`${productName} view ${idx + 1}`}
                   fill
+                  sizes="72px"
                   draggable={false}
                   className="pointer-events-none object-cover"
                 />
@@ -108,6 +109,7 @@ const ProductImageGallery = ({
               src={selectedImage}
               alt={productName}
               fill
+              sizes="(max-width: 1024px) 100vw, 50vw"
               priority
               draggable={false}
               className="pointer-events-none object-cover"
