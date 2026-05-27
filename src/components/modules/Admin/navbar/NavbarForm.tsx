@@ -24,16 +24,10 @@ interface FormValues {
   title: string;
   href: string;
   order: string | number;
-  seoTitle?: string;
-  seoDescription?: string;
-  seoKeywords?: string;
   subItems: {
     title: string;
     href: string;
     items: string | string[];
-    seoTitle?: string;
-    seoDescription?: string;
-    seoKeywords?: string;
   }[];
 }
 
@@ -52,9 +46,6 @@ const NavbarForm = ({ navbar }: Props) => {
       title: navbar?.title || '',
       href: navbar?.href || '',
       order: navbar?.order || 0,
-      seoTitle: navbar?.seoTitle || '',
-      seoDescription: navbar?.seoDescription || '',
-      seoKeywords: navbar?.seoKeywords || '',
       subItems:
         navbar?.subItems?.map((item) => ({
           ...item,
@@ -158,48 +149,6 @@ const NavbarForm = ({ navbar }: Props) => {
           )}
         />
 
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-          <FormField
-            control={form.control}
-            name="seoTitle"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>SEO Title</FormLabel>
-                <FormControl>
-                  <Input placeholder="SEO Title" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="seoDescription"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>SEO Description</FormLabel>
-                <FormControl>
-                  <Input placeholder="SEO Description" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="seoKeywords"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>SEO Keywords</FormLabel>
-                <FormControl>
-                  <Input placeholder="Keyword1, Keyword2" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <FormLabel>Sub Items (Mega Menu)</FormLabel>
@@ -269,51 +218,6 @@ const NavbarForm = ({ navbar }: Props) => {
                       </FormItem>
                     )}
                   />
-
-                  <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-                    <FormField
-                      control={form.control}
-                      name={`subItems.${index}.seoTitle`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Sub-SEO Title</FormLabel>
-                          <FormControl>
-                            <Input placeholder="SEO Title" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name={`subItems.${index}.seoDescription`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Sub-SEO Description</FormLabel>
-                          <FormControl>
-                            <Input placeholder="SEO Description" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name={`subItems.${index}.seoKeywords`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Sub-SEO Keywords</FormLabel>
-                          <FormControl>
-                            <Input
-                              placeholder="Keyword1, Keyword2"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
                 </div>
                 <Button
                   type="button"
