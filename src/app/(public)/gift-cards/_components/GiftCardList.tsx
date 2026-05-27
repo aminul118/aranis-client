@@ -7,6 +7,7 @@ import { ShoppingBag } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { toast } from 'sonner';
+import EmptyGiftCards from './EmptyGiftCards';
 import GiftCardHEader from './GiftCardHEader';
 
 export default function GiftCardList({
@@ -49,11 +50,7 @@ export default function GiftCardList({
   };
 
   if (giftCards.length === 0) {
-    return (
-      <div className="text-muted-foreground py-20 text-center">
-        No gift cards available at the moment. Please check back later.
-      </div>
-    );
+    return <EmptyGiftCards />;
   }
 
   return (
