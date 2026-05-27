@@ -1,6 +1,5 @@
 'use client';
 
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useUser } from '@/context/UserContext';
@@ -10,8 +9,10 @@ import { IOrder, OrderStatus } from '@/services/order/order.types';
 import { IProduct, Role } from '@/types';
 import {
   ArrowLeft,
+  Ban,
   Calendar,
   CheckCircle2,
+  Clock,
   CreditCard,
   Loader2,
   Mail,
@@ -19,13 +20,17 @@ import {
   Package,
   Phone,
   ShoppingBag,
+  Truck,
+  Undo2,
   User,
+  XCircle,
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
+import GetStatusBadge from '../../_components/getStatusBadge';
 import OrderPrint from './OrderPrint';
 
 const STATUS_CONFIG: Record<
@@ -72,6 +77,29 @@ const STATUS_CONFIG: Record<
     bg: 'bg-slate-500/10 border-slate-500/20',
     label: 'Returned',
   },
+};
+
+const getStatusIcon = (status: OrderStatus, size = 14) => {
+  switch (status) {
+    case OrderStatus.PENDING:
+      return <Clock size={size} />;
+    case OrderStatus.PROCESSING:
+      return <Loader2 size={size} className="animate-spin" />;
+    case OrderStatus.SHIPPED:
+      return <Truck size={size} />;
+    case OrderStatus.COURIER:
+      return <Package size={size} />;
+    case OrderStatus.DELIVERED:
+      return <CheckCircle2 size={size} />;
+    case OrderStatus.CANCELLED:
+      return <XCircle size={size} />;
+    case OrderStatus.REJECTED:
+      return <Ban size={size} />;
+    case OrderStatus.RETURNED:
+      return <Undo2 size={size} />;
+    default:
+      return null;
+  }
 };
 
 const ALL_STATUSES = Object.values(OrderStatus);
@@ -133,12 +161,9 @@ const OrderDetailsView = ({ order }: { order: IOrder }) => {
                 #{order._id?.slice(-6).toUpperCase()}
               </span>
             </h1>
-            <Badge
-              variant="outline"
-              className={`${cfg.bg} ${cfg.color} rounded-full border px-3 py-1 font-bold`}
-            >
-              {currentStatus}
-            </Badge>
+            <div className="origin-left scale-110">
+              {GetStatusBadge(currentStatus)}
+            </div>
           </div>
           <div className="text-muted-foreground mt-2 flex items-center gap-2 text-sm">
             <Calendar size={14} />
@@ -201,9 +226,9 @@ const OrderDetailsView = ({ order }: { order: IOrder }) => {
                 >
                   {updating && isActive ? (
                     <Loader2 size={14} className="animate-spin" />
-                  ) : isActive ? (
-                    <CheckCircle2 size={14} />
-                  ) : null}
+                  ) : (
+                    getStatusIcon(s)
+                  )}
                   {sCfg.label}
                 </button>
               );
@@ -327,7 +352,10 @@ const OrderDetailsView = ({ order }: { order: IOrder }) => {
                         >
                           <td className="px-6 py-4">
                             <div className="flex items-center gap-4">
-                              <div className="bg-muted border-border/50 relative h-12 w-12 shrink-0 overflow-hidden rounded-lg border">
+                              <Link
+                                href={`/admin/products/${product?._id}`}
+                                className="bg-muted border-border/50 relative block h-12 w-12 shrink-0 overflow-hidden rounded-lg border"
+                              >
                                 <Image
                                   src={
                                     product?.thumbnails?.[0] ||
@@ -337,11 +365,14 @@ const OrderDetailsView = ({ order }: { order: IOrder }) => {
                                   fill
                                   className="object-cover transition-transform duration-500 group-hover:scale-110"
                                 />
-                              </div>
+                              </Link>
                               <div className="min-w-0">
-                                <p className="text-foreground truncate text-sm font-bold">
+                                <Link
+                                  href={`/admin/products/${product?._id}`}
+                                  className="text-foreground truncate text-sm font-bold transition-colors hover:text-blue-500"
+                                >
                                   {product?.name || 'Product Deleted'}
-                                </p>
+                                </Link>
                                 <div className="text-muted-foreground mt-0.5 flex flex-wrap items-center gap-1.5 text-[10px] font-semibold tracking-wider uppercase">
                                   <span>{product?.category || 'N/A'}</span>
                                   {item.color && (

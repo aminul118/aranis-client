@@ -40,11 +40,8 @@ const PopupBannerTable = ({ banners, meta }: Props) => {
       tableTitle="Popup Banners"
       meta={meta}
       action={
-        <Button
-          onClick={() => handleOpen()}
-          className="rounded-full bg-blue-600 px-8 font-black text-white hover:bg-blue-700"
-        >
-          <Plus className="mr-2 h-5 w-5" />
+        <Button onClick={() => handleOpen()}>
+          <Plus className="mr-2 h-4 w-4" />
           Add New
         </Button>
       }

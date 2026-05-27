@@ -5,6 +5,7 @@ import ChatFloatingButton from '@/components/layouts/Navbar/ChatFloatingButton';
 import MobileBottomNav from '@/components/layouts/Navbar/MobileBottomNav';
 import Navbar from '@/components/layouts/Navbar/Navbar';
 import { getNavbars } from '@/services/navbar/navbar';
+import { getOffers } from '@/services/offer/offer';
 import { getSiteSettings } from '@/services/settings/settings';
 import { getMe } from '@/services/user/users';
 import { Children } from '@/types';
@@ -20,13 +21,15 @@ const RootLayout = async ({ children }: Children) => {
     // Gracefully handle unauthenticated user
   }
 
-  const [navItemsRes, siteSettingsRes] = await Promise.all([
+  const [navItemsRes, siteSettingsRes, offersRes] = await Promise.all([
     getNavbars({ limit: '1000' }),
     getSiteSettings(),
+    getOffers(),
   ]);
 
   const navItems = navItemsRes?.data || [];
   const siteSettings = siteSettingsRes?.data;
+  const activeOffers = offersRes?.data || [];
 
   const sortedNavItems = [...navItems].sort((a, b) => a.order - b.order);
 
@@ -35,6 +38,7 @@ const RootLayout = async ({ children }: Children) => {
       <Navbar
         user={user as any}
         navItems={sortedNavItems as any}
+        activeOffers={activeOffers}
         logo={<Logo className="text-white" />}
         siteSettings={siteSettings}
       />

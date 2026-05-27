@@ -8,6 +8,8 @@ import TopBar from './TopBar';
 
 interface DesktopNavbarProps {
   user: IUser | null;
+  navItems: any[];
+  activeOffers: any[];
   logo?: React.ReactNode;
   siteSettings?: any;
   totalItems: number;
@@ -16,6 +18,8 @@ interface DesktopNavbarProps {
 
 const DesktopNavbar = ({
   user,
+  navItems,
+  activeOffers,
   logo,
   siteSettings,
   totalItems,
@@ -30,10 +34,14 @@ const DesktopNavbar = ({
         totalItems={totalItems}
         wishlistCount={wishlistCount}
       />
+
       <Suspense
         fallback={<div className="h-14 w-full bg-white dark:bg-[#0a0a0a]" />}
       >
-        <CategoryBar />
+        <CategoryBar
+          initialNavItems={navItems}
+          initialActiveOffers={activeOffers}
+        />
       </Suspense>
     </div>
   );

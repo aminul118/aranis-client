@@ -3,6 +3,7 @@ import { Column } from '@/components/common/table/TableManageMent';
 import { IOrder, OrderStatus } from '@/services/order/order.types';
 import Link from 'next/link';
 import OrderActions from './OrderActions';
+import GetStatusBadge from './getStatusBadge';
 
 const OrdersColumn: Column<IOrder>[] = [
   {
@@ -61,13 +62,7 @@ const OrdersColumn: Column<IOrder>[] = [
   },
   {
     header: 'Status',
-    accessor: (o) => (
-      <span
-        className={`rounded-full px-2 py-0.5 text-xs font-medium ${o.status === OrderStatus.DELIVERED ? 'bg-green-500/10 text-green-500' : 'bg-amber-500/10 text-amber-500'}`}
-      >
-        {o.status}
-      </span>
-    ),
+    accessor: (o) => GetStatusBadge(o.status as OrderStatus),
     sortKey: 'status',
   },
   {

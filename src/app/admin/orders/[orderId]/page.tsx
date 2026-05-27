@@ -1,4 +1,4 @@
-import OrderDetailsView from '@/app/admin/orders/_components/OrderDetailsView';
+import OrderDetailsView from '@/app/admin/orders/[orderId]/_components/OrderDetailsView';
 import { getSingleOrder } from '@/services/order/order';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';

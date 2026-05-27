@@ -14,8 +14,44 @@ import useActionHandler from '@/hooks/useActionHandler';
 import { updateOrderStatus } from '@/services/order/order';
 import { IOrder, OrderStatus } from '@/services/order/order.types';
 import { Role } from '@/types';
-import { EllipsisIcon, RefreshCcw } from 'lucide-react';
+import {
+  Ban,
+  Check,
+  CheckCircle2,
+  Clock,
+  EllipsisIcon,
+  Eye,
+  Loader2,
+  Package,
+  RefreshCcw,
+  Truck,
+  Undo2,
+  XCircle,
+} from 'lucide-react';
 import { useRouter } from 'next/navigation';
+
+const getStatusIcon = (status: OrderStatus) => {
+  switch (status) {
+    case OrderStatus.PENDING:
+      return <Clock size={14} className="mr-2 text-amber-500" />;
+    case OrderStatus.PROCESSING:
+      return <Loader2 size={14} className="mr-2 animate-spin text-blue-500" />;
+    case OrderStatus.SHIPPED:
+      return <Truck size={14} className="mr-2 text-purple-500" />;
+    case OrderStatus.COURIER:
+      return <Package size={14} className="mr-2 text-indigo-500" />;
+    case OrderStatus.DELIVERED:
+      return <CheckCircle2 size={14} className="mr-2 text-emerald-500" />;
+    case OrderStatus.CANCELLED:
+      return <XCircle size={14} className="mr-2 text-red-500" />;
+    case OrderStatus.REJECTED:
+      return <Ban size={14} className="mr-2 text-red-600" />;
+    case OrderStatus.RETURNED:
+      return <Undo2 size={14} className="mr-2 text-orange-500" />;
+    default:
+      return <Check size={14} className="mr-2 text-gray-500" />;
+  }
+};
 
 const OrderActions = ({ order }: { order: IOrder }) => {
   const router = useRouter();
@@ -62,10 +98,10 @@ const OrderActions = ({ order }: { order: IOrder }) => {
         <DropdownMenuLabel>Actions</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem
-          className="cursor-pointer"
+          className="flex cursor-pointer items-center"
           onClick={() => router.push(`/admin/orders/${order._id}`)}
         >
-          View Details
+          <Eye size={14} className="mr-2 text-blue-500" /> View Details
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuLabel>Update Status</DropdownMenuLabel>
@@ -81,9 +117,12 @@ const OrderActions = ({ order }: { order: IOrder }) => {
               onClick={() => handleStatusUpdate(status)}
               disabled={order.status === status}
             >
-              <span>{status}</span>
+              <div className="flex items-center">
+                {getStatusIcon(status)}
+                <span>{status}</span>
+              </div>
               {order.status === status && (
-                <RefreshCcw className="text-primary h-3 w-3 animate-spin" />
+                <RefreshCcw className="text-primary ml-2 h-3 w-3 animate-spin" />
               )}
             </DropdownMenuItem>
           );

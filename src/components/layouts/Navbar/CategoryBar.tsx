@@ -2,16 +2,21 @@
 
 import { toUrlSlug } from '@/lib/url-slugs';
 import { cn } from '@/lib/utils';
-import { getNavbars, INavItem } from '@/services/navbar/navbar';
 import { ChevronDown } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-const CategoryBar = () => {
+const CategoryBar = ({
+  initialNavItems = [],
+  initialActiveOffers = [],
+}: {
+  initialNavItems?: any[];
+  initialActiveOffers?: any[];
+}) => {
   const pathname = usePathname();
-  const [navItems, setNavItems] = useState<INavItem[]>([]);
-  const [activeOffers, setActiveOffers] = useState<any[]>([]);
+  const [navItems, setNavItems] = useState<any[]>(initialNavItems);
+  const [activeOffers, setActiveOffers] = useState<any[]>(initialActiveOffers);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const pathSegments = pathname.split('/').filter(Boolean);
   const currentCategorySlug = pathSegments[0];
@@ -19,27 +24,9 @@ const CategoryBar = () => {
   const currentItemSlug = pathSegments[2];
 
   useEffect(() => {
-    const fetchNav = async () => {
-      const res = await getNavbars({ limit: '1000' });
-      if (res?.success) {
-        const sortedItems = (res.data || []).sort(
-          (a, b) => (a.order || 0) - (b.order || 0),
-        );
-        setNavItems(sortedItems);
-      }
-    };
-
-    const fetchActiveOffers = async () => {
-      // Import getOffers from offer service
-      const res = await fetch('/api/v1/offers').then((r) => r.json());
-      if (res?.success) {
-        setActiveOffers(res.data);
-      }
-    };
-
-    fetchNav();
-    fetchActiveOffers();
-  }, []);
+    setNavItems(initialNavItems);
+    setActiveOffers(initialActiveOffers);
+  }, [initialNavItems, initialActiveOffers]);
 
   return (
     <div className="dark:bg-background relative hidden w-full overflow-visible border-b border-gray-100 bg-white transition-colors lg:block dark:border-white/5">

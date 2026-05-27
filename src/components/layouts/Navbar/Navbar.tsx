@@ -13,11 +13,13 @@ import { NavMenu } from './nav-menu';
 const Navbar = ({
   user,
   navItems = [],
+  activeOffers = [],
   logo,
   siteSettings,
 }: {
   user: IUser | null;
   navItems?: NavMenu[];
+  activeOffers?: any[];
   logo?: React.ReactNode;
   siteSettings?: any;
 }) => {
@@ -83,6 +85,8 @@ const Navbar = ({
     >
       <DesktopNavbar
         user={user}
+        navItems={navItems as any}
+        activeOffers={activeOffers}
         logo={logo}
         siteSettings={siteSettings}
         totalItems={totalItems}
