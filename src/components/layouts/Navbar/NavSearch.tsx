@@ -100,7 +100,7 @@ const NavSearch = () => {
         aria-label="Open search"
         className="group relative hidden max-w-2xl flex-1 sm:flex"
       >
-        <div className="flex w-full items-center justify-between rounded-md border border-gray-100 bg-gray-50 px-4 py-2.5 pr-12 text-left text-sm text-gray-400 transition-all outline-none group-hover:border-blue-500/30 dark:border-white/5">
+        <div className="flex w-full items-center justify-between rounded-md border border-gray-100 bg-gray-50 px-4 py-2.5 pr-12 text-left text-sm text-gray-500 transition-all outline-none group-hover:border-blue-500/30 dark:border-white/5">
           <span>Search products...</span>
         </div>
         <div className="absolute top-1 right-1 bottom-1 flex items-center justify-center rounded bg-black p-4 text-white transition-colors">

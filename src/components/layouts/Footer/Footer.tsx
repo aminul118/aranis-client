@@ -46,9 +46,9 @@ const Footer = ({
 
           {/* Quick Links */}
           <div>
-            <h3 className="mb-5 text-[10px] font-black tracking-[0.2em] text-white uppercase italic">
+            <h2 className="mb-5 text-[10px] font-black tracking-[0.2em] text-white uppercase italic">
               Quick Links
-            </h3>
+            </h2>
             <ul className="space-y-3">
               {navItems.map(({ title, href }) => (
                 <li key={title}>
@@ -66,9 +66,9 @@ const Footer = ({
 
           {/* Customer Service */}
           <div>
-            <h3 className="mb-5 text-[10px] font-black tracking-[0.2em] text-white uppercase italic">
+            <h2 className="mb-5 text-[10px] font-black tracking-[0.2em] text-white uppercase italic">
               Support
-            </h3>
+            </h2>
             <ul className="space-y-3">
               {[
                 { title: 'Track Order', href: '/track-order' },
@@ -92,9 +92,9 @@ const Footer = ({
 
           {/* Contact Us */}
           <div>
-            <h3 className="mb-5 text-[10px] font-black tracking-[0.2em] text-white uppercase italic">
+            <h2 className="mb-5 text-[10px] font-black tracking-[0.2em] text-white uppercase italic">
               Contact Us
-            </h3>
+            </h2>
             <div className="space-y-4">
               <div className="flex items-start gap-3">
                 <div className="mt-1 rounded-lg bg-blue-500/10 p-2 text-blue-400">
@@ -135,7 +135,7 @@ const Footer = ({
 
         {/* Bottom Bar */}
         <div className="mt-6 flex flex-col items-center justify-between gap-4 sm:flex-row">
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-slate-400">
             © {new Date().getFullYear()}{' '}
             <span className="text-slate-400">Aranis Fashion</span>. All rights
             reserved.
@@ -143,7 +143,7 @@ const Footer = ({
 
           <ThemeToggle />
 
-          <p className="hidden items-center gap-1.5 text-xs text-slate-500 lg:flex">
+          <p className="hidden items-center gap-1.5 text-xs text-slate-400 lg:flex">
             Developed by
             <Link target="_blank" href="https://rangdhanuit.com">
               <span className="font-medium text-slate-400">Rangdhanu IT</span>

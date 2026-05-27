@@ -307,6 +307,7 @@ const ChatFloatingButton = ({
 
           <button
             onClick={() => setIsOpen(!isOpen)}
+            aria-label={isOpen ? 'Close chat window' : 'Open chat window'}
             className="group relative flex h-14 w-14 items-center justify-center rounded-full bg-blue-600 text-white shadow-lg transition-all hover:scale-110 hover:shadow-blue-600/40 active:scale-95"
           >
             {unreadCount > 0 && !isOpen && (

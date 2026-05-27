@@ -16,6 +16,8 @@ function Avatar({
     <AvatarPrimitive.Root
       data-slot="avatar"
       data-size={size}
+      role="img"
+      aria-label="User avatar"
       className={cn(
         'group/avatar relative flex size-8 shrink-0 overflow-hidden rounded-full select-none data-[size=lg]:size-10 data-[size=sm]:size-6',
         className,

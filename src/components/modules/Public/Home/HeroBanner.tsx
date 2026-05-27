@@ -125,7 +125,7 @@ const HeroBanner = ({ mainSlides, miniBanners }: HeroBannerProps) => {
                     <button
                       key={s._id ?? i}
                       onClick={() => goTo(i)}
-                      className={`h-1.5 rounded-full transition-all duration-300 ${
+                      className={`box-content h-1.5 rounded-full bg-clip-content p-2 transition-all duration-300 ${
                         i === current
                           ? 'w-6 bg-white'
                           : 'w-1.5 bg-white/40 hover:bg-white/70'

@@ -4,7 +4,7 @@ const nextConfig: NextConfig = {
   experimental: {
     authInterrupts: true,
     serverActions: {
-      bodySizeLimit: '10mb', // increase limit (you can use 20mb if needed)
+      bodySizeLimit: '10mb',
     },
     staleTimes: {
       dynamic: 0,
@@ -16,28 +16,11 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'res.cloudinary.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'images.unsplash.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'placehold.co',
-      },
-      {
-        protocol: 'https',
-        hostname: 'pub-8cc674862c474468be0fca8792ce7a3f.r2.dev',
-      },
-      {
-        protocol: 'https',
         hostname: 'cdn.thearanis.com',
       },
     ],
   },
 
-  // Enable source maps in production
   productionBrowserSourceMaps: true,
 
   redirects: async () => {

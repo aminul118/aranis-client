@@ -32,7 +32,7 @@ const ThemeToggle = () => {
             whileTap={{ scale: 0.9 }}
             whileHover={{ scale: 1.05 }}
             transition={{ type: 'spring', stiffness: 400, damping: 20 }}
-            className={`relative flex items-center justify-center rounded-full p-1 ${
+            className={`relative flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full p-2 ${
               isActive
                 ? 'text-primary-foreground'
                 : 'text-muted-foreground hover:text-foreground'

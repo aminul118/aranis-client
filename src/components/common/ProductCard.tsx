@@ -100,6 +100,7 @@ const ProductCard = ({
             src={primaryThumbnail}
             alt={product.name}
             fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             className="object-cover transition-transform duration-1000 ease-out group-hover:scale-110"
           />
           {secondaryThumbnail && (
@@ -108,6 +109,7 @@ const ProductCard = ({
               src={secondaryThumbnail}
               alt={`${product.name} - View 2`}
               fill
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
               className="object-cover opacity-0 transition-all duration-1000 ease-out group-hover:scale-110 group-hover:opacity-100"
             />
           )}
@@ -139,6 +141,7 @@ const ProductCard = ({
             e.stopPropagation();
             toggleWishlist(product);
           }}
+          aria-label={wishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
           className={cn(
             'absolute top-4 right-4 z-20 flex h-9 w-9 items-center justify-center rounded-full transition-all duration-500 active:scale-90',
             wishlisted
@@ -162,14 +165,14 @@ const ProductCard = ({
         )}
       >
         <div className="mb-1 flex items-center justify-between">
-          <p className="text-muted-foreground/60 text-[10px] font-bold tracking-[0.15em] uppercase">
+          <p className="text-muted-foreground/80 text-[10px] font-bold tracking-[0.15em] uppercase">
             {product.category || 'Collection'}
           </p>
         </div>
 
-        <h3 className="mb-3 line-clamp-1 text-sm font-bold tracking-tight text-zinc-900 transition-colors group-hover:text-blue-500 dark:text-white">
+        <h2 className="mb-3 line-clamp-1 text-sm font-bold tracking-tight text-zinc-900 transition-colors group-hover:text-blue-500 dark:text-white">
           {product.name}
-        </h3>
+        </h2>
 
         {isList && (
           <p className="text-muted-foreground mb-6 line-clamp-2 text-xs leading-relaxed">
@@ -197,6 +200,7 @@ const ProductCard = ({
 
           <Button
             size="icon"
+            aria-label="Add to cart"
             disabled={product.stock < 1}
             onClick={(e) => {
               e.preventDefault();

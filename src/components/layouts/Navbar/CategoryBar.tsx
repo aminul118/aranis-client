@@ -64,8 +64,8 @@ const CategoryBar = () => {
                     className={cn(
                       'relative flex h-full items-center gap-2 px-4 py-4 text-[10px] font-black tracking-widest whitespace-nowrap uppercase transition-all',
                       isCategoryActive || hoveredItem === item._id
-                        ? 'text-blue-600'
-                        : 'text-gray-600 hover:text-blue-600 dark:text-gray-400',
+                        ? 'text-blue-700 dark:text-blue-500'
+                        : 'text-gray-700 hover:text-blue-700 dark:text-gray-300',
                     )}
                   >
                     <span>{item.title}</span>

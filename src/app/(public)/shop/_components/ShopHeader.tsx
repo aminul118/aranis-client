@@ -93,6 +93,7 @@ const ShopHeader = ({
                   : 'text-zinc-500 hover:bg-black/5 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-white/5 dark:hover:text-white',
               )}
               onClick={() => onUpdateURL({ view: 'grid' })}
+              aria-label="Grid view"
             >
               <LayoutGrid size={20} />
             </Button>
@@ -106,6 +107,7 @@ const ShopHeader = ({
                   : 'text-zinc-500 hover:bg-black/5 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-white/5 dark:hover:text-white',
               )}
               onClick={() => onUpdateURL({ view: 'list' })}
+              aria-label="List view"
             >
               <List size={20} />
             </Button>
@@ -195,7 +197,10 @@ const ShopHeader = ({
             value={sortBy}
             onValueChange={(value) => onUpdateURL({ sort: value })}
           >
-            <SelectTrigger className="!h-12 flex-1 rounded-full border border-black/10 bg-white/70 px-6 font-bold text-zinc-800 shadow-sm ring-offset-0 transition-all hover:bg-white focus:ring-0 sm:w-[200px] sm:flex-none dark:border-white/10 dark:bg-white/[0.03] dark:text-white dark:shadow-2xl dark:hover:bg-white/[0.05]">
+            <SelectTrigger
+              aria-label="Sort options"
+              className="!h-12 flex-1 rounded-full border border-black/10 bg-white/70 px-6 font-bold text-zinc-800 shadow-sm ring-offset-0 transition-all hover:bg-white focus:ring-0 sm:w-[200px] sm:flex-none dark:border-white/10 dark:bg-white/[0.03] dark:text-white dark:shadow-2xl dark:hover:bg-white/[0.05]"
+            >
               <SelectValue placeholder="Sort by" />
             </SelectTrigger>
             <SelectContent className="shadow-3xl rounded-[20px] border-black/10 bg-white text-zinc-800 backdrop-blur-xl dark:border-white/10 dark:bg-[#151722] dark:text-white">

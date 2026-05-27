@@ -37,6 +37,7 @@ const Logo = async ({ className, logoUrl }: Props) => {
         width={180}
         alt="Aranis logo"
         priority={true}
+        fetchPriority="high"
         className="object-contain"
       />
     </Link>

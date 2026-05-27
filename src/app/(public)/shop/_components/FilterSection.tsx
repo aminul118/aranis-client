@@ -282,10 +282,14 @@ const FilterSection = ({
 
           <div className="mt-4 flex items-center gap-3">
             <div className="flex flex-1 flex-col gap-1">
-              <label className="text-muted-foreground text-[9px] font-bold tracking-wider uppercase">
+              <label
+                htmlFor="minPrice"
+                className="text-muted-foreground text-[9px] font-bold tracking-wider uppercase"
+              >
                 Min Price
               </label>
               <input
+                id="minPrice"
                 type="number"
                 min={globalMin}
                 max={globalMax}
@@ -324,10 +328,14 @@ const FilterSection = ({
               />
             </div>
             <div className="flex flex-1 flex-col gap-1">
-              <label className="text-muted-foreground text-[9px] font-bold tracking-wider uppercase">
+              <label
+                htmlFor="maxPrice"
+                className="text-muted-foreground text-[9px] font-bold tracking-wider uppercase"
+              >
                 Max Price
               </label>
               <input
+                id="maxPrice"
                 type="number"
                 min={globalMin}
                 max={globalMax}
@@ -389,6 +397,7 @@ const FilterSection = ({
                   onClick={() =>
                     onToggleMultiFilter('color', color.name, selectedColors)
                   }
+                  aria-label={`Filter by color ${color.name}`}
                   className={cn(
                     'relative grid h-11 w-11 place-items-center rounded-full border shadow-sm transition',
                     active
