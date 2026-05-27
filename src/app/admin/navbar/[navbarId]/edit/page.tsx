@@ -1,4 +1,5 @@
 import NavbarForm from '@/app/admin/_components/NavbarForm';
+import BackButton from '@/components/common/BackButton';
 import ClientTableWrapper from '@/components/common/wrapper/ClientTableWrapper';
 import { getSingleNavbar } from '@/services/navbar/navbar';
 
@@ -11,7 +12,7 @@ export default async function EditNavbarPage({
   const { data } = await getSingleNavbar(navbarId);
 
   return (
-    <ClientTableWrapper tableTitle="Edit navbar item">
+    <ClientTableWrapper tableTitle="Edit navbar item" action={<BackButton />}>
       <NavbarForm navbar={data} />
     </ClientTableWrapper>
   );

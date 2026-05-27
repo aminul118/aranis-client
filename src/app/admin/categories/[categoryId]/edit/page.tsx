@@ -1,4 +1,5 @@
 import CategoryForm from '@/app/admin/categories/_components/CategoryForm';
+import BackButton from '@/components/common/BackButton';
 import ClientTableWrapper from '@/components/common/wrapper/ClientTableWrapper';
 import { getSingleCategory } from '@/services/category/category';
 
@@ -11,7 +12,7 @@ export default async function EditCategoryPage({
   const { data } = await getSingleCategory(categoryId);
 
   return (
-    <ClientTableWrapper tableTitle="Edit category">
+    <ClientTableWrapper tableTitle="Edit category" action={<BackButton />}>
       <CategoryForm category={data} />
     </ClientTableWrapper>
   );

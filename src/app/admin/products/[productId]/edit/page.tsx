@@ -1,4 +1,5 @@
 import ProductForm from '@/app/admin/products/_components/ProductForm';
+import BackButton from '@/components/common/BackButton';
 import ClientTableWrapper from '@/components/common/wrapper/ClientTableWrapper';
 import { getCategories } from '@/services/category/category';
 import { getColors } from '@/services/color/color';
@@ -30,7 +31,7 @@ export default async function EditProductPage({
   ]);
 
   return (
-    <ClientTableWrapper tableTitle="Edit product">
+    <ClientTableWrapper tableTitle="Edit product" action={<BackButton />}>
       <ProductForm
         product={productRes.data}
         categories={categoriesRes.data || []}

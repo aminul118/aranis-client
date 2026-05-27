@@ -1,4 +1,5 @@
 import ProductForm from '@/app/admin/products/_components/ProductForm';
+import BackButton from '@/components/common/BackButton';
 import ClientTableWrapper from '@/components/common/wrapper/ClientTableWrapper';
 import { getCategories } from '@/services/category/category';
 import { getColors } from '@/services/color/color';
@@ -17,7 +18,7 @@ export default async function CreateProductPage() {
     ]);
 
   return (
-    <ClientTableWrapper tableTitle="Create new product">
+    <ClientTableWrapper tableTitle="Create new product" action={<BackButton />}>
       <ProductForm
         categories={categoriesRes.data || []}
         colors={colorsRes.data || []}
