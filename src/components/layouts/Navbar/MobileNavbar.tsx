@@ -12,7 +12,6 @@ import { ChevronDown, Clock, LayoutGrid, LogOut, User, X } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { Dispatch, SetStateAction, useState } from 'react';
-import { toast } from 'sonner';
 import NotificationBell from '../shared/NotificationBell';
 import { NavMenu } from './nav-menu';
 import NavSearch from './NavSearch';
@@ -99,7 +98,6 @@ const Mobile = ({ navItems, setMenuOpen, logo, user }: MobileProps) => {
   const handleLogout = async () => {
     setLoading(true);
     await logOut();
-    toast.success('Successfully Logged Out');
     setMenuOpen(false);
     router.push('/login');
     router.refresh();

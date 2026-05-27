@@ -20,6 +20,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import useActionHandler from '@/hooks/useActionHandler';
+import { formatRole } from '@/lib/utils';
 import { updateUser, updateUserWithFormData } from '@/services/user/users';
 import { IUser } from '@/types/api.types';
 import { userUpdateSchema, UserUpdateValues } from '@/zod/auth';
@@ -140,7 +141,8 @@ const UpdateProfileForm = ({ user, setIsEditing }: Props) => {
               <CardTitle className="text-2xl">{displayFullName}</CardTitle>
               <CardDescription>{user.email}</CardDescription>
               <div className="text-muted-foreground mt-2 text-sm">
-                Role: <span className="capitalize">{user.role}</span>
+                Role:{' '}
+                <span className="font-semibold">{formatRole(user.role)}</span>
               </div>
             </div>
           </div>
@@ -177,24 +179,6 @@ const UpdateProfileForm = ({ user, setIsEditing }: Props) => {
                   </FormItem>
                 )}
               />
-              <div className="md:col-span-2">
-                <FormField
-                  control={form.control}
-                  name="picture"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Profile Picture URL</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="https://example.com/avatar.jpg"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
             </div>
 
             <div className="flex justify-end gap-2">

@@ -65,7 +65,7 @@ const AddressManagement = ({ user }: Props) => {
   };
 
   return (
-    <div className="mt-6">
+    <>
       <CardHeader className="flex flex-row items-center justify-between">
         <div>
           <CardTitle className="text-xl">Saved Addresses</CardTitle>
@@ -171,7 +171,7 @@ const AddressManagement = ({ user }: Props) => {
           </div>
         )}
       </CardContent>
-    </div>
+    </>
   );
 };
 

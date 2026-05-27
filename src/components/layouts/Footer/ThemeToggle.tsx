@@ -1,5 +1,10 @@
 'use client';
 
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { motion } from 'framer-motion';
 import { Monitor, Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
@@ -24,31 +29,39 @@ const ThemeToggle = () => {
         const isActive = theme === value;
 
         return (
-          <motion.button
-            key={value}
-            onClick={() => setTheme(value)}
-            title={label}
-            aria-label={`Switch to ${label} theme`}
-            whileTap={{ scale: 0.9 }}
-            whileHover={{ scale: 1.05 }}
-            transition={{ type: 'spring', stiffness: 400, damping: 20 }}
-            className={`relative flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full p-2 ${
-              isActive
-                ? 'text-primary-foreground'
-                : 'text-muted-foreground hover:text-foreground'
-            }`}
-          >
-            {isActive && (
-              <motion.span
-                layoutId="footer-theme-pill"
-                className="bg-primary absolute inset-0 rounded-full"
-                transition={{ type: 'spring', stiffness: 350, damping: 25 }}
-              />
-            )}
+          <Tooltip key={value} delayDuration={300}>
+            <TooltipTrigger asChild>
+              <motion.button
+                onClick={() => setTheme(value)}
+                aria-label={`Switch to ${label} theme`}
+                whileTap={{ scale: 0.9 }}
+                whileHover={{ scale: 1.05 }}
+                transition={{ type: 'spring', stiffness: 400, damping: 20 }}
+                className={`relative flex h-6 w-6 items-center justify-center rounded-full ${
+                  isActive
+                    ? 'text-primary-foreground'
+                    : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                {isActive && (
+                  <motion.span
+                    layoutId="footer-theme-pill"
+                    className="bg-primary absolute inset-0 rounded-full"
+                    transition={{ type: 'spring', stiffness: 350, damping: 25 }}
+                  />
+                )}
 
-            {/* Smaller icon */}
-            <Icon className="relative z-10 h-3 w-3" />
-          </motion.button>
+                <Icon className="relative z-10 h-3.5 w-3.5" />
+              </motion.button>
+            </TooltipTrigger>
+            <TooltipContent
+              side="top"
+              sideOffset={12}
+              className="text-[10px] font-bold tracking-widest uppercase"
+            >
+              {label}
+            </TooltipContent>
+          </Tooltip>
         );
       })}
     </div>

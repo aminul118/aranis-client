@@ -6,7 +6,6 @@ import { logOut } from '@/services/auth/logout';
 import { LogOut } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { toast } from 'sonner';
 
 const LogOutDropDown = ({ className }: { className?: string }) => {
   const [loading, setLoading] = useState(false);
@@ -15,7 +14,6 @@ const LogOutDropDown = ({ className }: { className?: string }) => {
   const handleLogout = async () => {
     setLoading(true);
     await logOut();
-    toast.success('User Logout');
     router.push('/login');
   };
 

@@ -27,3 +27,14 @@ export const extractPlainText = (content?: string): string => {
     return content.replace(/<[^>]*>?/gm, '');
   }
 };
+
+export const formatRole = (role?: string): string => {
+  if (!role) return '';
+  if (role === 'SUPER_ADMIN') return 'Super Admin';
+  if (role === 'ADMIN') return 'Admin';
+  if (role === 'USER') return 'User';
+  return (
+    role.charAt(0).toUpperCase() +
+    role.slice(1).toLowerCase().replace(/_/g, ' ')
+  );
+};

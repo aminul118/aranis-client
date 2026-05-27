@@ -91,7 +91,7 @@ const ProductCard = ({
           'relative overflow-hidden bg-zinc-100 dark:bg-zinc-800',
           isList
             ? 'aspect-square w-40 shrink-0 sm:w-64'
-            : 'aspect-[3.8/5] w-full',
+            : 'aspect-[4/5] w-full',
         )}
       >
         <AnimatePresence mode="wait">

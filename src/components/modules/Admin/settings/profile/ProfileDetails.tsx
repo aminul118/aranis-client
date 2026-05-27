@@ -8,6 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { formatRole } from '@/lib/utils';
 import { IUser } from '@/types/api.types';
 import { PencilLine } from 'lucide-react';
 
@@ -42,7 +43,8 @@ const ProfileDetails = ({ user, setIsEditing }: Props) => {
               <CardTitle className="text-2xl">{displayFullName}</CardTitle>
               <CardDescription>{user.email}</CardDescription>
               <div className="text-muted-foreground mt-2 text-sm">
-                Role: <span className="capitalize">{user.role}</span>
+                Role:{' '}
+                <span className="font-semibold">{formatRole(user.role)}</span>
               </div>
             </div>
           </div>
@@ -68,7 +70,7 @@ const ProfileDetails = ({ user, setIsEditing }: Props) => {
           </div>
           <div className="space-y-1">
             <h3 className="text-muted-foreground text-sm font-medium">Role</h3>
-            <p className="text-lg font-medium capitalize">{user.role}</p>
+            <p className="text-lg font-medium">{formatRole(user.role)}</p>
           </div>
           <div className="space-y-1">
             <h3 className="text-muted-foreground text-sm font-medium">

@@ -21,7 +21,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
 import AlertPopUp from './AlertPopUp';
 
 type AlertState = {
@@ -54,7 +53,6 @@ const LoginForm = () => {
       if (loginMode === 'otp') {
         const res = await requestOTP(values.identifier);
         if (res.success) {
-          toast.success('OTP sent to your email/phone');
           router.push(
             `/verify?identifier=${encodeURIComponent(values.identifier)}${redirect ? `&redirect=${redirect}` : ''}`,
           );
@@ -72,7 +70,6 @@ const LoginForm = () => {
           password: values.password,
         });
         if (res.success) {
-          toast.success('Logged in successfully');
           if (redirect) {
             window.location.href = redirect.startsWith('/')
               ? redirect

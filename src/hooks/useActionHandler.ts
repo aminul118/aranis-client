@@ -30,10 +30,13 @@ const useActionHandler = () => {
     success,
     errorMessage = 'Something went wrong',
   }: ExecuteOptions<T>): Promise<boolean> => {
-    if (isPending) return false; //  prevent double click
+    if (isPending) return false;
 
     setIsPending(true);
-    const toastId = toast.loading(success?.loadingText || 'Processing...');
+    let toastId: string | number | undefined;
+    if (success?.loadingText) {
+      toastId = toast.loading(success.loadingText);
+    }
 
     try {
       const res = await action();
@@ -41,9 +44,11 @@ const useActionHandler = () => {
       logger.info('API RESPONSE:', res);
 
       if (res?.success) {
-        toast.success(res.message || success?.message || 'Success', {
-          id: toastId,
-        });
+        if (success?.message) {
+          toast.success(success.message, { id: toastId });
+        } else if (toastId) {
+          toast.dismiss(toastId);
+        }
 
         success?.onSuccess?.(res.data);
 

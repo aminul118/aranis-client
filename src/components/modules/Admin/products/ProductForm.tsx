@@ -860,7 +860,6 @@ const ProductForm = ({
             name="thumbnails"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Product Gallery (Thumbnails)</FormLabel>
                 <FormControl>
                   <MultiImageUploader
                     value={field.value}
@@ -1205,6 +1204,10 @@ const ProductForm = ({
                               onChange={(files) => field.onChange(files)}
                             />
                           </FormControl>
+                          <FormDescription>
+                            Upload 4:5 aspect ratio images (e.g., 800x1000) for
+                            best display.
+                          </FormDescription>
                           <FormMessage />
                         </FormItem>
                       )}
