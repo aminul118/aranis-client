@@ -575,7 +575,7 @@ const ProductDetailContent = ({
                         {(product.sizeGuide as any).name || 'View Size Guide'}
                       </Button>
                     </DialogTrigger>
-                    <DialogContent className="max-w-3xl overflow-hidden border-none bg-transparent p-0 shadow-none">
+                    <DialogContent className="w-[95vw] max-w-5xl overflow-hidden border-none bg-transparent p-0 shadow-none sm:max-w-5xl">
                       <div className="relative overflow-hidden rounded-3xl bg-white shadow-2xl dark:bg-zinc-950">
                         <div className="flex items-center gap-3 border-b border-zinc-100 p-4 dark:border-zinc-800">
                           <Ruler size={16} className="text-blue-500" />
@@ -583,15 +583,16 @@ const ProductDetailContent = ({
                             {(product.sizeGuide as any).name || 'Size Guide'}
                           </DialogTitle>
                         </div>
-                        <div className="relative aspect-auto max-h-[80vh] w-full overflow-y-auto">
+                        <div className="relative aspect-auto max-h-[85vh] w-full overflow-y-auto">
                           <Image
                             src={(product.sizeGuide as any).image}
                             alt={
                               (product.sizeGuide as any).name || 'Size Guide'
                             }
-                            width={800}
-                            height={600}
-                            className="h-auto w-full object-contain p-2"
+                            width={1600}
+                            height={1600}
+                            sizes="(max-width: 1280px) 100vw, 1280px"
+                            className="h-auto w-full object-contain p-2 md:p-6"
                             priority
                           />
                         </div>
