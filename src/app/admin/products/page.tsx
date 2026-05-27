@@ -45,7 +45,7 @@ export default ProductPage;
 const Actions = () => {
   return (
     <Link href="/admin/products/create">
-      <Button className="rounded-full bg-blue-600 px-6 font-black text-white hover:bg-blue-700">
+      <Button>
         <Plus className="mr-2 h-4 w-4" /> Add Product
       </Button>
     </Link>

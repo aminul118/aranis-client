@@ -125,8 +125,9 @@ const Mobile = ({ navItems, setMenuOpen, logo, user }: MobileProps) => {
         <div className="flex flex-1 flex-col gap-1 overflow-y-auto pr-2">
           {navItems.map(({ title, href, subItems }) => {
             const categorySlug = toUrlSlug(title);
-            const isCategoryActive = currentCategorySlug === categorySlug;
-            const isActive = pathname === href || isCategoryActive;
+            const isActive =
+              (href === '/' && pathname === '/') ||
+              (href !== '/' && pathname.startsWith(href));
             const hasSubItems = subItems && subItems.length > 0;
             const isExpanded = expandedItem === title;
 

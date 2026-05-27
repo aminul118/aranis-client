@@ -1,7 +1,16 @@
 'use client';
 
-import { Gift, LucideIcon, Mail, Phone } from 'lucide-react';
+import {
+  Gift,
+  Headset,
+  LucideIcon,
+  Mail,
+  MapPin,
+  Phone,
+  Truck,
+} from 'lucide-react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 type LinkItem = {
   name: string;
@@ -11,6 +20,7 @@ type LinkItem = {
 };
 
 const TopBar = ({ siteSettings }: { siteSettings?: any }) => {
+  const pathname = usePathname();
   const activeOffer = siteSettings?.activeOfferTag || 'Eid offer';
 
   const links: LinkItem[] = [
@@ -21,16 +31,28 @@ const TopBar = ({ siteSettings }: { siteSettings?: any }) => {
       iconColor: 'text-red-500',
     },
     {
+      name: 'Gift Card',
+      href: '/gift-card',
+      icon: Gift,
+      iconColor: 'text-purple-500',
+    },
+    {
       name: 'Order Tracking',
       href: '/track-order',
+      icon: Truck,
+      iconColor: 'text-emerald-500',
     },
     {
       name: 'Contact',
       href: '/contact',
+      icon: Headset,
+      iconColor: 'text-blue-500',
     },
     {
       name: 'Store Location',
       href: '/location',
+      icon: MapPin,
+      iconColor: 'text-amber-500',
     },
   ];
   return (
@@ -67,7 +89,11 @@ const TopBar = ({ siteSettings }: { siteSettings?: any }) => {
                 <Link
                   key={link.name}
                   href={link.href}
-                  className="group flex items-center gap-1 transition-colors hover:text-blue-600 dark:hover:text-blue-400"
+                  className={`group flex items-center gap-1 transition-colors hover:text-blue-600 dark:hover:text-blue-400 ${
+                    pathname === link.href
+                      ? 'text-blue-600 dark:text-blue-400'
+                      : ''
+                  }`}
                 >
                   {Icon && (
                     <Icon

@@ -115,12 +115,7 @@ const ColorForm = ({ color, onSuccess }: Props) => {
 
           <div className="flex justify-end gap-2 pt-2">
             {onSuccess && (
-              <Button
-                type="button"
-                variant="outline"
-                onClick={onSuccess}
-                className="rounded-lg border-white/20 text-white hover:bg-white/10"
-              >
+              <Button type="button" variant="outline" onClick={onSuccess}>
                 Cancel
               </Button>
             )}

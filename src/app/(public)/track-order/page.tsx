@@ -1,6 +1,5 @@
 import generateMetaTags from '@/seo/generateMetaTags';
 import { Metadata } from 'next';
-import { Suspense } from 'react';
 import TrackOrderContent from './_components/TrackOrderContent';
 
 export default function TrackOrderPage() {
@@ -21,18 +20,7 @@ export default function TrackOrderPage() {
           </p>
         </div>
 
-        <Suspense
-          fallback={
-            <div className="flex flex-col items-center justify-center py-20 text-center">
-              <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-500/20 border-t-blue-500" />
-              <p className="text-muted-foreground mt-4 text-sm font-medium">
-                Initializing tracking console...
-              </p>
-            </div>
-          }
-        >
-          <TrackOrderContent />
-        </Suspense>
+        <TrackOrderContent />
       </div>
     </div>
   );

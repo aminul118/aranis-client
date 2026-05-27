@@ -583,7 +583,7 @@ const ProductDetailContent = ({
                             {(product.sizeGuide as any).name || 'Size Guide'}
                           </DialogTitle>
                         </div>
-                        <div className="relative aspect-auto max-h-[85vh] w-full overflow-y-auto">
+                        <div className="relative max-h-[85vh] w-full overflow-auto">
                           <Image
                             src={(product.sizeGuide as any).image}
                             alt={
@@ -592,7 +592,7 @@ const ProductDetailContent = ({
                             width={1600}
                             height={1600}
                             sizes="(max-width: 1280px) 100vw, 1280px"
-                            className="h-auto w-full object-contain p-2 md:p-6"
+                            className="h-auto w-full min-w-[600px] object-contain p-2 md:min-w-full md:p-6"
                             priority
                           />
                         </div>

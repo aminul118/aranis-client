@@ -1,6 +1,7 @@
 'use client';
 
 import SubmitButton from '@/components/common/button/submit-button';
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -104,7 +105,12 @@ const SizeForm = ({ size, onSuccess }: Props) => {
             )}
           />
 
-          <div className="flex justify-end pt-2">
+          <div className="flex justify-end gap-2 pt-2">
+            {onSuccess && (
+              <Button type="button" variant="outline" onClick={onSuccess}>
+                Cancel
+              </Button>
+            )}
             <SubmitButton
               loading={form.formState.isSubmitting}
               text={isEdit ? 'Update' : 'Add'}

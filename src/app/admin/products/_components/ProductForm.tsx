@@ -1316,12 +1316,12 @@ const ProductForm = ({
           <DialogHeader className="sr-only">
             <DialogTitle>Size Guide Preview</DialogTitle>
           </DialogHeader>
-          <div className="relative flex h-full w-full items-center justify-center">
+          <div className="relative flex h-full w-full items-center justify-center overflow-auto">
             {selectedSizeGuideImage && (
               <img
                 src={selectedSizeGuideImage}
                 alt="Size Guide Full Preview"
-                className="max-h-[90vh] max-w-full rounded-xl object-contain shadow-2xl"
+                className="max-h-[90vh] max-w-none min-w-[600px] rounded-xl object-contain shadow-2xl md:min-w-full"
               />
             )}
           </div>

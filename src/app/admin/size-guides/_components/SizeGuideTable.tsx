@@ -88,12 +88,9 @@ const SizeGuideTable = ({ sizeGuides, meta }: Props) => {
       tableTitle="Size Guides"
       meta={meta}
       action={
-        <Button
-          onClick={() => handleOpen()}
-          className="rounded-full bg-blue-600 px-8 font-black text-white hover:bg-blue-700"
-        >
-          <Plus className="mr-2 h-5 w-5" />
-          Add New
+        <Button onClick={() => handleOpen()}>
+          <Plus className="mr-2 h-4 w-4" />
+          Add Size Guide
         </Button>
       }
     >
@@ -126,12 +123,12 @@ const SizeGuideTable = ({ sizeGuides, meta }: Props) => {
           <DialogHeader className="sr-only">
             <DialogTitle>Size Guide Image Preview</DialogTitle>
           </DialogHeader>
-          <div className="relative flex aspect-auto h-full w-full items-center justify-center">
+          <div className="relative flex aspect-auto h-full w-full items-center justify-center overflow-auto">
             {previewImage && (
               <img
                 src={previewImage}
                 alt="Size Guide Preview"
-                className="max-h-[90vh] max-w-full rounded-xl object-contain shadow-2xl"
+                className="max-h-[90vh] max-w-none min-w-[600px] rounded-xl object-contain shadow-2xl md:min-w-full"
               />
             )}
           </div>

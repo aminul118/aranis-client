@@ -28,9 +28,8 @@ const CouponModal = ({ coupon, trigger }: Props) => {
         {trigger ? (
           trigger
         ) : (
-          <Button className="rounded-full bg-blue-600 font-bold hover:bg-blue-700">
-            <Plus className="mr-2 h-4 w-4" />
-            Add Coupon
+          <Button>
+            <Plus className="mr-2 h-4 w-4" /> Add Coupon
           </Button>
         )}
       </DialogTrigger>

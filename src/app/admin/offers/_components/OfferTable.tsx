@@ -40,12 +40,8 @@ const OfferTable = ({ offers, meta }: Props) => {
       tableTitle="Offer Management"
       meta={meta}
       action={
-        <Button
-          onClick={() => handleOpen()}
-          className="rounded-full bg-blue-600 px-8 font-black text-white hover:bg-blue-700"
-        >
-          <Plus className="mr-2 h-5 w-5" />
-          Add New Offer
+        <Button onClick={() => handleOpen()}>
+          <Plus className="mr-2 h-4 w-4" /> Add New Offer
         </Button>
       }
     >

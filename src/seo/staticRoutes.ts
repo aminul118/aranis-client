@@ -32,7 +32,7 @@ export const staticRoutes: Routes[] = [
     priority: 0.7,
   },
   {
-    url: 'gift',
+    url: 'gift-card',
     changeFrequency: 'monthly',
     priority: 0.6,
   },

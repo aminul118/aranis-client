@@ -13,6 +13,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Form,
   FormControl,
@@ -47,6 +48,7 @@ const NewUserModal = () => {
       phone: '',
       password: '',
       confirmPassword: '',
+      isVerified: false,
     },
   });
 
@@ -189,6 +191,28 @@ const NewUserModal = () => {
                         />
                       </FormControl>
                       <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* Is Verified Checkbox */}
+                <FormField
+                  control={form.control}
+                  name="isVerified"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-start space-y-0 space-x-3 rounded-md border p-4 shadow-sm">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                      <div className="space-y-1 leading-none">
+                        <FormLabel>Verified User</FormLabel>
+                        <p className="text-muted-foreground text-sm">
+                          Mark this user as verified immediately upon creation.
+                        </p>
+                      </div>
                     </FormItem>
                   )}
                 />

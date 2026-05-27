@@ -29,7 +29,7 @@ const ThemeToggle = () => {
         const isActive = theme === value;
 
         return (
-          <Tooltip key={value} delayDuration={300}>
+          <Tooltip key={value} delayDuration={0}>
             <TooltipTrigger asChild>
               <motion.button
                 onClick={() => setTheme(value)}

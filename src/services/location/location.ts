@@ -8,7 +8,8 @@ export interface ILocation {
   _id?: string;
   name: string;
   address: string;
-  phone: string;
+  offDay?: string;
+  phone: string[];
   hours: string;
   isActive: boolean;
   createdAt?: string;

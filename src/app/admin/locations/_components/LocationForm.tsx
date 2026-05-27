@@ -18,7 +18,7 @@ import {
   updateLocation,
 } from '@/services/location/location';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Clock, MapPin, Phone, Save } from 'lucide-react';
+import { CalendarOff, Clock, MapPin, Phone, Save } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -26,7 +26,10 @@ import { z } from 'zod';
 const locationSchema = z.object({
   name: z.string().min(1, 'Please provide a name for this outlet'),
   address: z.string().min(1, 'The physical address is required'),
-  phone: z.string().min(1, 'A contact phone number is necessary'),
+  offDay: z.string().optional(),
+  phone: z
+    .string()
+    .min(1, 'A contact phone number is necessary (comma separated)'),
   hours: z.string().min(1, 'Operating hours must be specified'),
   isActive: z.boolean().default(true),
 });
@@ -47,18 +50,29 @@ const LocationForm = ({ location, onSuccess }: Props) => {
     defaultValues: {
       name: location?.name || '',
       address: location?.address || '',
-      phone: location?.phone || '',
+      offDay: location?.offDay || '',
+      phone: Array.isArray(location?.phone)
+        ? location.phone.join(', ')
+        : location?.phone || '',
       hours: location?.hours || '',
       isActive: location?.isActive ?? true,
     },
   });
 
   const onSubmit = async (values: FormValues) => {
+    const payload = {
+      ...values,
+      phone: values.phone
+        .split(',')
+        .map((p) => p.trim())
+        .filter(Boolean),
+    };
+
     await executePost({
       action: () =>
         location?._id
-          ? updateLocation(location._id, values)
-          : createLocation(values as ILocation),
+          ? updateLocation(location._id, payload as any)
+          : createLocation(payload as unknown as ILocation),
       success: {
         loadingText: location?._id
           ? 'Updating outlet...'
@@ -117,7 +131,7 @@ const LocationForm = ({ location, onSuccess }: Props) => {
                     <FormControl>
                       <div className="relative">
                         <Input
-                          placeholder="+880 1XXX-XXXXXX"
+                          placeholder="+880 1XXX-XXXXXX, +880 1YYY-YYYYYY"
                           className="h-12 border-gray-200 bg-gray-50 pl-10 font-bold focus:border-emerald-500/50 dark:border-white/5 dark:bg-white/5"
                           {...field}
                         />
@@ -147,6 +161,32 @@ const LocationForm = ({ location, onSuccess }: Props) => {
                       className="h-12 border-gray-200 bg-gray-50 font-bold focus:border-blue-500/50 dark:border-white/5 dark:bg-white/5"
                       {...field}
                     />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="offDay"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-[10px] font-black tracking-[0.2em] text-red-500 uppercase italic">
+                    Off Day
+                  </FormLabel>
+                  <FormControl>
+                    <div className="relative">
+                      <Input
+                        placeholder="e.g. Tuesday"
+                        className="h-12 border-gray-200 bg-gray-50 pl-10 font-bold focus:border-red-500/50 dark:border-white/5 dark:bg-white/5"
+                        {...field}
+                      />
+                      <CalendarOff
+                        size={16}
+                        className="absolute top-1/2 left-3.5 -translate-y-1/2 text-zinc-400 dark:text-zinc-600"
+                      />
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>

@@ -49,7 +49,9 @@ const CategoryBar = () => {
           <div className="flex items-center">
             {navItems.map((item) => {
               const categorySlug = toUrlSlug(item.title);
-              const isCategoryActive = currentCategorySlug === categorySlug;
+              const isCategoryActive =
+                (item.href === '/' && pathname === '/') ||
+                (item.href !== '/' && pathname.startsWith(item.href));
               const hasSubItems = item.subItems && item.subItems.length > 0;
 
               return (

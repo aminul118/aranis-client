@@ -112,22 +112,32 @@ const UpdateProfileForm = ({ user, setIsEditing }: Props) => {
   };
 
   return (
-    <>
-      <CardHeader>
-        <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-between">
-          <div className="flex flex-col items-center gap-4 sm:flex-row">
+    <div className="flex flex-col gap-6">
+      <CardHeader className="border-border/50 rounded-t-2xl border-b bg-gradient-to-br from-blue-500/5 via-purple-500/5 to-transparent pt-12 pb-10">
+        <div className="flex flex-col items-center gap-8 px-4 sm:flex-row sm:justify-between sm:px-8">
+          <div className="flex flex-col items-center gap-6 sm:flex-row">
             <div className="group relative">
-              <Avatar className="h-24 w-24">
-                <AvatarImage src={displayPicture} alt={displayFullName} />
-                <AvatarFallback className="text-2xl">
+              <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 opacity-20 blur transition duration-500 group-hover:opacity-40"></div>
+              <Avatar className="ring-background relative h-28 w-28 shadow-2xl ring-4 transition-transform duration-300 hover:scale-105">
+                <AvatarImage
+                  src={displayPicture}
+                  alt={displayFullName}
+                  className="object-cover"
+                />
+                <AvatarFallback className="bg-muted text-3xl font-black">
                   {displayInitials}
                 </AvatarFallback>
               </Avatar>
               <div
-                className="absolute inset-0 flex cursor-pointer items-center justify-center rounded-full bg-black/50 opacity-0 transition-opacity group-hover:opacity-100"
+                className="absolute inset-0 z-10 flex cursor-pointer items-center justify-center rounded-full bg-black/60 opacity-0 backdrop-blur-sm transition-all duration-300 group-hover:opacity-100"
                 onClick={() => fileInputRef.current?.click()}
               >
-                <Camera className="h-8 w-8 text-white" />
+                <div className="flex flex-col items-center gap-1 text-white">
+                  <Camera className="h-6 w-6" />
+                  <span className="text-[10px] font-bold tracking-wider uppercase">
+                    Change
+                  </span>
+                </div>
               </div>
               <input
                 type="file"
@@ -137,30 +147,38 @@ const UpdateProfileForm = ({ user, setIsEditing }: Props) => {
                 onChange={onFileChange}
               />
             </div>
-            <div className="text-center sm:text-left">
-              <CardTitle className="text-2xl">{displayFullName}</CardTitle>
-              <CardDescription>{user.email}</CardDescription>
-              <div className="text-muted-foreground mt-2 text-sm">
-                Role:{' '}
-                <span className="font-semibold">{formatRole(user.role)}</span>
+            <div className="space-y-2 text-center sm:text-left">
+              <CardTitle className="text-3xl font-black tracking-tight sm:text-4xl">
+                {displayFullName}
+              </CardTitle>
+              <CardDescription className="text-base font-medium opacity-80 sm:text-lg">
+                {user.email}
+              </CardDescription>
+              <div className="mt-2 inline-flex items-center rounded-full bg-blue-500/10 px-4 py-1.5 text-xs font-black tracking-widest text-blue-600 uppercase shadow-sm dark:bg-blue-500/20 dark:text-blue-400">
+                {formatRole(user.role)}
               </div>
             </div>
           </div>
         </div>
       </CardHeader>
 
-      <CardContent>
+      <CardContent className="px-4 pt-6 pb-12 sm:px-12">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
               <FormField
                 control={form.control}
                 name="firstName"
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>First Name</FormLabel>
+                  <FormItem className="space-y-2">
+                    <FormLabel className="text-muted-foreground text-xs font-black tracking-widest uppercase">
+                      First Name
+                    </FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <Input
+                        className="h-12 rounded-xl px-4 text-base transition-shadow focus-visible:ring-blue-500"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -170,10 +188,15 @@ const UpdateProfileForm = ({ user, setIsEditing }: Props) => {
                 control={form.control}
                 name="lastName"
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Last Name</FormLabel>
+                  <FormItem className="space-y-2">
+                    <FormLabel className="text-muted-foreground text-xs font-black tracking-widest uppercase">
+                      Last Name
+                    </FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <Input
+                        className="h-12 rounded-xl px-4 text-base transition-shadow focus-visible:ring-blue-500"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -181,10 +204,12 @@ const UpdateProfileForm = ({ user, setIsEditing }: Props) => {
               />
             </div>
 
-            <div className="flex justify-end gap-2">
+            <div className="flex justify-end gap-3 pt-4">
               <Button
                 type="button"
                 variant="outline"
+                size="lg"
+                className="rounded-xl"
                 onClick={() => {
                   setIsEditing(false);
                   setUploadedImageBlob(null);
@@ -193,7 +218,7 @@ const UpdateProfileForm = ({ user, setIsEditing }: Props) => {
               >
                 <X className="mr-2 h-4 w-4" /> Cancel
               </Button>
-              <SubmitButton />
+              <SubmitButton className="rounded-xl px-8" />
             </div>
           </form>
         </Form>
@@ -206,7 +231,7 @@ const UpdateProfileForm = ({ user, setIsEditing }: Props) => {
           onClose={() => setShowCropper(false)}
         />
       )}
-    </>
+    </div>
   );
 };
 

@@ -5,7 +5,7 @@ import { useWishlist } from '@/context/WishlistContext';
 import { IUser } from '@/types';
 import { Gift, Heart, ShoppingCart, User } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import HeaderUser from '../shared/HeaderUser';
 import NotificationBell from '../shared/NotificationBell';
@@ -47,6 +47,7 @@ const MainNavbar = ({
 
   const [searchQuery, setSearchQuery] = useState('');
   const router = useRouter();
+  const pathname = usePathname();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -70,7 +71,11 @@ const MainNavbar = ({
           {/* Offers */}
           <Link
             href="/offers"
-            className="group flex items-center gap-2 rounded-md border border-orange-500/40 bg-orange-500/10 px-4 py-2 text-orange-400 transition-colors hover:bg-orange-500/20"
+            className={`group flex items-center gap-2 rounded-md border px-4 py-2 transition-colors ${
+              pathname === '/offers' || pathname.startsWith('/offers?')
+                ? 'border-white/50 bg-white/20 text-orange-400 shadow-[0_0_15px_rgba(255,255,255,0.1)]'
+                : 'border-orange-500/40 bg-orange-500/10 text-orange-400 hover:bg-orange-500/20'
+            }`}
           >
             <Gift size={18} />
             <span className="hidden text-[10px] font-black tracking-widest uppercase md:inline">
@@ -82,7 +87,11 @@ const MainNavbar = ({
           {user && (
             <Link
               href="/wishlist"
-              className="group flex items-center gap-2 rounded-md border border-white/20 px-4 py-2 transition-colors hover:bg-white/5"
+              className={`group flex items-center gap-2 rounded-md border px-4 py-2 transition-colors ${
+                pathname === '/wishlist'
+                  ? 'border-white/50 bg-white/20 shadow-[0_0_15px_rgba(255,255,255,0.1)]'
+                  : 'border-white/20 hover:bg-white/5'
+              }`}
             >
               <div className="relative">
                 <Heart size={18} className="text-white" />
@@ -101,7 +110,11 @@ const MainNavbar = ({
           {/* Cart */}
           <Link
             href="/cart"
-            className="group flex items-center gap-2 rounded-md border border-white/20 px-4 py-2 transition-colors hover:bg-white/5"
+            className={`group flex items-center gap-2 rounded-md border px-4 py-2 transition-colors ${
+              pathname === '/cart'
+                ? 'border-white/50 bg-white/20 shadow-[0_0_15px_rgba(255,255,255,0.1)]'
+                : 'border-white/20 hover:bg-white/5'
+            }`}
           >
             <div className="relative">
               <ShoppingCart size={18} className="text-white" />

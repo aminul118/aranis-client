@@ -163,7 +163,7 @@ const ChatFloatingButton = ({
   return (
     <div className="fixed right-4 bottom-[calc(4rem+env(safe-area-inset-bottom)+1rem)] z-50 flex flex-col items-end gap-4 lg:right-6 lg:bottom-6">
       {/* WhatsApp Button */}
-      <Tooltip delayDuration={300}>
+      <Tooltip delayDuration={0}>
         <TooltipTrigger asChild>
           <a
             href={whatsappLink}
@@ -321,7 +321,7 @@ const ChatFloatingButton = ({
             )}
           </AnimatePresence>
 
-          <Tooltip delayDuration={300}>
+          <Tooltip delayDuration={0}>
             <TooltipTrigger asChild>
               <button
                 onClick={() => setIsOpen(!isOpen)}

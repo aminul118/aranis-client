@@ -3,7 +3,7 @@
 import { Column } from '@/components/common/table/TableManageMent';
 import { Badge } from '@/components/ui/badge';
 import { ILocation } from '@/services/location/location';
-import { Clock, MapPin, Phone } from 'lucide-react';
+import { CalendarOff, Clock, MapPin, Phone } from 'lucide-react';
 
 const LocationColumn: Column<ILocation>[] = [
   {
@@ -39,16 +39,28 @@ const LocationColumn: Column<ILocation>[] = [
     accessor: (row) => (
       <div className="flex items-center gap-2 text-zinc-400">
         <Phone size={12} className="text-emerald-500" />
-        <span className="text-xs font-bold">{row.phone}</span>
+        <span className="text-xs font-bold">
+          {Array.isArray(row.phone) ? row.phone.join(', ') : row.phone}
+        </span>
       </div>
     ),
   },
   {
     header: 'Hours',
     accessor: (row) => (
-      <div className="flex items-center gap-2 text-zinc-400">
-        <Clock size={12} className="text-amber-500" />
-        <span className="text-xs font-bold">{row.hours}</span>
+      <div className="flex flex-col gap-1">
+        <div className="flex items-center gap-2 text-zinc-400">
+          <Clock size={12} className="text-amber-500" />
+          <span className="text-xs font-bold">{row.hours}</span>
+        </div>
+        {row.offDay && (
+          <div className="flex items-center gap-2 text-zinc-400">
+            <CalendarOff size={12} className="text-red-500" />
+            <span className="text-[10px] font-bold tracking-widest text-red-400/80 uppercase">
+              {row.offDay} Off
+            </span>
+          </div>
+        )}
       </div>
     ),
   },
