@@ -1,4 +1,4 @@
-import Contact from '@/components/modules/Public/contact/Contact';
+import Contact from '@/app/(public)/contact/_components/Contact';
 import { generateDynamicMeta } from '@/seo/generateDynamicMeta';
 import { getSiteSettings } from '@/services/settings/settings';
 import { Metadata } from 'next';

@@ -1,8 +1,8 @@
 'use client';
 
+import LocationForm from '@/app/admin/locations/_components/LocationForm';
+import LocationTable from '@/app/admin/locations/_components/LocationTable';
 import ClientTableWrapper from '@/components/common/wrapper/ClientTableWrapper';
-import LocationForm from '@/components/modules/Admin/location/LocationForm';
-import LocationTable from '@/components/modules/Admin/location/LocationTable';
 import {
   Dialog,
   DialogContent,

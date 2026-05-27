@@ -1,5 +1,5 @@
+import ProductDetailContent from '@/app/(public)/products/_components/ProductDetailContent';
 import ProductCard from '@/components/common/ProductCard';
-import ProductDetailContent from '@/components/modules/Public/Products/ProductDetailContent';
 import { getProducts, getSingleProduct } from '@/services/product/product';
 import { getSiteSettings } from '@/services/settings/settings';
 import { ArrowLeft } from 'lucide-react';

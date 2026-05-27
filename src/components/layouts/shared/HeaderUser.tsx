@@ -1,6 +1,6 @@
 'use client';
 
-import LogOutDropDown from '@/components/modules/Authentication/log-out-dropdown';
+import LogOutDropDown from '@/components/common/log-out-dropdown';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,

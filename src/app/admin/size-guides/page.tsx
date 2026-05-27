@@ -1,4 +1,4 @@
-import SizeGuideTable from '@/components/modules/Admin/size-guides/SizeGuideTable';
+import SizeGuideTable from '@/app/admin/size-guides/_components/SizeGuideTable';
 import cleanSearchParams from '@/lib/cleanSearchParams';
 import { getAllSizeGuides } from '@/services/size-guide/size-guide';
 import { SearchParams } from '@/types';

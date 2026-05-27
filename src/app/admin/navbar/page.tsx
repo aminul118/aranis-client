@@ -1,5 +1,5 @@
+import NavbarTable from '@/app/admin/_components/NavbarTable';
 import ClientTableWrapper from '@/components/common/wrapper/ClientTableWrapper';
-import NavbarTable from '@/components/modules/Admin/navbar/NavbarTable';
 import { Button } from '@/components/ui/button';
 import cleanSearchParams from '@/lib/cleanSearchParams';
 import { getNavbars } from '@/services/navbar/navbar';

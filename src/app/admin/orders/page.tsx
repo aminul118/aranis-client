@@ -1,5 +1,5 @@
+import OrdersTable from '@/app/admin/orders/_components/OrdersTable';
 import ClientTableWrapper from '@/components/common/wrapper/ClientTableWrapper';
-import OrdersTable from '@/components/modules/Admin/orders/OrdersTable';
 import cleanSearchParams from '@/lib/cleanSearchParams';
 import { getAllOrders } from '@/services/order/order';
 import { SearchParams } from '@/types';

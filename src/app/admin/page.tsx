@@ -1,5 +1,5 @@
+import Stats from '@/app/admin/_components/Stats';
 import SetPasswordPrompt from '@/components/common/SetPasswordPrompt';
-import Stats from '@/components/modules/Admin/Stats/Stats';
 import GradientTitle from '@/components/ui/gradientTitle';
 import { getAdminStats } from '@/services/stats/stats';
 import { getMe } from '@/services/user/users';

@@ -1,4 +1,4 @@
-import ForgotPasswordForm from '@/components/modules/Authentication/ForgotPasswordForm';
+import ForgotPasswordForm from '@/app/(public)/(authentication)/forgot-password/_components/ForgotPasswordForm';
 import generateMetaTags from '@/seo/generateMetaTags';
 import { Metadata } from 'next';
 

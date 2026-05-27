@@ -1,4 +1,4 @@
-import PopupBannerTable from '@/components/modules/Admin/popup-banner/PopupBannerTable';
+import PopupBannerTable from '@/app/admin/popup-banners/_components/PopupBannerTable';
 import cleanSearchParams from '@/lib/cleanSearchParams';
 import { getPopupBanners } from '@/services/popup-banner/popup-banner';
 import { SearchParams } from '@/types';

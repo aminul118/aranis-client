@@ -27,7 +27,7 @@ import {
   X,
 } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import DashboardCharts from '../Dashboard/DashboardCharts';
+import DashboardCharts from './DashboardCharts';
 import StatsSkeleton from './StatsSkeleton';
 
 interface StatsProps {

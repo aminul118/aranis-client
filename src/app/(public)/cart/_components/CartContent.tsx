@@ -1,8 +1,8 @@
 'use client';
 
-import CartItem from '@/components/modules/Public/Cart/CartItem';
-import CartSummary from '@/components/modules/Public/Cart/CartSummary';
-import EmptyCart from '@/components/modules/Public/Cart/EmptyCart';
+import CartItem from '@/app/(public)/cart/_components/CartItem';
+import CartSummary from '@/app/(public)/cart/_components/CartSummary';
+import EmptyCart from '@/app/(public)/cart/_components/EmptyCart';
 import { useCart } from '@/context/CartContext';
 import { AnimatePresence } from 'framer-motion';
 import { ShoppingBag } from 'lucide-react';

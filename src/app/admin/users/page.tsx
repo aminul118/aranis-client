@@ -1,6 +1,6 @@
+import NewUserModal from '@/app/admin/users/_components/NewUserModal';
+import UsersTable from '@/app/admin/users/_components/UsersTable';
 import ClientTableWrapper from '@/components/common/wrapper/ClientTableWrapper';
-import NewUserModal from '@/components/modules/Admin/users/NewUserModal';
-import UsersTable from '@/components/modules/Admin/users/UsersTable';
 import cleanSearchParams from '@/lib/cleanSearchParams';
 import { getUsers } from '@/services/user/users';
 import { SearchParams } from '@/types/react.types';

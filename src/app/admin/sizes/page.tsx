@@ -1,6 +1,6 @@
+import SizeModal from '@/app/admin/sizes/_components/SizeModal';
+import SizesTable from '@/app/admin/sizes/_components/SizesTable';
 import ClientTableWrapper from '@/components/common/wrapper/ClientTableWrapper';
-import SizeModal from '@/components/modules/Admin/sizes/SizeModal';
-import SizesTable from '@/components/modules/Admin/sizes/SizesTable';
 import cleanSearchParams from '@/lib/cleanSearchParams';
 import { getSizes } from '@/services/size/size';
 import { SearchParams } from '@/types';

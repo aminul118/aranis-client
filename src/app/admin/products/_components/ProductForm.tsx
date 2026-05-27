@@ -43,8 +43,8 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
-import QuickAddCategory from '../categories/QuickAddCategory';
-import QuickAddColor from '../colors/QuickAddColor';
+import QuickAddCategory from '../../../../app/admin/categories/_components/QuickAddCategory';
+import QuickAddColor from '../../../../app/admin/colors/_componnets/QuickAddColor';
 import QuickAddOffer from './QuickAddOffer';
 
 type FormValues = {

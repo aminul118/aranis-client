@@ -1,5 +1,5 @@
+import SocialLinks from '@/app/(public)/_components/SocialLinks';
 import AminulLogo from '@/components/common/Logo';
-import SocialLinks from '@/components/modules/Public/Home/SocialLinks';
 import { INavItem } from '@/services/navbar/navbar';
 import { ISocialLink } from '@/services/settings/settings';
 import { Mail, MapPin, Phone } from 'lucide-react';

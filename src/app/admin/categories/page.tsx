@@ -1,5 +1,5 @@
+import CategoriesTable from '@/app/admin/categories/_components/CategoriesTable';
 import ClientTableWrapper from '@/components/common/wrapper/ClientTableWrapper';
-import CategoriesTable from '@/components/modules/Admin/categories/CategoriesTable';
 import { Button } from '@/components/ui/button';
 import cleanSearchParams from '@/lib/cleanSearchParams';
 import { getCategories } from '@/services/category/category';

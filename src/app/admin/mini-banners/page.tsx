@@ -1,5 +1,5 @@
+import MiniBannerTable from '@/app/admin/mini-banners/_components/MiniBannerTable';
 import ClientTableWrapper from '@/components/common/wrapper/ClientTableWrapper';
-import MiniBannerTable from '@/components/modules/Admin/hero-banner/MiniBannerTable';
 import { Button } from '@/components/ui/button';
 import cleanSearchParams from '@/lib/cleanSearchParams';
 import { getMiniBanners } from '@/services/hero-banner/hero-banner';

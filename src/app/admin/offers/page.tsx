@@ -1,4 +1,4 @@
-import OfferTable from '@/components/modules/Admin/offers/OfferTable';
+import OfferTable from '@/app/admin/offers/_components/OfferTable';
 import cleanSearchParams from '@/lib/cleanSearchParams';
 import { getOffers } from '@/services/offer/offer';
 import { SearchParams } from '@/types';

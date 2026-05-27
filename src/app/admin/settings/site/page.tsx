@@ -1,4 +1,4 @@
-import SiteSettingsForm from '@/components/modules/Admin/site/SiteSettingsForm';
+import SiteSettingsForm from '@/app/admin/site/_components/SiteSettingsForm';
 import { getSiteSettings } from '@/services/settings/settings';
 import { Metadata } from 'next';
 

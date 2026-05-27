@@ -1,5 +1,5 @@
+import ProductForm from '@/app/admin/products/_components/ProductForm';
 import ClientTableWrapper from '@/components/common/wrapper/ClientTableWrapper';
-import ProductForm from '@/components/modules/Admin/products/ProductForm';
 import { getCategories } from '@/services/category/category';
 import { getColors } from '@/services/color/color';
 import { getOffers } from '@/services/offer/offer';

@@ -1,10 +1,10 @@
+import NavbarForm from '@/app/admin/_components/NavbarForm';
 import ClientTableWrapper from '@/components/common/wrapper/ClientTableWrapper';
-import NavbarForm from '@/components/modules/Admin/navbar/NavbarForm';
 
 export default function CreateNavbarPage() {
-    return (
-        <ClientTableWrapper tableTitle="Add Menu Item">
-            <NavbarForm />
-        </ClientTableWrapper>
-    );
+  return (
+    <ClientTableWrapper tableTitle="Add Menu Item">
+      <NavbarForm />
+    </ClientTableWrapper>
+  );
 }

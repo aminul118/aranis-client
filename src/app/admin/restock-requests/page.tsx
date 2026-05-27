@@ -1,5 +1,5 @@
+import RestockRequestsTable from '@/app/admin/restock-requests/_components/RestockRequestsTable';
 import ClientTableWrapper from '@/components/common/wrapper/ClientTableWrapper';
-import RestockRequestsTable from '@/components/modules/Admin/restock-requests/RestockRequestsTable';
 import cleanSearchParams from '@/lib/cleanSearchParams';
 import { getRestockRequests } from '@/services/restock/restock';
 import { SearchParams } from '@/types';

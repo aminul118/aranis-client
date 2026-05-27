@@ -1,4 +1,4 @@
-import ResetPassword from '@/components/modules/Authentication/ResetPassword';
+import ResetPassword from '@/app/(public)/(authentication)/reset-password/_components/ResetPassword';
 import generateMetaTags from '@/seo/generateMetaTags';
 import { SearchParams } from '@/types';
 import { Metadata } from 'next';

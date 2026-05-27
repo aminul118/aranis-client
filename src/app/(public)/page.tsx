@@ -1,8 +1,8 @@
-import BestSellingProducts from '@/components/modules/Public/Home/BestSellingProducts';
-import FeaturedProducts from '@/components/modules/Public/Home/FeaturedProducts';
-import HeroBanner from '@/components/modules/Public/Home/HeroBanner';
-import HomeSEOContent from '@/components/modules/Public/Home/HomeSEOContent';
-import NewArrivals from '@/components/modules/Public/Home/NewArrivals';
+import BestSellingProducts from '@/app/(public)/_components/BestSellingProducts';
+import FeaturedProducts from '@/app/(public)/_components/FeaturedProducts';
+import HeroBanner from '@/app/(public)/_components/HeroBanner';
+import HomeSEOContent from '@/app/(public)/_components/HomeSEOContent';
+import NewArrivals from '@/app/(public)/_components/NewArrivals';
 import generateMetaTags from '@/seo/generateMetaTags';
 import {
   getHeroBanners,

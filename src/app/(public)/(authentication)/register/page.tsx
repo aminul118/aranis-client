@@ -1,4 +1,4 @@
-import RegisterForm from '@/components/modules/Authentication/RegisterForm';
+import RegisterForm from '@/app/(public)/(authentication)/register/_components/RegisterForm';
 import { Card, CardContent } from '@/components/ui/card';
 import images from '@/config/images';
 import generateMetaTags from '@/seo/generateMetaTags';
