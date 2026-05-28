@@ -8,7 +8,7 @@ import { getDefaultDashboardRoute } from '@/services/user/user-access';
 import { IUser } from '@/types';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Fade as Hamburger } from 'hamburger-react';
-import { ChevronDown, Clock, LayoutGrid, LogOut, User, X } from 'lucide-react';
+import { ChevronDown, LayoutGrid, LogOut, User, X } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { Dispatch, SetStateAction, useState } from 'react';
@@ -143,10 +143,10 @@ const Mobile = ({ navItems, setMenuOpen, logo, user }: MobileProps) => {
                     }
                   }}
                   className={cn(
-                    'flex w-full items-center justify-between rounded-xl border border-transparent px-4 py-4 text-sm font-bold tracking-widest uppercase transition-all',
+                    'flex w-full items-center justify-between rounded-xl px-4 py-3 text-sm font-semibold transition-all',
                     isActive
-                      ? 'bg-blue-600 text-white shadow-lg'
-                      : 'text-gray-600 hover:border-gray-100 hover:bg-gray-50 dark:text-gray-400 dark:hover:border-white/5 dark:hover:bg-white/5',
+                      ? 'bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400'
+                      : 'text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-white/5',
                   )}
                 >
                   {title}
@@ -156,7 +156,7 @@ const Mobile = ({ navItems, setMenuOpen, logo, user }: MobileProps) => {
                         'transition-transform duration-200',
                         isExpanded ? 'rotate-180' : '-rotate-90 opacity-50',
                       )}
-                      size={14}
+                      size={16}
                     />
                   )}
                 </button>
@@ -168,9 +168,9 @@ const Mobile = ({ navItems, setMenuOpen, logo, user }: MobileProps) => {
                       animate={{ height: 'auto', opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
                       transition={{ duration: 0.3, ease: 'easeInOut' }}
-                      className="ml-4 overflow-hidden rounded-xl bg-gray-50/50 dark:bg-white/5"
+                      className="ml-4 overflow-hidden"
                     >
-                      <div className="flex flex-col gap-1 p-2">
+                      <div className="mt-1 flex flex-col gap-2 border-l border-gray-100 py-2 pl-4 dark:border-white/10">
                         {subItems.map((sub) => {
                           const subCategorySlug = toUrlSlug(sub.title);
                           return (
@@ -178,18 +178,24 @@ const Mobile = ({ navItems, setMenuOpen, logo, user }: MobileProps) => {
                               key={sub.title}
                               className="flex flex-col gap-1"
                             >
-                              <p className="px-3 pt-3 pb-1 text-[10px] font-black tracking-widest text-blue-600 uppercase dark:text-blue-400">
+                              <p className="px-3 pt-1 pb-1 text-xs font-bold text-gray-900 dark:text-gray-100">
                                 {sub.title}
                               </p>
                               <div className="flex flex-col gap-0.5">
                                 {sub.items.map((item) => {
                                   const itemSlug = toUrlSlug(item);
                                   const itemHref = `/${categorySlug}/${subCategorySlug}/${itemSlug}`;
+                                  const isItemActive = pathname === itemHref;
                                   return (
                                     <Link
                                       key={item}
                                       href={itemHref}
-                                      className="rounded-lg px-3 py-2.5 text-xs font-bold text-gray-500 transition-colors hover:bg-white hover:text-gray-900 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white"
+                                      className={cn(
+                                        'rounded-lg px-3 py-2 text-sm transition-colors',
+                                        isItemActive
+                                          ? 'bg-blue-50 font-semibold text-blue-600 dark:bg-blue-500/10 dark:text-blue-400'
+                                          : 'font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white',
+                                      )}
                                       onClick={() => setMenuOpen(false)}
                                     >
                                       {item}
@@ -207,6 +213,32 @@ const Mobile = ({ navItems, setMenuOpen, logo, user }: MobileProps) => {
               </div>
             );
           })}
+
+          <div className="mt-2 flex flex-col gap-1 border-t border-gray-100 pt-4 dark:border-white/5">
+            {[
+              { title: 'Track Order', href: '/track-order' },
+              { title: 'Gift Cards', href: '/gift-cards' },
+              { title: 'Contacts', href: '/contact' },
+              { title: 'Outlet Locations', href: '/location' },
+            ].map((link) => {
+              const isActive = pathname === link.href;
+              return (
+                <Link
+                  key={link.title}
+                  href={link.href}
+                  onClick={() => setMenuOpen(false)}
+                  className={cn(
+                    'flex w-full items-center justify-between rounded-xl px-4 py-3 text-sm font-semibold transition-all',
+                    isActive
+                      ? 'bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400'
+                      : 'text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-white/5',
+                  )}
+                >
+                  {link.title}
+                </Link>
+              );
+            })}
+          </div>
 
           <div className="mt-8 flex flex-col gap-4 border-t border-gray-100 pt-6 pb-20 dark:border-white/5">
             {user ? (
@@ -251,13 +283,6 @@ const Mobile = ({ navItems, setMenuOpen, logo, user }: MobileProps) => {
 
                 {/* Track Order & Logout Row */}
                 <div className="flex items-center gap-2">
-                  <Link
-                    href="/track-order"
-                    onClick={() => setMenuOpen(false)}
-                    className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-black/10 bg-white/50 py-3 text-xs font-bold text-zinc-800 transition-all hover:bg-white dark:border-white/10 dark:bg-white/[0.02] dark:text-white dark:hover:bg-white/5"
-                  >
-                    <Clock size={14} /> Track Order
-                  </Link>
                   <button
                     onClick={handleLogout}
                     disabled={loading}
@@ -269,16 +294,6 @@ const Mobile = ({ navItems, setMenuOpen, logo, user }: MobileProps) => {
               </div>
             ) : (
               <div className="flex flex-col gap-3">
-                {/* Guest CTA: Track Order */}
-                <Link
-                  href="/track-order"
-                  onClick={() => setMenuOpen(false)}
-                  className="flex w-full items-center justify-center gap-2 rounded-2xl border border-black/10 bg-white/50 py-3.5 text-sm font-bold text-zinc-800 transition-all hover:bg-white dark:border-white/10 dark:bg-white/[0.03] dark:text-white dark:hover:bg-white/[0.05]"
-                >
-                  <Clock size={16} /> Track Order
-                </Link>
-
-                {/* Login & Register Buttons */}
                 <div className="flex gap-2">
                   <Link
                     href="/login"
