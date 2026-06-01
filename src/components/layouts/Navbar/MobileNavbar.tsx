@@ -11,7 +11,7 @@ import { Fade as Hamburger } from 'hamburger-react';
 import { ChevronDown, LayoutGrid, LogOut, User, X } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, ReactNode, SetStateAction, useState } from 'react';
 import NotificationBell from '../shared/NotificationBell';
 import { NavMenu } from './nav-menu';
 import NavSearch from './NavSearch';
@@ -19,7 +19,7 @@ import NavSearch from './NavSearch';
 interface MobileNavbarProps {
   user: IUser | null;
   navItems: NavMenu[];
-  logo?: React.ReactNode;
+  logo?: ReactNode;
   menuOpen: boolean;
   setMenuOpen: Dispatch<SetStateAction<boolean>>;
 }

@@ -60,21 +60,21 @@ const TopBar = ({ siteSettings }: { siteSettings?: any }) => {
       <div className="container mx-auto flex items-center justify-between px-4 text-[10px] font-bold tracking-wider text-gray-600 uppercase dark:text-gray-400">
         {/* Left Side */}
         <div className="flex items-center gap-6">
-          <a
+          <Link
             href={`tel:${siteSettings?.contactNumber || '+8801886877730'}`}
             className="flex items-center gap-2 transition-colors hover:text-blue-600 dark:hover:text-blue-400"
           >
             <Phone size={14} className="text-gray-400 dark:text-gray-600" />
             <span>{siteSettings?.contactNumber || '+880 1886-877730'}</span>
-          </a>
+          </Link>
           {siteSettings?.email && (
-            <a
+            <Link
               href={`mailto:${siteSettings.email}`}
               className="flex items-center gap-2 transition-colors hover:text-blue-600 dark:hover:text-blue-400"
             >
               <Mail size={14} className="text-gray-400 dark:text-gray-600" />
               <span>{siteSettings.email}</span>
-            </a>
+            </Link>
           )}
         </div>
 

@@ -5,15 +5,15 @@ import { useWishlist } from '@/context/WishlistContext';
 import { IUser } from '@/types';
 import { Gift, Heart, ShoppingCart, User } from 'lucide-react';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { usePathname } from 'next/navigation';
+import { ReactNode } from 'react';
 import HeaderUser from '../shared/HeaderUser';
 import NotificationBell from '../shared/NotificationBell';
 import NavSearch from './NavSearch';
 
 interface MainNavbarProps {
   user?: IUser | null;
-  logo?: React.ReactNode;
+  logo?: ReactNode;
   totalItems?: number;
   wishlistCount?: number;
 }
@@ -45,16 +45,7 @@ const MainNavbar = ({
   const wishlistCount =
     propWishlistCount !== undefined ? propWishlistCount : contextWishlistCount;
 
-  const [searchQuery, setSearchQuery] = useState('');
-  const router = useRouter();
   const pathname = usePathname();
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      router.push(`/shop?q=${encodeURIComponent(searchQuery)}`);
-    }
-  };
 
   return (
     // ✅ Always black background (light/dark theme doesn't affect)

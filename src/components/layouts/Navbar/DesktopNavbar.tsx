@@ -1,7 +1,7 @@
 'use client';
 
 import { IUser } from '@/types';
-import { Suspense } from 'react';
+import { ReactNode, Suspense } from 'react';
 import CategoryBar from './CategoryBar';
 import MainNavbar from './MainNavbar';
 import TopBar from './TopBar';
@@ -10,7 +10,7 @@ interface DesktopNavbarProps {
   user: IUser | null;
   navItems: any[];
   activeOffers: any[];
-  logo?: React.ReactNode;
+  logo?: ReactNode;
   siteSettings?: any;
   totalItems: number;
   wishlistCount: number;
