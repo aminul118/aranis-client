@@ -883,6 +883,7 @@ const ProductForm = ({
                 <FormControl>
                   <MultiImageUploader
                     value={field.value}
+                    max={6}
                     onChange={(files) => field.onChange(files)}
                   />
                 </FormControl>
@@ -1221,6 +1222,7 @@ const ProductForm = ({
                           <FormControl>
                             <MultiImageUploader
                               value={field.value}
+                              max={6}
                               onChange={(files) => field.onChange(files)}
                             />
                           </FormControl>
@@ -1317,8 +1319,7 @@ const ProductForm = ({
               SEO Configuration
             </h3>
             <p className="text-muted-foreground text-xs font-medium">
-              Define custom metadata for Search Engine Optimization. If left
-              empty, defaults will be used.
+              Define custom metadata for Search Engine Optimization.
             </p>
           </div>
 
@@ -1327,7 +1328,9 @@ const ProductForm = ({
             name="seo.title"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Meta Title</FormLabel>
+                <FormLabel>
+                  Meta Title <span className="text-red-500">*</span>
+                </FormLabel>
                 <FormControl>
                   <Input
                     placeholder="e.g. Premium Silk Pakistani Suit | Aranis"
@@ -1355,7 +1358,9 @@ const ProductForm = ({
             name="seo.keywords"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Meta Keywords</FormLabel>
+                <FormLabel>
+                  Meta Keywords <span className="text-red-500">*</span>
+                </FormLabel>
                 <FormControl>
                   <Input
                     placeholder="e.g. silk suit, pakistani dress, luxury fashion"
@@ -1373,7 +1378,9 @@ const ProductForm = ({
             name="seo.description"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Meta Description</FormLabel>
+                <FormLabel>
+                  Meta Description <span className="text-red-500">*</span>
+                </FormLabel>
                 <FormControl>
                   <Textarea
                     className="h-36"

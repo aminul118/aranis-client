@@ -3,6 +3,7 @@
 import Image from '@/components/common/SafeImage';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useCallback, useRef, useState } from 'react';
+import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch';
 
 interface ProductImageGalleryProps {
   thumbnails: string[];
@@ -49,7 +50,7 @@ const ProductImageGallery = ({
   const currentIdx = thumbnails.indexOf(selectedImage);
 
   return (
-    <div className="flex gap-3 select-none">
+    <div className="relative flex gap-3 select-none">
       {/* ── Left Thumbnail Strip ─────────────────────────────────────────── */}
       {hasMultiple && (
         <div
@@ -86,76 +87,173 @@ const ProductImageGallery = ({
         </div>
       )}
 
-      {/* ── Main Viewer ───────────────────────────────────────────────────── */}
-      <div
-        ref={containerRef}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-        onMouseMove={handleMouseMove}
-        className="border-border/50 bg-secondary/30 relative aspect-[4/5] flex-1 cursor-crosshair overflow-hidden rounded-3xl border backdrop-blur-sm"
-        style={{ isolation: 'isolate' }}
-      >
-        {/* Crossfade switcher */}
-        <AnimatePresence mode="wait">
+      {/* ── Main Viewer (Desktop) ───────────────────────────────────────── */}
+      <div className="relative hidden aspect-[4/5] flex-1 md:block">
+        <div
+          ref={containerRef}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          onMouseMove={handleMouseMove}
+          className="border-border/50 bg-secondary/30 absolute inset-0 cursor-crosshair overflow-hidden rounded-3xl border backdrop-blur-sm"
+          style={{ isolation: 'isolate' }}
+        >
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={selectedImage}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="absolute inset-0"
+            >
+              <Image
+                src={selectedImage}
+                alt={productName}
+                fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                priority
+                draggable={false}
+                className="pointer-events-none object-cover"
+              />
+              {/* The Lens that follows the cursor */}
+              {isZoomed && (
+                <div
+                  className="pointer-events-none absolute border border-black/10 bg-white/30 shadow-xl backdrop-blur-[2px] transition-opacity duration-200"
+                  style={{
+                    width: '30%',
+                    height: '30%',
+                    left: `calc(${zoomOrigin.x}% - 15%)`,
+                    top: `calc(${zoomOrigin.y}% - 15%)`,
+                  }}
+                />
+              )}
+            </motion.div>
+          </AnimatePresence>
+
+          {saleBadge && (
+            <div className="absolute top-4 left-4 z-10">{saleBadge}</div>
+          )}
+
           <motion.div
-            key={selectedImage}
             initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="absolute inset-0"
+            animate={{ opacity: isZoomed ? 0 : 1 }}
+            transition={{ duration: 0.3 }}
+            className="pointer-events-none absolute right-3 bottom-10 z-10 flex items-center gap-1.5 rounded-full bg-black/50 px-3 py-1.5 text-[10px] font-bold tracking-wide text-white/80 backdrop-blur-sm"
           >
-            <Image
-              src={selectedImage}
-              alt={productName}
-              fill
-              sizes="(max-width: 1024px) 100vw, 50vw"
-              priority
-              draggable={false}
-              className="pointer-events-none object-cover"
+            <svg
+              className="h-3 w-3"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2.5}
+            >
+              <circle cx="11" cy="11" r="8" />
+              <path d="M21 21l-4.35-4.35M11 8v6M8 11h6" />
+            </svg>
+            Hover to zoom
+          </motion.div>
+
+          {hasMultiple && (
+            <div className="absolute right-3 bottom-3 z-10 rounded-full bg-black/60 px-3 py-1 text-xs font-bold text-white backdrop-blur-sm">
+              {currentIdx + 1} / {thumbnails.length}
+            </div>
+          )}
+        </div>
+
+        {/* ── Zoom Portal (Desktop) ─────────────────────────────────────── */}
+        <AnimatePresence>
+          {isZoomed && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.2 }}
+              className="border-border/50 pointer-events-none absolute top-0 left-[calc(100%+24px)] z-50 h-full w-full overflow-hidden rounded-3xl border bg-white shadow-2xl"
               style={{
-                transform: isZoomed ? `scale(${ZOOM_SCALE})` : 'scale(1)',
-                transformOrigin: `${zoomOrigin.x}% ${zoomOrigin.y}%`,
-                transition: isZoomed
-                  ? 'transform 0.08s ease-out'
-                  : 'transform 0.35s ease-out',
-                willChange: 'transform',
+                backgroundImage: `url(${selectedImage})`,
+                backgroundPosition: `${zoomOrigin.x}% ${zoomOrigin.y}%`,
+                backgroundSize: `${ZOOM_SCALE * 100}%`,
+                backgroundRepeat: 'no-repeat',
               }}
             />
-          </motion.div>
+          )}
         </AnimatePresence>
+      </div>
 
-        {/* Sale badge */}
-        {saleBadge && (
-          <div className="absolute top-4 left-4 z-10">{saleBadge}</div>
-        )}
-
-        {/* Zoom hint */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: isZoomed ? 0 : 1 }}
-          transition={{ duration: 0.3 }}
-          className="pointer-events-none absolute right-3 bottom-10 z-10 flex items-center gap-1.5 rounded-full bg-black/50 px-3 py-1.5 text-[10px] font-bold tracking-wide text-white/80 backdrop-blur-sm"
+      {/* ── Main Viewer (Mobile) ────────────────────────────────────────── */}
+      <div
+        className="border-border/50 bg-secondary/30 relative aspect-[4/5] flex-1 overflow-hidden rounded-3xl border backdrop-blur-sm md:hidden"
+        style={{ isolation: 'isolate' }}
+      >
+        <TransformWrapper
+          initialScale={1}
+          minScale={1}
+          maxScale={4}
+          centerOnInit
+          doubleClick={{ mode: 'zoomIn' }}
+          wheel={{ step: 0.1 }}
+          pinch={{ step: 5 }}
         >
-          <svg
-            className="h-3 w-3"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2.5}
-          >
-            <circle cx="11" cy="11" r="8" />
-            <path d="M21 21l-4.35-4.35M11 8v6M8 11h6" />
-          </svg>
-          Hover to zoom
-        </motion.div>
+          {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
+            <>
+              <TransformComponent
+                wrapperStyle={{ width: '100%', height: '100%' }}
+                contentStyle={{ width: '100%', height: '100%' }}
+              >
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={selectedImage}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="relative h-full w-full"
+                    style={{ width: '100%', height: '100%' }}
+                  >
+                    <Image
+                      src={selectedImage}
+                      alt={productName}
+                      fill
+                      sizes="100vw"
+                      priority
+                      draggable={false}
+                      className="object-cover"
+                    />
+                  </motion.div>
+                </AnimatePresence>
+              </TransformComponent>
 
-        {/* Image counter */}
-        {hasMultiple && (
-          <div className="absolute right-3 bottom-3 z-10 rounded-full bg-black/60 px-3 py-1 text-xs font-bold text-white backdrop-blur-sm">
-            {currentIdx + 1} / {thumbnails.length}
-          </div>
-        )}
+              {saleBadge && (
+                <div className="pointer-events-none absolute top-4 left-4 z-10">
+                  {saleBadge}
+                </div>
+              )}
+
+              <div className="pointer-events-none absolute right-3 bottom-10 z-10 flex items-center gap-1.5 rounded-full bg-black/50 px-3 py-1.5 text-[10px] font-bold tracking-wide text-white/80 backdrop-blur-sm">
+                <svg
+                  className="h-3 w-3"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2.5}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM10.5 7.5v6m3-3h-6"
+                  />
+                </svg>
+                Pinch to zoom
+              </div>
+
+              {hasMultiple && (
+                <div className="pointer-events-none absolute right-3 bottom-3 z-10 rounded-full bg-black/60 px-3 py-1 text-xs font-bold text-white backdrop-blur-sm">
+                  {currentIdx + 1} / {thumbnails.length}
+                </div>
+              )}
+            </>
+          )}
+        </TransformWrapper>
       </div>
     </div>
   );

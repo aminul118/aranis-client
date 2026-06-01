@@ -11,7 +11,8 @@ export const productSchema = z.object({
     .refine((val) => val > 0, 'Price must be greater than 0'),
   thumbnails: z
     .array(z.union([z.string(), z.any()]))
-    .min(1, 'At least one product thumbnail is required'),
+    .min(1, 'At least one product thumbnail is required')
+    .max(6, 'Maximum 6 product thumbnails allowed'),
   description: z.string().min(1, 'Description is required'),
   details: z.string().default(''),
   slug: z.string().optional(),
@@ -49,6 +50,7 @@ export const productSchema = z.object({
           .default([]),
         thumbnails: z
           .array(z.union([z.string(), z.any()]))
+          .max(6, 'Maximum 6 variant thumbnails allowed')
           .optional()
           .default([]),
         sku: z.string().optional(),
@@ -70,13 +72,11 @@ export const productSchema = z.object({
   sku: z.string().optional(),
   videoUrl: z.string().url('Invalid URL').optional().or(z.literal('')),
   sizeGuide: z.string().optional().or(z.literal('')),
-  seo: z
-    .object({
-      title: z.string().optional(),
-      description: z.string().optional(),
-      keywords: z.string().optional(),
-    })
-    .optional(),
+  seo: z.object({
+    title: z.string().min(1, 'SEO title is required'),
+    description: z.string().min(1, 'SEO description is required'),
+    keywords: z.string().min(1, 'SEO keywords are required'),
+  }),
 });
 
 export const addProductSchema = productSchema;
