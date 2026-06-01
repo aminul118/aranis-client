@@ -1,7 +1,7 @@
 'use client';
 
-import { useCart } from '@/context/CartContext';
-import { useWishlist } from '@/context/WishlistContext';
+import { useCartOptional } from '@/context/CartContext';
+import { useWishlistOptional } from '@/context/WishlistContext';
 import { cn } from '@/lib/utils';
 import { Gift, Heart, MapPin, ShoppingCart } from 'lucide-react';
 import Link from 'next/link';
@@ -10,21 +10,11 @@ import { usePathname } from 'next/navigation';
 const MobileBottomNav = () => {
   const pathname = usePathname();
 
-  let totalItems = 0;
-  try {
-    const cart = useCart();
-    totalItems = cart?.totalItems || 0;
-  } catch (error) {
-    // Safe fallback
-  }
+  const cart = useCartOptional();
+  let totalItems = cart?.totalItems || 0;
 
-  let wishlistCount = 0;
-  try {
-    const wishlist = useWishlist();
-    wishlistCount = wishlist?.wishlistCount || 0;
-  } catch (error) {
-    // Safe fallback
-  }
+  const wishlist = useWishlistOptional();
+  let wishlistCount = wishlist?.wishlistCount || 0;
 
   const navItems = [
     {

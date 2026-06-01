@@ -332,3 +332,7 @@ export const useWishlist = () => {
   }
   return context;
 };
+
+export const useWishlistOptional = () => {
+  return useContext(WishlistContext);
+};

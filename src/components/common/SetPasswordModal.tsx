@@ -21,6 +21,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import Password from '@/components/ui/password';
+import { useUser } from '@/context/UserContext';
 import useActionHandler from '@/hooks/useActionHandler';
 import { changePassword } from '@/services/user/users';
 import { setPasswordSchema, SetPasswordValues } from '@/zod/auth';
@@ -35,6 +36,7 @@ interface SetPasswordModalProps {
 
 const SetPasswordModal = ({ open, setOpen }: SetPasswordModalProps) => {
   const { executePost } = useActionHandler();
+  const { refreshUser } = useUser();
 
   const form = useForm<SetPasswordValues>({
     resolver: zodResolver(setPasswordSchema),
@@ -51,6 +53,7 @@ const SetPasswordModal = ({ open, setOpen }: SetPasswordModalProps) => {
         onSuccess: () => {
           form.reset();
           setOpen(false);
+          refreshUser();
         },
         loadingText: 'Setting your password...',
         message:

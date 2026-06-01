@@ -1,7 +1,7 @@
 'use client';
 
-import { useCart } from '@/context/CartContext';
-import { useWishlist } from '@/context/WishlistContext';
+import { useCartOptional } from '@/context/CartContext';
+import { useWishlistOptional } from '@/context/WishlistContext';
 import { cn } from '@/lib/utils';
 import { IUser } from '@/types';
 import { motion, useMotionValueEvent, useScroll } from 'framer-motion';
@@ -23,21 +23,11 @@ const Navbar = ({
   logo?: React.ReactNode;
   siteSettings?: any;
 }) => {
-  let totalItems = 0;
-  try {
-    const cart = useCart();
-    totalItems = cart?.totalItems || 0;
-  } catch (error) {
-    // Safe fallback for SSR or context-less environments
-  }
+  const cart = useCartOptional();
+  let totalItems = cart?.totalItems || 0;
 
-  let wishlistCount = 0;
-  try {
-    const wishlist = useWishlist();
-    wishlistCount = wishlist?.wishlistCount || 0;
-  } catch (error) {
-    // Safe fallback for SSR or context-less environments
-  }
+  const wishlist = useWishlistOptional();
+  let wishlistCount = wishlist?.wishlistCount || 0;
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);

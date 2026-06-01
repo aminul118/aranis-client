@@ -144,6 +144,8 @@ const ProductDetailContent = ({
           description:
             "We'll notify you as soon as this item is back in stock.",
         });
+      } else {
+        toast.error(res.message || 'Failed to submit restock request');
       }
     } catch (error) {
       toast.error('Something went wrong');
@@ -620,7 +622,7 @@ const ProductDetailContent = ({
                     onClick={handleRestockRequest}
                     disabled={isRequesting}
                     variant="outline"
-                    className="w-full rounded-2xl border-2 border-zinc-200 py-4 text-sm font-bold text-zinc-600 transition-all hover:bg-zinc-50 active:scale-[0.98]"
+                    className="w-full rounded-2xl border-2 border-zinc-200 py-4 text-sm font-bold text-zinc-600 transition-all hover:bg-zinc-50 active:scale-[0.98] dark:border-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-900/50"
                   >
                     <BellRing className="mr-2 h-4 w-4 animate-pulse text-blue-500" />{' '}
                     {isRequesting

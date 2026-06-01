@@ -1,7 +1,7 @@
 'use client';
 
-import { useCart } from '@/context/CartContext';
-import { useWishlist } from '@/context/WishlistContext';
+import { useCartOptional } from '@/context/CartContext';
+import { useWishlistOptional } from '@/context/WishlistContext';
 import { IUser } from '@/types';
 import { Gift, Heart, ShoppingCart, User } from 'lucide-react';
 import Link from 'next/link';
@@ -24,21 +24,11 @@ const MainNavbar = ({
   totalItems: propTotalItems,
   wishlistCount: propWishlistCount,
 }: MainNavbarProps) => {
-  let contextTotalItems = 0;
-  try {
-    const cart = useCart();
-    contextTotalItems = cart?.totalItems || 0;
-  } catch (error) {
-    // Safe fallback
-  }
+  const cart = useCartOptional();
+  let contextTotalItems = cart?.totalItems || 0;
 
-  let contextWishlistCount = 0;
-  try {
-    const wishlist = useWishlist();
-    contextWishlistCount = wishlist?.wishlistCount || 0;
-  } catch (error) {
-    // Safe fallback
-  }
+  const wishlist = useWishlistOptional();
+  let contextWishlistCount = wishlist?.wishlistCount || 0;
 
   const totalItems =
     propTotalItems !== undefined ? propTotalItems : contextTotalItems;

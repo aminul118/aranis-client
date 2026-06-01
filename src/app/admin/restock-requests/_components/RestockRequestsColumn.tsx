@@ -11,17 +11,23 @@ const RestockRequestsColumn: Column<IRestockRequest>[] = [
     header: 'Product',
     accessor: (c) => (
       <div className="flex items-center gap-4">
-        <div className="border-border relative h-12 w-10 overflow-hidden rounded-md border">
-          <Image
-            src={c.product.thumbnails?.[0]}
-            alt={c.product.name}
-            fill
-            className="object-cover"
-          />
+        <div className="border-border bg-muted relative flex h-12 w-10 items-center justify-center overflow-hidden rounded-md border">
+          {c.product ? (
+            <Image
+              src={c.product.thumbnails?.[0] || '/placeholder.png'}
+              alt={c.product.name}
+              fill
+              className="object-cover"
+            />
+          ) : (
+            <span className="text-muted-foreground text-[10px]">N/A</span>
+          )}
         </div>
         <div>
-          <p className="font-bold">{c.product.name}</p>
-          <p className="text-muted-foreground text-xs">{c.product.category}</p>
+          <p className="font-bold">{c.product?.name || 'Deleted Product'}</p>
+          <p className="text-muted-foreground text-xs">
+            {c.product?.category || 'N/A'}
+          </p>
         </div>
       </div>
     ),
@@ -33,9 +39,11 @@ const RestockRequestsColumn: Column<IRestockRequest>[] = [
         <User size={14} className="text-muted-foreground" />
         <div>
           <p className="text-sm font-medium">
-            {c.user.firstName} {c.user.lastName}
+            {c.user ? `${c.user.firstName} ${c.user.lastName}` : 'Deleted User'}
           </p>
-          <p className="text-muted-foreground text-[10px]">{c.user.email}</p>
+          <p className="text-muted-foreground text-[10px]">
+            {c.user?.email || 'N/A'}
+          </p>
         </div>
       </div>
     ),

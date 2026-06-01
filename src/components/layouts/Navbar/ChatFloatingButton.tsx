@@ -239,7 +239,7 @@ const ChatFloatingButton = ({
                         <MessageCircle size={24} />
                       </div>
                       <h4 className="text-sm font-bold text-gray-900 dark:text-white">
-                        Welcome, {user.firstName}!
+                        Welcome, {user.fullName || user.firstName}!
                       </h4>
                       <p className="mt-1 max-w-[200px] text-xs text-gray-400">
                         How can we help you today? Our team is ready to assist

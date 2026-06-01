@@ -8,6 +8,7 @@ import { deleteCategoryBulk, ICategory } from '@/services/category/category';
 import { Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import CategoriesColumn from './CategoriesColumn';
+import SubCategoryFilter from './SubCategoryFilter';
 
 const CategoriesTable = ({ categories }: { categories: ICategory[] }) => {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -47,7 +48,9 @@ const CategoriesTable = ({ categories }: { categories: ICategory[] }) => {
           </div>
         </div>
       )}
-      <TableFilters />
+      <TableFilters>
+        <SubCategoryFilter categories={categories || []} />
+      </TableFilters>
       <TableManageMent
         columns={CategoriesColumn}
         data={categories || []}

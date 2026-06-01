@@ -36,7 +36,6 @@ export const getMyWishlist = async () => {
     '/wishlist/my-wishlist',
     {
       cache: 'no-store',
-      next: { tags: ['wishlist'] },
     },
   );
 };

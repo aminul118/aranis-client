@@ -54,9 +54,7 @@ const getAllOrders = async (query: Record<string, string>) => {
 const getMyOrders = async (query?: Record<string, string>) => {
   return await serverFetch.get<ApiResponse<IOrder[]>>('/orders/my-orders', {
     query,
-    next: {
-      tags: ['order'],
-    },
+    cache: 'no-store',
   });
 };
 
@@ -98,9 +96,7 @@ const deleteOrderBulk = async (ids: string[]) => {
 
 const getUnreadOrdersCount = async () => {
   return await serverFetch.get<ApiResponse<number>>('/orders/unread-count', {
-    next: {
-      tags: ['order'],
-    },
+    cache: 'no-store',
   });
 };
 

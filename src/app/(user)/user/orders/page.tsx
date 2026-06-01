@@ -3,7 +3,7 @@
 import WriteReviewModal from '@/app/(user)/user/orders/_components/WriteReviewModal';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useCart } from '@/context/CartContext';
+import { useCartOptional } from '@/context/CartContext';
 import { getMyOrders } from '@/services/order/order';
 import { AnimatePresence } from 'framer-motion';
 import { ArrowRight, Search, ShoppingBag } from 'lucide-react';
@@ -16,7 +16,7 @@ import OrderListSkeleton from './_components/OrderListSkeleton';
 
 const UserOrdersPage = () => {
   const router = useRouter();
-  const { addToCart } = useCart();
+  const cartContext = useCartOptional();
   const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -24,8 +24,8 @@ const UserOrdersPage = () => {
 
   const handleOrderAgain = (order: any) => {
     order.items.forEach((item: any) => {
-      if (item.product) {
-        addToCart(item.product, item.color, item.size);
+      if (item.product && cartContext) {
+        cartContext.addToCart(item.product, item.color, item.size);
       }
     });
     toast.success('Items added to cart!');

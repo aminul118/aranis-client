@@ -309,3 +309,7 @@ export const useCart = () => {
   }
   return context;
 };
+
+export const useCartOptional = () => {
+  return useContext(CartContext);
+};
