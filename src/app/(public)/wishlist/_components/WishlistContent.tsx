@@ -3,7 +3,6 @@
 import Image from '@/components/common/SafeImage';
 import { useCart } from '@/context/CartContext';
 import { useWishlist } from '@/context/WishlistContext';
-import { motion } from 'framer-motion';
 import { Heart, Minus, Plus, ShoppingBag, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -248,47 +247,22 @@ export default function WishlistContent() {
 
   if (wishlistCount === 0) {
     return (
-      <div className="bg-background flex min-h-[70vh] flex-col items-center justify-center px-4 pt-20 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="flex flex-col items-center"
+      <div className="bg-background flex min-h-[60vh] flex-col items-center justify-center px-4 pt-20 text-center">
+        <div className="bg-muted mb-6 flex h-20 w-20 items-center justify-center rounded-full">
+          <Heart className="text-muted-foreground h-10 w-10 opacity-50" />
+        </div>
+        <h3 className="text-foreground text-2xl font-black tracking-tight">
+          Nothing here yet
+        </h3>
+        <p className="text-muted-foreground mt-2 max-w-sm text-sm">
+          Tap the heart on any item to save it here for later!
+        </p>
+        <Link
+          href="/shop"
+          className="bg-primary text-primary-foreground hover:bg-primary/90 mt-6 flex h-12 items-center justify-center rounded-xl px-8 text-sm font-bold transition-all active:scale-95"
         >
-          <motion.div
-            animate={{
-              scale: [1, 1.15, 1],
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              ease: 'easeInOut',
-            }}
-            className="mb-8 flex h-24 w-24 items-center justify-center rounded-full bg-pink-50/80 text-pink-400 dark:bg-pink-900/20"
-          >
-            <Heart
-              size={48}
-              strokeWidth={1.5}
-              fill="currentColor"
-              className="opacity-20"
-            />
-            <Heart size={48} strokeWidth={1.5} className="absolute" />
-          </motion.div>
-
-          <h1 className="text-foreground mb-3 text-3xl font-bold tracking-tight">
-            Nothing here yet
-          </h1>
-
-          <p className="text-muted-foreground mb-10 max-w-[280px] text-base leading-relaxed">
-            Tap the heart on any item to save it here for later!
-          </p>
-
-          <Link
-            href="/shop"
-            className="flex h-14 items-center justify-center rounded-2xl bg-pink-500 px-10 text-sm font-bold text-white shadow-lg shadow-pink-500/20 transition-all hover:bg-pink-600 active:scale-95"
-          >
-            Explore Collections
-          </Link>
-        </motion.div>
+          Explore Collections
+        </Link>
       </div>
     );
   }
