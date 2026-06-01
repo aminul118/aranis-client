@@ -7,7 +7,10 @@ import { Metadata } from 'next';
 
 const OrdersAdminPage = async ({ searchParams }: SearchParams) => {
   const params = await cleanSearchParams(searchParams);
-  const { data, meta } = await getAllOrders(params);
+  const { data, meta } = await getAllOrders(params, {
+    cache: 'no-store',
+    headers: { 'x-bypass-cache': 'true' },
+  });
   return (
     <>
       <ClientTableWrapper tableTitle="Orders" meta={meta}>

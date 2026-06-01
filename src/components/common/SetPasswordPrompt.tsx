@@ -1,5 +1,6 @@
 'use client';
 
+import { useUser } from '@/context/UserContext';
 import { IUser } from '@/types';
 import { ShieldAlert, X } from 'lucide-react';
 import { useState } from 'react';
@@ -10,11 +11,14 @@ interface SetPasswordPromptProps {
   user: IUser;
 }
 
-const SetPasswordPrompt = ({ user }: SetPasswordPromptProps) => {
+const SetPasswordPrompt = ({ user: serverUser }: SetPasswordPromptProps) => {
+  const { user: clientUser } = useUser();
+  const activeUser = clientUser || serverUser;
+
   const [modalOpen, setModalOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
 
-  if (user?.hasPassword || !isVisible) {
+  if (activeUser?.hasPassword || !isVisible) {
     return null;
   }
 

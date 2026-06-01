@@ -3,9 +3,51 @@ import { getNavbars } from '@/services/navbar/navbar';
 import { getSiteSettings } from '@/services/settings/settings';
 import { Metadata } from 'next';
 
+import { getCategories } from '@/services/category/category';
+import { getColors } from '@/services/color/color';
+import { getProductPriceRange, getProducts } from '@/services/product/product';
+import { getSizes } from '@/services/size/size';
 import ShopContent from './_components/ShopContent';
-const ShopPage = () => {
-  return <ShopContent />;
+
+interface Props {
+  searchParams: Promise<Record<string, string>>;
+}
+
+const ShopPage = async ({ searchParams }: Props) => {
+  const resolvedSearchParams = await searchParams;
+  const page = resolvedSearchParams.page || '1';
+  const limit = '12';
+
+  const query = {
+    ...resolvedSearchParams,
+    page,
+    limit,
+  };
+
+  const [
+    { data: products, meta },
+    { data: dbCategories },
+    { data: dbColors },
+    { data: dbSizes },
+    { data: priceRange },
+  ] = await Promise.all([
+    getProducts(query),
+    getCategories({ limit: '1000' }),
+    getColors({ limit: '1000' }),
+    getSizes({ limit: '1000' }),
+    getProductPriceRange(),
+  ]);
+
+  return (
+    <ShopContent
+      products={products || []}
+      meta={meta || null}
+      dbCategories={dbCategories || []}
+      dbColors={dbColors || []}
+      dbSizes={dbSizes || []}
+      priceRange={priceRange || null}
+    />
+  );
 };
 
 export default ShopPage;

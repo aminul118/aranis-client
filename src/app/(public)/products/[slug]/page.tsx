@@ -30,15 +30,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
 
+  const title = product.seo?.title;
+  const description = product.seo?.description;
+  const keywords = product.seo?.keywords;
+
   return {
-    title: `${product.name} | Aranis`,
-    description: product.description.replace(/<[^>]*>/g, '').slice(0, 160),
+    title,
+    description,
+    keywords,
     openGraph: {
-      title: product.name,
-      description: product.description.replace(/<[^>]*>/g, '').slice(0, 160),
+      title: product.seo?.title,
+      description,
       images: [
         {
-          url: product.thumbnails?.[0],
+          url: product.thumbnails?.[0] || '',
           width: 800,
           height: 1000,
           alt: product.name,

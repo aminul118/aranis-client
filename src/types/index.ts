@@ -82,6 +82,12 @@ export interface IProduct {
   videoUrl?: string;
   sizeGuide?: ISizeGuide | string;
   isDeleted?: boolean;
+  seo?: {
+    title?: string;
+    description?: string;
+    keywords?: string;
+    ogImage?: string;
+  };
 }
 
 export interface ICartItem extends IProduct {

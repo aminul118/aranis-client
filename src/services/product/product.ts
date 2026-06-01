@@ -1,5 +1,6 @@
 'use server';
 
+import type { FetchOptions } from '@/helpers/serverFetchHelper';
 import { revalidate } from '@/lib/revalidate';
 import serverFetch from '@/lib/server-fetch';
 import type { ApiResponse, IProduct } from '@/types';
@@ -44,10 +45,17 @@ export const updateProduct = async (
   return res;
 };
 
-const getProducts = async (query: Record<string, string>) => {
+const getProducts = async (
+  query: Record<string, string>,
+  options?: FetchOptions,
+) => {
   return await serverFetch.get<ApiResponse<IProduct[]>>('/products', {
     query,
-    next: { tags: ['product'] },
+    next: { tags: ['product'], ...options?.next },
+    ...options,
+    headers: {
+      ...options?.headers,
+    },
   });
 };
 

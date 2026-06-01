@@ -4,15 +4,13 @@ import AppPagination from '@/components/common/pagination/AppPagination';
 import { TransitionContext } from '@/context/useTransition';
 import { generateShopPath } from '@/lib/url-slugs';
 import { cn } from '@/lib/utils';
-import { getCategories, ICategory } from '@/services/category/category';
-import { getColors, IColor } from '@/services/color/color';
-import { getProductPriceRange, getProducts } from '@/services/product/product';
-import { getSizes, ISize } from '@/services/size/size';
+import { ICategory } from '@/services/category/category';
+import { IColor } from '@/services/color/color';
+import { ISize } from '@/services/size/size';
 import { IMeta, IProduct } from '@/types';
 import { motion } from 'framer-motion';
 import { Gift } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import NProgress from 'nprogress';
 import {
   useEffect,
   useTransition as useReactTransition,
@@ -23,12 +21,6 @@ import FilterSection from './FilterSection';
 import ProductList from './ProductList';
 import ShopHeader from './ShopHeader';
 
-// Global memory cache to eliminate loading flickers during page changes/navigating navbar
-let cachedColors: IColor[] | null = null;
-let cachedCategories: ICategory[] | null = null;
-let cachedPriceRange: { minPrice: number; maxPrice: number } | null = null;
-let cachedSizes: ISize[] | null = null;
-
 interface ShopContentProps {
   initialFilters?: {
     category?: string;
@@ -37,40 +29,44 @@ interface ShopContentProps {
   };
   isOfferPage?: boolean;
   offerTag?: string;
+  products: IProduct[];
+  meta: IMeta | null;
+  dbCategories: ICategory[];
+  dbColors: IColor[];
+  dbSizes: ISize[];
+  priceRange: { minPrice: number; maxPrice: number } | null;
 }
 
 const ShopContent = ({
   initialFilters,
   isOfferPage = false,
   offerTag,
+  products = [],
+  meta = null,
+  dbCategories = [],
+  dbColors = [],
+  dbSizes = [],
+  priceRange = null,
 }: ShopContentProps) => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
   const [isPending, startTransition] = useReactTransition();
   const [pendingAction, setPendingAction] = useState<string | null>(null);
-  const [allProducts, setAllProducts] = useState<IProduct[]>([]);
-  const [meta, setMeta] = useState<IMeta | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [hasInitialProducts, setHasInitialProducts] = useState<boolean | null>(
-    null,
-  );
 
-  // Initialize with cached metadata to render sidebar filters instantly without flickering
-  const [dbColors, setDbColors] = useState<IColor[]>(cachedColors || []);
-  const [dbCategories, setDbCategories] = useState<ICategory[]>(
-    cachedCategories || [],
-  );
-  const [dbSizes, setDbSizes] = useState<ISize[]>(cachedSizes || []);
-  const [priceRange, setPriceRange] = useState<{
-    minPrice: number;
-    maxPrice: number;
-  } | null>(cachedPriceRange || null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
-  const page = Number(searchParams.get('page')) || 1;
-  const limit = 12;
+  // Load view mode from localStorage on mount
+  useEffect(() => {
+    const savedView = localStorage.getItem('Aranis_shop_view') as
+      | 'grid'
+      | 'list';
+    if (savedView && (savedView === 'grid' || savedView === 'list')) {
+      setViewMode(savedView);
+    }
+  }, []);
 
-  // Sync state with URL and path params
   const selectedCategory =
     initialFilters?.category || searchParams.get('category') || 'All';
   const selectedSubCategory =
@@ -82,136 +78,17 @@ const ShopContent = ({
   const selectedMinPrice = searchParams.get('minPrice') || '';
   const selectedMaxPrice = searchParams.get('maxPrice') || '';
   const sortBy = searchParams.get('sort') || '-createdAt';
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
-  // Load view mode from localStorage on mount
-  useEffect(() => {
-    const savedView = localStorage.getItem('Aranis_shop_view') as
-      | 'grid'
-      | 'list';
+  // Check if we are in an empty state prior to filtering (used for offers page)
+  const isQueryEmpty =
+    !searchParams.get('color') &&
+    !searchParams.get('sizes') &&
+    !searchParams.get('minPrice') &&
+    !searchParams.get('maxPrice') &&
+    !searchParams.get('q') &&
+    !searchParams.get('sort');
 
-    if (savedView && (savedView === 'grid' || savedView === 'list')) {
-      setViewMode(savedView);
-    }
-  }, []);
-
-  useEffect(() => {
-    const fetchAll = async () => {
-      // Background stale-while-revalidate: only show spinner if we have no products yet
-      if (allProducts.length === 0) {
-        setLoading(true);
-      }
-      NProgress.start();
-
-      let updatedHasInitial = hasInitialProducts;
-
-      try {
-        const query: Record<string, string> = {};
-        searchParams.forEach((value, key) => {
-          if (
-            value !== 'undefined' &&
-            value !== 'null' &&
-            value &&
-            value.trim() !== ''
-          ) {
-            query[key] = value;
-          }
-        });
-
-        if (initialFilters?.category) query.category = initialFilters.category;
-        if (initialFilters?.subCategory)
-          query.subCategory = initialFilters.subCategory;
-        if (initialFilters?.type) query.type = initialFilters.type;
-
-        if (isOfferPage) {
-          query.isOffer = 'true';
-          if (offerTag) {
-            query.offerTag = offerTag;
-          }
-        }
-
-        if (!query.limit) query.limit = limit.toString();
-        if (!query.page) query.page = page.toString();
-
-        const { data, meta: productMeta } = await getProducts(query);
-        setAllProducts(data || []);
-        setMeta(productMeta || null);
-
-        // Track if there are any products initially before user filters
-        const isQueryEmpty =
-          !searchParams.get('color') &&
-          !searchParams.get('sizes') &&
-          !searchParams.get('minPrice') &&
-          !searchParams.get('maxPrice') &&
-          !searchParams.get('q') &&
-          !searchParams.get('sort');
-
-        if (hasInitialProducts === null) {
-          if (data && data.length > 0) {
-            updatedHasInitial = true;
-          } else {
-            updatedHasInitial = !isQueryEmpty;
-          }
-          setHasInitialProducts(updatedHasInitial);
-        }
-      } catch (error) {
-        console.error('Failed to fetch products', error);
-        if (hasInitialProducts === null) {
-          updatedHasInitial = false;
-          setHasInitialProducts(false);
-        }
-      } finally {
-        if (hasInitialProducts === null && updatedHasInitial === null) {
-          setHasInitialProducts(false);
-        }
-        setLoading(false);
-        NProgress.done();
-      }
-    };
-    fetchAll();
-  }, [
-    searchParams,
-    page,
-    initialFilters?.category,
-    initialFilters?.subCategory,
-    initialFilters?.type,
-    isOfferPage,
-    offerTag,
-  ]);
-
-  useEffect(() => {
-    const fetchMetadata = async () => {
-      try {
-        const [colorRes, catRes, priceRes, sizeRes] = await Promise.all([
-          getColors({ limit: '1000' }),
-          getCategories({ limit: '1000' }),
-          getProductPriceRange(),
-          getSizes({ limit: '1000' }),
-        ]);
-
-        if (colorRes.data) {
-          cachedColors = colorRes.data;
-          setDbColors(colorRes.data);
-        }
-        if (catRes.data) {
-          cachedCategories = catRes.data;
-          setDbCategories(catRes.data);
-        }
-        if (priceRes.data) {
-          cachedPriceRange = priceRes.data;
-          setPriceRange(priceRes.data);
-        }
-        if (sizeRes.data) {
-          cachedSizes = sizeRes.data;
-          setDbSizes(sizeRes.data);
-        }
-      } catch (error) {
-        console.error('Failed to fetch filter metadata', error);
-      }
-    };
-    fetchMetadata();
-  }, []);
+  const hasInitialProducts = (products?.length || 0) > 0 || !isQueryEmpty;
 
   const updateURL = (newParams: Record<string, string | null>) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -268,7 +145,6 @@ const ShopContent = ({
 
     startTransition(() => {
       if (isOfferPage) {
-        // We are on the offers page. Keep the path completely intact!
         router.push(`${pathname}${queryStr}`);
       } else if (hasStructuralChange) {
         const nextPath = generateShopPath(
@@ -300,7 +176,6 @@ const ShopContent = ({
     };
 
     if (!initialFilters) {
-      // Only clear structural category paths if we are on the general /shop page
       clearParams.category = 'All';
       clearParams.subCategory = '';
       clearParams.type = '';
@@ -309,14 +184,6 @@ const ShopContent = ({
     updateURL(clearParams);
   };
 
-  if (isOfferPage && hasInitialProducts === null) {
-    return (
-      <div className="bg-background flex min-h-[70vh] items-center justify-center">
-        <div className="h-10 w-10 animate-spin rounded-full border-t-2 border-b-2 border-red-500"></div>
-      </div>
-    );
-  }
-
   return (
     <TransitionContext.Provider
       value={{ startTransition, isPending, pendingAction, setPendingAction }}
@@ -324,11 +191,11 @@ const ShopContent = ({
       <div
         className={cn(
           'bg-background min-h-screen transition-opacity duration-300',
-          (isPending || loading) && 'pointer-events-none opacity-60',
+          isPending && 'pointer-events-none opacity-60',
         )}
       >
         <div className="container mx-auto px-4 py-8 md:py-12">
-          {isOfferPage && hasInitialProducts === false ? (
+          {isOfferPage && !hasInitialProducts ? (
             <div className="flex min-h-[50vh] flex-col items-center justify-center py-10 text-center">
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
@@ -459,8 +326,8 @@ const ShopContent = ({
 
                 <main className="flex-1">
                   <ProductList
-                    products={allProducts}
-                    loading={loading}
+                    products={products}
+                    loading={isPending}
                     viewMode={viewMode}
                     selectedColors={selectedColors}
                   />

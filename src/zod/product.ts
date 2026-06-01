@@ -70,6 +70,13 @@ export const productSchema = z.object({
   sku: z.string().optional(),
   videoUrl: z.string().url('Invalid URL').optional().or(z.literal('')),
   sizeGuide: z.string().optional().or(z.literal('')),
+  seo: z
+    .object({
+      title: z.string().optional(),
+      description: z.string().optional(),
+      keywords: z.string().optional(),
+    })
+    .optional(),
 });
 
 export const addProductSchema = productSchema;

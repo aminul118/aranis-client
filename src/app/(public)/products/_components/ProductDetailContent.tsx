@@ -66,8 +66,7 @@ const ProductDetailContent = ({
       /(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/,
     );
     const videoId = match ? match[1] : url.split('/').pop() || '';
-    const origin = typeof window !== 'undefined' ? window.location.origin : '';
-    return `https://www.youtube.com/embed/${videoId}${origin ? `?origin=${encodeURIComponent(origin)}` : ''}`;
+    return `https://www.youtube.com/embed/${videoId}`;
   };
 
   // Initialize variant from URL color

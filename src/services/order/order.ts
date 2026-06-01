@@ -38,16 +38,30 @@ const createOrder = async (payload: IOrderPayload) => {
 
   revalidate('ME');
   revalidate('order');
+  revalidate('product');
+  try {
+    const { revalidatePath } = require('next/cache');
+    revalidatePath('/offers');
+    revalidatePath('/shop');
+    revalidatePath('/');
+  } catch (e) {
+    console.error(e);
+  }
 
   return res;
 };
 
-const getAllOrders = async (query: Record<string, string>) => {
+import type { FetchOptions } from '@/helpers/serverFetchHelper';
+
+const getAllOrders = async (
+  query: Record<string, string>,
+  options?: FetchOptions,
+) => {
   return await serverFetch.get<ApiResponse<IOrder[]>>('/orders', {
     query,
-    next: {
-      tags: ['order'],
-    },
+    next: { tags: ['order'], ...options?.next },
+    ...options,
+    headers: { ...options?.headers },
   });
 };
 
@@ -58,8 +72,12 @@ const getMyOrders = async (query?: Record<string, string>) => {
   });
 };
 
-const getSingleOrder = async (id: string) => {
-  return await serverFetch.get<ApiResponse<IOrder>>(`/orders/${id}`);
+const getSingleOrder = async (id: string, options?: FetchOptions) => {
+  return await serverFetch.get<ApiResponse<IOrder>>(`/orders/${id}`, {
+    next: { tags: ['order'], ...options?.next },
+    ...options,
+    headers: { ...options?.headers },
+  });
 };
 
 const updateOrderStatus = async (id: string, status: OrderStatus) => {
@@ -73,6 +91,15 @@ const updateOrderStatus = async (id: string, status: OrderStatus) => {
     },
   );
   revalidate('order');
+  revalidate('product');
+  try {
+    const { revalidatePath } = require('next/cache');
+    revalidatePath('/offers');
+    revalidatePath('/shop');
+    revalidatePath('/');
+  } catch (e) {
+    console.error(e);
+  }
   return res;
 };
 
@@ -91,6 +118,15 @@ const deleteOrderBulk = async (ids: string[]) => {
     },
   );
   revalidate('order');
+  revalidate('product');
+  try {
+    const { revalidatePath } = require('next/cache');
+    revalidatePath('/offers');
+    revalidatePath('/shop');
+    revalidatePath('/');
+  } catch (e) {
+    console.error(e);
+  }
   return res;
 };
 

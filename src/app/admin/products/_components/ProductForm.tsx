@@ -28,6 +28,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
 import useActionHandler from '@/hooks/useActionHandler';
 import { cn } from '@/lib/utils';
 import { ICategory } from '@/services/category/category';
@@ -82,6 +83,11 @@ type FormValues = {
   sku: string;
   videoUrl: string;
   sizeGuide: string;
+  seo: {
+    title: string;
+    description: string;
+    keywords: string;
+  };
 };
 
 interface Props {
@@ -146,6 +152,11 @@ const ProductForm = ({
         (product?.sizeGuide as any)?._id ||
         (product?.sizeGuide as string) ||
         '',
+      seo: {
+        title: product?.seo?.title || '',
+        description: product?.seo?.description || '',
+        keywords: product?.seo?.keywords || '',
+      },
     },
   });
 
@@ -190,6 +201,11 @@ const ProductForm = ({
           (product.sizeGuide as any)?._id ||
           (product.sizeGuide as string) ||
           '',
+        seo: {
+          title: product.seo?.title || '',
+          description: product.seo?.description || '',
+          keywords: product.seo?.keywords || '',
+        },
       });
     }
   }, [product, form]);
@@ -367,6 +383,7 @@ const ProductForm = ({
       'sizeGuide',
       data.sizeGuide === 'none' ? '' : data.sizeGuide || '',
     );
+    formData.append('seo', JSON.stringify(data.seo || {}));
     formData.append('color', data.color);
     formData.append('sizes', JSON.stringify(data.sizes || []));
     formData.append('sku', data.sku || '');
@@ -1293,6 +1310,94 @@ const ProductForm = ({
             </FormItem>
           )}
         />
+
+        <div className="bg-muted/5 space-y-4 rounded-xl border border-white/10 p-6">
+          <div className="space-y-1">
+            <h3 className="text-lg font-black tracking-tight uppercase">
+              SEO Configuration
+            </h3>
+            <p className="text-muted-foreground text-xs font-medium">
+              Define custom metadata for Search Engine Optimization. If left
+              empty, defaults will be used.
+            </p>
+          </div>
+
+          <FormField
+            control={form.control}
+            name="seo.title"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Meta Title</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="e.g. Premium Silk Pakistani Suit | Aranis"
+                    {...field}
+                  />
+                </FormControl>
+                <FormDescription className="flex justify-between">
+                  <span>Ideal length: 50-60 characters.</span>
+                  <span
+                    className={cn(
+                      (field.value?.length || 0) > 60
+                        ? 'font-bold text-red-500'
+                        : 'text-muted-foreground',
+                    )}
+                  >
+                    {field.value?.length || 0} / 60
+                  </span>
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="seo.keywords"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Meta Keywords</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="e.g. silk suit, pakistani dress, luxury fashion"
+                    {...field}
+                  />
+                </FormControl>
+                <FormDescription>Comma-separated keywords.</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="seo.description"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Meta Description</FormLabel>
+                <FormControl>
+                  <Textarea
+                    className="h-36"
+                    placeholder="A brief description of this product for search engines..."
+                    {...field}
+                  />
+                </FormControl>
+                <FormDescription className="flex justify-between">
+                  <span>Ideal length: 150-160 characters.</span>
+                  <span
+                    className={cn(
+                      (field.value?.length || 0) > 160
+                        ? 'font-bold text-red-500'
+                        : 'text-muted-foreground',
+                    )}
+                  >
+                    {field.value?.length || 0} / 160
+                  </span>
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
 
         <div className="flex justify-end pt-4">
           <SubmitButton
