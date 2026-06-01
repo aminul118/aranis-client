@@ -1,4 +1,4 @@
-import NavbarForm from '@/app/admin/_components/NavbarForm';
+import NavbarForm from '@/app/admin/navbar/_components/NavbarForm';
 import BackButton from '@/components/common/BackButton';
 import ClientTableWrapper from '@/components/common/wrapper/ClientTableWrapper';
 import { getSingleNavbar } from '@/services/navbar/navbar';

@@ -4,13 +4,15 @@ import { revalidate } from '@/lib/revalidate';
 import serverFetch from '@/lib/server-fetch';
 import { ApiResponse } from '@/types';
 
+export interface INavItemLink {
+  label: string;
+  url: string;
+}
+
 export interface INavSubItem {
-  title: string;
-  href: string;
-  items: string[];
-  seoTitle?: string;
-  seoDescription?: string;
-  seoKeywords?: string;
+  title?: string;
+  href?: string;
+  items: INavItemLink[];
 }
 
 export interface INavItem {
@@ -20,9 +22,6 @@ export interface INavItem {
   subItems?: INavSubItem[];
   order: number;
   isDeleted?: boolean;
-  seoTitle?: string;
-  seoDescription?: string;
-  seoKeywords?: string;
 }
 
 const createNavbar = async (payload: INavItem) => {

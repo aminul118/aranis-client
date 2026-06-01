@@ -178,17 +178,25 @@ const Mobile = ({ navItems, setMenuOpen, logo, user }: MobileProps) => {
                               key={sub.title}
                               className="flex flex-col gap-1"
                             >
-                              <p className="px-3 pt-1 pb-1 text-xs font-bold text-gray-900 dark:text-gray-100">
-                                {sub.title}
-                              </p>
+                              {sub.title && (
+                                <p className="px-3 pt-1 pb-1 text-xs font-bold text-gray-900 dark:text-gray-100">
+                                  {sub.title}
+                                </p>
+                              )}
                               <div className="flex flex-col gap-0.5">
-                                {sub.items.map((item) => {
-                                  const itemSlug = toUrlSlug(item);
-                                  const itemHref = `/${categorySlug}/${subCategorySlug}/${itemSlug}`;
+                                {sub.items.map((item: any) => {
+                                  const isObj = typeof item === 'object';
+                                  const label = isObj ? item.label : item;
+                                  const itemSlug = toUrlSlug(label);
+
+                                  const itemHref = isObj
+                                    ? item.url
+                                    : `/${categorySlug}/${subCategorySlug}/${itemSlug}`;
+
                                   const isItemActive = pathname === itemHref;
                                   return (
                                     <Link
-                                      key={item}
+                                      key={label}
                                       href={itemHref}
                                       className={cn(
                                         'rounded-lg px-3 py-2 text-sm transition-colors',
@@ -198,7 +206,7 @@ const Mobile = ({ navItems, setMenuOpen, logo, user }: MobileProps) => {
                                       )}
                                       onClick={() => setMenuOpen(false)}
                                     >
-                                      {item}
+                                      {label}
                                     </Link>
                                   );
                                 })}

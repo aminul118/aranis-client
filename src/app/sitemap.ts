@@ -28,17 +28,25 @@ const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
     });
 
     item.subItems?.forEach((sub) => {
-      const subCategorySlug = toUrlSlug(sub.title);
-      categorizationRoutes.push({
-        url: `${categorySlug}/${subCategorySlug}`,
-        changeFrequency: 'weekly',
-        priority: 0.7,
-      });
+      const subCategorySlug = sub.title ? toUrlSlug(sub.title) : null;
+      if (subCategorySlug) {
+        categorizationRoutes.push({
+          url: `${categorySlug}/${subCategorySlug}`,
+          changeFrequency: 'weekly',
+          priority: 0.7,
+        });
+      }
 
       sub.items.forEach((type) => {
-        const typeSlug = toUrlSlug(type);
+        const typeSlug = toUrlSlug(type.label);
+        const itemUrl =
+          type.url ||
+          (subCategorySlug
+            ? `${categorySlug}/${subCategorySlug}/${typeSlug}`
+            : `${categorySlug}/${typeSlug}`);
+
         categorizationRoutes.push({
-          url: `${categorySlug}/${subCategorySlug}/${typeSlug}`,
+          url: itemUrl.startsWith('/') ? itemUrl.slice(1) : itemUrl,
           changeFrequency: 'weekly',
           priority: 0.6,
         });

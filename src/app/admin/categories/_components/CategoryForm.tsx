@@ -40,8 +40,6 @@ const CategoryForm = ({ category }: Props) => {
     defaultValues: {
       name: category?.name || '',
       subCategories: category?.subCategories || [{ title: '', items: [] }],
-      colors: (category?.colors.join(', ') as any) || '',
-      sizes: (category?.sizes.join(', ') as any) || '',
     },
   });
 
@@ -51,23 +49,8 @@ const CategoryForm = ({ category }: Props) => {
   });
 
   const onSubmit = async (data: FormValues) => {
-    // Process comma separated strings to arrays if they are still strings
     const payload = {
       ...data,
-      colors:
-        typeof data.colors === 'string'
-          ? (data.colors as string)
-              .split(',')
-              .map((s) => s.trim())
-              .filter(Boolean)
-          : data.colors,
-      sizes:
-        typeof data.sizes === 'string'
-          ? (data.sizes as string)
-              .split(',')
-              .map((s) => s.trim())
-              .filter(Boolean)
-          : data.sizes,
     };
 
     if (isEdit && category) {
@@ -107,41 +90,12 @@ const CategoryForm = ({ category }: Props) => {
             <FormItem>
               <FormLabel>Category Name</FormLabel>
               <FormControl>
-                <Input placeholder="e.g. Men, Women, Accessories" {...field} />
+                <Input placeholder="e.g. Men" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          <FormField
-            control={form.control}
-            name="colors"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Colors (comma separated)</FormLabel>
-                <FormControl>
-                  <Input placeholder="Black, Blue, White" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="sizes"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Sizes (comma separated)</FormLabel>
-                <FormControl>
-                  <Input placeholder="S, M, L, XL" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
 
         <div className="space-y-4">
           <div className="flex items-center justify-between">
@@ -167,9 +121,9 @@ const CategoryForm = ({ category }: Props) => {
                     name={`subCategories.${index}.title`}
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Sub Category Title</FormLabel>
+                        <FormLabel>Sub Category Title (Optional)</FormLabel>
                         <FormControl>
-                          <Input placeholder="e.g. Shirts, Pants" {...field} />
+                          <Input placeholder="eg. Shirts" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -180,7 +134,7 @@ const CategoryForm = ({ category }: Props) => {
                     name={`subCategories.${index}.items`}
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Types (comma separated)</FormLabel>
+                        <FormLabel>Types (comma separated, Optional)</FormLabel>
                         <FormControl>
                           <Input
                             placeholder="Formal, Casual, Oversized"

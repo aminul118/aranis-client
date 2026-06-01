@@ -21,7 +21,7 @@ const NavbarColumn: Column<INavItem>[] = [
   },
   {
     header: 'Sub Items',
-    accessor: (n) => n.subItems?.map((s) => s.title).join(', ') || 'None',
+    accessor: (n) => n.subItems?.map((s) => s.title).join(', ') || '-',
   },
 
   {

@@ -14,11 +14,19 @@ const CategoriesColumn: Column<ICategory>[] = [
   },
   {
     header: 'Sub Categories',
-    accessor: (c) => c.subCategories?.map((s) => s.title).join(', ') || 'N/A',
+    accessor: (c) => {
+      const titles = c.subCategories?.map((s) => s.title).filter(Boolean);
+      return titles?.length ? titles.join(', ') : '-';
+    },
   },
   {
-    header: 'Colors',
-    accessor: (c) => c.colors?.join(', ') || 'N/A',
+    header: 'Types',
+    accessor: (c) => {
+      const allTypes = c.subCategories
+        ?.flatMap((s) => s.items || [])
+        .filter(Boolean);
+      return allTypes?.length ? allTypes.join(', ') : '-';
+    },
   },
   {
     header: 'Actions',

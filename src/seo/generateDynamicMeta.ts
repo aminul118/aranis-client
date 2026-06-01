@@ -70,8 +70,8 @@ export async function generateCategorizedMeta(
     // 2. Find the Sub-Category
     const subCategorySlug = slugs[1]?.toLowerCase();
     subCategoryItem = categoryItem?.subItems?.find(
-      (sub) =>
-        toUrlSlug(sub.title) === subCategorySlug ||
+      (sub: any) =>
+        (sub.title && toUrlSlug(sub.title) === subCategorySlug) ||
         (sub.href &&
           sub.href.split('/').pop()?.toLowerCase() === subCategorySlug),
     );
@@ -79,7 +79,7 @@ export async function generateCategorizedMeta(
     // 3. Find the Type/Item
     const typeSlug = slugs[2]?.toLowerCase();
     typeItem = subCategoryItem?.items.find(
-      (item: string) => toUrlSlug(item) === typeSlug,
+      (item: any) => toUrlSlug(item.label) === typeSlug,
     );
   } else if (slugs.length === 1) {
     // Search subItems across all navItems
@@ -87,7 +87,7 @@ export async function generateCategorizedMeta(
     for (const item of navItems) {
       const matchedSub = item.subItems?.find(
         (sub: any) =>
-          toUrlSlug(sub.title) === categorySlug ||
+          (sub.title && toUrlSlug(sub.title) === categorySlug) ||
           (sub.href &&
             sub.href.split('/').pop()?.toLowerCase() === categorySlug),
       );
@@ -101,7 +101,7 @@ export async function generateCategorizedMeta(
 
       for (const sub of item.subItems || []) {
         const matchedType = sub.items?.find(
-          (i: string) => toUrlSlug(i) === categorySlug,
+          (i: any) => toUrlSlug(i.label) === categorySlug,
         );
         if (matchedType) {
           categoryItem = item;
@@ -121,28 +121,12 @@ export async function generateCategorizedMeta(
   let finalDesc = '';
   let finalKeywords = '';
 
-  if (
-    subCategoryItem &&
-    (subCategoryItem.seoTitle || subCategoryItem.seoDescription)
-  ) {
-    finalTitle = subCategoryItem.seoTitle || subCategoryItem.title;
-    finalDesc = subCategoryItem.seoDescription || '';
-    finalKeywords = subCategoryItem.seoKeywords || '';
-  } else if (
-    categoryItem &&
-    (categoryItem.seoTitle || categoryItem.seoDescription)
-  ) {
-    finalTitle = categoryItem.seoTitle || categoryItem.title;
-    finalDesc = categoryItem.seoDescription || '';
-    finalKeywords = categoryItem.seoKeywords || '';
-  }
-
   // Fallback to semantic generation if not manually overridden
   if (!finalTitle) {
     if (typeItem && subCategoryItem && categoryItem) {
-      finalTitle = `${typeItem} ${subCategoryItem.title} for ${categoryItem.title}`;
+      finalTitle = `${typeItem.label} ${subCategoryItem.title || ''} for ${categoryItem.title}`;
     } else if (subCategoryItem && categoryItem) {
-      finalTitle = `${subCategoryItem.title} for ${categoryItem.title}`;
+      finalTitle = `${subCategoryItem.title || ''} for ${categoryItem.title}`;
     } else if (categoryItem) {
       finalTitle = categoryItem.title;
     } else {

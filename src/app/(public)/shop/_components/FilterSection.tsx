@@ -190,7 +190,7 @@ const FilterSection = ({
 
               return (
                 <motion.div
-                  key={sub.title}
+                  key={sub.title || Math.random().toString()}
                   whileHover={{ scale: 1.01 }}
                   whileTap={{ scale: 0.99 }}
                 >
@@ -203,7 +203,7 @@ const FilterSection = ({
                     )}
                     variant="ghost"
                     onClick={() =>
-                      onUpdateURL({ subCategory: sub.title, type: '' })
+                      onUpdateURL({ subCategory: sub.title || null, type: '' })
                     }
                   >
                     <span>{sub.title}</span>
@@ -229,7 +229,7 @@ const FilterSection = ({
             <div className="flex flex-wrap gap-2">
               {currentCategoryData.subCategories
                 .find((s) => s.title === selectedSubCategory)
-                ?.items.map((type) => {
+                ?.items?.map((type) => {
                   const active = selectedType === type;
 
                   return (

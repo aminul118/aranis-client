@@ -813,8 +813,11 @@ const ProductForm = ({
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {subCategories.map((s) => (
-                      <SelectItem key={s.title} value={s.title}>
+                    {subCategories.map((s, idx) => (
+                      <SelectItem
+                        key={s.title || `sub-${idx}`}
+                        value={s.title || ''}
+                      >
                         {s.title}
                       </SelectItem>
                     ))}

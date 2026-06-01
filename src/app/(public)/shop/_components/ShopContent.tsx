@@ -267,8 +267,8 @@ const ShopContent = ({
     const queryStr = searchStr ? `?${searchStr}` : '';
 
     startTransition(() => {
-      if (initialFilters || isOfferPage) {
-        // We are on a clean category page (e.g. /pakistani) or the offers page. Keep the path completely intact!
+      if (isOfferPage) {
+        // We are on the offers page. Keep the path completely intact!
         router.push(`${pathname}${queryStr}`);
       } else if (hasStructuralChange) {
         const nextPath = generateShopPath(

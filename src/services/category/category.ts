@@ -5,16 +5,14 @@ import serverFetch from '@/lib/server-fetch';
 import { ApiResponse } from '@/types';
 
 export interface ISubCategory {
-  title: string;
-  items: string[];
+  title?: string;
+  items?: string[];
 }
 
 export interface ICategory {
   _id?: string;
   name: string;
   subCategories: ISubCategory[];
-  colors: string[];
-  sizes: string[];
   isDeleted?: boolean;
 }
 
