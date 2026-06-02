@@ -283,27 +283,34 @@ export default function AdminChatPage() {
         <div className="flex flex-1 flex-col overflow-hidden bg-gray-50/30 dark:bg-black/20">
           {/* Active Chat Header */}
           <div className="flex shrink-0 items-center justify-between border-b border-gray-100 bg-white p-4 dark:border-white/5 dark:bg-[#0a0a0a]">
-            <div className="flex items-center gap-4">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600 font-bold text-white">
-                {activeChat.participants.find((p: any) => p.role === 'USER')
-                  ?.firstName?.[0] || 'U'}
-              </div>
-              <div>
-                <h3 className="text-sm font-bold">
-                  {
-                    activeChat.participants.find((p: any) => p.role === 'USER')
-                      ?.firstName
-                  }{' '}
-                  {
-                    activeChat.participants.find((p: any) => p.role === 'USER')
-                      ?.lastName
-                  }
-                </h3>
-                <p className="text-[10px] font-bold tracking-widest text-green-500 uppercase">
-                  Customer Support Active
-                </p>
-              </div>
-            </div>
+            {(() => {
+              const userParticipant =
+                activeChat.participants.find((p: any) => p.role === 'USER') ||
+                activeChat.participants[0];
+
+              const contactInfo = [
+                userParticipant?.email,
+                userParticipant?.phone,
+              ]
+                .filter(Boolean)
+                .join(' • ');
+
+              return (
+                <div className="flex items-center gap-4">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600 font-bold text-white">
+                    {userParticipant?.firstName?.[0] || 'U'}
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-bold">
+                      {userParticipant?.firstName} {userParticipant?.lastName}
+                    </h3>
+                    <p className="text-[10px] font-bold tracking-widest text-green-500 uppercase">
+                      {contactInfo || 'Customer Support Active'}
+                    </p>
+                  </div>
+                </div>
+              );
+            })()}
             <button className="p-2 text-gray-400 transition-colors hover:text-gray-900">
               <MoreVertical size={20} />
             </button>

@@ -4,7 +4,9 @@ import serverFetch from '@/lib/server-fetch';
 import { ApiResponse } from '@/types';
 
 export const getMyConversations = async () => {
-  return await serverFetch.get<ApiResponse<any[]>>('/chat/my-conversations');
+  return await serverFetch.get<ApiResponse<any[]>>('/chat/my-conversations', {
+    cache: 'no-store',
+  });
 };
 
 export const getOrCreateConversation = async (participants: string[]) => {
@@ -13,6 +15,7 @@ export const getOrCreateConversation = async (participants: string[]) => {
     {
       body: JSON.stringify({ participants }),
       headers: { 'Content-Type': 'application/json' },
+      cache: 'no-store',
     },
   );
 };
@@ -20,6 +23,7 @@ export const getOrCreateConversation = async (participants: string[]) => {
 export const getMessages = async (conversationId: string) => {
   return await serverFetch.get<ApiResponse<any[]>>(
     `/chat/messages/${conversationId}`,
+    { cache: 'no-store' },
   );
 };
 
@@ -30,5 +34,7 @@ export const markAsSeen = async (conversationId: string) => {
 };
 
 export const getUnreadCount = async () => {
-  return await serverFetch.get<ApiResponse<number>>('/chat/unread-count');
+  return await serverFetch.get<ApiResponse<number>>('/chat/unread-count', {
+    cache: 'no-store',
+  });
 };
