@@ -1300,15 +1300,18 @@ const ProductForm = ({
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>
-                Description <span className="text-red-500">*</span>
-              </FormLabel>
+              <FormLabel>Description</FormLabel>
               <FormControl>
                 <PlateRichEditor
                   value={field.value}
                   onChange={field.onChange}
                 />
               </FormControl>
+              <FormDescription>
+                <span className="font-bold text-blue-500">Note:</span> This
+                content will be displayed on the left side of the product page,
+                immediately visible to customers.
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -1327,8 +1330,10 @@ const ProductForm = ({
                 />
               </FormControl>
               <FormDescription>
-                Use headings, lists, and formatting to design your product
-                details page.
+                <span className="font-bold text-blue-500">Note:</span> This
+                content will be displayed inside the "Details" tab below the
+                main product information. Use headings and lists to organize
+                extensive product specifications.
               </FormDescription>
               <FormMessage />
             </FormItem>

@@ -526,38 +526,17 @@ const ProductDetailContent = ({
                       onClick={() => !isStockOut && setSelectedSize(size)}
                       disabled={isStockOut}
                       className={cn(
-                        'group relative flex min-w-16 flex-col items-center justify-center gap-0.5 overflow-hidden rounded-2xl border-2 px-5 py-3 transition-all duration-300',
-                        selectedSize === size
-                          ? 'border-blue-600 bg-blue-600 text-white shadow-xl shadow-blue-500/20'
-                          : isStockOut
-                            ? 'cursor-not-allowed border-red-200 bg-red-50/50 text-red-400'
-                            : 'border-border/50 bg-muted/30 text-muted-foreground hover:text-foreground hover:border-blue-500/30',
+                        'group relative flex min-w-16 flex-col items-center justify-center gap-0.5 overflow-hidden rounded-lg border-2 px-5 py-3 transition-all duration-300',
+                        isStockOut
+                          ? 'cursor-not-allowed border-transparent bg-slate-200 text-slate-400 dark:bg-slate-800 dark:text-slate-500'
+                          : selectedSize === size
+                            ? 'border-blue-600 bg-blue-600 text-white shadow-md dark:border-blue-500 dark:bg-blue-600'
+                            : 'border-blue-600 bg-transparent text-slate-800 hover:bg-blue-50 dark:border-blue-500 dark:text-slate-200 dark:hover:bg-blue-900/30',
                       )}
                     >
-                      <span
-                        className={cn(
-                          'text-sm font-black tracking-widest uppercase',
-                          isStockOut && 'text-red-400/80 line-through',
-                        )}
-                      >
+                      <span className="text-sm font-black tracking-widest uppercase">
                         {size}
                       </span>
-
-                      {isStockOut && (
-                        <>
-                          {/* Visual cross lines */}
-                          <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-                            <div className="h-[1.5px] w-[140%] rotate-45 transform bg-red-400/60" />
-                            <div className="absolute h-[1.5px] w-[140%] -rotate-45 transform bg-red-400/60" />
-                          </div>
-                        </>
-                      )}
-
-                      {selectedSize === size && !isStockOut && (
-                        <div className="absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-blue-500 text-white shadow-lg ring-2 ring-white">
-                          <Check className="h-2.5 w-2.5" strokeWidth={4} />
-                        </div>
-                      )}
                     </button>
                   );
                 })}

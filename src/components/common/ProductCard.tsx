@@ -2,12 +2,9 @@
 
 import Image from '@/components/common/SafeImage';
 import { Button } from '@/components/ui/button';
-import { useCart } from '@/context/CartContext';
-import { useUser } from '@/context/UserContext';
 import { useWishlist } from '@/context/WishlistContext';
 import { cn, extractPlainText } from '@/lib/utils';
 import { IProduct } from '@/types';
-import { AnimatePresence, motion } from 'framer-motion';
 import { Heart, ShoppingCart } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
@@ -25,8 +22,6 @@ const ProductCard = ({
   selectedColors = [],
 }: ProductCardProps) => {
   const router = useRouter();
-  const { addToCart } = useCart();
-  const { user } = useUser();
   const { toggleWishlist, isInWishlist } = useWishlist();
 
   const isList = viewMode === 'list';
@@ -70,15 +65,7 @@ const ProductCard = ({
   }`;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      whileInView={{ opacity: 1, scale: 1 }}
-      viewport={{ once: true }}
-      transition={{
-        delay: index * 0.05,
-        duration: 0.6,
-        ease: [0.16, 1, 0.3, 1],
-      }}
+    <div
       className={cn(
         'group relative cursor-pointer overflow-hidden bg-white transition-all duration-700 hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.15)] dark:bg-zinc-900/50 dark:hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.4)]',
         isList && 'flex flex-row gap-8',
@@ -94,26 +81,24 @@ const ProductCard = ({
             : 'aspect-[4/5] w-full',
         )}
       >
-        <AnimatePresence mode="wait">
+        <Image
+          key="primary-image"
+          src={primaryThumbnail}
+          alt={product.name}
+          fill
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          className="object-cover transition-transform duration-1000 ease-out group-hover:scale-110"
+        />
+        {secondaryThumbnail && (
           <Image
-            key="primary-image"
-            src={primaryThumbnail}
-            alt={product.name}
+            key="secondary-image"
+            src={secondaryThumbnail}
+            alt={`${product.name} - View 2`}
             fill
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            className="object-cover transition-transform duration-1000 ease-out group-hover:scale-110"
+            className="object-cover opacity-0 transition-all duration-1000 ease-out group-hover:scale-110 group-hover:opacity-100"
           />
-          {secondaryThumbnail && (
-            <Image
-              key="secondary-image"
-              src={secondaryThumbnail}
-              alt={`${product.name} - View 2`}
-              fill
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-              className="object-cover opacity-0 transition-all duration-1000 ease-out group-hover:scale-110 group-hover:opacity-100"
-            />
-          )}
-        </AnimatePresence>
+        )}
 
         {/* Floating Badges */}
         <div className="absolute top-4 left-4 z-10 flex flex-col gap-1.5">
@@ -218,7 +203,7 @@ const ProductCard = ({
           </Button>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 

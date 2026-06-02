@@ -4,13 +4,15 @@ import serverFetch from '@/lib/server-fetch';
 import { ApiResponse } from '@/types';
 
 export const getMyConversations = async (searchTerm?: string) => {
+  const timestamp = Date.now();
   const query = searchTerm
-    ? `?searchTerm=${encodeURIComponent(searchTerm)}`
-    : '';
+    ? `?searchTerm=${encodeURIComponent(searchTerm)}&t=${timestamp}`
+    : `?t=${timestamp}`;
   return await serverFetch.get<ApiResponse<any[]>>(
     `/chat/my-conversations${query}`,
     {
       cache: 'no-store',
+      next: { revalidate: 0 },
     },
   );
 };
@@ -22,14 +24,18 @@ export const getOrCreateConversation = async (participants: string[]) => {
       body: JSON.stringify({ participants }),
       headers: { 'Content-Type': 'application/json' },
       cache: 'no-store',
+      next: { revalidate: 0 },
     },
   );
 };
 
 export const getMessages = async (conversationId: string) => {
   return await serverFetch.get<ApiResponse<any[]>>(
-    `/chat/messages/${conversationId}`,
-    { cache: 'no-store' },
+    `/chat/messages/${conversationId}?t=${Date.now()}`,
+    {
+      cache: 'no-store',
+      next: { revalidate: 0 },
+    },
   );
 };
 
@@ -40,9 +46,13 @@ export const markAsSeen = async (conversationId: string) => {
 };
 
 export const getUnreadCount = async () => {
-  return await serverFetch.get<ApiResponse<number>>('/chat/unread-count', {
-    cache: 'no-store',
-  });
+  return await serverFetch.get<ApiResponse<number>>(
+    `/chat/unread-count?t=${Date.now()}`,
+    {
+      cache: 'no-store',
+      next: { revalidate: 0 },
+    },
+  );
 };
 
 export const deleteConversation = async (conversationId: string) => {

@@ -13,8 +13,8 @@ export const productSchema = z.object({
     .array(z.union([z.string(), z.any()]))
     .min(1, 'At least one product thumbnail is required')
     .max(6, 'Maximum 6 product thumbnails allowed'),
-  description: z.string().min(1, 'Description is required'),
-  details: z.string().default(''),
+  description: z.string().optional().default(''),
+  details: z.string().optional().default(''),
   slug: z.string().optional(),
   buyPrice: z.coerce
     .number()
