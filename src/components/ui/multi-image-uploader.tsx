@@ -13,6 +13,7 @@ interface Props {
   /** Max number of gallery images */
   max?: number;
   label?: string;
+  required?: boolean;
 }
 
 const MultiImageUploader = ({
@@ -20,6 +21,7 @@ const MultiImageUploader = ({
   onChange,
   max = 8,
   label = 'Gallery Images',
+  required = false,
 }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [previews, setPreviews] = useState<string[]>([]);
@@ -75,7 +77,10 @@ const MultiImageUploader = ({
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-foreground text-sm font-bold">{label}</p>
+          <p className="text-foreground text-sm font-bold">
+            {label}
+            {required && <span className="ml-1 text-red-500">*</span>}
+          </p>
           <p className="text-muted-foreground mt-0.5 text-[10px]">
             Recommended: Portrait aspect ratio (3:4 or 4:5, e.g., 900x1200 px or
             800x1000 px), max 2MB each
@@ -116,7 +121,7 @@ const MultiImageUploader = ({
 
       {/* Image Grid */}
       {value.length > 0 && (
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+        <div className="grid grid-cols-3 gap-4">
           {value.map((item, idx) => (
             <div
               key={idx}

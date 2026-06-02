@@ -48,6 +48,10 @@ const SizeGuideTable = ({ sizeGuides, meta }: Props) => {
 
   const columns: Column<ISizeGuide>[] = [
     {
+      header: 'SI',
+      accessor: (_, __, globalIndex) => globalIndex,
+    },
+    {
       header: 'Image',
       accessor: (sg) => (
         <div
@@ -119,7 +123,10 @@ const SizeGuideTable = ({ sizeGuides, meta }: Props) => {
 
       {/* Image Preview Modal */}
       <Dialog open={isImageOpen} onOpenChange={setIsImageOpen}>
-        <DialogContent className="overflow-hidden border-none bg-transparent p-0 shadow-none sm:max-w-[800px]">
+        <DialogContent
+          className="overflow-hidden border-none bg-transparent p-0 shadow-none sm:max-w-[800px]"
+          closeButtonClassName="text-red-500 hover:text-red-700 bg-white hover:bg-white/90 rounded-full"
+        >
           <DialogHeader className="sr-only">
             <DialogTitle>Size Guide Image Preview</DialogTitle>
           </DialogHeader>

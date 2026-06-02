@@ -2,6 +2,12 @@
 
 import { Column } from '@/components/common/table/TableManageMent';
 import { Badge } from '@/components/ui/badge';
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import { IPopupBanner } from '@/services/popup-banner/popup-banner';
 import Image from 'next/image';
 import PopupBannerActions from './PopupBannerActions';
@@ -16,15 +22,33 @@ export const getPopupBannerColumns = (
   {
     header: 'Image',
     accessor: (b) => (
-      <div className="bg-muted relative h-10 w-20 overflow-hidden rounded">
-        <Image
-          src={b.image}
-          alt={b.title || 'Popup Banner'}
-          fill
-          className="object-cover"
-          sizes="80px"
-        />
-      </div>
+      <Dialog>
+        <DialogTrigger asChild>
+          <div className="bg-muted relative h-10 w-20 cursor-pointer overflow-hidden rounded transition-opacity hover:opacity-80">
+            <Image
+              src={b.image}
+              alt={b.title || 'Popup Banner'}
+              fill
+              className="object-cover"
+              sizes="80px"
+            />
+          </div>
+        </DialogTrigger>
+        <DialogContent
+          className="max-w-5xl border-none bg-transparent p-0 shadow-none"
+          closeButtonClassName="text-red-500 hover:text-red-700 bg-white hover:bg-white/90 rounded-full"
+        >
+          <DialogTitle className="sr-only">Banner Image</DialogTitle>
+          <div className="relative flex w-full items-center justify-center p-4">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={b.image}
+              alt={b.title || 'Popup Banner'}
+              className="max-h-[85vh] w-auto max-w-full rounded-md object-contain shadow-2xl"
+            />
+          </div>
+        </DialogContent>
+      </Dialog>
     ),
   },
   {

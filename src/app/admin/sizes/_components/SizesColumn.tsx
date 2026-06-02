@@ -4,9 +4,9 @@ import SizeActions from './SizeActions';
 
 const SizesColumn: Column<ISize>[] = [
   {
-    header: 'SI',
+    header: 'Order',
     accessor: (c) => c.order || 0,
-    sortKey: 'order',
+    sortKey: '-order',
   },
   {
     header: 'Name',

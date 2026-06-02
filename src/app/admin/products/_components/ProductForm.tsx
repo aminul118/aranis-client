@@ -438,7 +438,7 @@ const ProductForm = ({
           render={({ field }) => (
             <FormItem>
               <FormLabel className="text-sm font-bold tracking-widest text-blue-600 uppercase">
-                Product Name
+                Product Name <span className="text-red-500">*</span>
               </FormLabel>
               <FormControl>
                 <Input
@@ -471,7 +471,9 @@ const ProductForm = ({
             name="buyPrice"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Buy Price ($)</FormLabel>
+                <FormLabel>
+                  Buy Price ($) <span className="text-red-500">*</span>
+                </FormLabel>
                 <FormControl>
                   <Input type="number" step="0.01" {...field} />
                 </FormControl>
@@ -484,7 +486,9 @@ const ProductForm = ({
             name="price"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Sale Price ($)</FormLabel>
+                <FormLabel>
+                  Sale Price ($) <span className="text-red-500">*</span>
+                </FormLabel>
                 <FormControl>
                   <Input type="number" step="0.01" {...field} />
                 </FormControl>
@@ -497,7 +501,9 @@ const ProductForm = ({
             name="stock"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Stock Count</FormLabel>
+                <FormLabel>
+                  Stock Count <span className="text-red-500">*</span>
+                </FormLabel>
                 <FormControl>
                   <Input
                     type="number"
@@ -783,8 +789,10 @@ const ProductForm = ({
             name="category"
             render={({ field }) => (
               <FormItem>
-                <div className="flex items-center justify-between">
-                  <FormLabel>Category</FormLabel>
+                <div className="flex h-9 items-center justify-between">
+                  <FormLabel>
+                    Category <span className="text-red-500">*</span>
+                  </FormLabel>
                   <QuickAddCategory
                     onSuccess={(newCat) => {
                       setLocalCategories((prev) => [...prev, newCat]);
@@ -818,7 +826,9 @@ const ProductForm = ({
             name="subCategory"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Sub Category</FormLabel>
+                <div className="flex h-9 items-center">
+                  <FormLabel>Sub Category</FormLabel>
+                </div>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
@@ -849,7 +859,9 @@ const ProductForm = ({
             name="type"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Type</FormLabel>
+                <div className="flex h-9 items-center">
+                  <FormLabel>Type</FormLabel>
+                </div>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
@@ -884,6 +896,7 @@ const ProductForm = ({
                   <MultiImageUploader
                     value={field.value}
                     max={6}
+                    required={true}
                     onChange={(files) => field.onChange(files)}
                   />
                 </FormControl>
@@ -900,8 +913,10 @@ const ProductForm = ({
             name="color"
             render={({ field }) => (
               <FormItem>
-                <div className="flex items-center justify-between">
-                  <FormLabel>Product Color</FormLabel>
+                <div className="flex h-9 items-center justify-between">
+                  <FormLabel>
+                    Product Color <span className="text-red-500">*</span>
+                  </FormLabel>
                   <QuickAddColor
                     onSuccess={(newColor) => {
                       setLocalColors((prev) => [...prev, newColor]);
@@ -959,7 +974,11 @@ const ProductForm = ({
             name="sizes"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Available Sizes</FormLabel>
+                <div className="flex h-9 items-center">
+                  <FormLabel>
+                    Available Sizes <span className="text-red-500">*</span>
+                  </FormLabel>
+                </div>
                 <div className="border-border/50 bg-muted/10 flex flex-wrap items-center gap-2 rounded-xl border p-4">
                   {sizes.map((size) => (
                     <button
@@ -1111,7 +1130,8 @@ const ProductForm = ({
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-muted-foreground text-xs font-black tracking-widest uppercase">
-                            Variant Color
+                            Variant Color{' '}
+                            <span className="text-red-500">*</span>
                           </FormLabel>
                           <div className="grid grid-cols-4 gap-2">
                             {colors.map((color) => (
@@ -1280,7 +1300,9 @@ const ProductForm = ({
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Description</FormLabel>
+              <FormLabel>
+                Description <span className="text-red-500">*</span>
+              </FormLabel>
               <FormControl>
                 <PlateRichEditor
                   value={field.value}
