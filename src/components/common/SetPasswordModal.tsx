@@ -54,6 +54,8 @@ const SetPasswordModal = ({ open, setOpen }: SetPasswordModalProps) => {
           form.reset();
           setOpen(false);
           refreshUser();
+          // Force a page reload to guarantee the prompt disappears and user state is synchronized
+          window.location.reload();
         },
         loadingText: 'Setting your password...',
         message:

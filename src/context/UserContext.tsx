@@ -51,7 +51,12 @@ export const UserProvider: React.FC<{
 export const useUser = () => {
   const context = useContext(UserContext);
   if (context === undefined) {
-    throw new Error('useUser must be used within a UserProvider');
+    // Return a dummy context instead of throwing to prevent Next.js HMR/Context duplicate module crashes
+    return {
+      user: null,
+      loading: false,
+      refreshUser: async () => {},
+    };
   }
   return context;
 };

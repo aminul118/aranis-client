@@ -1,4 +1,4 @@
-import SettingsSidebar from '@/app/admin/settings/_components/SettingsSidebar';
+import SettingsSidebar from '@/app/(dashboard)/admin/settings/_components/SettingsSidebar';
 import AdminSidebar from '@/components/layouts/Admin/admin-sidebar';
 import AdminHeader from '@/components/layouts/Admin/AdminHeader';
 import { AdminSidebarSkeleton } from '@/components/layouts/Admin/AdminSidebarSkeleton';

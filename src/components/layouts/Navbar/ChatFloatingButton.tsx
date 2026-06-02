@@ -137,6 +137,7 @@ const ChatFloatingButton = ({
     if (!message.trim() || !conversation || !user) return;
 
     const newMessage = {
+      tempId: `temp-${Date.now()}`,
       sender: user._id,
       receiver:
         conversation.participants.find((p: any) => p._id !== user._id)?._id ||

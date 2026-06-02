@@ -1,4 +1,4 @@
-import ProfileClient from '@/app/admin/settings/_components/profile/ProfileClient';
+import ProfileClient from '@/app/(dashboard)/admin/settings/_components/profile/ProfileClient';
 import { getMe } from '@/services/user/users';
 import { Metadata } from 'next';
 
