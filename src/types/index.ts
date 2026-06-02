@@ -82,11 +82,10 @@ export interface IProduct {
   videoUrl?: string;
   sizeGuide?: ISizeGuide | string;
   isDeleted?: boolean;
-  seo?: {
-    title?: string;
-    description?: string;
-    keywords?: string;
-    ogImage?: string;
+  seo: {
+    title: string;
+    description: string;
+    keywords: string;
   };
 }
 

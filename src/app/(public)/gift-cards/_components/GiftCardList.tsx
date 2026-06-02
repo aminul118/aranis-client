@@ -43,6 +43,11 @@ export default function GiftCardList({
       discountPercentage: giftCard.discountPercentage,
       isOffer: giftCard.discountPercentage > 0,
       itemType: 'GiftCard' as any,
+      seo: {
+        title: giftCard.name,
+        description: '',
+        keywords: '',
+      },
     } as IProduct;
 
     addToCart(mappedProduct);

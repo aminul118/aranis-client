@@ -5,6 +5,7 @@ import PlateRichEditor from '@/components/rich-text/core/rich-editor';
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -19,7 +20,9 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import SingleImageUploader from '@/components/ui/single-image-uploader';
+import { Textarea } from '@/components/ui/textarea';
 import useActionHandler from '@/hooks/useActionHandler';
+import { cn } from '@/lib/utils';
 import {
   createGiftCard,
   IGiftCard,
@@ -48,6 +51,11 @@ const giftCardSchema = z.object({
           (typeof val === 'object' && val !== null)),
       'Image is required',
     ),
+  seo: z.object({
+    title: z.string().min(1, 'SEO title is required'),
+    description: z.string().min(1, 'SEO description is required'),
+    keywords: z.string().min(1, 'SEO keywords are required'),
+  }),
 });
 
 type FormValues = z.infer<typeof giftCardSchema>;
@@ -71,6 +79,11 @@ const GiftCardForm = ({ giftCard }: Props) => {
       validityDays: giftCard?.validityDays || 365,
       status: giftCard?.status || 'active',
       image: giftCard?.image || '',
+      seo: {
+        title: giftCard?.seo?.title || '',
+        description: giftCard?.seo?.description || '',
+        keywords: giftCard?.seo?.keywords || '',
+      },
     },
   });
 
@@ -78,7 +91,9 @@ const GiftCardForm = ({ giftCard }: Props) => {
     const formData = new FormData();
     Object.entries(values).forEach(([key, value]) => {
       if (value !== undefined && value !== null) {
-        if (value instanceof File) {
+        if (key === 'seo') {
+          formData.append(key, JSON.stringify(value));
+        } else if (value instanceof File) {
           formData.append(key, value);
         } else {
           formData.append(key, String(value));
@@ -231,6 +246,99 @@ const GiftCardForm = ({ giftCard }: Props) => {
             </FormItem>
           )}
         />
+
+        <div className="bg-muted/5 space-y-4 rounded-xl border border-white/10 p-6">
+          <div className="space-y-1">
+            <h3 className="text-lg font-black tracking-tight uppercase">
+              SEO Configuration
+            </h3>
+            <p className="text-muted-foreground text-xs font-medium">
+              Define custom metadata for Search Engine Optimization.
+            </p>
+          </div>
+
+          <FormField
+            control={form.control}
+            name="seo.title"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  Meta Title <span className="text-red-500">*</span>
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="e.g. Premium $50 Gift Card | Aranis"
+                    {...field}
+                  />
+                </FormControl>
+                <FormDescription className="flex justify-between">
+                  <span>Ideal length: 50-60 characters.</span>
+                  <span
+                    className={cn(
+                      (field.value?.length || 0) > 60
+                        ? 'font-bold text-red-500'
+                        : 'text-muted-foreground',
+                    )}
+                  >
+                    {field.value?.length || 0} / 60
+                  </span>
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="seo.keywords"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  Meta Keywords <span className="text-red-500">*</span>
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="e.g. gift card, present, store credit"
+                    {...field}
+                  />
+                </FormControl>
+                <FormDescription>Comma-separated keywords.</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="seo.description"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  Meta Description <span className="text-red-500">*</span>
+                </FormLabel>
+                <FormControl>
+                  <Textarea
+                    className="h-36"
+                    placeholder="A brief description of this gift card for search engines..."
+                    {...field}
+                  />
+                </FormControl>
+                <FormDescription className="flex justify-between">
+                  <span>Ideal length: 150-160 characters.</span>
+                  <span
+                    className={cn(
+                      (field.value?.length || 0) > 160
+                        ? 'font-bold text-red-500'
+                        : 'text-muted-foreground',
+                    )}
+                  >
+                    {field.value?.length || 0} / 160
+                  </span>
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
 
         <div className="flex justify-end pt-4">
           <SubmitButton

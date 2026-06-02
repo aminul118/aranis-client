@@ -1,10 +1,19 @@
-import { getSingleGiftCard } from '@/services/giftcard/giftcard';
+import { getGiftCards, getSingleGiftCard } from '@/services/giftcard/giftcard';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import GiftCardDetail from './_components/GiftCardDetail';
 
 interface Props {
   params: Promise<{ slug: string }>;
+}
+
+export async function generateStaticParams() {
+  const { data: giftCards } = await getGiftCards({ limit: '1000' });
+  return (
+    giftCards?.map((card) => ({
+      slug: String(card.slug || card._id),
+    })) || []
+  );
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -14,8 +23,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     if (!data) return { title: 'Not Found' };
 
     return {
-      title: `${data.name} | Aranis Gift Cards`,
-      description: data.description,
+      title: data.seo.title,
+      description: data.seo.description,
+      keywords: data.seo.keywords,
+      openGraph: {
+        title: data.seo.title,
+        description: data.seo.description,
+        images: [
+          {
+            url: data.image,
+            width: 800,
+            height: 1000,
+            alt: data.seo.title,
+          },
+        ],
+      },
     };
   } catch (error) {
     return {

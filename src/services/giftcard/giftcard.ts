@@ -15,6 +15,11 @@ export interface IGiftCard {
   status: 'active' | 'inactive';
   validityDays: number;
   isDeleted?: boolean;
+  seo: {
+    title: string;
+    description: string;
+    keywords: string;
+  };
 }
 
 export const createGiftCard = async (formData: FormData) => {

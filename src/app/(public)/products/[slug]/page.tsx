@@ -1,4 +1,4 @@
-import ProductDetailContent from '@/app/(public)/products/_components/ProductDetailContent';
+import ProductDetailContent from '@/app/(public)/products/[slug]/_components/ProductDetailContent';
 import ProductCard from '@/components/common/ProductCard';
 import { getProducts, getSingleProduct } from '@/services/product/product';
 import { getSiteSettings } from '@/services/settings/settings';
@@ -30,20 +30,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
 
-  const title = product.seo?.title;
-  const description = product.seo?.description;
-  const keywords = product.seo?.keywords;
+  const title = product.seo.title;
+  const description = product.seo.description;
+  const keywords = product.seo.keywords;
 
   return {
     title,
     description,
     keywords,
     openGraph: {
-      title: product.seo?.title,
+      title: product.seo.title,
       description,
       images: [
         {
-          url: product.thumbnails?.[0] || '',
+          url: product.thumbnails[0],
           width: 800,
           height: 1000,
           alt: product.name,

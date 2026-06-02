@@ -1,6 +1,6 @@
 'use client';
 
-import icons from '@/constants/icons';
+import icons from '@/config/icons';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 
