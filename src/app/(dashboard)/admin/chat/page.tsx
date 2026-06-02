@@ -3,6 +3,7 @@
 import { getSocket, useSocket } from '@/hooks/useSocket';
 import { cn } from '@/lib/utils';
 import {
+  deleteConversation,
   getMessages,
   getMyConversations,
   markAsSeen,
@@ -142,12 +143,21 @@ export default function AdminChatPage() {
     }
   }, [messages]);
 
-  const fetchConversations = async () => {
-    const res = await getMyConversations();
+  const fetchConversations = async (searchTerm?: string) => {
+    const term = searchTerm !== undefined ? searchTerm : search;
+    const res = await getMyConversations(term);
     if (res?.success) {
       setConversations(res.data || []);
     }
   };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      fetchConversations(search);
+    }, 500);
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [search]);
 
   const fetchMessages = async (id: string) => {
     setLoading(true);
@@ -186,6 +196,15 @@ export default function AdminChatPage() {
     setMessages((prev) => [...prev, newMessage]);
     getSocket().emit('send-message', newMessage);
     setMessage('');
+  };
+
+  const handleDeleteConversation = async () => {
+    if (!activeChat) return;
+    const res = await deleteConversation(activeChat._id);
+    if (res?.success) {
+      setConversations((prev) => prev.filter((c) => c._id !== activeChat._id));
+      setActiveChat(null);
+    }
   };
 
   return (
@@ -311,9 +330,19 @@ export default function AdminChatPage() {
                 </div>
               );
             })()}
-            <button className="p-2 text-gray-400 transition-colors hover:text-gray-900">
-              <MoreVertical size={20} />
-            </button>
+            <div className="flex items-center gap-2">
+              {admin?.role === 'SUPER_ADMIN' && (
+                <button
+                  onClick={handleDeleteConversation}
+                  className="rounded-xl px-3 py-1.5 text-xs font-bold text-red-500 transition-colors hover:bg-red-50 dark:hover:bg-red-500/10"
+                >
+                  Delete
+                </button>
+              )}
+              <button className="p-2 text-gray-400 transition-colors hover:text-gray-900">
+                <MoreVertical size={20} />
+              </button>
+            </div>
           </div>
 
           {/* Active Chat Messages */}

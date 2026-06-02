@@ -3,10 +3,16 @@
 import serverFetch from '@/lib/server-fetch';
 import { ApiResponse } from '@/types';
 
-export const getMyConversations = async () => {
-  return await serverFetch.get<ApiResponse<any[]>>('/chat/my-conversations', {
-    cache: 'no-store',
-  });
+export const getMyConversations = async (searchTerm?: string) => {
+  const query = searchTerm
+    ? `?searchTerm=${encodeURIComponent(searchTerm)}`
+    : '';
+  return await serverFetch.get<ApiResponse<any[]>>(
+    `/chat/my-conversations${query}`,
+    {
+      cache: 'no-store',
+    },
+  );
 };
 
 export const getOrCreateConversation = async (participants: string[]) => {
@@ -37,4 +43,8 @@ export const getUnreadCount = async () => {
   return await serverFetch.get<ApiResponse<number>>('/chat/unread-count', {
     cache: 'no-store',
   });
+};
+
+export const deleteConversation = async (conversationId: string) => {
+  return await serverFetch.delete<ApiResponse<null>>(`/chat/${conversationId}`);
 };
