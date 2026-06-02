@@ -1,6 +1,6 @@
 'use client';
 
-import WriteReviewModal from '@/app/(user)/user/orders/_components/WriteReviewModal';
+import WriteReviewModal from '@/app/(dashboard)/user/orders/_components/WriteReviewModal';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useCartOptional } from '@/context/CartContext';

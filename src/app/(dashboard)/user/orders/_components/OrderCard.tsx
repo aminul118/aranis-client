@@ -1,6 +1,6 @@
 'use client';
 
-import OrderStatusStepper from '@/app/(user)/user/orders/_components/OrderStatusStepper';
+import OrderStatusStepper from '@/app/(dashboard)/user/orders/_components/OrderStatusStepper';
 import Image from '@/components/common/SafeImage';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
