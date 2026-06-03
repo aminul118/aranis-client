@@ -30,16 +30,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
 
-  const title = product.seo.title;
-  const description = product.seo.description;
-  const keywords = product.seo.keywords;
+  const title = product.seo?.title || `${product.name} | Aranis`;
+  const description = product.seo?.description || '';
+  const keywords = product.seo?.keywords || '';
 
   return {
     title,
     description,
     keywords,
     openGraph: {
-      title: product.seo.title,
+      title: product.seo?.title || title,
       description,
       images: [
         {
