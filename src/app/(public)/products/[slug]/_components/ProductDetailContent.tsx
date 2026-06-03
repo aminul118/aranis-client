@@ -1,46 +1,25 @@
 'use client';
 
-import Image from '@/components/common/SafeImage';
 import HtmlContent from '@/components/rich-text/core/html-content';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useCart } from '@/context/CartContext';
 import { useUser } from '@/context/UserContext';
 import { useWishlist } from '@/context/WishlistContext';
-import { cn } from '@/lib/utils';
 import { createRestockRequest } from '@/services/restock/restock';
 import { ISiteSetting } from '@/services/settings/settings';
 import { IProduct, IVariantSize } from '@/types';
 import { motion } from 'framer-motion';
-import {
-  BellRing,
-  Check,
-  Copy,
-  Facebook,
-  Heart,
-  MessageCircle,
-  Ruler,
-  Share2,
-  ShoppingCart,
-} from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
+import ProductDetailActions from './ProductDetailActions';
+import ProductDetailHeader from './ProductDetailHeader';
+import ProductDetailSizes from './ProductDetailSizes';
+import ProductDetailTabs from './ProductDetailTabs';
+import ProductDetailVariants from './ProductDetailVariants';
 import ProductImageGallery from './ProductImageGallery';
 
+import { ShoppingCart } from 'lucide-react';
 interface ProductDetailContentProps {
   product: IProduct;
   settings?: ISiteSetting;
@@ -88,9 +67,9 @@ const ProductDetailContent = ({
   }, [urlColor, product.variants]);
   const [isRequesting, setIsRequesting] = useState(false);
   const currentSelectedColor =
-    selectedVariantIndex === -1
+    (selectedVariantIndex === -1
       ? product.color
-      : product.variants?.[selectedVariantIndex]?.color;
+      : product.variants?.[selectedVariantIndex]?.color) || '';
   const isWishlisted = isInWishlist(
     product._id as string,
     currentSelectedColor,
@@ -255,21 +234,33 @@ const ProductDetailContent = ({
         />
 
         {/* Artisanal Details Section - Moved here */}
-        {product.details && (
-          <div className="border-border/50 hidden border-t pt-8 lg:block">
-            <h2 className="text-foreground mb-4 text-xs font-black tracking-[0.2em] uppercase">
-              Artisanal Details
-            </h2>
-            <HtmlContent
-              content={
-                Array.isArray(product.details)
-                  ? product.details.join('\n')
-                  : product.details
-              }
-              className="prose prose-sm dark:prose-invert text-muted-foreground/80 max-w-none leading-relaxed font-medium"
-            />
-          </div>
-        )}
+        {(() => {
+          const stripHtml = (html: string) =>
+            (html || '').replace(/<[^>]*>?/gm, '').trim();
+          const hasDetailsText =
+            !!product.details &&
+            (Array.isArray(product.details)
+              ? product.details.some((d) => stripHtml(d).length > 0)
+              : stripHtml(product.details).length > 0);
+
+          if (!hasDetailsText) return null;
+
+          return (
+            <div className="border-border/50 hidden border-t pt-8 lg:block">
+              <h2 className="text-foreground mb-4 text-xs font-black tracking-[0.2em] uppercase">
+                Artisanal Details
+              </h2>
+              <HtmlContent
+                content={
+                  Array.isArray(product.details)
+                    ? product.details.join('\n')
+                    : product.details
+                }
+                className="prose prose-sm dark:prose-invert text-muted-foreground/80 max-w-none leading-relaxed font-medium"
+              />
+            </div>
+          );
+        })()}
       </div>
 
       {/* Content Section */}
@@ -280,535 +271,43 @@ const ProductDetailContent = ({
           transition={{ duration: 0.5, delay: 0.2 }}
           className="space-y-8"
         >
-          {/* Brand & Stats */}
-          <div className="flex items-center justify-between">
-            <Badge
-              variant="outline"
-              className="rounded-full border-blue-500/30 px-4 py-1 text-xs font-bold tracking-widest text-blue-500 uppercase"
-            >
-              Premium {product.category}
-            </Badge>
-            <div className="flex items-center gap-4">
-              <button
-                onClick={() =>
-                  toggleWishlist(product, currentSelectedColor, selectedSize)
-                }
-                aria-label="Toggle wishlist"
-                className={`border-border/50 hover:bg-muted rounded-full border p-2.5 transition-all ${isWishlisted ? 'bg-red-50 text-red-500' : 'text-muted-foreground'}`}
-              >
-                <Heart
-                  size={20}
-                  fill={isWishlisted ? 'currentColor' : 'none'}
-                />
-              </button>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <button
-                    aria-label="Share product"
-                    className="border-border/50 text-muted-foreground hover:bg-muted rounded-full border p-2.5 transition-all outline-none"
-                  >
-                    <Share2 size={20} />
-                  </button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent
-                  align="end"
-                  className="border-border bg-card w-56 rounded-2xl p-2 shadow-2xl"
-                >
-                  <DropdownMenuItem
-                    onClick={() => handleShare('facebook')}
-                    className="flex cursor-pointer items-center gap-3 rounded-xl p-3 focus:bg-blue-500/10 focus:text-blue-600"
-                  >
-                    <Facebook size={18} />
-                    <span className="font-bold">Share on Facebook</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() => handleShare('messenger')}
-                    className="flex cursor-pointer items-center gap-3 rounded-xl p-3 focus:bg-blue-500/10 focus:text-blue-600"
-                  >
-                    <MessageCircle size={18} />
-                    <span className="font-bold">Send in Messenger</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() => handleShare('copy')}
-                    className="focus:bg-muted flex cursor-pointer items-center gap-3 rounded-xl p-3"
-                  >
-                    <Copy size={18} />
-                    <span className="font-bold">Copy Product Link</span>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          </div>
+          <ProductDetailHeader
+            product={product}
+            currentVariant={currentVariant}
+            isWishlisted={isWishlisted}
+            toggleWishlist={toggleWishlist}
+            handleShare={handleShare}
+            currentSelectedColor={currentSelectedColor}
+            selectedSize={selectedSize}
+          />
 
-          {/* Title & Price */}
-          <div>
-            <h1 className="text-foreground mb-6 text-3xl leading-[1.2] font-black tracking-tight capitalize md:text-4xl lg:text-5xl">
-              {product.name}
-            </h1>
-            <div className="flex items-center gap-6">
-              {(product.salePrice ?? 0) > 0 || product.isOffer ? (
-                <div className="flex items-baseline gap-4">
-                  <span className="text-3xl font-black tracking-tighter text-blue-500 md:text-4xl">
-                    ৳{(product.salePrice ?? product.price).toFixed(2)}
-                  </span>
-                  <div className="flex flex-col">
-                    <span className="text-muted-foreground/40 text-lg font-medium italic line-through md:text-xl">
-                      ৳{product.price.toFixed(2)}
-                    </span>
-                    {(product.salePrice ?? 0) > 0 && (
-                      <span className="w-fit rounded-full bg-red-500/10 px-3 py-1 text-[10px] font-black text-red-600 uppercase">
-                        {Math.round(
-                          (1 - (product.salePrice ?? 0) / product.price) * 100,
-                        )}
-                        % OFF
-                      </span>
-                    )}
-                  </div>
-                </div>
-              ) : (
-                <p className="text-foreground text-3xl font-black tracking-tighter md:text-4xl">
-                  ৳{product.price.toFixed(2)}
-                </p>
-              )}
-            </div>
-          </div>
-
-          <div className="flex items-center gap-4">
-            <span className="text-muted-foreground text-xs font-black tracking-widest uppercase">
-              SKU:
-            </span>
-            <span className="text-foreground text-sm font-bold tracking-tight">
-              {currentVariant?.sku || product.sku || 'N/A'}
-            </span>
-          </div>
-
-          <div className="from-border/50 via-border h-px bg-linear-to-r to-transparent" />
-
-          {/* Selection Controls */}
           <div className="space-y-10">
-            {/* Variant Selection */}
-            {product.variants && product.variants.length > 0 && (
-              <div className="space-y-6">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-foreground text-sm font-black tracking-[0.2em] uppercase">
-                    Select Color
-                  </h2>
-                  <Badge
-                    variant="secondary"
-                    className="rounded-lg px-3 py-1 text-[10px] font-black tracking-tighter uppercase"
-                  >
-                    {selectedVariantIndex === -1
-                      ? product.color
-                      : product.variants[selectedVariantIndex].color}
-                  </Badge>
-                </div>
-                <div className="flex flex-wrap gap-4">
-                  {/* Default/Main Product Variant */}
-                  <button
-                    onClick={() => setSelectedVariantIndex(-1)}
-                    className={cn(
-                      'group relative h-24 w-20 overflow-hidden rounded-2xl border-2 transition-all duration-500',
-                      selectedVariantIndex === -1
-                        ? 'z-10 scale-110 border-blue-500 shadow-2xl shadow-blue-500/20'
-                        : 'border-border/40 opacity-70 hover:scale-105 hover:border-blue-500/30 hover:opacity-100',
-                    )}
-                  >
-                    <Image
-                      src={product.thumbnails?.[0] || '/placeholder.jpg'}
-                      alt={product.color}
-                      fill
-                      sizes="80px"
-                      className="object-cover transition-transform duration-700 group-hover:scale-110"
-                    />
-                    <div
-                      className={cn(
-                        'absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-500',
-                        selectedVariantIndex === -1
-                          ? 'opacity-100'
-                          : 'opacity-0 group-hover:opacity-100',
-                      )}
-                    />
-                    <span className="absolute inset-x-0 bottom-2 text-center text-[9px] font-black tracking-tighter text-white uppercase drop-shadow-md">
-                      {product.color}
-                    </span>
-                    {selectedVariantIndex === -1 && (
-                      <div className="absolute top-2 right-2 flex h-4 w-4 items-center justify-center rounded-full bg-blue-500 shadow-lg">
-                        <Check
-                          className="h-2.5 w-2.5 text-white"
-                          strokeWidth={4}
-                        />
-                      </div>
-                    )}
-                  </button>
+            <ProductDetailVariants
+              product={product}
+              selectedVariantIndex={selectedVariantIndex}
+              setSelectedVariantIndex={setSelectedVariantIndex}
+            />
 
-                  {/* Other Variants */}
-                  {product.variants.map((variant, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => setSelectedVariantIndex(idx)}
-                      className={cn(
-                        'group relative h-24 w-20 overflow-hidden rounded-2xl border-2 transition-all duration-500',
-                        selectedVariantIndex === idx
-                          ? 'z-10 scale-110 border-blue-500 shadow-2xl shadow-blue-500/20'
-                          : 'border-border/40 opacity-70 hover:scale-105 hover:border-blue-500/30 hover:opacity-100',
-                      )}
-                    >
-                      <Image
-                        src={variant.thumbnails?.[0] || product.thumbnails?.[0]}
-                        alt={variant.color}
-                        fill
-                        sizes="80px"
-                        className="object-cover transition-transform duration-700 group-hover:scale-110"
-                      />
-                      <div
-                        className={cn(
-                          'absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-500',
-                          selectedVariantIndex === idx
-                            ? 'opacity-100'
-                            : 'opacity-0 group-hover:opacity-100',
-                        )}
-                      />
-                      <span className="absolute inset-x-0 bottom-2 text-center text-[9px] font-black tracking-tighter text-white uppercase drop-shadow-md">
-                        {variant.color}
-                      </span>
-                      {selectedVariantIndex === idx && (
-                        <div className="absolute top-2 right-2 flex h-4 w-4 items-center justify-center rounded-full bg-blue-500 shadow-lg">
-                          <Check
-                            className="h-2.5 w-2.5 text-white"
-                            strokeWidth={4}
-                          />
-                        </div>
-                      )}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Size Selection */}
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <h2 className="text-foreground text-sm font-black tracking-widest uppercase">
-                  Select Size
-                </h2>
-              </div>
-              <div className="flex flex-wrap gap-3">
-                {product.sizes.map((size) => {
-                  const sizeStock = (() => {
-                    if (selectedVariantIndex >= 0) {
-                      const variant = product.variants?.[selectedVariantIndex];
-                      const sizeObj = variant?.sizes?.find(
-                        (s: IVariantSize) => s.size === size,
-                      );
-                      return sizeObj ? sizeObj.stock : 0;
-                    } else {
-                      const sizeObj = product.sizeStock?.find(
-                        (s: IVariantSize) => s.size === size,
-                      );
-                      return sizeObj ? sizeObj.stock : 0;
-                    }
-                  })();
-
-                  const isStockOut = sizeStock === 0;
-                  const selectedColor =
-                    selectedVariantIndex === -1
-                      ? product.color
-                      : product.variants?.[selectedVariantIndex]?.color;
-                  const isWishlisted = isInWishlist(
-                    product._id as string,
-                    selectedColor,
-                    size,
-                  );
-
-                  return (
-                    <button
-                      key={size}
-                      onClick={() => !isStockOut && setSelectedSize(size)}
-                      disabled={isStockOut}
-                      className={cn(
-                        'group relative flex min-w-16 flex-col items-center justify-center gap-0.5 overflow-hidden rounded-lg border-2 px-5 py-3 transition-all duration-300',
-                        isStockOut
-                          ? 'cursor-not-allowed border-transparent bg-slate-200 text-slate-400 dark:bg-slate-800 dark:text-slate-500'
-                          : selectedSize === size
-                            ? 'border-blue-600 bg-blue-600 text-white shadow-md dark:border-blue-500 dark:bg-blue-600'
-                            : 'border-blue-600 bg-transparent text-slate-800 hover:bg-blue-50 dark:border-blue-500 dark:text-slate-200 dark:hover:bg-blue-900/30',
-                      )}
-                    >
-                      <span className="text-sm font-black tracking-widest uppercase">
-                        {size}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Size Guide Button */}
-              {product.sizeGuide && (
-                <div className="mt-6">
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className="w-full rounded-xl border-2 border-zinc-200 font-bold text-zinc-600 transition-all hover:bg-zinc-50 sm:w-auto dark:border-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-900"
-                      >
-                        <Ruler size={16} className="mr-2 text-blue-500" />
-                        {(product.sizeGuide as any).name || 'View Size Guide'}
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent className="w-[95vw] max-w-5xl overflow-hidden border-none bg-transparent p-0 shadow-none sm:max-w-5xl">
-                      <div className="relative overflow-hidden rounded-3xl bg-white shadow-2xl dark:bg-zinc-950">
-                        <div className="flex items-center gap-3 border-b border-zinc-100 p-4 dark:border-zinc-800">
-                          <Ruler size={16} className="text-blue-500" />
-                          <DialogTitle className="m-0 text-sm font-bold tracking-widest uppercase">
-                            {(product.sizeGuide as any).name || 'Size Guide'}
-                          </DialogTitle>
-                        </div>
-                        <div className="relative max-h-[85vh] w-full overflow-auto">
-                          <Image
-                            src={(product.sizeGuide as any).image}
-                            alt={
-                              (product.sizeGuide as any).name || 'Size Guide'
-                            }
-                            width={1600}
-                            height={1600}
-                            sizes="(max-width: 1280px) 100vw, 1280px"
-                            className="h-auto w-full min-w-[600px] object-contain p-2 md:min-w-full md:p-6"
-                            priority
-                          />
-                        </div>
-                      </div>
-                    </DialogContent>
-                  </Dialog>
-                </div>
-              )}
-            </div>
+            <ProductDetailSizes
+              product={product}
+              selectedVariantIndex={selectedVariantIndex}
+              selectedSize={selectedSize}
+              setSelectedSize={setSelectedSize}
+            />
           </div>
 
-          {/* CTA Section */}
-          <div className="flex flex-col gap-4 pt-6">
-            <div className="flex flex-row gap-3">
-              {currentStock < 1 ? (
-                <div className="flex flex-1 flex-col gap-3 md:flex-row">
-                  <Button
-                    disabled
-                    size="lg"
-                    className="w-full flex-1 cursor-not-allowed rounded-2xl border-2 border-red-500/30 bg-red-500/10 py-4 text-sm font-black text-red-500 shadow-none"
-                  >
-                    STOCK OUT
-                  </Button>
-                  <Button
-                    onClick={handleRestockRequest}
-                    disabled={isRequesting}
-                    variant="outline"
-                    className="w-full flex-1 rounded-2xl border-2 border-zinc-200 py-4 text-sm font-bold text-zinc-600 transition-all hover:bg-zinc-50 active:scale-[0.98] dark:border-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-900/50"
-                  >
-                    <BellRing className="mr-2 h-4 w-4 animate-pulse text-blue-500" />{' '}
-                    {isRequesting
-                      ? 'Requesting...'
-                      : 'Notify Me When Restocked'}
-                  </Button>
-                </div>
-              ) : (
-                <>
-                  <Button
-                    onClick={() => handleAddToCart(false)}
-                    size="lg"
-                    variant="outline"
-                    className="flex-1 rounded-2xl border-2 border-blue-700 py-4 text-sm font-black text-blue-700 transition-all hover:bg-blue-50 active:scale-[0.98] dark:border-blue-500 dark:text-blue-500 dark:hover:bg-blue-500/10"
-                  >
-                    Add to Cart <ShoppingCart className="ml-2 h-4 w-4" />
-                  </Button>
-                  <Button
-                    onClick={() => handleAddToCart(true)}
-                    size="lg"
-                    className="flex-1 rounded-2xl bg-blue-600 py-4 text-sm font-black text-white shadow-xl shadow-blue-500/20 transition-all hover:bg-blue-700 active:scale-[0.98]"
-                  >
-                    Buy Now
-                  </Button>
-                </>
-              )}
-            </div>
-            <div className="flex items-center justify-center gap-8 py-4">
-              <div className="text-muted-foreground flex items-center gap-2 text-[10px] font-black tracking-tighter uppercase">
-                <div
-                  className={`h-1.5 w-1.5 rounded-full ${currentStock > 0 ? 'bg-emerald-500' : 'bg-red-500'}`}
-                />
-                {currentStock > 0 ? 'In Stock' : 'Out of Stock'}
-              </div>
-              <div className="text-muted-foreground flex items-center gap-2 text-[10px] font-black tracking-tighter uppercase">
-                <div className="h-1.5 w-1.5 rounded-full bg-blue-500" />
-                24h Shipping
-              </div>
-              <div className="text-muted-foreground flex items-center gap-2 text-[10px] font-black tracking-tighter uppercase">
-                <div className="h-1.5 w-1.5 rounded-full bg-amber-500" />
-                30 Day Return
-              </div>
-            </div>
-          </div>
+          <ProductDetailActions
+            currentStock={currentStock}
+            isRequesting={isRequesting}
+            handleRestockRequest={handleRestockRequest}
+            handleAddToCart={handleAddToCart}
+          />
 
-          {/* Tabs Section */}
-          <div className="border-border/50 space-y-10 border-t pt-8">
-            <Tabs defaultValue="description" className="w-full">
-              <TabsList className="mb-8 flex w-full justify-start gap-4 overflow-x-auto rounded-none border-b bg-transparent p-0">
-                <TabsTrigger
-                  value="description"
-                  className="text-muted-foreground data-[state=active]:border-foreground data-[state=active]:text-foreground rounded-none border-b-2 border-transparent px-4 py-3 text-[10px] font-black tracking-widest uppercase data-[state=active]:bg-transparent data-[state=active]:shadow-none"
-                >
-                  Description
-                </TabsTrigger>
-                {product.videoUrl && (
-                  <TabsTrigger
-                    value="video"
-                    className="text-muted-foreground data-[state=active]:border-foreground data-[state=active]:text-foreground rounded-none border-b-2 border-transparent px-4 py-3 text-[10px] font-black tracking-widest uppercase data-[state=active]:bg-transparent data-[state=active]:shadow-none"
-                  >
-                    Product Video
-                  </TabsTrigger>
-                )}
-                <TabsTrigger
-                  value="refund"
-                  className="text-muted-foreground data-[state=active]:border-foreground data-[state=active]:text-foreground rounded-none border-b-2 border-transparent px-4 py-3 text-[10px] font-black tracking-widest uppercase data-[state=active]:bg-transparent data-[state=active]:shadow-none"
-                >
-                  Refund Policy
-                </TabsTrigger>
-                <TabsTrigger
-                  value="return"
-                  className="text-muted-foreground data-[state=active]:border-foreground data-[state=active]:text-foreground rounded-none border-b-2 border-transparent px-4 py-3 text-[10px] font-black tracking-widest uppercase data-[state=active]:bg-transparent data-[state=active]:shadow-none"
-                >
-                  Return Policy
-                </TabsTrigger>
-              </TabsList>
-
-              <TabsContent value="description" className="mt-0">
-                <div className="space-y-8">
-                  <div>
-                    <h2 className="text-foreground mb-4 text-xs font-black tracking-[0.2em] uppercase">
-                      The Narrative
-                    </h2>
-                    <HtmlContent
-                      content={product.description}
-                      className="prose prose-sm dark:prose-invert text-muted-foreground/80 max-w-none text-base leading-relaxed font-medium"
-                    />
-                  </div>
-
-                  {/* Mobile Artisanal Details */}
-                  {product.details && (
-                    <div className="lg:hidden">
-                      <h2 className="text-foreground mb-4 text-xs font-black tracking-[0.2em] uppercase">
-                        Artisanal Details
-                      </h2>
-                      <HtmlContent
-                        content={
-                          Array.isArray(product.details)
-                            ? product.details.join('\n')
-                            : product.details
-                        }
-                        className="prose prose-sm dark:prose-invert text-muted-foreground/80 max-w-none leading-relaxed font-medium"
-                      />
-                    </div>
-                  )}
-                </div>
-              </TabsContent>
-
-              {product.videoUrl && (
-                <TabsContent value="video" className="mt-0">
-                  <div className="aspect-video w-full overflow-hidden rounded-2xl border-4 border-white/10 shadow-2xl">
-                    <iframe
-                      width="100%"
-                      height="100%"
-                      src={getYoutubeEmbedUrl(product.videoUrl)}
-                      title="Product Video"
-                      frameBorder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                      referrerPolicy="origin"
-                    ></iframe>
-                  </div>
-                  <p className="text-muted-foreground mt-4 text-center text-sm font-medium italic">
-                    Experience the elegance and movement of this piece in
-                    motion.
-                  </p>
-                </TabsContent>
-              )}
-
-              <TabsContent value="refund" className="mt-0">
-                <div className="prose prose-sm dark:prose-invert text-muted-foreground/80 max-w-none text-base leading-relaxed font-medium">
-                  {settings?.refundPolicy ? (
-                    <HtmlContent content={settings.refundPolicy} />
-                  ) : (
-                    <>
-                      <p>
-                        We believe in the quality of our products. If you are
-                        not completely satisfied with your purchase, we offer a
-                        straightforward refund policy.
-                      </p>
-                      <ul className="mt-4 space-y-2">
-                        <li>
-                          Refunds must be requested within 30 days of delivery.
-                        </li>
-                        <li>
-                          The item must be in its original condition, unworn,
-                          unwashed, with all original tags attached.
-                        </li>
-                        <li>
-                          Refunds will be processed to the original payment
-                          method within 5-7 business days after we receive the
-                          returned item.
-                        </li>
-                        <li>
-                          Shipping costs are non-refundable unless the item
-                          received was damaged or incorrect.
-                        </li>
-                      </ul>
-                      <p className="mt-4">
-                        Please contact our support team at support@Aranis.com to
-                        initiate a refund request.
-                      </p>
-                    </>
-                  )}
-                </div>
-              </TabsContent>
-
-              <TabsContent value="return" className="mt-0">
-                <div className="prose prose-sm dark:prose-invert text-muted-foreground/80 max-w-none text-base leading-relaxed font-medium">
-                  {settings?.returnPolicy ? (
-                    <HtmlContent content={settings.returnPolicy} />
-                  ) : (
-                    <>
-                      <p>
-                        Our return process is designed to be as seamless as
-                        possible for you.
-                      </p>
-                      <ul className="mt-4 space-y-2">
-                        <li>
-                          You have 30 days from the date of delivery to return
-                          your item.
-                        </li>
-                        <li>
-                          To initiate a return, please log in to your account,
-                          navigate to "My Orders," and select the item you wish
-                          to return.
-                        </li>
-                        <li>
-                          You will receive a pre-paid return shipping label via
-                          email.
-                        </li>
-                        <li>
-                          Please package the item securely and drop it off at
-                          any authorized shipping location.
-                        </li>
-                      </ul>
-                      <p className="mt-4">
-                        Once your return is received and inspected, we will
-                        notify you of the approval or rejection of your return.
-                        Approved returns will be refunded or exchanged according
-                        to your preference.
-                      </p>
-                    </>
-                  )}
-                </div>
-              </TabsContent>
-            </Tabs>
-          </div>
+          <ProductDetailTabs
+            product={product}
+            settings={settings}
+            getYoutubeEmbedUrl={getYoutubeEmbedUrl}
+          />
         </motion.div>
       </div>
     </div>

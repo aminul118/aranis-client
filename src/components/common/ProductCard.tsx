@@ -17,7 +17,6 @@ interface ProductCardProps {
 
 const ProductCard = ({
   product,
-  index = 0,
   viewMode = 'grid',
   selectedColors = [],
 }: ProductCardProps) => {
@@ -108,15 +107,6 @@ const ProductCard = ({
               % OFF
             </div>
           )}
-          {product.isOffer &&
-            product.offerTag &&
-            !['website', 'show website'].includes(
-              product.offerTag.toLowerCase().trim(),
-            ) && (
-              <div className="rounded-full bg-blue-500 px-2.5 py-1 text-[9px] font-black tracking-tight text-white uppercase shadow-sm">
-                {product.offerTag}
-              </div>
-            )}
         </div>
 
         {/* Wishlist - Heart floating with soft glow */}
@@ -168,17 +158,31 @@ const ProductCard = ({
         <div className="mt-auto flex items-center justify-between gap-3">
           <div className="flex flex-col">
             {(product.salePrice ?? 0) > 0 || product.isOffer ? (
-              <div className="flex items-baseline gap-2">
-                <span className="text-lg font-black tracking-tight text-zinc-900 dark:text-white">
-                  ৳{(product.salePrice ?? product.price).toLocaleString()}
-                </span>
-                <span className="text-muted-foreground/50 text-[11px] font-medium line-through">
-                  ৳{product.price.toLocaleString()}
-                </span>
+              <div className="flex flex-col gap-0.5">
+                <div className="flex items-baseline gap-2">
+                  <span className="text-lg font-black tracking-tight text-zinc-900 dark:text-white">
+                    ৳
+                    {(product.salePrice ?? product.price).toLocaleString(
+                      'en-IN',
+                    )}
+                  </span>
+                  <span className="text-muted-foreground/50 text-[11px] font-medium line-through">
+                    ৳{product.price.toLocaleString('en-IN')}
+                  </span>
+                </div>
+                {(product.salePrice ?? 0) > 0 &&
+                  product.price > (product.salePrice ?? 0) && (
+                    <span className="text-[10px] font-bold tracking-tight text-red-500">
+                      Save ৳
+                      {(
+                        product.price - (product.salePrice ?? 0)
+                      ).toLocaleString('en-IN')}
+                    </span>
+                  )}
               </div>
             ) : (
               <span className="text-lg font-black tracking-tight text-zinc-900 dark:text-white">
-                ৳{product.price.toLocaleString()}
+                ৳{product.price.toLocaleString('en-IN')}
               </span>
             )}
           </div>
