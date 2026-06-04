@@ -65,9 +65,9 @@ export async function POST(req: NextRequest) {
     let finalFileName = uniqueFileName;
 
     if (file.type.startsWith('image/')) {
-      // Convert and compress to webp
+      // Convert and compress to webp with high quality
       bufferToUpload = await sharp(buffer as any)
-        .webp({ quality: 80 })
+        .webp({ quality: 95 })
         .toBuffer();
       contentType = 'image/webp';
     } else {
