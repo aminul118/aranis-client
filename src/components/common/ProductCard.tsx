@@ -66,8 +66,8 @@ const ProductCard = ({
   return (
     <div
       className={cn(
-        'group relative cursor-pointer overflow-hidden bg-white transition-all duration-700 hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.15)] dark:bg-zinc-900/50 dark:hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.4)]',
-        isList && 'flex flex-row gap-8',
+        'group relative flex h-full cursor-pointer overflow-hidden bg-white transition-all duration-700 hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.15)] dark:bg-zinc-900/50 dark:hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.4)]',
+        isList ? 'flex-row gap-8' : 'flex-col',
       )}
       onClick={() => router.push(productUrl)}
     >
@@ -75,9 +75,7 @@ const ProductCard = ({
       <div
         className={cn(
           'relative overflow-hidden bg-zinc-100 dark:bg-zinc-800',
-          isList
-            ? 'aspect-square w-40 shrink-0 sm:w-64'
-            : 'aspect-[4/5] w-full',
+          isList ? 'aspect-[4/5] w-40 shrink-0 sm:w-64' : 'aspect-[4/5] w-full',
         )}
       >
         <Image
@@ -109,6 +107,15 @@ const ProductCard = ({
           )}
         </div>
 
+        {/* Out of Stock Overlay */}
+        {product.stock < 1 && (
+          <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/20 backdrop-blur-[2px]">
+            <span className="rounded bg-black/80 px-3 py-1.5 text-[10px] font-black tracking-[0.2em] text-white uppercase sm:px-4 sm:py-2 sm:text-xs">
+              Out of Stock
+            </span>
+          </div>
+        )}
+
         {/* Wishlist - Heart floating with soft glow */}
         <button
           onClick={(e) => {
@@ -136,7 +143,7 @@ const ProductCard = ({
       <div
         className={cn(
           'flex flex-1 flex-col',
-          isList ? 'py-4 pr-4' : 'p-5 pt-4',
+          isList ? 'py-4 pr-4' : 'p-3 pt-3 sm:p-5 sm:pt-4',
         )}
       >
         <div className="mb-1 flex items-center justify-between">
@@ -145,7 +152,7 @@ const ProductCard = ({
           </p>
         </div>
 
-        <h2 className="mb-3 line-clamp-1 text-sm font-bold tracking-tight text-zinc-900 transition-colors group-hover:text-blue-500 dark:text-white">
+        <h2 className="mb-3 line-clamp-2 min-h-[32px] text-xs leading-tight font-bold tracking-tight text-zinc-900 transition-colors group-hover:text-blue-500 sm:min-h-[36px] sm:text-sm sm:leading-tight dark:text-white">
           {product.name}
         </h2>
 
@@ -155,8 +162,8 @@ const ProductCard = ({
           </p>
         )}
 
-        <div className="mt-auto flex items-center justify-between gap-3">
-          <div className="flex flex-col">
+        <div className="mt-auto flex items-end justify-between gap-2 sm:items-center sm:gap-3">
+          <div className="flex min-w-0 flex-1 flex-col">
             {(product.salePrice ?? 0) > 0 || product.isOffer ? (
               <div className="flex flex-col gap-0.5">
                 <div className="flex items-baseline gap-2">
@@ -187,11 +194,7 @@ const ProductCard = ({
             )}
           </div>
 
-          {product.stock < 1 ? (
-            <span className="rounded-full border border-red-500/20 bg-red-500/10 px-2 py-1 text-[10px] font-black tracking-widest text-red-500 uppercase">
-              Stock Out
-            </span>
-          ) : (
+          {product.stock > 0 && (
             <Button
               size="icon"
               aria-label="Add to cart"

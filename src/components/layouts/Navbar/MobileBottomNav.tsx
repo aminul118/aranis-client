@@ -3,7 +3,7 @@
 import { useCartOptional } from '@/context/CartContext';
 import { useWishlistOptional } from '@/context/WishlistContext';
 import { cn } from '@/lib/utils';
-import { Gift, Heart, ShoppingCart, User } from 'lucide-react';
+import { Gift, Heart, ShoppingBag, ShoppingCart, User } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -39,6 +39,11 @@ const MobileBottomNav = ({ user }: { user: IUser | null }) => {
       icon: ShoppingCart,
       count: totalItems,
       badgeColor: 'bg-blue-600',
+    },
+    {
+      label: 'Orders',
+      href: '/user/orders',
+      icon: ShoppingBag,
     },
     {
       label: 'ACCOUNT',
