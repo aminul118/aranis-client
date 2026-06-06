@@ -20,6 +20,14 @@ const GlobalOfferModal = () => {
   const [progress, setProgress] = useState(100);
 
   useEffect(() => {
+    // Check if the user has already closed the banner in this session
+    if (typeof window !== 'undefined') {
+      const isClosed = sessionStorage.getItem('popupBannerClosed');
+      if (isClosed === 'true') {
+        return;
+      }
+    }
+
     const fetchPopup = async () => {
       try {
         const baseUrl =
@@ -66,7 +74,7 @@ const GlobalOfferModal = () => {
     const timer = setInterval(() => {
       setProgress((prev) => {
         if (prev <= 0) {
-          setVisible(false);
+          handleClose();
           return 0;
         }
         return prev - step;
@@ -77,6 +85,9 @@ const GlobalOfferModal = () => {
   }, [visible]);
 
   const handleClose = () => {
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('popupBannerClosed', 'true');
+    }
     setVisible(false);
   };
 
