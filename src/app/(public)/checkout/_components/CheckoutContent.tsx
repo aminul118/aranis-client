@@ -21,6 +21,10 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
+import {
+  getDeliveryCharge,
+  IDeliveryCharge,
+} from '@/services/delivery-charge/delivery-charge';
 import CheckoutCartItems from './CheckoutCartItems';
 import CheckoutPaymentSection from './CheckoutPaymentSection';
 import CheckoutShippingSection from './CheckoutShippingSection';
@@ -56,8 +60,21 @@ export default function CheckoutContent() {
   const [shippingLocation, setShippingLocation] = useState<
     'inside' | 'outside'
   >('inside');
+  const [deliverySettings, setDeliverySettings] = useState<IDeliveryCharge>({
+    insideDhaka: 70,
+    outsideDhaka: 150,
+    freeDeliveryThreshold: 0,
+  });
 
-  const shippingCharge = shippingLocation === 'inside' ? 70 : 150;
+  // Calculate dynamic shipping charge based on settings
+  const shippingCharge =
+    deliverySettings.freeDeliveryThreshold > 0 &&
+    total >= deliverySettings.freeDeliveryThreshold
+      ? 0
+      : shippingLocation === 'inside'
+        ? deliverySettings.insideDhaka
+        : deliverySettings.outsideDhaka;
+
   const finalTotal = total + shippingCharge;
 
   const router = useRouter();
@@ -79,7 +96,18 @@ export default function CheckoutContent() {
         setLoading(false);
       }
     };
+    const fetchDeliverySettings = async () => {
+      try {
+        const res = await getDeliveryCharge();
+        if (res.success && res.data) {
+          setDeliverySettings(res.data);
+        }
+      } catch (e) {
+        console.error('Failed to load delivery settings', e);
+      }
+    };
     fetchUser();
+    fetchDeliverySettings();
     // Re-validate cart stock on checkout mount
     validateCartStock();
   }, [router]);
@@ -133,6 +161,16 @@ export default function CheckoutContent() {
     if (hasStockOut) {
       toast.error(
         'Please remove out of stock items from your cart to proceed.',
+      );
+      return;
+    }
+
+    const hasInsufficientStock = cart.some(
+      (item) => item.stock !== undefined && item.quantity > item.stock,
+    );
+    if (hasInsufficientStock) {
+      toast.error(
+        'Some items in your cart exceed available stock. Please reduce their quantity.',
       );
       return;
     }
@@ -255,7 +293,15 @@ export default function CheckoutContent() {
     try {
       const activeLocation = overrideShippingLocation || shippingLocation;
       const activePaymentMethod = overridePaymentMethod || paymentMethod;
-      const activeShippingCharge = activeLocation === 'inside' ? 70 : 150;
+
+      const activeShippingCharge =
+        deliverySettings.freeDeliveryThreshold > 0 &&
+        total >= deliverySettings.freeDeliveryThreshold
+          ? 0
+          : activeLocation === 'inside'
+            ? deliverySettings.insideDhaka
+            : deliverySettings.outsideDhaka;
+
       const activeTotalPrice = total + activeShippingCharge;
 
       const orderPayload = {
@@ -463,6 +509,8 @@ export default function CheckoutContent() {
               setGuestInfo={setGuestInfo}
               guestMethod={guestMethod}
               setGuestMethod={setGuestMethod}
+              isDeliveryFree={shippingCharge === 0}
+              deliverySettings={deliverySettings}
             />
 
             {/* Payment Section */}
@@ -564,8 +612,10 @@ export default function CheckoutContent() {
                 </div>
                 <div className="text-muted-foreground flex justify-between text-sm font-medium">
                   <span>Delivery Charge</span>
-                  <span className="font-black text-blue-600">
-                    +৳{shippingCharge}
+                  <span
+                    className={`font-black ${shippingCharge === 0 ? 'text-emerald-500' : 'text-blue-600'}`}
+                  >
+                    {shippingCharge === 0 ? 'Free' : `+৳${shippingCharge}`}
                   </span>
                 </div>
                 {discount > 0 && (
@@ -589,7 +639,14 @@ export default function CheckoutContent() {
 
               <Button
                 onClick={handlePlaceOrder}
-                disabled={submitting || cart.some((item) => item.isStockOut)}
+                disabled={
+                  submitting ||
+                  cart.some(
+                    (item) =>
+                      item.isStockOut ||
+                      (item.stock !== undefined && item.quantity > item.stock),
+                  )
+                }
                 className="mt-10 h-16 w-full rounded-full bg-linear-to-r from-blue-600 to-indigo-700 text-lg font-black tracking-widest uppercase shadow-xl shadow-blue-500/25 transition-all hover:scale-[1.02] hover:shadow-blue-500/40 active:scale-95 disabled:opacity-50"
               >
                 {submitting ? 'Processing...' : 'Complete Order'}

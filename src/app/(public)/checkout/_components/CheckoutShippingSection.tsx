@@ -23,6 +23,12 @@ interface CheckoutShippingSectionProps {
   setGuestInfo: (val: any) => void;
   guestMethod: 'email' | 'phone';
   setGuestMethod: (val: 'email' | 'phone') => void;
+  isDeliveryFree: boolean;
+  deliverySettings: {
+    insideDhaka: number;
+    outsideDhaka: number;
+    freeDeliveryThreshold: number;
+  };
 }
 
 export default function CheckoutShippingSection({
@@ -37,6 +43,8 @@ export default function CheckoutShippingSection({
   setGuestInfo,
   guestMethod,
   setGuestMethod,
+  isDeliveryFree,
+  deliverySettings,
 }: CheckoutShippingSectionProps) {
   return (
     <motion.section
@@ -80,7 +88,11 @@ export default function CheckoutShippingSection({
             >
               <div className="flex w-full items-center justify-between">
                 <span className="text-sm font-bold">Inside Dhaka</span>
-                <span className="text-sm font-black">৳70</span>
+                {!isDeliveryFree && (
+                  <span className="text-sm font-black">
+                    ৳{deliverySettings.insideDhaka}
+                  </span>
+                )}
               </div>
             </label>
           </div>
@@ -100,7 +112,11 @@ export default function CheckoutShippingSection({
             >
               <div className="flex w-full items-center justify-between">
                 <span className="text-sm font-bold">Outside Dhaka</span>
-                <span className="text-sm font-black">৳150</span>
+                {!isDeliveryFree && (
+                  <span className="text-sm font-black">
+                    ৳{deliverySettings.outsideDhaka}
+                  </span>
+                )}
               </div>
             </label>
           </div>

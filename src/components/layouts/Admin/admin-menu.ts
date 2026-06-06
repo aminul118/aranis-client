@@ -15,6 +15,7 @@ import {
   Ruler,
   ShoppingCart,
   TicketPercent,
+  Truck,
   Users,
 } from 'lucide-react';
 
@@ -46,6 +47,7 @@ const adminSidebarMenu: MenuGroup[] = [
         url: '/admin/restock-requests',
         icon: BellRing,
       },
+      { name: 'Delivery Charge', url: '/admin/delivery-charge', icon: Truck },
     ],
   },
   {

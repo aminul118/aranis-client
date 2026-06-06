@@ -235,7 +235,11 @@ const CartItem = ({
                     item.selectedSize,
                   )
                 }
-                disabled={item.quantity >= 20 || item.isStockOut}
+                disabled={
+                  item.quantity >= 20 ||
+                  item.isStockOut ||
+                  (item.stock !== undefined && item.quantity >= item.stock)
+                }
                 className="text-muted-foreground hover:bg-background hover:text-foreground flex h-8 w-8 items-center justify-center rounded-full shadow-xs transition-all disabled:cursor-not-allowed disabled:opacity-30"
               >
                 <Plus size={14} />
@@ -271,6 +275,18 @@ const CartItem = ({
             </p>
           </div>
         </div>
+
+        {/* Insufficient Stock Warning */}
+        {!item.isStockOut &&
+          item.stock !== undefined &&
+          item.quantity > item.stock && (
+            <div className="mt-4 rounded-lg border border-orange-500/30 bg-orange-500/10 p-2.5 text-center sm:text-left">
+              <p className="text-xs font-bold text-orange-600 dark:text-orange-400">
+                Only {item.stock} left in stock! Please reduce your quantity to
+                proceed.
+              </p>
+            </div>
+          )}
       </div>
     </motion.div>
   );

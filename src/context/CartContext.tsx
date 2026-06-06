@@ -4,6 +4,7 @@ import { ICoupon } from '@/services/coupon/coupon';
 import { getProducts } from '@/services/product/product';
 import { ICartItem, IProduct } from '@/types';
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 interface CartContextType {
   cart: ICartItem[];
@@ -114,12 +115,13 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
             currentStock = sizeObj ? sizeObj.stock : liveProduct.stock;
           }
 
-          const isStockOut = currentStock < 1 || currentStock < item.quantity;
+          const isStockOut = currentStock < 1;
 
           if (
             item.isStockOut !== isStockOut ||
             item.price !== liveProduct.price ||
-            item.salePrice !== liveProduct.salePrice
+            item.salePrice !== liveProduct.salePrice ||
+            item.stock !== currentStock
           ) {
             hasChanges = true;
             return {
@@ -127,7 +129,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
               isStockOut,
               price: liveProduct.price,
               salePrice: liveProduct.salePrice,
-              stock: liveProduct.stock,
+              stock: currentStock, // Save exactly the variant stock or global stock here!
               variants: liveProduct.variants,
               sizeStock: liveProduct.sizeStock,
             };
@@ -163,18 +165,46 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
           item.selectedSize === selectedSize,
       );
       if (existingItem) {
+        // Prevent adding more than available stock
+        const newQuantity = existingItem.quantity + 1;
+
+        if (newQuantity > existingItem.stock) {
+          toast.error(`Only ${existingItem.stock} left in stock!`);
+          return prevCart;
+        }
+
         return prevCart.map((item) =>
-          item._id === product._id &&
           item._id === product._id &&
           item.selectedColor === selectedColor &&
           item.selectedSize === selectedSize
-            ? { ...item, quantity: Math.min(item.quantity + 1, 20) }
+            ? { ...item, quantity: Math.min(newQuantity, 20) }
             : item,
         );
       }
+
+      let initialStock = product.stock;
+      if (selectedColor) {
+        const variant = product.variants?.find(
+          (v) => v.color === selectedColor,
+        );
+        if (variant && selectedSize) {
+          const sizeObj = variant.sizes?.find((s) => s.size === selectedSize);
+          initialStock = sizeObj ? sizeObj.stock : 0;
+        }
+      } else if (selectedSize) {
+        const sizeObj = product.sizeStock?.find((s) => s.size === selectedSize);
+        initialStock = sizeObj ? sizeObj.stock : product.stock;
+      }
+
       return [
         ...prevCart,
-        { ...product, quantity: 1, selectedColor, selectedSize },
+        {
+          ...product,
+          quantity: 1,
+          selectedColor,
+          selectedSize,
+          stock: initialStock,
+        },
       ];
     });
   };
@@ -203,15 +233,21 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
     selectedSize?: string,
   ) => {
     if (quantity < 1) return;
-    const finalQuantity = Math.min(quantity, 20);
     setCart((prevCart) =>
-      prevCart.map((item) =>
-        item._id === id &&
-        item.selectedColor === selectedColor &&
-        item.selectedSize === selectedSize
-          ? { ...item, quantity: finalQuantity }
-          : item,
-      ),
+      prevCart.map((item) => {
+        if (
+          item._id === id &&
+          item.selectedColor === selectedColor &&
+          item.selectedSize === selectedSize
+        ) {
+          if (quantity > item.stock) {
+            toast.error(`Only ${item.stock} left in stock!`);
+            return item;
+          }
+          return { ...item, quantity };
+        }
+        return item;
+      }),
     );
   };
 
