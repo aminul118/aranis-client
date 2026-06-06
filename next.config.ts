@@ -1,6 +1,11 @@
+import envVars from '@/config/env.config';
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
+  compiler: {
+    removeConsole:
+      envVars.nodeEnv === 'production' ? { exclude: ['error'] } : false,
+  },
   experimental: {
     authInterrupts: true,
     serverActions: {
