@@ -67,7 +67,8 @@ const CartItem = ({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       className={`group border-border bg-card/40 relative flex flex-col gap-6 overflow-hidden rounded-[32px] border p-5 backdrop-blur-xl transition-all sm:flex-row sm:items-center ${
-        item.isStockOut
+        item.isStockOut ||
+        (item.stock !== undefined && item.quantity > item.stock)
           ? 'opacity-70 grayscale-[0.2]'
           : 'hover:border-blue-500/30 hover:shadow-2xl hover:shadow-blue-500/5'
       }`}
@@ -86,7 +87,8 @@ const CartItem = ({
           fill
           className="object-cover transition-transform duration-700 group-hover:scale-110"
         />
-        {item.isStockOut ? (
+        {item.isStockOut ||
+        (item.stock !== undefined && item.quantity > item.stock) ? (
           <div className="absolute top-2 left-2 z-10 rounded-full bg-red-600 px-2.5 py-1 text-[9px] font-black text-white uppercase shadow-lg shadow-red-500/20">
             Out of Stock
           </div>
@@ -257,7 +259,7 @@ const CartItem = ({
               )}
               <span className="text-foreground text-2xl font-black tracking-tighter">
                 {item.isStockOut ? (
-                  <span className="text-lg text-red-500">Not Available</span>
+                  <span className="text-lg text-red-500">Out of Stock</span>
                 ) : (
                   <>
                     ৳
@@ -277,13 +279,13 @@ const CartItem = ({
         </div>
 
         {/* Insufficient Stock Warning */}
-        {!item.isStockOut &&
-          item.stock !== undefined &&
+        {item.stock !== undefined &&
+          item.stock > 0 &&
           item.quantity > item.stock && (
             <div className="mt-4 rounded-lg border border-orange-500/30 bg-orange-500/10 p-2.5 text-center sm:text-left">
               <p className="text-xs font-bold text-orange-600 dark:text-orange-400">
-                Only {item.stock} left in stock! Please reduce your quantity to
-                proceed.
+                Only {item.stock} left in stock! You can try to decrease order
+                quantity to proceed.
               </p>
             </div>
           )}
