@@ -80,7 +80,7 @@ const HomeSEOContent = () => {
 
       <div className="container mx-auto max-w-6xl px-4">
         {/* Header - Storytelling Intro */}
-        <header className="mb-24 flex flex-col items-center text-center md:mb-32">
+        <header className="mb-12 flex flex-col items-center text-center md:mb-32">
           <span className="text-primary mb-6 flex items-center gap-2 rounded-full border border-blue-500/20 bg-blue-500/5 px-4 py-1.5 text-xs font-bold tracking-[0.2em] uppercase">
             Story of Aranis
           </span>
@@ -128,12 +128,12 @@ const HomeSEOContent = () => {
         </header>
 
         {/* Vertical Editorial Sections */}
-        <div className="space-y-32 md:space-y-48">
+        <div className="space-y-16 md:space-y-48">
           {sections.map((section, index) => (
             <article
               key={section.title}
               className={cn(
-                'group relative flex flex-col gap-10 md:gap-20',
+                'group relative flex flex-col gap-8 md:gap-20',
                 index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse',
               )}
             >
@@ -176,9 +176,9 @@ const HomeSEOContent = () => {
         </div>
 
         {/* Global Standards & Distribution Section */}
-        <footer className="mt-32 md:mt-48">
-          <div className="relative overflow-hidden rounded-[64px] border border-white/10 bg-white/2 p-8 shadow-2xl backdrop-blur-md md:p-20">
-            <div className="relative z-10 grid gap-16 lg:grid-cols-2 lg:gap-24">
+        <footer className="mt-16 md:mt-48">
+          <div className="relative overflow-hidden rounded-[32px] border border-white/10 bg-white/2 p-6 shadow-2xl backdrop-blur-md md:rounded-[64px] md:p-20">
+            <div className="relative z-10 grid gap-10 lg:grid-cols-2 lg:gap-24">
               <div className="space-y-8">
                 <h3 className="text-foreground text-3xl font-extrabold md:text-4xl">
                   Trusted Online Fashion Shopping at The Best E-Commerce Website
@@ -233,7 +233,7 @@ const HomeSEOContent = () => {
               </div>
             </div>
 
-            <div className="mt-20 flex flex-col items-center gap-6 border-t border-white/5 pt-12 text-center md:flex-row md:justify-between md:text-left">
+            <div className="mt-12 flex flex-col items-center gap-6 border-t border-white/5 pt-8 text-center md:mt-20 md:flex-row md:justify-between md:pt-12 md:text-left">
               <p className="text-muted-foreground max-w-md text-sm">
                 As an organization strictly maintaining regulatory requirements,
                 Aranis is committed to providing products and services of a

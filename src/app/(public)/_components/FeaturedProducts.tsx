@@ -15,9 +15,9 @@ const FeaturedProducts = async () => {
   if (featuredItems.length === 0) return null;
 
   return (
-    <section className="bg-muted/50 py-24">
+    <section className="bg-muted/50 py-10 md:py-24">
       <div className="container mx-auto px-4">
-        <AnimatedSection className="mb-16 flex flex-col items-end justify-between gap-6 md:flex-row">
+        <AnimatedSection className="mb-8 flex flex-col items-start justify-between gap-6 md:mb-16 md:flex-row md:items-end">
           <div>
             <h2 className="text-foreground mb-4 text-2xl font-black tracking-tighter md:text-4xl">
               Featured <span className="text-primary">Excellence</span>
@@ -35,7 +35,7 @@ const FeaturedProducts = async () => {
           </Button>
         </AnimatedSection>
 
-        <Grid cols={4}>
+        <Grid cols={4} className="gap-x-4 gap-y-6 md:gap-x-8 md:gap-y-12">
           {featuredItems.map((product, index) => (
             <ProductCard key={product._id} product={product} index={index} />
           ))}

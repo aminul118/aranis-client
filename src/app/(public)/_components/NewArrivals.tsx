@@ -11,9 +11,9 @@ const NewArrivals = async () => {
   if (products.length === 0) return null;
 
   return (
-    <section className="bg-background py-24">
+    <section className="bg-background py-10 md:py-24">
       <div className="container mx-auto px-4">
-        <AnimatedSection className="mb-16 flex flex-col items-end justify-between gap-6 md:flex-row">
+        <AnimatedSection className="mb-8 flex flex-col items-start justify-between gap-6 md:mb-16 md:flex-row md:items-end">
           <div>
             <div className="text-primary mb-2 flex items-center gap-3">
               <div className="bg-primary h-0.5 w-12 rounded-full" />
@@ -37,7 +37,7 @@ const NewArrivals = async () => {
           </Button>
         </AnimatedSection>
 
-        <Grid cols={4} className="gap-x-8 gap-y-12">
+        <Grid cols={4} className="gap-x-4 gap-y-6 md:gap-x-8 md:gap-y-12">
           {products.map((product, index) => (
             <ProductCard key={product._id} product={product} index={index} />
           ))}
