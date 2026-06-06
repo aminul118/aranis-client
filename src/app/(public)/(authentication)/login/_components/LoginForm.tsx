@@ -200,6 +200,14 @@ const LoginForm = () => {
                       </button>
                     </div>
                   </FormControl>
+                  <div className="mt-2 flex justify-end">
+                    <Link
+                      href="/forgot-password"
+                      className="text-primary text-xs font-bold hover:underline"
+                    >
+                      Forgot Password?
+                    </Link>
+                  </div>
                   <FormMessage />
                 </FormItem>
               )}
