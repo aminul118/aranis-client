@@ -3,11 +3,14 @@
 import { useCartOptional } from '@/context/CartContext';
 import { useWishlistOptional } from '@/context/WishlistContext';
 import { cn } from '@/lib/utils';
-import { Gift, Heart, MapPin, ShoppingCart } from 'lucide-react';
+import { Gift, Heart, ShoppingCart, User } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-const MobileBottomNav = () => {
+import { getDefaultDashboardRoute } from '@/services/user/user-access';
+import { IUser } from '@/types';
+
+const MobileBottomNav = ({ user }: { user: IUser | null }) => {
   const pathname = usePathname();
 
   const cart = useCartOptional();
@@ -38,9 +41,9 @@ const MobileBottomNav = () => {
       badgeColor: 'bg-blue-600',
     },
     {
-      label: 'LOCATION',
-      href: '/location',
-      icon: MapPin,
+      label: 'ACCOUNT',
+      href: user ? getDefaultDashboardRoute(user.role as any) : '/login',
+      icon: User,
     },
   ];
 

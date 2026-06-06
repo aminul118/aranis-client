@@ -45,7 +45,7 @@ const RootLayout = async ({ children }: Children) => {
       <div className="grow pt-[60px] lg:pt-[176px]">{children}</div>
       <ChatFloatingButton user={user as any} siteSettings={siteSettings} />
       <GlobalOfferModal />
-      <MobileBottomNav />
+      <MobileBottomNav user={user as any} />
       <Footer
         socialLinks={siteSettings?.socialLinks}
         navItems={sortedNavItems as any}

@@ -9,7 +9,7 @@ import {
 import { IUser } from '@/types';
 import Menu from './Menu';
 
-const UserSidebar = async ({ user }: { user: IUser }) => {
+const UserSidebar = ({ user }: { user: IUser }) => {
   return (
     <Sidebar collapsible="offcanvas" className="bg-black! text-white!">
       <SidebarHeader>
