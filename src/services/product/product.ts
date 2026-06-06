@@ -85,7 +85,7 @@ const deleteProduct = async (id: string) => {
 
 const getBestSellingProducts = async () => {
   return await serverFetch.get<ApiResponse<IProduct[]>>('/products', {
-    query: { sort: '-soldCount', limit: '12' },
+    query: { sort: '-inStock -soldCount -createdAt', limit: '12' },
     next: {
       tags: ['product', 'best-selling'],
     },
@@ -94,7 +94,7 @@ const getBestSellingProducts = async () => {
 
 const getNewArrivals = async () => {
   return await serverFetch.get<ApiResponse<IProduct[]>>('/products', {
-    query: { sort: '-createdAt', limit: '12' },
+    query: { sort: '-inStock -createdAt', limit: '12' },
     next: {
       tags: ['product', 'new-arrivals'],
     },

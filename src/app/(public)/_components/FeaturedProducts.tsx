@@ -6,7 +6,10 @@ import Link from 'next/link';
 import AnimatedSection from './AnimatedSection';
 
 const FeaturedProducts = async () => {
-  const { data } = await getProducts({ featured: 'true' });
+  const { data } = await getProducts({
+    featured: 'true',
+    sort: '-inStock -createdAt',
+  });
   const featuredItems = data?.slice(0, 8) || [];
 
   if (featuredItems.length === 0) return null;
