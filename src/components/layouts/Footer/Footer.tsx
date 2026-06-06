@@ -1,5 +1,6 @@
 import SocialLinks from '@/app/(public)/_components/SocialLinks';
 import AminulLogo from '@/components/common/Logo';
+import { Button } from '@/components/ui/button';
 import { INavItem } from '@/services/navbar/navbar';
 import { ISocialLink } from '@/services/settings/settings';
 import Link from 'next/link';
@@ -105,9 +106,12 @@ const Footer = ({
 
           <p className="hidden items-center gap-1.5 text-xs text-slate-400 lg:flex">
             Developed by
-            <Link target="_blank" href="https://rangdhanuit.com">
-              <span className="font-medium text-slate-400">Rangdhanu IT</span>
-            </Link>
+            <Button variant="link" className="px-0 text-xs">
+              {' '}
+              <Link target="_blank" href="https://rangdhanuit.com">
+                Rangdhanu IT
+              </Link>
+            </Button>
           </p>
         </div>
       </div>
