@@ -45,8 +45,8 @@ const CartSummary = ({
 
   return (
     <div className="flex flex-col gap-6 lg:sticky lg:top-32">
-      <div className="border-border bg-card/40 relative overflow-hidden rounded-[40px] border p-8 backdrop-blur-2xl transition-all hover:border-blue-500/20">
-        <div className="absolute -top-24 -right-24 h-48 w-48 rounded-full bg-blue-500/5 blur-3xl" />
+      <div className="border-border bg-card/40 hover:border-primary/20 relative overflow-hidden rounded-[40px] border p-8 backdrop-blur-2xl transition-all">
+        <div className="bg-primary/5 absolute -top-24 -right-24 h-48 w-48 rounded-full blur-3xl" />
 
         <h2 className="text-foreground mb-8 text-3xl font-black tracking-tighter">
           Summary
@@ -62,11 +62,11 @@ const CartSummary = ({
 
           {couponCode && (
             <div className="flex items-center justify-between text-sm">
-              <div className="flex items-center gap-2 text-blue-500">
+              <div className="text-primary flex items-center gap-2">
                 <Tag size={14} />
                 <span className="font-bold">Discount ({discountPercent}%)</span>
               </div>
-              <span className="font-black text-blue-600">
+              <span className="text-primary font-black">
                 -৳{discount.toLocaleString()}
               </span>
             </div>
@@ -78,7 +78,7 @@ const CartSummary = ({
             <span className="text-lg font-black tracking-tighter uppercase">
               Order Total
             </span>
-            <span className="text-4xl font-black tracking-tighter text-blue-600">
+            <span className="text-primary text-4xl font-black tracking-tighter">
               ৳{total.toLocaleString()}
             </span>
           </div>
@@ -93,13 +93,13 @@ const CartSummary = ({
             Have a promo code?
           </p>
           {couponCode ? (
-            <div className="group flex items-center justify-between rounded-2xl border border-blue-500/20 bg-blue-500/5 px-4 py-4 text-sm font-bold text-blue-600 transition-all hover:bg-blue-500/10">
+            <div className="group border-primary/20 bg-primary/5 text-primary hover:bg-primary/10 flex items-center justify-between rounded-2xl border px-4 py-4 text-sm font-bold transition-all">
               <span className="flex items-center gap-2">
                 <Tag size={16} className="animate-bounce" /> {couponCode}
               </span>
               <button
                 onClick={() => onApplyCoupon(null)}
-                className="text-blue-500/40 transition-colors hover:text-red-500"
+                className="text-primary/40 hover:text-destructive transition-colors"
               >
                 <X size={18} />
               </button>
@@ -111,11 +111,11 @@ const CartSummary = ({
                 placeholder="Enter Code"
                 value={couponInput}
                 onChange={(e) => setCouponInput(e.target.value)}
-                className="border-border bg-muted/50 text-foreground focus:bg-background w-full rounded-2xl border px-5 py-4 text-sm font-bold transition-all focus:border-blue-500/50 focus:outline-none"
+                className="border-border bg-muted/50 text-foreground focus:bg-background focus:border-primary/50 w-full rounded-2xl border px-5 py-4 text-sm font-bold transition-all focus:outline-none"
               />
               <button
                 onClick={handleApplyCoupon}
-                className="absolute top-2 right-2 bottom-2 rounded-xl bg-blue-600 px-6 text-xs font-black text-white transition-all hover:bg-blue-700 active:scale-95"
+                className="bg-primary text-primary-foreground hover:bg-primary/90 absolute top-2 right-2 bottom-2 rounded-xl px-6 text-xs font-black transition-all active:scale-95"
               >
                 Apply
               </button>
@@ -125,7 +125,7 @@ const CartSummary = ({
 
         <Button
           asChild
-          className="h-16 w-full rounded-full bg-linear-to-r from-blue-600 to-indigo-700 text-lg font-black tracking-tighter shadow-xl shadow-blue-500/25 transition-all hover:scale-[1.02] hover:shadow-blue-500/40 active:scale-95"
+          className="shadow-primary/25 hover:shadow-primary/40 h-16 w-full rounded-full text-lg font-black tracking-tighter shadow-xl transition-all hover:scale-[1.02] active:scale-95"
         >
           <Link href="/checkout">
             Checkout Now <ArrowRight className="ml-2 h-6 w-6" />
@@ -152,7 +152,7 @@ const CartSummary = ({
           <span className="text-[10px] font-black uppercase">Secure</span>
         </div>
         <div className="flex flex-col items-center gap-1">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-500/10 text-blue-600">
+          <div className="bg-primary/10 text-primary flex h-8 w-8 items-center justify-center rounded-full">
             <svg
               width="16"
               height="16"

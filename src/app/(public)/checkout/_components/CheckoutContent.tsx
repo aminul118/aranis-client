@@ -370,7 +370,7 @@ export default function CheckoutContent() {
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <div className="h-12 w-12 animate-spin rounded-full border-t-2 border-b-2 border-blue-600"></div>
+        <div className="border-primary h-12 w-12 animate-spin rounded-full border-t-2 border-b-2"></div>
       </div>
     );
   }
@@ -485,7 +485,7 @@ export default function CheckoutContent() {
           </Link>
           <div>
             <h1 className="text-foreground text-5xl font-black tracking-tighter uppercase italic">
-              Secure <span className="text-blue-600">Checkout</span>
+              Secure <span className="text-primary">Checkout</span>
             </h1>
             <p className="text-muted-foreground/60 text-sm font-medium">
               Complete your order with Aranis elite protection
@@ -519,8 +519,8 @@ export default function CheckoutContent() {
               setPaymentMethod={setPaymentMethod}
             />
 
-            <div className="flex items-center gap-4 rounded-2xl border border-blue-500/20 bg-blue-500/5 p-6">
-              <ShieldCheck className="text-blue-500" size={24} />
+            <div className="border-primary/20 bg-primary/5 flex items-center gap-4 rounded-2xl border p-6">
+              <ShieldCheck className="text-primary" size={24} />
               <div>
                 <h4 className="text-sm font-bold">Protected Transaction</h4>
                 <p className="text-muted-foreground text-xs">
@@ -535,9 +535,9 @@ export default function CheckoutContent() {
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="border-border bg-card/40 relative overflow-hidden rounded-[40px] border p-8 backdrop-blur-2xl transition-all hover:border-blue-500/20"
+              className="border-border bg-card/40 hover:border-primary/20 relative overflow-hidden rounded-[40px] border p-8 backdrop-blur-2xl transition-all"
             >
-              <div className="absolute -top-24 -right-24 h-48 w-48 rounded-full bg-blue-500/5 blur-3xl" />
+              <div className="bg-primary/5 absolute -top-24 -right-24 h-48 w-48 rounded-full blur-3xl" />
 
               <h3 className="mb-8 text-2xl font-black tracking-tighter uppercase italic">
                 Order Summary
@@ -570,13 +570,13 @@ export default function CheckoutContent() {
                   Promotion Code
                 </p>
                 {couponCode ? (
-                  <div className="flex items-center justify-between rounded-2xl border border-blue-500/20 bg-blue-500/5 px-4 py-4 text-sm font-bold text-blue-600 transition-all hover:bg-blue-500/10">
+                  <div className="border-primary/20 bg-primary/5 text-primary hover:bg-primary/10 flex items-center justify-between rounded-2xl border px-4 py-4 text-sm font-bold transition-all">
                     <span className="flex items-center gap-2">
                       <Tag size={16} className="animate-bounce" /> {couponCode}
                     </span>
                     <button
                       onClick={() => applyCoupon(null)}
-                      className="text-blue-500/40 transition-colors hover:text-red-500"
+                      className="text-primary/40 hover:text-destructive transition-colors"
                     >
                       <X size={18} />
                     </button>
@@ -590,12 +590,12 @@ export default function CheckoutContent() {
                       onChange={(e) =>
                         setCouponInput(e.target.value.toUpperCase())
                       }
-                      className="border-border bg-muted/50 text-foreground focus:bg-background w-full rounded-2xl border px-5 py-4 text-xs font-black tracking-widest transition-all focus:border-blue-500/50 focus:outline-none"
+                      className="border-border bg-muted/50 text-foreground focus:bg-background focus:border-primary/50 w-full rounded-2xl border px-5 py-4 text-xs font-black tracking-widest transition-all focus:outline-none"
                     />
                     <button
                       onClick={handleApplyCoupon}
                       disabled={isApplyingCoupon}
-                      className="absolute top-2 right-2 bottom-2 rounded-xl bg-blue-600 px-6 text-[10px] font-black text-white transition-all hover:bg-blue-700 active:scale-95 disabled:opacity-50"
+                      className="bg-primary text-primary-foreground hover:bg-primary/90 absolute top-2 right-2 bottom-2 rounded-xl px-6 text-[10px] font-black transition-all active:scale-95 disabled:opacity-50"
                     >
                       {isApplyingCoupon ? '...' : 'APPLY'}
                     </button>
@@ -613,7 +613,7 @@ export default function CheckoutContent() {
                 <div className="text-muted-foreground flex justify-between text-sm font-medium">
                   <span>Delivery Charge</span>
                   <span
-                    className={`font-black ${shippingCharge === 0 ? 'text-emerald-500' : 'text-blue-600'}`}
+                    className={`font-black ${shippingCharge === 0 ? 'text-emerald-500' : 'text-primary'}`}
                   >
                     {shippingCharge === 0 ? 'Free' : `+৳${shippingCharge}`}
                   </span>
@@ -631,7 +631,7 @@ export default function CheckoutContent() {
                   <span className="text-lg font-black tracking-tighter uppercase italic">
                     Total Due
                   </span>
-                  <span className="text-4xl font-black tracking-tighter text-blue-600">
+                  <span className="text-primary text-4xl font-black tracking-tighter">
                     ৳{finalTotal.toLocaleString()}
                   </span>
                 </div>
@@ -647,7 +647,7 @@ export default function CheckoutContent() {
                       (item.stock !== undefined && item.quantity > item.stock),
                   )
                 }
-                className="mt-10 h-16 w-full rounded-full bg-linear-to-r from-blue-600 to-indigo-700 text-lg font-black tracking-widest uppercase shadow-xl shadow-blue-500/25 transition-all hover:scale-[1.02] hover:shadow-blue-500/40 active:scale-95 disabled:opacity-50"
+                className="shadow-primary/25 hover:shadow-primary/40 mt-10 h-16 w-full rounded-full text-lg font-black tracking-widest uppercase shadow-xl transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-50"
               >
                 {submitting ? 'Processing...' : 'Complete Order'}
               </Button>

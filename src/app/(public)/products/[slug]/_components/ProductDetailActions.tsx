@@ -43,14 +43,14 @@ export const ProductDetailActions = ({
               onClick={() => handleAddToCart(false)}
               size="lg"
               variant="outline"
-              className="flex-1 rounded-2xl border-2 border-blue-700 py-4 text-sm font-black text-blue-700 transition-all hover:bg-blue-50 active:scale-[0.98] dark:border-blue-500 dark:text-blue-500 dark:hover:bg-blue-500/10"
+              className="border-primary/50 text-primary hover:bg-primary/5 flex-1 rounded-2xl border-2 py-4 text-sm font-black transition-all active:scale-[0.98]"
             >
               Add to Cart <ShoppingCart className="ml-2 h-4 w-4" />
             </Button>
             <Button
               onClick={() => handleAddToCart(true)}
               size="lg"
-              className="flex-1 rounded-2xl bg-blue-600 py-4 text-sm font-black text-white shadow-xl shadow-blue-500/20 transition-all hover:bg-blue-700 active:scale-[0.98]"
+              className="shadow-primary/20 flex-1 rounded-2xl py-4 text-sm font-black shadow-xl transition-all active:scale-[0.98]"
             >
               Buy Now
             </Button>

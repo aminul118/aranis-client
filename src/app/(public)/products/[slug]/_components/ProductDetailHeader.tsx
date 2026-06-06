@@ -33,7 +33,7 @@ export const ProductDetailHeader = ({
       <div className="flex items-center justify-between">
         <Badge
           variant="outline"
-          className="rounded-full border-blue-500/30 px-4 py-1 text-xs font-bold tracking-widest text-blue-500 uppercase"
+          className="border-primary/30 text-primary rounded-full px-4 py-1 text-xs font-bold tracking-widest uppercase"
         >
           Premium {product.category}
         </Badge>
@@ -94,7 +94,7 @@ export const ProductDetailHeader = ({
         <div className="flex items-center gap-6">
           {(product.salePrice ?? 0) > 0 || product.isOffer ? (
             <div className="flex items-center gap-4">
-              <span className="text-3xl font-bold text-blue-600 md:text-4xl">
+              <span className="text-primary text-3xl font-bold md:text-4xl">
                 ৳{(product.salePrice ?? product.price).toLocaleString('en-IN')}
               </span>
               <div className="flex flex-col gap-1">

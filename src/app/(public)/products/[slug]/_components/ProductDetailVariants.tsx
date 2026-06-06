@@ -41,8 +41,8 @@ export const ProductDetailVariants = ({
           className={cn(
             'group relative h-24 w-20 overflow-hidden rounded-2xl border-2 transition-all duration-500',
             selectedVariantIndex === -1
-              ? 'z-10 scale-110 border-blue-500 shadow-2xl shadow-blue-500/20'
-              : 'border-border/40 opacity-70 hover:scale-105 hover:border-blue-500/30 hover:opacity-100',
+              ? 'border-primary shadow-primary/20 z-10 scale-110 shadow-2xl'
+              : 'border-border/40 hover:border-primary/50 opacity-70 hover:scale-105 hover:opacity-100',
           )}
         >
           <Image
@@ -64,8 +64,11 @@ export const ProductDetailVariants = ({
             {product.color}
           </span>
           {selectedVariantIndex === -1 && (
-            <div className="absolute top-2 right-2 flex h-4 w-4 items-center justify-center rounded-full bg-blue-500 shadow-lg">
-              <Check className="h-2.5 w-2.5 text-white" strokeWidth={4} />
+            <div className="bg-primary absolute top-2 right-2 flex h-4 w-4 items-center justify-center rounded-full shadow-lg">
+              <Check
+                className="text-primary-foreground h-2.5 w-2.5"
+                strokeWidth={4}
+              />
             </div>
           )}
         </button>
@@ -78,8 +81,8 @@ export const ProductDetailVariants = ({
             className={cn(
               'group relative h-24 w-20 overflow-hidden rounded-2xl border-2 transition-all duration-500',
               selectedVariantIndex === idx
-                ? 'z-10 scale-110 border-blue-500 shadow-2xl shadow-blue-500/20'
-                : 'border-border/40 opacity-70 hover:scale-105 hover:border-blue-500/30 hover:opacity-100',
+                ? 'border-primary shadow-primary/20 z-10 scale-110 shadow-2xl'
+                : 'border-border/40 hover:border-primary/50 opacity-70 hover:scale-105 hover:opacity-100',
             )}
           >
             <Image
@@ -101,8 +104,11 @@ export const ProductDetailVariants = ({
               {variant.color}
             </span>
             {selectedVariantIndex === idx && (
-              <div className="absolute top-2 right-2 flex h-4 w-4 items-center justify-center rounded-full bg-blue-500 shadow-lg">
-                <Check className="h-2.5 w-2.5 text-white" strokeWidth={4} />
+              <div className="bg-primary absolute top-2 right-2 flex h-4 w-4 items-center justify-center rounded-full shadow-lg">
+                <Check
+                  className="text-primary-foreground h-2.5 w-2.5"
+                  strokeWidth={4}
+                />
               </div>
             )}
           </button>

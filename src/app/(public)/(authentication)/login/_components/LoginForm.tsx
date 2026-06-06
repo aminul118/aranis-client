@@ -208,7 +208,7 @@ const LoginForm = () => {
 
           <SubmitButton
             loading={form.formState.isSubmitting}
-            className="h-12 w-full rounded-xl text-sm font-black tracking-widest uppercase shadow-xl shadow-blue-500/20"
+            className="h-12 w-full rounded-xl text-sm font-black tracking-widest uppercase"
             text={loginMode === 'otp' ? 'Send OTP →' : 'Login Now'}
             loadingText={
               loginMode === 'otp' ? 'Sending OTP...' : 'Logging in...'

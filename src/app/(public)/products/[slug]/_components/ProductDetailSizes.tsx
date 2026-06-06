@@ -61,10 +61,10 @@ export const ProductDetailSizes = ({
               className={cn(
                 'group relative flex min-w-16 flex-col items-center justify-center gap-0.5 overflow-hidden rounded-lg border-2 px-5 py-3 transition-all duration-300',
                 isStockOut
-                  ? 'cursor-not-allowed border-transparent bg-slate-200 text-slate-400 dark:bg-slate-800 dark:text-slate-500'
+                  ? 'cursor-not-allowed border-transparent bg-slate-200 text-slate-400 dark:bg-zinc-800 dark:text-zinc-500'
                   : selectedSize === size
-                    ? 'border-blue-600 bg-blue-600 text-white shadow-md dark:border-blue-500 dark:bg-blue-600'
-                    : 'border-blue-600 bg-transparent text-slate-800 hover:bg-blue-50 dark:border-blue-500 dark:text-slate-200 dark:hover:bg-blue-900/30',
+                    ? 'border-primary bg-primary text-primary-foreground shadow-md'
+                    : 'border-primary text-primary hover:bg-primary/10 bg-transparent',
               )}
             >
               <span className="text-sm font-black tracking-widest uppercase">
@@ -82,16 +82,16 @@ export const ProductDetailSizes = ({
             <DialogTrigger asChild>
               <Button
                 variant="outline"
-                className="w-full rounded-xl border-2 border-zinc-200 font-bold text-zinc-600 transition-all hover:bg-zinc-50 sm:w-auto dark:border-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-900"
+                className="w-full rounded-xl border-2 font-bold transition-all sm:w-auto"
               >
-                <Ruler size={16} className="mr-2 text-blue-500" />
+                <Ruler size={16} className="text-primary mr-2" />
                 {(product.sizeGuide as any).name || 'View Size Guide'}
               </Button>
             </DialogTrigger>
             <DialogContent className="w-[95vw] max-w-5xl overflow-hidden border-none bg-transparent p-0 shadow-none sm:max-w-5xl">
               <div className="relative overflow-hidden rounded-3xl bg-white shadow-2xl dark:bg-zinc-950">
                 <div className="flex items-center gap-3 border-b border-zinc-100 p-4 dark:border-zinc-800">
-                  <Ruler size={16} className="text-blue-500" />
+                  <Ruler size={16} className="text-primary" />
                   <DialogTitle className="m-0 text-sm font-bold tracking-widest uppercase">
                     {(product.sizeGuide as any).name || 'Size Guide'}
                   </DialogTitle>

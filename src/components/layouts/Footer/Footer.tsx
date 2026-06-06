@@ -2,7 +2,6 @@ import SocialLinks from '@/app/(public)/_components/SocialLinks';
 import AminulLogo from '@/components/common/Logo';
 import { INavItem } from '@/services/navbar/navbar';
 import { ISocialLink } from '@/services/settings/settings';
-import { Mail, MapPin, Phone } from 'lucide-react';
 import Link from 'next/link';
 import ThemeToggle from './ThemeToggle';
 
@@ -28,7 +27,7 @@ const Footer = ({
 
       <div className="container mx-auto px-4 pt-16 pb-8">
         {/* Main Footer Grid */}
-        <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-3">
           {/* Brand Column */}
           <div className="lg:col-span-1">
             <div className="mb-4">
@@ -88,45 +87,6 @@ const Footer = ({
                 </li>
               ))}
             </ul>
-          </div>
-
-          {/* Contact Us */}
-          <div>
-            <h2 className="mb-5 text-[10px] font-black tracking-[0.2em] text-white uppercase italic">
-              Contact Us
-            </h2>
-            <div className="space-y-4">
-              <div className="flex items-start gap-3">
-                <div className="mt-1 rounded-lg bg-blue-500/10 p-2 text-blue-400">
-                  <MapPin size={14} />
-                </div>
-                <p className="text-sm leading-relaxed font-medium text-slate-400">
-                  {siteSettings?.location || 'Block E, Road 11, Banani, Dhaka'}
-                </p>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="rounded-lg bg-emerald-500/10 p-2 text-emerald-400">
-                  <Phone size={14} />
-                </div>
-                <a
-                  href={`tel:${siteSettings?.contactNumber || '+8801886877730'}`}
-                  className="text-sm font-bold text-slate-400 transition-colors hover:text-emerald-400"
-                >
-                  {siteSettings?.contactNumber || '+880 1886-877730'}
-                </a>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="rounded-lg bg-amber-500/10 p-2 text-amber-400">
-                  <Mail size={14} />
-                </div>
-                <a
-                  href={`mailto:${siteSettings?.email || 'hello@aranis.com'}`}
-                  className="text-sm font-bold text-slate-400 transition-colors hover:text-amber-400"
-                >
-                  {siteSettings?.email || 'hello@aranis.com'}
-                </a>
-              </div>
-            </div>
           </div>
         </div>
 
