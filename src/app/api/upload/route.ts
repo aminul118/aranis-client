@@ -22,6 +22,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'No file provided' }, { status: 400 });
     }
 
+    if (file.size > 2 * 1024 * 1024) {
+      return NextResponse.json(
+        { error: 'File size exceeds 2MB limit' },
+        { status: 400 },
+      );
+    }
+
     // Convert File to Buffer
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
@@ -65,9 +72,10 @@ export async function POST(req: NextRequest) {
     let finalFileName = uniqueFileName;
 
     if (file.type.startsWith('image/')) {
-      // Convert and compress to webp with high quality, preserving original dimensions
+      // Convert and compress to webp with high quality, preserving zooming quality
       bufferToUpload = await sharp(buffer as any)
-        .webp({ quality: 80 })
+        .resize(1200, 1200, { fit: 'inside', withoutEnlargement: true })
+        .webp({ quality: 75 })
         .toBuffer();
       contentType = 'image/webp';
     } else {

@@ -51,6 +51,22 @@ const ProductImageGallery = ({
 
   return (
     <div className="relative flex gap-3 select-none">
+      {/* ── Preload All Images to Ensure Instant Switching ──────────────── */}
+      {hasMultiple && (
+        <div className="pointer-events-none absolute -z-10 h-0 w-0 overflow-hidden opacity-0">
+          {thumbnails.map((img) => (
+            <Image
+              key={`preload-${img}`}
+              src={img}
+              alt="preload"
+              fill
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              priority
+            />
+          ))}
+        </div>
+      )}
+
       {/* ── Left Thumbnail Strip ─────────────────────────────────────────── */}
       {hasMultiple && (
         <div

@@ -50,6 +50,7 @@ export interface IVariant {
   thumbnails: string[];
   sizes: IVariantSize[];
   sku?: string;
+  soldCount?: number;
 }
 
 export interface IProduct {

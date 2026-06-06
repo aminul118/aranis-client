@@ -285,6 +285,118 @@ export default async function ProductDetailPage({ params }: Props) {
               </div>
             </CardContent>
           </Card>
+
+          {/* Variants */}
+          {(() => {
+            const variantSoldCountSum =
+              product.variants?.reduce(
+                (acc: number, v: any) => acc + (v.soldCount || 0),
+                0,
+              ) || 0;
+            const mainVariantSoldCount = Math.max(
+              0,
+              (product.soldCount || 0) - variantSoldCountSum,
+            );
+
+            const allVariants = [
+              {
+                color: product.color,
+                thumbnails: product.thumbnails,
+                sku: product.sku,
+                sizes: product.sizeStock || [],
+                soldCount: mainVariantSoldCount,
+                isMain: true,
+              },
+              ...(product.variants || []),
+            ];
+
+            return (
+              allVariants.length > 0 && (
+                <Card className="border-border/40">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="flex items-center gap-2 text-base">
+                      <Palette className="text-blue-500" size={16} />
+                      Product Variants
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    {allVariants.map((variant: any, idx: number) => (
+                      <div
+                        key={idx}
+                        className="border-border/40 flex gap-4 border-b pb-4 last:border-0 last:pb-0"
+                      >
+                        <div className="bg-muted border-border/50 relative aspect-square w-20 shrink-0 overflow-hidden rounded-lg border">
+                          {variant.thumbnails?.[0] ? (
+                            <Image
+                              src={variant.thumbnails[0]}
+                              alt={`${product.name} - ${variant.color}`}
+                              fill
+                              className="object-cover"
+                            />
+                          ) : (
+                            <div className="text-muted-foreground flex h-full w-full items-center justify-center">
+                              <ImageIcon size={24} />
+                            </div>
+                          )}
+                        </div>
+                        <div className="flex-1 space-y-2">
+                          <div className="flex items-center justify-between">
+                            <p className="font-bold">{variant.color}</p>
+                            {variant.sku && (
+                              <Badge variant="outline" className="text-[10px]">
+                                SKU: {variant.sku}
+                              </Badge>
+                            )}
+                          </div>
+                          {/* Calculate variant total stock */}
+                          {(() => {
+                            const variantStock =
+                              variant.sizes?.reduce(
+                                (sum: number, sizeObj: any) =>
+                                  sum + (Number(sizeObj.stock) || 0),
+                                0,
+                              ) || 0;
+                            const variantSold = variant.soldCount || 0;
+                            return (
+                              <div className="text-muted-foreground flex items-center gap-4 text-xs font-medium">
+                                <span className="flex items-center gap-1">
+                                  <Package size={14} /> Total Stock:{' '}
+                                  <span className="text-foreground font-bold">
+                                    {variantStock}
+                                  </span>
+                                </span>
+                                <span className="flex items-center gap-1">
+                                  <ShoppingCart size={14} /> Sold:{' '}
+                                  <span className="text-foreground font-bold">
+                                    {variantSold}
+                                  </span>
+                                </span>
+                              </div>
+                            );
+                          })()}
+                          {variant.sizes && variant.sizes.length > 0 && (
+                            <div className="flex flex-wrap gap-1.5 pt-1">
+                              {variant.sizes.map((s: any, i: number) => (
+                                <span
+                                  key={i}
+                                  className="bg-muted border-border/50 rounded-full border px-2 py-0.5 text-xs font-medium"
+                                >
+                                  {s.size}{' '}
+                                  <span className="text-muted-foreground ml-1">
+                                    ({s.stock})
+                                  </span>
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </CardContent>
+                </Card>
+              )
+            );
+          })()}
         </div>
       </div>
     </div>

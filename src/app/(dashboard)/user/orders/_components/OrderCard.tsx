@@ -126,55 +126,67 @@ export default function OrderCard({
 
         {/* Order Items */}
         <div className="flex flex-col gap-4">
-          {order.items.map((item: any, itemIdx: number) => (
-            <div
-              key={`${
-                item.product?._id || item._id || itemIdx
-              }_${item.color || ''}_${item.size || ''}`}
-              className="flex items-center gap-6"
-            >
-              <div className="bg-muted border-border/50 relative h-16 w-16 shrink-0 overflow-hidden rounded-xl border">
-                {item.product?.thumbnails?.[0] ? (
-                  <Image
-                    src={item.product.thumbnails[0]}
-                    alt={item.product.name}
-                    fill
-                    className="object-cover"
-                  />
-                ) : (
-                  <div className="text-muted-foreground bg-muted/50 flex h-full w-full items-center justify-center">
-                    <ShoppingBag size={24} />
-                  </div>
+          {order.items.map((item: any, itemIdx: number) => {
+            let imageSrc = item.product?.thumbnails?.[0];
+            if (item.color && item.product?.variants?.length > 0) {
+              const variant = item.product.variants.find(
+                (v: any) => v.color === item.color,
+              );
+              if (variant?.thumbnails?.[0]) {
+                imageSrc = variant.thumbnails[0];
+              }
+            }
+
+            return (
+              <div
+                key={`${
+                  item.product?._id || item._id || itemIdx
+                }_${item.color || ''}_${item.size || ''}`}
+                className="flex items-center gap-6"
+              >
+                <div className="bg-muted border-border/50 relative h-16 w-16 shrink-0 overflow-hidden rounded-xl border">
+                  {imageSrc ? (
+                    <Image
+                      src={imageSrc}
+                      alt={item.product?.name || 'Product'}
+                      fill
+                      className="object-cover"
+                    />
+                  ) : (
+                    <div className="text-muted-foreground bg-muted/50 flex h-full w-full items-center justify-center">
+                      <ShoppingBag size={24} />
+                    </div>
+                  )}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <h4 className="text-foreground truncate font-bold">
+                    {item.product?.name || 'Product Unavailable'}
+                  </h4>
+                  <p className="text-muted-foreground text-xs font-bold tracking-widest uppercase">
+                    Qty: {item.quantity} • ৳{item.price.toFixed(2)}
+                    {item.size && ` • Size: ${item.size}`}
+                    {item.color && ` • Color: ${item.color}`}
+                  </p>
+                </div>
+                {item.product && (
+                  <Button
+                    asChild
+                    size="sm"
+                    variant="ghost"
+                    className="group/btn shrink-0 rounded-full"
+                  >
+                    <Link
+                      href={`/products/${
+                        (item.product as IProduct).slug || item.product._id
+                      }`}
+                    >
+                      View
+                    </Link>
+                  </Button>
                 )}
               </div>
-              <div className="min-w-0 flex-1">
-                <h4 className="text-foreground truncate font-bold">
-                  {item.product?.name || 'Product Unavailable'}
-                </h4>
-                <p className="text-muted-foreground text-xs font-bold tracking-widest uppercase">
-                  Qty: {item.quantity} • ৳{item.price.toFixed(2)}
-                  {item.size && ` • Size: ${item.size}`}
-                  {item.color && ` • Color: ${item.color}`}
-                </p>
-              </div>
-              {item.product && (
-                <Button
-                  asChild
-                  size="sm"
-                  variant="ghost"
-                  className="group/btn shrink-0 rounded-full"
-                >
-                  <Link
-                    href={`/products/${
-                      (item.product as IProduct).slug || item.product._id
-                    }`}
-                  >
-                    View
-                  </Link>
-                </Button>
-              )}
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Order Footer */}

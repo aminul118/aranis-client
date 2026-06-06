@@ -84,16 +84,25 @@ const OrderPrint = ({ order }: { order: IOrder }) => {
           <tbody className="divide-y divide-gray-50">
             {order.items.map((item, idx) => {
               const product = item.product as IProduct;
+              let imageSrc =
+                product?.thumbnails?.[0] ||
+                (product as any)?.image ||
+                '/placeholder.jpg';
+              if (item.color && product?.variants?.length) {
+                const variant = product.variants.find(
+                  (v: any) => v.color === item.color,
+                );
+                if (variant?.thumbnails?.[0]) {
+                  imageSrc = variant.thumbnails[0];
+                }
+              }
+
               return (
                 <tr key={idx}>
                   <td className="py-6">
                     <div className="relative h-12 w-12 overflow-hidden rounded border border-gray-100">
                       <Image
-                        src={
-                          product?.thumbnails?.[0] ||
-                          (product as any)?.image ||
-                          '/placeholder.jpg'
-                        }
+                        src={imageSrc}
                         alt={product?.name || 'Product Deleted'}
                         fill
                         className="object-cover"

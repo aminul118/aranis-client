@@ -22,34 +22,48 @@ export default function OrderItemsCard({ order }: OrderItemsCardProps) {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-6 p-6 md:p-8">
-        {order.items.map((item: any, idx: number) => (
-          <div
-            key={idx}
-            className="group flex items-center gap-5 transition-all hover:translate-x-2"
-          >
-            <div className="border-border relative h-20 w-16 overflow-hidden rounded-2xl border bg-black/5 shadow-xl dark:bg-white/5">
-              <Image
-                src={item.product.thumbnails?.[0] || item.product.image}
-                alt={item.product.name}
-                fill
-                className="object-cover transition-transform duration-500 group-hover:scale-110"
-              />
-            </div>
-            <div className="flex-1">
-              <p className="text-card-foreground text-lg leading-tight font-black">
-                {item.product.name}
+        {order.items.map((item: any, idx: number) => {
+          let imageSrc = item.product?.thumbnails?.[0] || item.product?.image;
+          if (item.color && item.product?.variants?.length > 0) {
+            const variant = item.product.variants.find(
+              (v: any) => v.color === item.color,
+            );
+            if (variant?.thumbnails?.[0]) {
+              imageSrc = variant.thumbnails[0];
+            }
+          }
+
+          return (
+            <div
+              key={idx}
+              className="group flex items-center gap-5 transition-all hover:translate-x-2"
+            >
+              <div className="border-border relative h-20 w-16 overflow-hidden rounded-2xl border bg-black/5 shadow-xl dark:bg-white/5">
+                {imageSrc && (
+                  <Image
+                    src={imageSrc}
+                    alt={item.product.name}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                )}
+              </div>
+              <div className="flex-1">
+                <p className="text-card-foreground text-lg leading-tight font-black">
+                  {item.product.name}
+                </p>
+                <p className="text-muted-foreground mt-1 text-sm font-bold opacity-60">
+                  {item.quantity} × ৳{item.price}
+                  {item.size && ` • Size: ${item.size}`}
+                  {item.color && ` • Color: ${item.color}`}
+                </p>
+              </div>
+              <p className="text-xl font-black text-blue-500">
+                ৳{item.quantity * item.price}
               </p>
-              <p className="text-muted-foreground mt-1 text-sm font-bold opacity-60">
-                {item.quantity} × ৳{item.price}
-                {item.size && ` • Size: ${item.size}`}
-                {item.color && ` • Color: ${item.color}`}
-              </p>
             </div>
-            <p className="text-xl font-black text-blue-500">
-              ৳{item.quantity * item.price}
-            </p>
-          </div>
-        ))}
+          );
+        })}
         <div className="border-border mt-6 border-t pt-8">
           <div className="flex items-end justify-between">
             <div>

@@ -2,6 +2,11 @@
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
 import { useUser } from '@/context/UserContext';
 import { cn } from '@/lib/utils';
 import { updateOrderStatus } from '@/services/order/order';
@@ -345,6 +350,66 @@ const OrderDetailsView = ({ order }: { order: IOrder }) => {
                   <tbody className="divide-border/40 divide-y">
                     {order.items.map((item, index) => {
                       const product = item.product as IProduct;
+                      let imageSrc =
+                        product?.thumbnails?.[0] ||
+                        (product as any)?.image ||
+                        '/placeholder.jpg';
+                      if (item.color && product?.variants?.length) {
+                        const variant = product.variants.find(
+                          (v: any) => v.color === item.color,
+                        );
+                        if (variant?.thumbnails?.[0]) {
+                          imageSrc = variant.thumbnails[0];
+                        }
+                      }
+
+                      let variantSoldCount = 0;
+                      let variantStock = 0;
+                      let sizeStock = 0;
+
+                      if (item.color === product?.color) {
+                        const variantSoldCountSum =
+                          product?.variants?.reduce(
+                            (acc: number, v: any) => acc + (v.soldCount || 0),
+                            0,
+                          ) || 0;
+                        variantSoldCount = Math.max(
+                          0,
+                          (product?.soldCount || 0) - variantSoldCountSum,
+                        );
+                        variantStock =
+                          product?.sizeStock?.reduce(
+                            (sum: number, sizeObj: any) =>
+                              sum + (Number(sizeObj.stock) || 0),
+                            0,
+                          ) || 0;
+                        if (item.size) {
+                          const sizeObj = product?.sizeStock?.find(
+                            (s: any) => s.size === item.size,
+                          );
+                          sizeStock = sizeObj?.stock || 0;
+                        }
+                      } else if (item.color && product?.variants?.length) {
+                        const variant = product.variants.find(
+                          (v: any) => v.color === item.color,
+                        );
+                        if (variant) {
+                          variantSoldCount = variant.soldCount || 0;
+                          variantStock =
+                            variant.sizes?.reduce(
+                              (sum: number, sizeObj: any) =>
+                                sum + (Number(sizeObj.stock) || 0),
+                              0,
+                            ) || 0;
+                          if (item.size) {
+                            const sizeObj = variant.sizes?.find(
+                              (s: any) => s.size === item.size,
+                            );
+                            sizeStock = sizeObj?.stock || 0;
+                          }
+                        }
+                      }
+
                       return (
                         <tr
                           key={index}
@@ -357,11 +422,7 @@ const OrderDetailsView = ({ order }: { order: IOrder }) => {
                                 className="bg-muted border-border/50 relative block h-12 w-12 shrink-0 overflow-hidden rounded-lg border"
                               >
                                 <Image
-                                  src={
-                                    product?.thumbnails?.[0] ||
-                                    (product as any)?.image ||
-                                    '/placeholder.jpg'
-                                  }
+                                  src={imageSrc}
                                   alt={product?.name || 'Product Deleted'}
                                   fill
                                   className="object-cover transition-transform duration-500 group-hover:scale-110"
@@ -379,17 +440,69 @@ const OrderDetailsView = ({ order }: { order: IOrder }) => {
                                   {item.color && (
                                     <>
                                       <span>•</span>
-                                      <span className="bg-muted text-foreground rounded px-1.5 py-0.5 font-black">
-                                        {item.color}
-                                      </span>
+                                      <Popover>
+                                        <PopoverTrigger className="bg-muted text-foreground hover:bg-muted/80 cursor-pointer rounded px-1.5 py-0.5 font-black transition-colors">
+                                          {item.color}
+                                        </PopoverTrigger>
+                                        <PopoverContent
+                                          className="w-auto p-4"
+                                          side="top"
+                                        >
+                                          <div className="space-y-2">
+                                            <h4 className="mb-3 leading-none font-medium">
+                                              Variant Details: {item.color}
+                                            </h4>
+                                            <div className="flex gap-4 text-sm">
+                                              <div className="flex flex-col gap-1">
+                                                <span className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase">
+                                                  Total Stock
+                                                </span>
+                                                <span className="font-medium">
+                                                  {variantStock}
+                                                </span>
+                                              </div>
+                                              <div className="flex flex-col gap-1">
+                                                <span className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase">
+                                                  Total Sold
+                                                </span>
+                                                <span className="font-medium">
+                                                  {variantSoldCount}
+                                                </span>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </PopoverContent>
+                                      </Popover>
                                     </>
                                   )}
                                   {item.size && (
                                     <>
                                       <span>•</span>
-                                      <span className="bg-muted text-foreground rounded px-1.5 py-0.5 font-black">
-                                        Size: {item.size}
-                                      </span>
+                                      <Popover>
+                                        <PopoverTrigger className="bg-muted text-foreground hover:bg-muted/80 cursor-pointer rounded px-1.5 py-0.5 font-black transition-colors">
+                                          Size: {item.size}
+                                        </PopoverTrigger>
+                                        <PopoverContent
+                                          className="w-auto p-4"
+                                          side="top"
+                                        >
+                                          <div className="space-y-2">
+                                            <h4 className="mb-3 leading-none font-medium">
+                                              Size Details: {item.size}
+                                            </h4>
+                                            <div className="flex gap-4 text-sm">
+                                              <div className="flex flex-col gap-1">
+                                                <span className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase">
+                                                  Available Stock
+                                                </span>
+                                                <span className="font-medium">
+                                                  {sizeStock}
+                                                </span>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </PopoverContent>
+                                      </Popover>
                                     </>
                                   )}
                                 </div>
