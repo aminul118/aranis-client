@@ -66,8 +66,15 @@ const CartItem = ({
       layout
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="group border-border bg-card/40 relative flex flex-col gap-6 overflow-hidden rounded-[32px] border p-5 backdrop-blur-xl transition-all hover:border-blue-500/30 hover:shadow-2xl hover:shadow-blue-500/5 sm:flex-row sm:items-center"
+      className={`group border-border bg-card/40 relative flex flex-col gap-6 overflow-hidden rounded-[32px] border p-5 backdrop-blur-xl transition-all sm:flex-row sm:items-center ${
+        item.isStockOut
+          ? 'opacity-70 grayscale-[0.2]'
+          : 'hover:border-blue-500/30 hover:shadow-2xl hover:shadow-blue-500/5'
+      }`}
     >
+      {item.isStockOut && (
+        <div className="pointer-events-none absolute inset-0 z-0 bg-red-500/5" />
+      )}
       {/* Product Image */}
       <Link
         href={`/products/${item.slug || item._id}`}
@@ -79,11 +86,15 @@ const CartItem = ({
           fill
           className="object-cover transition-transform duration-700 group-hover:scale-110"
         />
-        {item.salePrice && item.salePrice > 0 && (
-          <div className="absolute top-2 left-2 rounded-full bg-red-500 px-2.5 py-1 text-[9px] font-black text-white uppercase shadow-lg shadow-red-500/20">
+        {item.isStockOut ? (
+          <div className="absolute top-2 left-2 z-10 rounded-full bg-red-600 px-2.5 py-1 text-[9px] font-black text-white uppercase shadow-lg shadow-red-500/20">
+            Out of Stock
+          </div>
+        ) : item.salePrice && item.salePrice > 0 ? (
+          <div className="absolute top-2 left-2 z-10 rounded-full bg-red-500 px-2.5 py-1 text-[9px] font-black text-white uppercase shadow-lg shadow-red-500/20">
             Sale
           </div>
-        )}
+        ) : null}
       </Link>
 
       <div className="flex flex-1 flex-col justify-center py-1 text-center sm:text-left">
@@ -207,8 +218,8 @@ const CartItem = ({
                     item.selectedSize,
                   )
                 }
-                disabled={item.quantity <= 1}
-                className="text-muted-foreground hover:bg-background hover:text-foreground flex h-8 w-8 items-center justify-center rounded-full shadow-xs transition-all disabled:opacity-30"
+                disabled={item.quantity <= 1 || item.isStockOut}
+                className="text-muted-foreground hover:bg-background hover:text-foreground flex h-8 w-8 items-center justify-center rounded-full shadow-xs transition-all disabled:cursor-not-allowed disabled:opacity-30"
               >
                 <Minus size={14} />
               </button>
@@ -224,8 +235,8 @@ const CartItem = ({
                     item.selectedSize,
                   )
                 }
-                disabled={item.quantity >= 20}
-                className="text-muted-foreground hover:bg-background hover:text-foreground flex h-8 w-8 items-center justify-center rounded-full shadow-xs transition-all disabled:opacity-30"
+                disabled={item.quantity >= 20 || item.isStockOut}
+                className="text-muted-foreground hover:bg-background hover:text-foreground flex h-8 w-8 items-center justify-center rounded-full shadow-xs transition-all disabled:cursor-not-allowed disabled:opacity-30"
               >
                 <Plus size={14} />
               </button>
@@ -241,12 +252,18 @@ const CartItem = ({
                 </span>
               )}
               <span className="text-foreground text-2xl font-black tracking-tighter">
-                ৳
-                {(
-                  (item.salePrice && item.salePrice > 0
-                    ? item.salePrice
-                    : item.price) * item.quantity
-                ).toLocaleString()}
+                {item.isStockOut ? (
+                  <span className="text-lg text-red-500">Not Available</span>
+                ) : (
+                  <>
+                    ৳
+                    {(
+                      (item.salePrice && item.salePrice > 0
+                        ? item.salePrice
+                        : item.price) * item.quantity
+                    ).toLocaleString()}
+                  </>
+                )}
               </span>
             </div>
             <p className="text-muted-foreground/40 text-[10px] font-bold tracking-wider uppercase">

@@ -94,4 +94,5 @@ export interface ICartItem extends IProduct {
   quantity: number;
   selectedColor?: string;
   selectedSize?: string;
+  isStockOut?: boolean;
 }

@@ -209,6 +209,7 @@ const ProductImageGallery = ({
           doubleClick={{ mode: 'zoomIn' }}
           wheel={{ step: 0.1 }}
           pinch={{ step: 5 }}
+          panning={{ disabled: true }}
         >
           {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
             <>

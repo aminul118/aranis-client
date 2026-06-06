@@ -187,24 +187,27 @@ const ProductCard = ({
             )}
           </div>
 
-          <Button
-            size="icon"
-            aria-label="Add to cart"
-            disabled={product.stock < 1}
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              router.push(productUrl);
-            }}
-            className={cn(
-              'h-10 w-10 rounded-full border-none transition-all duration-500 active:scale-95',
-              product.stock < 1
-                ? 'bg-zinc-100 text-zinc-400 dark:bg-zinc-800'
-                : 'bg-zinc-900 text-white shadow-xl shadow-zinc-900/10 hover:-translate-y-1 dark:bg-white dark:text-zinc-900 dark:shadow-white/5',
-            )}
-          >
-            <ShoppingCart size={16} strokeWidth={2.5} />
-          </Button>
+          {product.stock < 1 ? (
+            <span className="rounded-full border border-red-500/20 bg-red-500/10 px-2 py-1 text-[10px] font-black tracking-widest text-red-500 uppercase">
+              Stock Out
+            </span>
+          ) : (
+            <Button
+              size="icon"
+              aria-label="Add to cart"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                router.push(productUrl);
+              }}
+              className={cn(
+                'h-10 w-10 rounded-full border-none transition-all duration-500 active:scale-95',
+                'bg-zinc-900 text-white shadow-xl shadow-zinc-900/10 hover:-translate-y-1 dark:bg-white dark:text-zinc-900 dark:shadow-white/5',
+              )}
+            >
+              <ShoppingCart size={16} strokeWidth={2.5} />
+            </Button>
+          )}
         </div>
       </div>
     </div>

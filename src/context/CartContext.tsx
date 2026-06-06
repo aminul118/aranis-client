@@ -1,6 +1,7 @@
 'use client';
 
 import { ICoupon } from '@/services/coupon/coupon';
+import { getProducts } from '@/services/product/product';
 import { ICartItem, IProduct } from '@/types';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
@@ -42,6 +43,7 @@ interface CartContextType {
   total: number;
   couponCode: string | null;
   applyCoupon: (coupon: ICoupon | null) => void;
+  validateCartStock: () => Promise<void>;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -65,6 +67,88 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     localStorage.setItem('Aranis_cart', JSON.stringify(cart));
   }, [cart]);
+
+  const validateCartStock = async () => {
+    if (cart.length === 0) return;
+
+    try {
+      const productIds = Array.from(new Set(cart.map((item) => item._id)));
+      const idsQuery = productIds.join(',');
+
+      const response = await getProducts({ _id: idsQuery, limit: '100' });
+      const latestProducts = response.data || [];
+
+      setCart((prevCart) => {
+        let hasChanges = false;
+        const newCart = prevCart.map((item) => {
+          const liveProduct = latestProducts.find((p) => p._id === item._id);
+
+          if (!liveProduct) {
+            // Product might have been deleted
+            if (!item.isStockOut) {
+              hasChanges = true;
+              return { ...item, isStockOut: true };
+            }
+            return item;
+          }
+
+          // Check variant and size stock
+          let currentStock = liveProduct.stock;
+
+          if (item.selectedColor) {
+            const variant = liveProduct.variants?.find(
+              (v) => v.color === item.selectedColor,
+            );
+            if (variant && item.selectedSize) {
+              const sizeObj = variant.sizes?.find(
+                (s) => s.size === item.selectedSize,
+              );
+              currentStock = sizeObj ? sizeObj.stock : 0;
+            } else if (variant) {
+              // Assuming variant stock is sum of sizes if sizes exist, else we can't easily tell. Fallback to global.
+            }
+          } else if (item.selectedSize) {
+            const sizeObj = liveProduct.sizeStock?.find(
+              (s) => s.size === item.selectedSize,
+            );
+            currentStock = sizeObj ? sizeObj.stock : liveProduct.stock;
+          }
+
+          const isStockOut = currentStock < 1 || currentStock < item.quantity;
+
+          if (
+            item.isStockOut !== isStockOut ||
+            item.price !== liveProduct.price ||
+            item.salePrice !== liveProduct.salePrice
+          ) {
+            hasChanges = true;
+            return {
+              ...item,
+              isStockOut,
+              price: liveProduct.price,
+              salePrice: liveProduct.salePrice,
+              stock: liveProduct.stock,
+              variants: liveProduct.variants,
+              sizeStock: liveProduct.sizeStock,
+            };
+          }
+
+          return item;
+        });
+
+        return hasChanges ? newCart : prevCart;
+      });
+    } catch (error) {
+      console.error('Failed to validate cart stock:', error);
+    }
+  };
+
+  // Run validation when cart mounts or changes (debounced by doing it in a separate effect that watches just the length to avoid infinite loops if cart updates self)
+  useEffect(() => {
+    if (cart.length > 0) {
+      validateCartStock();
+    }
+  }, [cart.length]);
 
   const addToCart = (
     product: IProduct,
@@ -295,6 +379,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
         total,
         couponCode,
         applyCoupon,
+        validateCartStock,
       }}
     >
       {children}

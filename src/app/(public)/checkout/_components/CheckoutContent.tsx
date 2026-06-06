@@ -34,6 +34,7 @@ export default function CheckoutContent() {
     couponCode,
     applyCoupon,
     clearCart,
+    validateCartStock,
   } = useCart();
   const [couponInput, setCouponInput] = useState('');
   const [isApplyingCoupon, setIsApplyingCoupon] = useState(false);
@@ -79,6 +80,8 @@ export default function CheckoutContent() {
       }
     };
     fetchUser();
+    // Re-validate cart stock on checkout mount
+    validateCartStock();
   }, [router]);
 
   useEffect(() => {
@@ -126,6 +129,14 @@ export default function CheckoutContent() {
   }, [user, loading]);
 
   const handlePlaceOrder = async () => {
+    const hasStockOut = cart.some((item) => item.isStockOut);
+    if (hasStockOut) {
+      toast.error(
+        'Please remove out of stock items from your cart to proceed.',
+      );
+      return;
+    }
+
     if (user?.role === Role.ADMIN || user?.role === Role.SUPER_ADMIN) {
       toast.error('Admin accounts cannot place orders.');
       return;
@@ -484,6 +495,25 @@ export default function CheckoutContent() {
                 Order Summary
               </h3>
 
+              {cart.some((item) => item.isStockOut) && (
+                <div className="mb-6 rounded-2xl border border-red-500/30 bg-red-500/10 p-4">
+                  <div className="flex items-start gap-3 text-red-500">
+                    <ShieldAlert size={20} className="mt-0.5 shrink-0" />
+                    <p className="text-sm leading-relaxed font-bold">
+                      One or more items in your cart are currently out of stock.
+                      Please review your cart and remove them before proceeding.
+                    </p>
+                  </div>
+                  <Button
+                    asChild
+                    variant="outline"
+                    className="mt-4 w-full border-red-500/20 text-red-500 hover:bg-red-500/10"
+                  >
+                    <Link href="/cart">Review Cart</Link>
+                  </Button>
+                </div>
+              )}
+
               <CheckoutCartItems cart={cart} />
 
               {/* Coupon Section */}
@@ -559,7 +589,7 @@ export default function CheckoutContent() {
 
               <Button
                 onClick={handlePlaceOrder}
-                disabled={submitting}
+                disabled={submitting || cart.some((item) => item.isStockOut)}
                 className="mt-10 h-16 w-full rounded-full bg-linear-to-r from-blue-600 to-indigo-700 text-lg font-black tracking-widest uppercase shadow-xl shadow-blue-500/25 transition-all hover:scale-[1.02] hover:shadow-blue-500/40 active:scale-95 disabled:opacity-50"
               >
                 {submitting ? 'Processing...' : 'Complete Order'}
