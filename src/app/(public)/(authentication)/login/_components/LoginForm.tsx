@@ -1,6 +1,7 @@
 'use client';
 
 import SubmitButton from '@/components/common/button/submit-button';
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -201,12 +202,10 @@ const LoginForm = () => {
                     </div>
                   </FormControl>
                   <div className="mt-2 flex justify-end">
-                    <Link
-                      href="/forgot-password"
-                      className="text-primary text-xs font-bold hover:underline"
-                    >
-                      Forgot Password?
-                    </Link>
+                    <Button variant="link" className="px-0">
+                      {' '}
+                      <Link href="/forgot-password">Forgot Password?</Link>
+                    </Button>
                   </div>
                   <FormMessage />
                 </FormItem>
@@ -225,13 +224,14 @@ const LoginForm = () => {
           />
 
           <div className="mt-4 text-center text-xs font-medium">
-            Don&apos;t have an account?
-            <Link
-              href={`/register${redirect ? `?redirect=${redirect}` : ''}`}
-              className="p-0 pl-1 font-black text-blue-600 hover:underline"
-            >
-              CREATE ONE
-            </Link>
+            Don&apos;t have an account?{' '}
+            <Button variant="link" className="px-0">
+              <Link
+                href={`/register${redirect ? `?redirect=${redirect}` : ''}`}
+              >
+                Create one
+              </Link>
+            </Button>
           </div>
         </form>
       </Form>

@@ -1,6 +1,7 @@
 'use client';
 
 import SubmitButton from '@/components/common/button/submit-button';
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -124,12 +125,9 @@ const ForgotPasswordForm = () => {
 
           <div className="mt-4 text-center text-xs font-medium">
             Remembered your password?{' '}
-            <Link
-              href="/login"
-              className="text-primary font-bold transition-colors hover:underline"
-            >
-              Login here
-            </Link>
+            <Button variant="link" asChild className="px-0">
+              <Link href="/login">Login here</Link>
+            </Button>
           </div>
         </form>
       </Form>
