@@ -15,6 +15,18 @@ const CustomerInterestPage = async ({ searchParams }: SearchParams) => {
     cache: 'no-store',
   } as any);
 
+  if (res && !res.success) {
+    return (
+      <div className="flex h-64 items-center justify-center rounded-xl border border-red-500/20 bg-red-500/10 p-6 text-center text-red-500">
+        <p className="font-semibold">Error loading data: {res.message}</p>
+        <p className="mt-2 text-sm opacity-80">
+          This usually means the backend endpoint is failing or not deployed
+          yet.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <ClientTableWrapper
       tableTitle="Customer Interest (Cart & Wishlist)"
