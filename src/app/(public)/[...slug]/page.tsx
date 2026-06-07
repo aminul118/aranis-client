@@ -47,7 +47,15 @@ const DynamicShopPage = async ({ params, searchParams }: Props) => {
 
   const categories = dbCategories || [];
 
-  const { category, subCategory, type } = resolveSlugs(slug, categories);
+  const { category, subCategory, type, isValidMatch } = resolveSlugs(
+    slug,
+    categories,
+  );
+
+  // If the slug doesn't match any valid category/subcategory, return 404
+  if (!isValidMatch) {
+    notFound();
+  }
 
   const initialFilters = {
     category: category === 'All' ? undefined : category,

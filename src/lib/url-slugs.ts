@@ -110,5 +110,6 @@ export const resolveSlugs = (slugs: string[], categories: any[]) => {
       resolvedSubCategory ||
       (subCategorySlug ? fallback(subCategorySlug) : undefined),
     type: resolvedType || (typeSlug ? fallback(typeSlug) : undefined),
+    isValidMatch: !!resolvedCategory,
   };
 };
