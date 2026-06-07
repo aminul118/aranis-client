@@ -112,12 +112,12 @@ const LoginForm = () => {
         onValueChange={(v: any) => setLoginMode(v)}
         className="w-full"
       >
-        <TabsList className="flex h-[52px] w-full overflow-hidden rounded-full bg-[#334155]/60 p-0 shadow-inner dark:bg-slate-800/80">
+        <TabsList className="flex h-12 w-full overflow-hidden rounded-full bg-[#334155]/60 p-0 shadow-inner dark:bg-slate-800/80">
           <TabsTrigger
             value="otp"
             className="h-full flex-1 rounded-full text-base font-medium text-slate-300 transition-all duration-300 data-[state=active]:bg-[#3b82f6] data-[state=active]:text-white data-[state=active]:shadow-md"
           >
-            OTP Login
+            OTP
           </TabsTrigger>
           <TabsTrigger
             value="password"
@@ -207,7 +207,7 @@ const LoginForm = () => {
 
           <SubmitButton
             loading={form.formState.isSubmitting}
-            className="h-12 w-full rounded-xl text-sm font-black tracking-widest uppercase"
+            className="h-12 w-full rounded-full text-sm font-black tracking-widest uppercase"
             text={loginMode === 'otp' ? 'Send OTP →' : 'Login Now'}
             loadingText={
               loginMode === 'otp' ? 'Sending OTP...' : 'Logging in...'

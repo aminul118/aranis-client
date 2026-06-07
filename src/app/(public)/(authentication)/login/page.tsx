@@ -42,14 +42,12 @@ const LoginPage = () => {
 
 export default LoginPage;
 
-// >> SEO Start
+//  SEO
 export const metadata: Metadata = generateMetaTags({
   title: 'Login | The Aranis',
   description:
     'Securely log in to your The Aranis account to manage your orders, wishlist, and profile.',
   keywords:
     'login, sign in, The Aranis, e-commerce login, secure access, fashion portal',
-  image: '/seo/aminul-hero-ss.png',
   websitePath: '/login',
 });
-// >> SEO End
