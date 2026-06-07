@@ -1,5 +1,7 @@
 'use client';
 
+import HeaderUser from '@/components/layouts/shared/HeaderUser';
+import NotificationBell from '@/components/layouts/shared/NotificationBell';
 import { useCartOptional } from '@/context/CartContext';
 import { useWishlistOptional } from '@/context/WishlistContext';
 import { IUser } from '@/types';
@@ -7,8 +9,6 @@ import { Gift, Heart, ShoppingCart, User } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ReactNode } from 'react';
-import HeaderUser from '../shared/HeaderUser';
-import NotificationBell from '../shared/NotificationBell';
 import NavSearch from './NavSearch';
 
 interface MainNavbarProps {

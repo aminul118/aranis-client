@@ -1,13 +1,13 @@
 'use client';
 
+import HeaderUser from '@/components/layouts/shared/HeaderUser';
+import NotificationBell from '@/components/layouts/shared/NotificationBell';
 import { Separator } from '@/components/ui/separator';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { useCartOptional } from '@/context/CartContext';
 import { IUser } from '@/types';
 import { ShoppingCart } from 'lucide-react';
 import Link from 'next/link';
-import HeaderUser from '../shared/HeaderUser';
-import NotificationBell from '../shared/NotificationBell';
 
 const UserHeader = ({ user }: { user: IUser }) => {
   const cartContext = useCartOptional();

@@ -1,14 +1,14 @@
 import SettingsSidebar from '@/app/(dashboard)/admin/settings/_components/SettingsSidebar';
-import AdminSidebar from '@/components/layouts/Admin/admin-sidebar';
-import AdminHeader from '@/components/layouts/Admin/AdminHeader';
-import { AdminSidebarSkeleton } from '@/components/layouts/Admin/AdminSidebarSkeleton';
-import UserSidebar from '@/components/layouts/User/user-sidebar';
-import UserHeader from '@/components/layouts/User/UserHeader';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { getSiteSettings } from '@/services/settings/settings';
 import { getMe } from '@/services/user/users';
 import { Role } from '@/types';
 import { Suspense } from 'react';
+import AdminSidebar from '../(dashboard)/admin/_components/layouts/admin-sidebar';
+import AdminHeader from '../(dashboard)/admin/_components/layouts/AdminHeader';
+import { AdminSidebarSkeleton } from '../(dashboard)/admin/_components/layouts/AdminSidebarSkeleton';
+import UserSidebar from '../(dashboard)/user/_componnets/layouts/user-sidebar';
+import UserHeader from '../(dashboard)/user/_componnets/layouts/UserHeader';
 
 export const dynamic = 'force-dynamic';
 

@@ -1,11 +1,11 @@
-import AdminSidebar from '@/components/layouts/Admin/admin-sidebar';
-import AdminHeader from '@/components/layouts/Admin/AdminHeader';
-import { AdminSidebarSkeleton } from '@/components/layouts/Admin/AdminSidebarSkeleton';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { getMe } from '@/services/user/users';
 import { Children } from '@/types';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
+import AdminSidebar from './_components/layouts/admin-sidebar';
+import AdminHeader from './_components/layouts/AdminHeader';
+import { AdminSidebarSkeleton } from './_components/layouts/AdminSidebarSkeleton';
 
 export const dynamic = 'force-dynamic';
 

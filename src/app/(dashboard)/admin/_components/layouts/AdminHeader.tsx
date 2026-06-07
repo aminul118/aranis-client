@@ -1,13 +1,13 @@
 'use client';
 
+import HeaderUser from '@/components/layouts/shared/HeaderUser';
+import NotificationBell from '@/components/layouts/shared/NotificationBell';
 import { Separator } from '@/components/ui/separator';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { useSocket } from '@/hooks/useSocket';
 import { getAdminStats } from '@/services/stats/stats';
 import { IUser } from '@/types';
 import { useCallback, useEffect, useState } from 'react';
-import HeaderUser from '../shared/HeaderUser';
-import NotificationBell from '../shared/NotificationBell';
 import DashboardBreadcrumb from './DashboardBreadcrumb ';
 
 const AdminHeader = ({ user }: { user: IUser }) => {

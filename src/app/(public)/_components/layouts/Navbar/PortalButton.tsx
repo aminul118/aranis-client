@@ -5,18 +5,18 @@ const PortalButton = () => {
   return (
     <Button
       asChild
-      className="group relative overflow-hidden rounded-full bg-primary px-6 font-bold text-primary-foreground shadow-2xl transition-all hover:scale-105 active:scale-95"
+      className="group bg-primary text-primary-foreground relative overflow-hidden rounded-full px-6 font-bold shadow-2xl transition-all hover:scale-105 active:scale-95"
     >
       <Link href="/login">
         {/* Rotating Animated Border (Always Active) */}
-        <div className="absolute inset-0 rounded-full border border-border p-px">
+        <div className="border-border absolute inset-0 rounded-full border p-px">
           <div className="absolute inset-[-1000%] animate-[spin_4s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#3b82f6_0%,#06b6d4_50%,#3b82f6_100%)] opacity-100" />
         </div>
 
         {/* Button Content Background */}
-        <div className="absolute inset-px rounded-full bg-primary transition-colors duration-300 group-hover:bg-primary/90" />
+        <div className="bg-primary group-hover:bg-primary/90 absolute inset-px rounded-full transition-colors duration-300" />
 
-        <span className="relative z-10 bg-linear-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent transition-colors duration-300 group-hover:text-primary-foreground">
+        <span className="group-hover:text-primary-foreground relative z-10 bg-linear-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent transition-colors duration-300">
           Login
         </span>
 

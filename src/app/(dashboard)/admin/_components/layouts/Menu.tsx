@@ -1,7 +1,7 @@
 'use client';
 
-import { adminSidebarMenu } from '@/components/layouts/Admin/admin-menu';
 import DynamicMenu from '@/components/layouts/shared/DynamicMenu';
+import { adminSidebarMenu } from './admin-menu';
 
 import { IUser } from '@/types';
 

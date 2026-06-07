@@ -1,9 +1,9 @@
-import UserSidebar from '@/components/layouts/User/user-sidebar';
-import UserHeader from '@/components/layouts/User/UserHeader';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { getMe } from '@/services/user/users';
 import { Children } from '@/types';
 import { Metadata } from 'next';
+import UserSidebar from './_componnets/layouts/user-sidebar';
+import UserHeader from './_componnets/layouts/UserHeader';
 
 export const dynamic = 'force-dynamic';
 

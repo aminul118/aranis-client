@@ -1,5 +1,6 @@
 'use client';
 
+import NotificationBell from '@/components/layouts/shared/NotificationBell';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { toUrlSlug } from '@/lib/url-slugs';
 import { cn } from '@/lib/utils';
@@ -12,7 +13,6 @@ import { ChevronDown, LayoutGrid, LogOut, User, X } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { Dispatch, ReactNode, SetStateAction, useState } from 'react';
-import NotificationBell from '../shared/NotificationBell';
 import { NavMenu } from './nav-menu';
 import NavSearch from './NavSearch';
 
