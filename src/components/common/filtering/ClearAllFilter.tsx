@@ -26,7 +26,7 @@ const ClearAllFilter = ({ className }: Props) => {
       onClick={handleClear}
       variant="outline"
       className={cn(
-        'w-full border-blue-100 bg-blue-50/50 font-bold text-blue-600 hover:bg-blue-100 md:w-auto',
+        'w-full border-red-200 bg-red-50 font-bold text-red-600 hover:bg-red-100 md:w-auto dark:border-red-500/20 dark:bg-red-500/10 dark:text-red-400 dark:hover:bg-red-500/20',
         className,
       )}
     >

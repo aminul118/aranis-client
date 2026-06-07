@@ -142,14 +142,6 @@ const GlobalOfferModal = () => {
                 <div className="absolute inset-0 bg-linear-to-t from-[#111] via-transparent to-transparent opacity-60" />
               </Link>
             </div>
-
-            {/* Progress Bar */}
-            <div className="absolute bottom-0 left-0 h-1.5 w-full bg-white/5">
-              <motion.div
-                className="h-full bg-linear-to-r from-blue-600 to-indigo-600"
-                style={{ width: `${progress}%` }}
-              />
-            </div>
           </motion.div>
         </motion.div>
       )}

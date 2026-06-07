@@ -3,6 +3,7 @@ import {
   BellRing,
   Gift,
   Globe,
+  HeartPulse,
   ImageIcon,
   Layers,
   LayoutDashboard,
@@ -41,6 +42,11 @@ const adminSidebarMenu: MenuGroup[] = [
       { name: 'Gift Cards', url: '/admin/gift-cards', icon: Gift },
       { name: 'Offers', url: '/admin/offers', icon: TicketPercent },
       { name: 'Coupons', url: '/admin/coupons', icon: TicketPercent },
+      {
+        name: 'Customer Interest',
+        url: '/admin/customer-interest',
+        icon: HeartPulse,
+      },
       { name: 'Orders', url: '/admin/orders', icon: ShoppingCart },
       {
         name: 'Restock Requests',
