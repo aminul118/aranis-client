@@ -2,6 +2,7 @@
 
 import NotificationBell from '@/components/layouts/NotificationBell';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useUser } from '@/context/UserContext';
 import { toUrlSlug } from '@/lib/url-slugs';
 import { cn } from '@/lib/utils';
 import { logOut } from '@/services/auth/logout';
@@ -77,6 +78,7 @@ const Mobile = ({ navItems, setMenuOpen, logo, user }: MobileProps) => {
   const currentCategorySlug = pathSegments[0];
   const [expandedItem, setExpandedItem] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const { setUser } = useUser();
 
   const fullName =
     `${user?.firstName ?? ''} ${user?.lastName ?? ''}`.trim() || 'User';
@@ -98,6 +100,7 @@ const Mobile = ({ navItems, setMenuOpen, logo, user }: MobileProps) => {
   const handleLogout = async () => {
     setLoading(true);
     await logOut();
+    setUser(null);
     setMenuOpen(false);
     router.push('/login');
     router.refresh();

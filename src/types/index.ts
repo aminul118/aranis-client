@@ -91,6 +91,7 @@ export interface IProduct {
 }
 
 export interface ICartItem extends IProduct {
+  cartItemId?: string;
   quantity: number;
   selectedColor?: string;
   selectedSize?: string;

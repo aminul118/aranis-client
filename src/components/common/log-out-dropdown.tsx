@@ -7,13 +7,17 @@ import { LogOut } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
+import { useUser } from '@/context/UserContext';
+
 const LogOutDropDown = ({ className }: { className?: string }) => {
   const [loading, setLoading] = useState(false);
+  const { setUser } = useUser();
   const router = useRouter();
 
   const handleLogout = async () => {
     setLoading(true);
     await logOut();
+    setUser(null);
     router.push('/login');
   };
 

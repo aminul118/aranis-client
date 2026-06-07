@@ -7,7 +7,7 @@ const logOut = async () => {
   await removeAccessToken();
   await removeRefreshToken();
 
-  revalidate('ME');
+  await revalidate('ME');
 
   return {
     success: true,

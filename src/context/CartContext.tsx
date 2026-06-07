@@ -1,5 +1,15 @@
 'use client';
 
+import { useUser } from '@/context/UserContext';
+import {
+  addToCartService,
+  clearCartService,
+  getMyCart,
+  removeFromCartService,
+  updateCartColorService,
+  updateCartQuantityService,
+  updateCartSizeService,
+} from '@/services/cart/cart';
 import { ICoupon } from '@/services/coupon/coupon';
 import { getProducts } from '@/services/product/product';
 import { ICartItem, IProduct } from '@/types';
@@ -49,25 +59,122 @@ interface CartContextType {
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
+const GUEST_CART_KEY = 'aranis_guest_cart';
+const OLD_CART_KEY = 'Aranis_cart';
+
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
+  const { user } = useUser();
   const [cart, setCart] = useState<ICartItem[]>([]);
   const [couponCode, setCouponCode] = useState<string | null>(null);
   const [discountPercent, setDiscountPercent] = useState<number>(0);
 
-  // Load cart from localStorage
-  useEffect(() => {
-    const savedCart = localStorage.getItem('Aranis_cart');
-    if (savedCart) {
-      setCart(JSON.parse(savedCart));
+  const fetchServerCart = async () => {
+    if (!user) return;
+    try {
+      const res = await getMyCart();
+      if (res?.success && res.data) {
+        const mappedCart: ICartItem[] = res.data
+          .filter((item: any) => item && item.product)
+          .map((item: any) => ({
+            ...item.product,
+            _id: item.product._id, // use product id as the main _id for frontend mapping
+            cartItemId: item._id, // store backend cart doc id
+            quantity: item.quantity,
+            selectedColor: item.selectedColor,
+            selectedSize: item.selectedSize,
+            stock: item.product.stock,
+          }));
+        setCart(mappedCart);
+      } else {
+        setCart([]);
+      }
+    } catch (error) {
+      console.error('Failed to fetch server cart', error);
+      setCart([]);
     }
-  }, []);
+  };
 
-  // Save cart to localStorage
+  const syncCart = async (localItems: ICartItem[]) => {
+    try {
+      const res = await getMyCart();
+      const serverItems = res?.data || [];
+      const serverIdentifiers = new Set(
+        serverItems
+          .filter((item: any) => item && item.product)
+          .map(
+            (item: any) =>
+              `${item.product._id}-${item.selectedColor || ''}-${item.selectedSize || ''}`,
+          ),
+      );
+
+      for (const item of localItems) {
+        if (item && item._id) {
+          const identifier = `${item._id}-${item.selectedColor || ''}-${item.selectedSize || ''}`;
+          if (!serverIdentifiers.has(identifier)) {
+            await addToCartService({
+              product: item._id,
+              quantity: item.quantity,
+              selectedColor: item.selectedColor,
+              selectedSize: item.selectedSize,
+            });
+          }
+        }
+      }
+      localStorage.removeItem(GUEST_CART_KEY);
+      localStorage.removeItem(OLD_CART_KEY);
+      await fetchServerCart();
+      toast.success('Your cart has been synced!');
+    } catch (error) {
+      console.error('Failed to sync cart', error);
+      localStorage.removeItem(GUEST_CART_KEY);
+      localStorage.removeItem(OLD_CART_KEY);
+      await fetchServerCart();
+    }
+  };
+
   useEffect(() => {
-    localStorage.setItem('Aranis_cart', JSON.stringify(cart));
-  }, [cart]);
+    // Migration for old cart key
+    const oldCartData = localStorage.getItem(OLD_CART_KEY);
+    if (oldCartData) {
+      localStorage.setItem(GUEST_CART_KEY, oldCartData);
+      localStorage.removeItem(OLD_CART_KEY);
+    }
+
+    if (user) {
+      const localData = localStorage.getItem(GUEST_CART_KEY);
+      if (localData) {
+        try {
+          const parsed = JSON.parse(localData);
+          const localItems = (Array.isArray(parsed) ? parsed : []).filter(
+            (item) => item && item._id,
+          );
+          if (localItems.length > 0) {
+            syncCart(localItems);
+          } else {
+            fetchServerCart();
+          }
+        } catch {
+          fetchServerCart();
+        }
+      } else {
+        fetchServerCart();
+      }
+    } else {
+      const localData = localStorage.getItem(GUEST_CART_KEY);
+      if (localData) {
+        try {
+          const parsed = JSON.parse(localData);
+          setCart(Array.isArray(parsed) ? parsed : []);
+        } catch {
+          setCart([]);
+        }
+      } else {
+        setCart([]);
+      }
+    }
+  }, [user]);
 
   const validateCartStock = async () => {
     if (cart.length === 0) return;
@@ -85,7 +192,6 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
           const liveProduct = latestProducts.find((p) => p._id === item._id);
 
           if (!liveProduct) {
-            // Product might have been deleted
             if (!item.isStockOut) {
               hasChanges = true;
               return { ...item, isStockOut: true };
@@ -93,9 +199,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
             return item;
           }
 
-          // Check variant and size stock
           let currentStock = liveProduct.stock;
-
           if (item.selectedColor) {
             const variant = liveProduct.variants?.find(
               (v) => v.color === item.selectedColor,
@@ -105,8 +209,6 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
                 (s) => s.size === item.selectedSize,
               );
               currentStock = sizeObj ? sizeObj.stock : 0;
-            } else if (variant) {
-              // Assuming variant stock is sum of sizes if sizes exist, else we can't easily tell. Fallback to global.
             }
           } else if (item.selectedSize) {
             const sizeObj = liveProduct.sizeStock?.find(
@@ -129,7 +231,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
               isStockOut,
               price: liveProduct.price,
               salePrice: liveProduct.salePrice,
-              stock: currentStock, // Save exactly the variant stock or global stock here!
+              stock: currentStock,
               variants: liveProduct.variants,
               sizeStock: liveProduct.sizeStock,
             };
@@ -145,59 +247,57 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-  // Run validation when cart mounts or changes (debounced by doing it in a separate effect that watches just the length to avoid infinite loops if cart updates self)
   useEffect(() => {
     if (cart.length > 0) {
       validateCartStock();
     }
   }, [cart.length]);
 
-  const addToCart = (
+  const addToCart = async (
     product: IProduct,
     selectedColor?: string,
     selectedSize?: string,
   ) => {
-    setCart((prevCart) => {
-      const existingItem = prevCart.find(
-        (item) =>
-          item._id === product._id &&
-          item.selectedColor === selectedColor &&
-          item.selectedSize === selectedSize,
+    let initialStock = product.stock;
+    if (selectedColor) {
+      const variant = product.variants?.find((v) => v.color === selectedColor);
+      if (variant && selectedSize) {
+        const sizeObj = variant.sizes?.find((s) => s.size === selectedSize);
+        initialStock = sizeObj ? sizeObj.stock : 0;
+      }
+    } else if (selectedSize) {
+      const sizeObj = product.sizeStock?.find((s) => s.size === selectedSize);
+      initialStock = sizeObj ? sizeObj.stock : product.stock;
+    }
+
+    const existingItem = cart.find(
+      (item) =>
+        item._id === product._id &&
+        item.selectedColor === selectedColor &&
+        item.selectedSize === selectedSize,
+    );
+
+    const originalCart = [...cart];
+    let newQuantity = 1;
+    let newCartForGuest: ICartItem[] = [];
+
+    if (existingItem) {
+      newQuantity = existingItem.quantity + 1;
+      if (newQuantity > existingItem.stock) {
+        toast.error(`Only ${existingItem.stock} left in stock!`);
+        return;
+      }
+      newCartForGuest = cart.map((item) =>
+        item._id === product._id &&
+        item.selectedColor === selectedColor &&
+        item.selectedSize === selectedSize
+          ? { ...item, quantity: Math.min(newQuantity, 20) }
+          : item,
       );
-      if (existingItem) {
-        // Prevent adding more than available stock
-        const newQuantity = existingItem.quantity + 1;
-
-        if (newQuantity > existingItem.stock) {
-          toast.error(`Only ${existingItem.stock} left in stock!`);
-          return prevCart;
-        }
-
-        return prevCart.map((item) =>
-          item._id === product._id &&
-          item.selectedColor === selectedColor &&
-          item.selectedSize === selectedSize
-            ? { ...item, quantity: Math.min(newQuantity, 20) }
-            : item,
-        );
-      }
-
-      let initialStock = product.stock;
-      if (selectedColor) {
-        const variant = product.variants?.find(
-          (v) => v.color === selectedColor,
-        );
-        if (variant && selectedSize) {
-          const sizeObj = variant.sizes?.find((s) => s.size === selectedSize);
-          initialStock = sizeObj ? sizeObj.stock : 0;
-        }
-      } else if (selectedSize) {
-        const sizeObj = product.sizeStock?.find((s) => s.size === selectedSize);
-        initialStock = sizeObj ? sizeObj.stock : product.stock;
-      }
-
-      return [
-        ...prevCart,
+      setCart(newCartForGuest);
+    } else {
+      newCartForGuest = [
+        ...cart,
         {
           ...product,
           quantity: 1,
@@ -206,175 +306,311 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
           stock: initialStock,
         },
       ];
-    });
+      setCart(newCartForGuest);
+    }
+
+    if (!user) {
+      localStorage.setItem(GUEST_CART_KEY, JSON.stringify(newCartForGuest));
+    } else {
+      try {
+        const res = await addToCartService({
+          product: product._id as string,
+          quantity: 1,
+          selectedColor,
+          selectedSize,
+        });
+        if (!res.success) {
+          setCart(originalCart);
+          toast.error(res.message || 'Failed to add to cart');
+        } else {
+          // Re-fetch to get correct cartItemId
+          if (!existingItem) {
+            fetchServerCart();
+          }
+        }
+      } catch (error) {
+        setCart(originalCart);
+        toast.error('Something went wrong adding to cart');
+      }
+    }
   };
 
-  const removeFromCart = (
+  const removeFromCart = async (
     id: string,
     selectedColor?: string,
     selectedSize?: string,
   ) => {
-    setCart((prevCart) =>
-      prevCart.filter(
-        (item) =>
-          !(
-            item._id === id &&
-            item.selectedColor === selectedColor &&
-            item.selectedSize === selectedSize
-          ),
-      ),
+    const targetItem = cart.find(
+      (item) =>
+        item._id === id &&
+        item.selectedColor === selectedColor &&
+        item.selectedSize === selectedSize,
     );
+
+    const originalCart = [...cart];
+    const newCart = cart.filter(
+      (item) =>
+        !(
+          item._id === id &&
+          item.selectedColor === selectedColor &&
+          item.selectedSize === selectedSize
+        ),
+    );
+    setCart(newCart);
+
+    if (!user) {
+      localStorage.setItem(GUEST_CART_KEY, JSON.stringify(newCart));
+    } else if (targetItem?.cartItemId) {
+      try {
+        const res = await removeFromCartService(targetItem.cartItemId);
+        if (!res.success) {
+          setCart(originalCart);
+          toast.error('Failed to remove item');
+        }
+      } catch (error) {
+        setCart(originalCart);
+        toast.error('Something went wrong');
+      }
+    }
   };
 
-  const updateQuantity = (
+  const updateQuantity = async (
     id: string,
     quantity: number,
     selectedColor?: string,
     selectedSize?: string,
   ) => {
     if (quantity < 1) return;
-    setCart((prevCart) =>
-      prevCart.map((item) => {
-        if (
-          item._id === id &&
-          item.selectedColor === selectedColor &&
-          item.selectedSize === selectedSize
-        ) {
-          if (quantity > item.stock) {
-            toast.error(`Only ${item.stock} left in stock!`);
-            return item;
-          }
-          return { ...item, quantity };
-        }
-        return item;
-      }),
+    const originalCart = [...cart];
+    const targetItem = cart.find(
+      (item) =>
+        item._id === id &&
+        item.selectedColor === selectedColor &&
+        item.selectedSize === selectedSize,
     );
+
+    if (targetItem && quantity > targetItem.stock) {
+      toast.error(`Only ${targetItem.stock} left in stock!`);
+      return;
+    }
+
+    const newCart = cart.map((item) =>
+      item._id === id &&
+      item.selectedColor === selectedColor &&
+      item.selectedSize === selectedSize
+        ? { ...item, quantity }
+        : item,
+    );
+    setCart(newCart);
+
+    if (!user) {
+      localStorage.setItem(GUEST_CART_KEY, JSON.stringify(newCart));
+    } else if (targetItem?.cartItemId) {
+      try {
+        const res = await updateCartQuantityService(
+          targetItem.cartItemId,
+          quantity,
+        );
+        if (!res.success) {
+          setCart(originalCart);
+          toast.error('Failed to update quantity');
+        }
+      } catch (error) {
+        setCart(originalCart);
+        toast.error('Something went wrong');
+      }
+    }
   };
 
-  const updateSize = (
+  const updateSize = async (
     id: string,
     newSize: string,
     selectedColor?: string,
     oldSize?: string,
   ) => {
-    setCart((prevCart) => {
-      const targetItem = prevCart.find(
-        (item) =>
-          item._id === id &&
-          item.selectedColor === selectedColor &&
-          item.selectedSize === oldSize,
-      );
-      if (!targetItem) return prevCart;
+    const targetItem = cart.find(
+      (item) =>
+        item._id === id &&
+        item.selectedColor === selectedColor &&
+        item.selectedSize === oldSize,
+    );
+    if (!targetItem) return;
 
-      const existingItemWithNewSize = prevCart.find(
-        (item) =>
-          item._id === id &&
-          item.selectedColor === selectedColor &&
-          item.selectedSize === newSize,
-      );
+    const existingItemWithNewSize = cart.find(
+      (item) =>
+        item._id === id &&
+        item.selectedColor === selectedColor &&
+        item.selectedSize === newSize,
+    );
 
-      if (existingItemWithNewSize) {
-        return prevCart
-          .map((item) =>
-            item._id === id &&
-            item.selectedColor === selectedColor &&
-            item.selectedSize === newSize
-              ? { ...item, quantity: item.quantity + targetItem.quantity }
-              : item,
-          )
-          .filter(
-            (item) =>
-              !(
-                item._id === id &&
-                item.selectedColor === selectedColor &&
-                item.selectedSize === oldSize
-              ),
-          );
-      } else {
-        return prevCart.map((item) =>
+    const originalCart = [...cart];
+    let newCart = [...cart];
+
+    if (existingItemWithNewSize) {
+      newCart = cart
+        .map((item) =>
           item._id === id &&
           item.selectedColor === selectedColor &&
-          item.selectedSize === oldSize
-            ? { ...item, selectedSize: newSize }
+          item.selectedSize === newSize
+            ? { ...item, quantity: item.quantity + targetItem.quantity }
             : item,
+        )
+        .filter(
+          (item) =>
+            !(
+              item._id === id &&
+              item.selectedColor === selectedColor &&
+              item.selectedSize === oldSize
+            ),
         );
+    } else {
+      newCart = cart.map((item) =>
+        item._id === id &&
+        item.selectedColor === selectedColor &&
+        item.selectedSize === oldSize
+          ? { ...item, selectedSize: newSize }
+          : item,
+      );
+    }
+
+    setCart(newCart);
+
+    if (!user) {
+      localStorage.setItem(GUEST_CART_KEY, JSON.stringify(newCart));
+    } else if (targetItem.cartItemId) {
+      try {
+        const res = await updateCartSizeService(targetItem.cartItemId, newSize);
+        if (!res.success) {
+          setCart(originalCart);
+          toast.error('Failed to update size');
+        } else {
+          // Re-fetch to merge ids if needed
+          if (existingItemWithNewSize) {
+            fetchServerCart();
+          }
+        }
+      } catch (error) {
+        setCart(originalCart);
+        toast.error('Something went wrong');
       }
-    });
+    }
   };
 
-  const updateColor = (
+  const updateColor = async (
     id: string,
     newColor: string,
     selectedSize?: string,
     oldColor?: string,
   ) => {
-    setCart((prevCart) => {
-      const targetItem = prevCart.find(
-        (item) =>
-          item._id === id &&
-          item.selectedColor === oldColor &&
-          item.selectedSize === selectedSize,
-      );
-      if (!targetItem) return prevCart;
+    const targetItem = cart.find(
+      (item) =>
+        item._id === id &&
+        item.selectedColor === oldColor &&
+        item.selectedSize === selectedSize,
+    );
+    if (!targetItem) return;
 
-      const existingItemWithNewColor = prevCart.find(
-        (item) =>
+    const existingItemWithNewColor = cart.find(
+      (item) =>
+        item._id === id &&
+        item.selectedColor === newColor &&
+        item.selectedSize === selectedSize,
+    );
+
+    const originalCart = [...cart];
+    let newCart = [...cart];
+
+    let updatedThumbnails = targetItem.thumbnails;
+    if (newColor !== targetItem.color && targetItem.variants) {
+      const matchingVariant = targetItem.variants.find(
+        (v) => v.color === newColor,
+      );
+      if (
+        matchingVariant &&
+        matchingVariant.thumbnails &&
+        matchingVariant.thumbnails.length > 0
+      ) {
+        updatedThumbnails = matchingVariant.thumbnails;
+      }
+    }
+
+    if (existingItemWithNewColor) {
+      newCart = cart
+        .map((item) =>
           item._id === id &&
           item.selectedColor === newColor &&
-          item.selectedSize === selectedSize,
-      );
-
-      let updatedThumbnails = targetItem.thumbnails;
-      if (newColor !== targetItem.color && targetItem.variants) {
-        const matchingVariant = targetItem.variants.find(
-          (v) => v.color === newColor,
-        );
-        if (
-          matchingVariant &&
-          matchingVariant.thumbnails &&
-          matchingVariant.thumbnails.length > 0
-        ) {
-          updatedThumbnails = matchingVariant.thumbnails;
-        }
-      }
-
-      if (existingItemWithNewColor) {
-        return prevCart
-          .map((item) =>
-            item._id === id &&
-            item.selectedColor === newColor &&
-            item.selectedSize === selectedSize
-              ? { ...item, quantity: item.quantity + targetItem.quantity }
-              : item,
-          )
-          .filter(
-            (item) =>
-              !(
-                item._id === id &&
-                item.selectedColor === oldColor &&
-                item.selectedSize === selectedSize
-              ),
-          );
-      } else {
-        return prevCart.map((item) =>
-          item._id === id &&
-          item.selectedColor === oldColor &&
           item.selectedSize === selectedSize
-            ? {
-                ...item,
-                selectedColor: newColor,
-                thumbnails: updatedThumbnails,
-              }
+            ? { ...item, quantity: item.quantity + targetItem.quantity }
             : item,
+        )
+        .filter(
+          (item) =>
+            !(
+              item._id === id &&
+              item.selectedColor === oldColor &&
+              item.selectedSize === selectedSize
+            ),
         );
+    } else {
+      newCart = cart.map((item) =>
+        item._id === id &&
+        item.selectedColor === oldColor &&
+        item.selectedSize === selectedSize
+          ? {
+              ...item,
+              selectedColor: newColor,
+              thumbnails: updatedThumbnails,
+            }
+          : item,
+      );
+    }
+
+    setCart(newCart);
+
+    if (!user) {
+      localStorage.setItem(GUEST_CART_KEY, JSON.stringify(newCart));
+    } else if (targetItem.cartItemId) {
+      try {
+        const res = await updateCartColorService(
+          targetItem.cartItemId,
+          newColor,
+        );
+        if (!res.success) {
+          setCart(originalCart);
+          toast.error('Failed to update color');
+        } else {
+          // Re-fetch to merge ids if needed
+          if (existingItemWithNewColor) {
+            fetchServerCart();
+          }
+        }
+      } catch (error) {
+        setCart(originalCart);
+        toast.error('Something went wrong');
       }
-    });
+    }
   };
 
-  const clearCart = () => {
+  const clearCart = async () => {
+    const originalCart = [...cart];
     setCart([]);
     setCouponCode(null);
     setDiscountPercent(0);
+
+    if (!user) {
+      localStorage.removeItem(GUEST_CART_KEY);
+    } else {
+      try {
+        const res = await clearCartService();
+        if (!res.success) {
+          setCart(originalCart);
+          toast.error('Failed to clear cart');
+        }
+      } catch (error) {
+        setCart(originalCart);
+        toast.error('Something went wrong');
+      }
+    }
   };
 
   const applyCoupon = (coupon: ICoupon | null) => {

@@ -7,6 +7,7 @@ import { Heart, Minus, Plus, ShoppingBag, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
+import ContinueShoppingButton from './ContinueShoppingButton';
 
 interface WishlistItemCardProps {
   item: any;
@@ -107,7 +108,7 @@ const WishlistItemCard = ({
           <div className="space-y-1">
             <Link
               href={`/products/${product.slug || product._id}`}
-              className="text-foreground line-clamp-1 text-xl font-black tracking-tight transition-colors group-hover:text-blue-600"
+              className="text-foreground group-hover:text-primary line-clamp-1 text-xl font-black tracking-tight transition-colors"
             >
               {product.name}
             </Link>
@@ -219,7 +220,7 @@ const WishlistItemCard = ({
                   `"${product.name}" (${selectedColor} - ${selectedSize}) added to cart`,
                 );
               }}
-              className="flex h-10 items-center gap-2 rounded-full bg-blue-600 px-6 text-xs font-black tracking-widest text-white uppercase shadow-lg shadow-blue-500/20 transition-all hover:bg-blue-700 hover:shadow-blue-500/40 active:scale-95"
+              className="bg-primary text-primary-foreground shadow-primary/20 hover:bg-primary/90 hover:shadow-primary/40 flex h-10 items-center gap-2 rounded-full px-6 text-xs font-black tracking-widest uppercase shadow-lg transition-all active:scale-95"
             >
               <ShoppingBag size={14} />
               <span>Add to Bag</span>
@@ -284,7 +285,7 @@ export default function WishlistContent() {
           <div className="space-y-2">
             <h1 className="flex items-center gap-4 text-5xl font-black tracking-tighter uppercase">
               My Wishlist
-              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600/10 text-sm font-black tracking-normal text-blue-600 backdrop-blur-sm">
+              <span className="bg-primary/10 text-primary flex h-10 w-10 items-center justify-center rounded-full text-sm font-black tracking-normal backdrop-blur-sm">
                 {wishlistCount}
               </span>
             </h1>
@@ -292,16 +293,7 @@ export default function WishlistContent() {
               Items you've saved to buy later.
             </p>
           </div>
-          <Link
-            href="/shop"
-            className="group flex items-center gap-3 rounded-full border border-blue-600/20 bg-blue-600/5 px-8 py-3 text-sm font-black tracking-widest text-blue-600 uppercase transition-all hover:bg-blue-600 hover:text-white"
-          >
-            Continue Shopping{' '}
-            <ShoppingBag
-              size={18}
-              className="transition-transform group-hover:-translate-y-0.5"
-            />
-          </Link>
+          <ContinueShoppingButton />
         </div>
 
         <div className="flex flex-col gap-6">

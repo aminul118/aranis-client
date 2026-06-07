@@ -8,6 +8,7 @@ interface UserContextType {
   user: IUser | null;
   loading: boolean;
   refreshUser: () => Promise<void>;
+  setUser: React.Dispatch<React.SetStateAction<IUser | null>>;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -42,7 +43,7 @@ export const UserProvider: React.FC<{
   }, [initialUser]);
 
   return (
-    <UserContext.Provider value={{ user, loading, refreshUser }}>
+    <UserContext.Provider value={{ user, loading, refreshUser, setUser }}>
       {children}
     </UserContext.Provider>
   );
@@ -56,6 +57,7 @@ export const useUser = () => {
       user: null,
       loading: false,
       refreshUser: async () => {},
+      setUser: () => {},
     };
   }
   return context;

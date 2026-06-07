@@ -5,9 +5,8 @@ import CartSummary from '@/app/(public)/cart/_components/CartSummary';
 import EmptyCart from '@/app/(public)/cart/_components/EmptyCart';
 import { useCart } from '@/context/CartContext';
 import { AnimatePresence } from 'framer-motion';
-import { ShoppingBag } from 'lucide-react';
-import Link from 'next/link';
 import { useState } from 'react';
+import ContinueShoppingButton from '../../wishlist/_components/ContinueShoppingButton';
 
 export default function CartContent() {
   const {
@@ -57,16 +56,7 @@ export default function CartContent() {
               Review your selection and proceed to secure checkout.
             </p>
           </div>
-          <Link
-            href="/shop"
-            className="group flex items-center gap-3 rounded-full border border-blue-600/20 bg-blue-600/5 px-8 py-3 text-sm font-black tracking-widest text-blue-600 uppercase transition-all hover:bg-blue-600 hover:text-white"
-          >
-            Continue Shopping{' '}
-            <ShoppingBag
-              size={18}
-              className="transition-transform group-hover:-translate-y-0.5"
-            />
-          </Link>
+          <ContinueShoppingButton />
         </div>
 
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-3">

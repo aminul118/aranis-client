@@ -65,28 +65,26 @@ const MainNavbar = ({
           </Link>
 
           {/* Wishlist */}
-          {user && (
-            <Link
-              href="/wishlist"
-              className={`group flex items-center gap-2 rounded-md border px-4 py-2 transition-colors ${
-                pathname === '/wishlist'
-                  ? 'border-white/50 bg-white/20 shadow-[0_0_15px_rgba(255,255,255,0.1)]'
-                  : 'border-white/20 hover:bg-white/5'
-              }`}
-            >
-              <div className="relative">
-                <Heart size={18} className="text-white" />
-                {wishlistCount > 0 && (
-                  <span className="absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center rounded-full border-2 border-black bg-red-600 text-[8px] font-bold text-white">
-                    {wishlistCount}
-                  </span>
-                )}
-              </div>
-              <span className="hidden text-[10px] font-bold tracking-widest text-white uppercase lg:inline">
-                Wishlist
-              </span>
-            </Link>
-          )}
+          <Link
+            href="/wishlist"
+            className={`group flex items-center gap-2 rounded-md border px-4 py-2 transition-colors ${
+              pathname === '/wishlist'
+                ? 'border-white/50 bg-white/20 shadow-[0_0_15px_rgba(255,255,255,0.1)]'
+                : 'border-white/20 hover:bg-white/5'
+            }`}
+          >
+            <div className="relative">
+              <Heart size={18} className="text-white" />
+              {wishlistCount > 0 && (
+                <span className="absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center rounded-full border-2 border-black bg-red-600 text-[8px] font-bold text-white">
+                  {wishlistCount}
+                </span>
+              )}
+            </div>
+            <span className="hidden text-[10px] font-bold tracking-widest text-white uppercase lg:inline">
+              Wishlist
+            </span>
+          </Link>
 
           {/* Cart */}
           <Link
