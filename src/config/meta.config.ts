@@ -1,22 +1,22 @@
 import { MetaConfig } from '@/types';
 
 const metaConfig: MetaConfig = {
-  baseUrl: 'https://Aranis-fashion.vercel.app', // Update with actual domain if known
+  baseUrl: 'https://thearanis.com',
   baseImage: '/og-image.png',
-  siteName: 'Aranis Fashion',
+  siteName: 'The Aranis',
   category: 'Premium Contemporary Clothing',
   applicationName: 'The Aranis Store',
   facebook_app_id: '',
   authors_name: 'The Aranis Team',
-  authorPortfolio: 'https://Aranis-fashion.vercel.app',
-  twitter_site: '@Aranisfashion',
+  authorPortfolio: 'https://thearanis.com',
+  twitter_site: '@theAranis',
   bookmarks: '/logo.png',
   verification: {
     google: '',
     microsoft_bing: '',
   },
-  publisher: 'Aranis Fashion',
-  preventCrawler: ['/dashboard', '/admin'],
+  publisher: 'The Aranis',
+  preventCrawler: ['/user', '/admin'],
 };
 
 export default metaConfig;
