@@ -9,6 +9,7 @@ export type RouteConfig = {
 const authRoutes = [
   '/login',
   '/register',
+  '/verify',
   '/forgot-password',
   '/reset-password',
 ];

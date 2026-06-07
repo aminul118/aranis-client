@@ -1,6 +1,7 @@
 'use client';
 
 import SubmitButton from '@/components/common/button/submit-button';
+import IconInput from '@/components/common/form/IconInput';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -10,7 +11,6 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import useSearchParamsValues from '@/hooks/useSearchParamsValues';
 import { loginWithPassword } from '@/services/auth/login';
@@ -54,8 +54,9 @@ const LoginForm = () => {
       if (loginMode === 'otp') {
         const res = await requestOTP(values.identifier);
         if (res.success) {
+          const attemptsLeft = (res as any).data?.remainingAttempts;
           router.push(
-            `/verify?identifier=${encodeURIComponent(values.identifier)}${redirect ? `&redirect=${redirect}` : ''}`,
+            `/verify?identifier=${encodeURIComponent(values.identifier)}${redirect ? `&redirect=${redirect}` : ''}${attemptsLeft !== undefined ? `&attemptsLeft=${attemptsLeft}` : ''}`,
           );
         } else {
           setAlert({
@@ -111,16 +112,16 @@ const LoginForm = () => {
         onValueChange={(v: any) => setLoginMode(v)}
         className="w-full"
       >
-        <TabsList className="grid h-12 w-full grid-cols-2 rounded-xl p-1">
+        <TabsList className="flex h-[52px] w-full overflow-hidden rounded-full bg-[#334155]/60 p-0 shadow-inner dark:bg-slate-800/80">
           <TabsTrigger
             value="otp"
-            className="rounded-lg text-xs font-bold tracking-widest uppercase"
+            className="h-full flex-1 rounded-full text-base font-medium text-slate-300 transition-all duration-300 data-[state=active]:bg-[#3b82f6] data-[state=active]:text-white data-[state=active]:shadow-md"
           >
             OTP Login
           </TabsTrigger>
           <TabsTrigger
             value="password"
-            className="rounded-lg text-xs font-bold tracking-widest uppercase"
+            className="h-full flex-1 rounded-full text-base font-medium text-slate-300 transition-all duration-300 data-[state=active]:bg-[#3b82f6] data-[state=active]:text-white data-[state=active]:shadow-md"
           >
             Password
           </TabsTrigger>
@@ -150,17 +151,11 @@ const LoginForm = () => {
                   Email or Phone
                 </FormLabel>
                 <FormControl>
-                  <div className="relative">
-                    <Mail
-                      className="text-muted-foreground absolute top-1/2 left-3 -translate-y-1/2"
-                      size={18}
-                    />
-                    <Input
-                      placeholder="Enter your email or phone"
-                      className="h-12 rounded-xl border-2 pl-10 focus:border-blue-500"
-                      {...field}
-                    />
-                  </div>
+                  <IconInput
+                    icon={Mail}
+                    placeholder="Enter your email or phone"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -178,14 +173,11 @@ const LoginForm = () => {
                   </FormLabel>
                   <FormControl>
                     <div className="relative">
-                      <Lock
-                        className="text-muted-foreground absolute top-1/2 left-3 -translate-y-1/2"
-                        size={18}
-                      />
-                      <Input
+                      <IconInput
+                        icon={Lock}
                         type={showPassword ? 'text' : 'password'}
                         placeholder="••••••••"
-                        className="h-12 rounded-xl border-2 pr-10 pl-10 focus:border-blue-500"
+                        className="pr-10"
                         {...field}
                       />
                       <button

@@ -3,7 +3,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import SubmitButton from '@/components/common/button/submit-button';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Form,
   FormControl,
@@ -37,18 +36,15 @@ type FormValues = z.infer<typeof otpValidation>;
 
 const VerifyOTPForm = () => {
   const [counter, setCounter] = useState(60); // 1 min timer
-  const { identifier, redirect } = useSearchParamsValues(
-    'identifier',
-    'redirect',
+  const {
+    identifier,
+    redirect,
+    attemptsLeft: initialAttempts,
+  } = useSearchParamsValues('identifier', 'redirect', 'attemptsLeft');
+  const [attemptsLeft, setAttemptsLeft] = useState<number | null>(
+    initialAttempts ? parseInt(initialAttempts, 10) : null,
   );
   const router = useRouter();
-
-  // Identifier check -> User can't visit this page without it
-  useEffect(() => {
-    if (!identifier) {
-      router.replace('/login');
-    }
-  }, [identifier, router]);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(otpValidation),
@@ -101,82 +97,90 @@ const VerifyOTPForm = () => {
     if (res.success) {
       toast.success(`OTP sent to ${identifier}`);
       setCounter(60); // ✅ reset timer
+      if ((res as any).data?.remainingAttempts !== undefined) {
+        setAttemptsLeft((res as any).data.remainingAttempts);
+      }
     } else {
       toast.error(res.message || 'Error sending OTP');
     }
   };
 
   return (
-    <div data-aos="fade-left" className="flex items-center justify-center">
-      <Card className="w-lg">
-        <CardHeader className="flex flex-col items-center space-y-2 pb-2">
-          <CardTitle className="text-center text-xl font-semibold">
-            Verify Your Account
-          </CardTitle>
-          <p className="text-muted-foreground text-center text-sm">
-            Enter the 6-digit code sent to {identifier} to secure your access.
+    <div data-aos="fade-left" className="mx-auto w-full max-w-md">
+      <div className="mb-8 text-center">
+        <h1 className="text-foreground text-3xl font-bold tracking-tight">
+          Verify Your Account
+        </h1>
+        <p className="text-muted-foreground mt-2 text-sm">
+          Enter the 6-digit code sent to {identifier} to secure your access.
+        </p>
+      </div>
+
+      <div className="space-y-6">
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="flex flex-col items-center justify-center gap-6"
+          >
+            {/* OTP Field */}
+            <FormField
+              control={form.control}
+              name="otp"
+              render={({ field }) => (
+                <FormItem className="flex flex-col items-center gap-2">
+                  <FormLabel className="sr-only">OTP</FormLabel>
+                  <FormControl>
+                    <InputOTP
+                      maxLength={6}
+                      {...field}
+                      className="gap-2 text-lg"
+                    >
+                      <InputOTPGroup>
+                        <InputOTPSlot index={0} />
+                        <InputOTPSlot index={1} />
+                        <InputOTPSlot index={2} />
+                      </InputOTPGroup>
+                      <InputOTPSeparator />
+                      <InputOTPGroup>
+                        <InputOTPSlot index={3} />
+                        <InputOTPSlot index={4} />
+                        <InputOTPSlot index={5} />
+                      </InputOTPGroup>
+                    </InputOTP>
+                  </FormControl>
+                  <FormMessage className="mt-4" />
+                </FormItem>
+              )}
+            />
+
+            <SubmitButton
+              loading={form.formState.isSubmitting}
+              className="mt-4 h-12 w-full rounded-xl text-sm font-black tracking-widest uppercase"
+              text="Verify"
+              loadingText="Verifying..."
+              loadingEffect
+            />
+          </form>
+        </Form>
+
+        {/* Resend OTP Section */}
+        <div className="text-center text-sm">
+          {counter > 0 ? (
+            <Button variant="link" disabled className="text-muted-foreground">
+              {` Resend available in ${counter}`}
+            </Button>
+          ) : (
+            <Button variant="link" onClick={handleResend}>
+              Resend OTP
+            </Button>
+          )}
+        </div>
+        {attemptsLeft !== null && (
+          <p className="text-muted-foreground mt-2 text-center text-xs font-medium">
+            Daily limit remaining: {attemptsLeft}/5
           </p>
-        </CardHeader>
-
-        <CardContent className="space-y-3">
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="flex flex-col items-center justify-center gap-6"
-            >
-              {/* OTP Field */}
-              <FormField
-                control={form.control}
-                name="otp"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col items-center gap-2">
-                    <FormLabel className="sr-only">OTP</FormLabel>
-                    <FormControl>
-                      <InputOTP
-                        maxLength={6}
-                        {...field}
-                        className="gap-2 text-lg"
-                      >
-                        <InputOTPGroup>
-                          <InputOTPSlot index={0} />
-                          <InputOTPSlot index={1} />
-                          <InputOTPSlot index={2} />
-                        </InputOTPGroup>
-                        <InputOTPSeparator />
-                        <InputOTPGroup>
-                          <InputOTPSlot index={3} />
-                          <InputOTPSlot index={4} />
-                          <InputOTPSlot index={5} />
-                        </InputOTPGroup>
-                      </InputOTP>
-                    </FormControl>
-                    <FormMessage className="mt-4" />
-                  </FormItem>
-                )}
-              />
-
-              <SubmitButton
-                loading={form.formState.isSubmitting}
-                loadingEffect
-                text="Verify"
-              />
-            </form>
-          </Form>
-
-          {/* Resend OTP Section */}
-          <div className="text-center text-sm">
-            {counter > 0 ? (
-              <Button variant="link" disabled className="text-muted-foreground">
-                {` Resend available in ${counter}`}
-              </Button>
-            ) : (
-              <Button variant="link" onClick={handleResend}>
-                Resend OTP
-              </Button>
-            )}
-          </div>
-        </CardContent>
-      </Card>
+        )}
+      </div>
     </div>
   );
 };

@@ -1,6 +1,7 @@
 'use client';
 
 import SubmitButton from '@/components/common/button/submit-button';
+import IconInput from '@/components/common/form/IconInput';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -10,7 +11,6 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
 import { forgotPassword } from '@/services/auth/password-reset';
 import { loginFormValidation } from '@/zod/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -46,10 +46,14 @@ const ForgotPasswordForm = () => {
         setIsSuccess(true);
         const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.identifier);
         const target = isEmail ? 'email address' : 'mobile number';
+        const attemptsText =
+          (res as any).data?.remainingAttempts !== undefined
+            ? `\nRemaining daily attempts: ${(res as any).data.remainingAttempts}/5`
+            : '';
         setAlert({
           type: 'success',
           title: 'Reset Link Sent',
-          description: `A password reset link has been successfully sent to your ${target}.`,
+          description: `A password reset link has been successfully sent to your ${target}.${attemptsText}`,
         });
       } else {
         setAlert({
@@ -96,17 +100,12 @@ const ForgotPasswordForm = () => {
                       Email or Phone Number
                     </FormLabel>
                     <FormControl>
-                      <div className="relative">
-                        <Mail
-                          className="text-muted-foreground absolute top-1/2 left-3 -translate-y-1/2"
-                          size={18}
-                        />
-                        <Input
-                          placeholder="Enter your email or phone"
-                          className="focus:border-primary h-12 rounded-xl border-2 pl-10"
-                          {...field}
-                        />
-                      </div>
+                      <IconInput
+                        icon={Mail}
+                        placeholder="Enter your email or phone"
+                        className="focus:border-primary"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

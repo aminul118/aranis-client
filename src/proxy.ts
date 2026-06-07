@@ -32,8 +32,8 @@ export async function proxy(req: NextRequest) {
     return NextResponse.redirect(url);
   };
 
-  // 2) If access is invalid but refresh exists -> refresh once (avoid doing this on auth pages)
-  if (!user && !isAuthPage) {
+  // 2) If access is invalid but refresh exists -> refresh once
+  if (!user && req.cookies.has('refreshToken')) {
     const refreshed = await tryRefreshToken(req);
 
     if (refreshed?.accessToken) {
@@ -59,7 +59,15 @@ export async function proxy(req: NextRequest) {
   }
 
   // 4) Public Auth Pages (guest allowed)
-  if (!user && isAuthPage) return response;
+  if (!user && isAuthPage) {
+    if (
+      pathname.startsWith('/verify') &&
+      !req.nextUrl.searchParams.has('identifier')
+    ) {
+      return redirectTo('/login');
+    }
+    return response;
+  }
 
   // 5) Logged-in users should not see auth pages (login/register/etc.)
   if (user && isAuthPage) {
