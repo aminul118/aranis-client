@@ -1,6 +1,6 @@
 'use client';
 
-import NotificationBell from '@/components/layouts/shared/NotificationBell';
+import NotificationBell from '@/components/layouts/NotificationBell';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { toUrlSlug } from '@/lib/url-slugs';
 import { cn } from '@/lib/utils';

@@ -1,6 +1,6 @@
 'use client';
 
-import DynamicMenu from '@/components/layouts/shared/DynamicMenu';
+import DynamicMenu from '@/components/layouts/DynamicMenu';
 import { UserRole } from '@/types/admin-menu';
 import { userSidebarMenu } from './user-menu';
 

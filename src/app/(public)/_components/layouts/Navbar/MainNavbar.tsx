@@ -1,7 +1,7 @@
 'use client';
 
-import HeaderUser from '@/components/layouts/shared/HeaderUser';
-import NotificationBell from '@/components/layouts/shared/NotificationBell';
+import HeaderUser from '@/components/layouts/HeaderUser';
+import NotificationBell from '@/components/layouts/NotificationBell';
 import { useCartOptional } from '@/context/CartContext';
 import { useWishlistOptional } from '@/context/WishlistContext';
 import { IUser } from '@/types';

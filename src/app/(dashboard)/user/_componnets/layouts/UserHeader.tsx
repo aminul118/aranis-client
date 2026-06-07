@@ -1,7 +1,7 @@
 'use client';
 
-import HeaderUser from '@/components/layouts/shared/HeaderUser';
-import NotificationBell from '@/components/layouts/shared/NotificationBell';
+import HeaderUser from '@/components/layouts/HeaderUser';
+import NotificationBell from '@/components/layouts/NotificationBell';
 import { Separator } from '@/components/ui/separator';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { useCartOptional } from '@/context/CartContext';
