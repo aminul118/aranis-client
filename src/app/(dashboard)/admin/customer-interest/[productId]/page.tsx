@@ -3,6 +3,8 @@ import { getProductInterestUsers } from '@/services/customer-interest/customer-i
 import { Metadata } from 'next';
 import CustomerInterestUsersTable from './_components/CustomerInterestUsersTable';
 
+export const dynamic = 'force-dynamic';
+
 interface PageProps {
   params: Promise<{
     productId: string;

@@ -5,6 +5,8 @@ import { SearchParams } from '@/types';
 import { Metadata } from 'next';
 import CustomerInterestTable from './_components/CustomerInterestTable';
 
+export const dynamic = 'force-dynamic';
+
 const CustomerInterestPage = async ({ searchParams }: SearchParams) => {
   const params = await cleanSearchParams(searchParams);
 
