@@ -6,6 +6,8 @@ import { getSizes } from '@/services/size/size';
 import { SearchParams } from '@/types';
 import { Metadata } from 'next';
 
+export const dynamic = 'force-dynamic';
+
 const SizePage = async ({ searchParams }: SearchParams) => {
   const resolvedParams = await cleanSearchParams(searchParams);
   const params = { sort: 'order', ...resolvedParams };

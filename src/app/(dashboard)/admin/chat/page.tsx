@@ -20,6 +20,8 @@ import {
 import Image from 'next/image';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+export const dynamic = 'force-dynamic';
+
 export default function AdminChatPage() {
   const [admin, setAdmin] = useState<any>(null);
   const [conversations, setConversations] = useState<any[]>([]);

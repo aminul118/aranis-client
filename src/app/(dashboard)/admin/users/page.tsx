@@ -7,6 +7,8 @@ import { SearchParams } from '@/types/react.types';
 
 import { Metadata } from 'next';
 
+export const dynamic = 'force-dynamic';
+
 const UsersPage = async ({ searchParams }: SearchParams) => {
   const params = await cleanSearchParams(searchParams);
   const { data, meta } = await getUsers(params);

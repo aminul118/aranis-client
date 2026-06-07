@@ -3,6 +3,8 @@ import BackButton from '@/components/common/BackButton';
 import ClientTableWrapper from '@/components/common/wrapper/ClientTableWrapper';
 import { getSingleNavbar } from '@/services/navbar/navbar';
 
+export const dynamic = 'force-dynamic';
+
 export default async function EditNavbarPage({
   params,
 }: {

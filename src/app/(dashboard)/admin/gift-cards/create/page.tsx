@@ -3,6 +3,8 @@ import ClientTableWrapper from '@/components/common/wrapper/ClientTableWrapper';
 import { Metadata } from 'next';
 import GiftCardForm from '../_components/GiftCardForm';
 
+export const dynamic = 'force-dynamic';
+
 const CreateGiftCardPage = () => {
   return (
     <ClientTableWrapper

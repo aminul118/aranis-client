@@ -5,6 +5,8 @@ import { getRestockRequests } from '@/services/restock/restock';
 import { SearchParams } from '@/types';
 import { Metadata } from 'next';
 
+export const dynamic = 'force-dynamic';
+
 const RestockRequestsPage = async ({ searchParams }: SearchParams) => {
   const resolvedParams = await cleanSearchParams(searchParams);
   const { data, meta } = (await getRestockRequests(resolvedParams)) as any;

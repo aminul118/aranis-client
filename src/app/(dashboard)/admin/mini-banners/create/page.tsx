@@ -3,6 +3,8 @@ import BackButton from '@/components/common/BackButton';
 import ClientTableWrapper from '@/components/common/wrapper/ClientTableWrapper';
 import { Metadata } from 'next';
 
+export const dynamic = 'force-dynamic';
+
 export default function CreateMiniBannerPage() {
   return (
     <ClientTableWrapper tableTitle="Add Mini Banner" action={<BackButton />}>

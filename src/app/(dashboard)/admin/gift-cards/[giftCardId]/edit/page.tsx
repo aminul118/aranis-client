@@ -4,6 +4,8 @@ import { getSingleGiftCard } from '@/services/giftcard/giftcard';
 import { Metadata } from 'next';
 import GiftCardForm from '../../_components/GiftCardForm';
 
+export const dynamic = 'force-dynamic';
+
 const EditGiftCardPage = async ({
   params,
 }: {

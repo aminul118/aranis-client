@@ -4,6 +4,8 @@ import { getPopupBanners } from '@/services/popup-banner/popup-banner';
 import { SearchParams } from '@/types';
 import { Metadata } from 'next';
 
+export const dynamic = 'force-dynamic';
+
 const PopupBannersAdminPage = async ({ searchParams }: SearchParams) => {
   const params = await cleanSearchParams(searchParams);
   const { data, meta } = await getPopupBanners(params);

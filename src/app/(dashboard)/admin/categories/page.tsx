@@ -8,6 +8,8 @@ import { Plus } from 'lucide-react';
 import { Metadata } from 'next';
 import Link from 'next/link';
 
+export const dynamic = 'force-dynamic';
+
 const CategoryPage = async ({ searchParams }: SearchParams) => {
   const params = await cleanSearchParams(searchParams);
   const { data, meta } = await getCategories(params);

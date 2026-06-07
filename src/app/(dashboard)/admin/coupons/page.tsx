@@ -6,6 +6,8 @@ import { getCoupons } from '@/services/coupon/coupon';
 import { SearchParams } from '@/types';
 import { Metadata } from 'next';
 
+export const dynamic = 'force-dynamic';
+
 const AdminCouponsPage = async ({ searchParams }: SearchParams) => {
   const params = await cleanSearchParams(searchParams);
   const { data, meta } = await getCoupons(params);

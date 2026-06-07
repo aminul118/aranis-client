@@ -136,6 +136,7 @@ const GlobalOfferModal = () => {
                   src={popup.image}
                   alt={popup.title || 'Special Offer'}
                   fill
+                  sizes="(max-width: 768px) 100vw, 600px"
                   className="object-cover transition-transform duration-[3000ms] hover:scale-110"
                   priority
                 />

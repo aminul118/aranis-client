@@ -3,6 +3,8 @@ import BackButton from '@/components/common/BackButton';
 import ClientTableWrapper from '@/components/common/wrapper/ClientTableWrapper';
 import { getSingleColor } from '@/services/color/color';
 
+export const dynamic = 'force-dynamic';
+
 export default async function EditColorPage({
   params,
 }: {

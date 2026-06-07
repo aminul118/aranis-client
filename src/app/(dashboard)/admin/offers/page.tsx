@@ -4,6 +4,8 @@ import { getOffers } from '@/services/offer/offer';
 import { SearchParams } from '@/types';
 import { Metadata } from 'next';
 
+export const dynamic = 'force-dynamic';
+
 const OffersAdminPage = async ({ searchParams }: SearchParams) => {
   const params = await cleanSearchParams(searchParams);
   const { data, meta } = await getOffers(params);

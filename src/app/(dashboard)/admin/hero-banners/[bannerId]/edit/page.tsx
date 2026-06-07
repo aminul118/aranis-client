@@ -4,6 +4,8 @@ import ClientTableWrapper from '@/components/common/wrapper/ClientTableWrapper';
 import { getSingleHeroBanner } from '@/services/hero-banner/hero-banner';
 import { Metadata } from 'next';
 
+export const dynamic = 'force-dynamic';
+
 export default async function EditHeroBannerPage({
   params,
 }: {

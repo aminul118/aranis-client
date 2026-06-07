@@ -2,6 +2,8 @@ import CategoryForm from '@/app/(dashboard)/admin/categories/_components/Categor
 import BackButton from '@/components/common/BackButton';
 import ClientTableWrapper from '@/components/common/wrapper/ClientTableWrapper';
 
+export const dynamic = 'force-dynamic';
+
 export default function CreateCategoryPage() {
   return (
     <ClientTableWrapper

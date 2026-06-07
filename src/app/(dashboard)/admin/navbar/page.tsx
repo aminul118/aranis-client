@@ -8,6 +8,8 @@ import { Plus } from 'lucide-react';
 import { Metadata } from 'next';
 import Link from 'next/link';
 
+export const dynamic = 'force-dynamic';
+
 const NavbarAdminPage = async ({ searchParams }: SearchParams) => {
   const resolvedParams = await cleanSearchParams(searchParams);
   const params = { ...resolvedParams, sort: 'order' };

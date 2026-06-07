@@ -3,6 +3,8 @@ import cleanSearchParams from '@/lib/cleanSearchParams';
 import { getAllSizeGuides } from '@/services/size-guide/size-guide';
 import { SearchParams } from '@/types';
 
+export const dynamic = 'force-dynamic';
+
 export default async function SizeGuidesPage({ searchParams }: SearchParams) {
   const params = await cleanSearchParams(searchParams);
   const res = await getAllSizeGuides(params);

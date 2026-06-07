@@ -7,6 +7,8 @@ import { getOffers } from '@/services/offer/offer';
 import { getAllSizeGuides } from '@/services/size-guide/size-guide';
 import { getSizes } from '@/services/size/size';
 
+export const dynamic = 'force-dynamic';
+
 export default async function CreateProductPage() {
   const [categoriesRes, colorsRes, sizesRes, sizeGuidesRes, offersRes] =
     await Promise.all([

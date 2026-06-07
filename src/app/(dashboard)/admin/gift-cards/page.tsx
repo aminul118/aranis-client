@@ -8,6 +8,8 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import GiftCardsTable from './_components/GiftCardsTable';
 
+export const dynamic = 'force-dynamic';
+
 const GiftCardPage = async ({ searchParams }: SearchParams) => {
   const params = await cleanSearchParams(searchParams);
   const { data, meta } = await getGiftCards(params);

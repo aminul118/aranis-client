@@ -16,6 +16,8 @@ import { useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 
+export const dynamic = 'force-dynamic';
+
 const LocationsPage = () => {
   const [locations, setLocations] = useState<ILocation[]>([]);
   const [isOpen, setIsOpen] = useState(false);

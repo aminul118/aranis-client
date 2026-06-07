@@ -2,6 +2,8 @@ import { getDeliveryCharge } from '@/services/delivery-charge/delivery-charge';
 import { Metadata } from 'next';
 import DeliveryChargeForm from './_components/DeliveryChargeForm';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'Delivery Charge Settings | Admin Portal',
 };

@@ -8,6 +8,8 @@ import { getSingleProduct } from '@/services/product/product';
 import { getAllSizeGuides } from '@/services/size-guide/size-guide';
 import { getSizes } from '@/services/size/size';
 
+export const dynamic = 'force-dynamic';
+
 export default async function EditProductPage({
   params,
 }: {
