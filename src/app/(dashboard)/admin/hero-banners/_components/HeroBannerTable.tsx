@@ -51,7 +51,7 @@ const HeroBannerTable = ({ banners }: { banners: IHeroBanner[] }) => {
           </div>
         </div>
       )}
-      <TableFilters />
+      <TableFilters hideSearch={true} />
       <TableManageMent
         columns={HeroBannerColumn}
         data={banners || []}

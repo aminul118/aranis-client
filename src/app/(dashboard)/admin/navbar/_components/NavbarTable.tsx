@@ -47,7 +47,7 @@ const NavbarTable = ({ navbars }: { navbars: INavItem[] }) => {
           </div>
         </div>
       )}
-      <TableFilters />
+      <TableFilters searchPlaceholder="Search by menu title" />
       <TableManageMent
         columns={NavbarColumn}
         data={navbars || []}

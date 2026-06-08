@@ -48,7 +48,7 @@ const CategoriesTable = ({ categories }: { categories: ICategory[] }) => {
           </div>
         </div>
       )}
-      <TableFilters>
+      <TableFilters searchPlaceholder="Search by category name">
         <SubCategoryFilter categories={categories || []} />
       </TableFilters>
       <TableManageMent

@@ -45,7 +45,7 @@ const OfferTable = ({ offers, meta }: Props) => {
         </Button>
       }
     >
-      <TableFilters />
+      <TableFilters searchPlaceholder="Search by offer name" />
       <TableManageMent
         columns={columns}
         data={offers || []}

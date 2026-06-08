@@ -47,7 +47,7 @@ const SizesTable = ({ sizes }: { sizes: ISize[] }) => {
           </div>
         </div>
       )}
-      <TableFilters />
+      <TableFilters searchPlaceholder="Search by size name" />
       <TableManageMent
         columns={SizesColumn}
         data={sizes || []}

@@ -51,7 +51,7 @@ const OrdersTable = ({ orders }: { orders: IOrder[] }) => {
           </div>
         </div>
       )}
-      <TableFilters />
+      <TableFilters searchPlaceholder="Order no, user name, email or phone" />
       <TableManageMent
         columns={OrdersColumn}
         data={orders || []}

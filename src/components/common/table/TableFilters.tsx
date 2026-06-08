@@ -21,12 +21,16 @@ interface IProps {
   children?: ReactNode;
   sortOptions?: SortOption[];
   pageNumbers?: number[];
+  searchPlaceholder?: string;
+  hideSearch?: boolean;
 }
 
 const TableFilters = ({
   children,
   sortOptions,
   pageNumbers = [10, 20, 30, 40],
+  searchPlaceholder,
+  hideSearch = false,
 }: IProps) => {
   const isMobile = useIsMobile();
   const [showSearch, setShowSearch] = useState(false);
@@ -35,10 +39,13 @@ const TableFilters = ({
     return (
       <div className="pb-8">
         <div className="flex items-center justify-between gap-2">
-          {showSearch ? (
+          {showSearch && !hideSearch ? (
             <div className="flex w-full items-center gap-2">
               <div className="flex-1">
-                <SearchFilter className="w-full" />
+                <SearchFilter
+                  className="w-full"
+                  placeholder={searchPlaceholder}
+                />
               </div>
               <Button
                 variant="ghost"
@@ -51,13 +58,15 @@ const TableFilters = ({
             </div>
           ) : (
             <>
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={() => setShowSearch(true)}
-              >
-                <Search className="h-4 w-4" />
-              </Button>
+              {!hideSearch && (
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => setShowSearch(true)}
+                >
+                  <Search className="h-4 w-4" />
+                </Button>
+              )}
               <div className="flex items-center gap-2">
                 <RefreshButton
                   variant="outline"
@@ -93,7 +102,11 @@ const TableFilters = ({
   return (
     <div className="pb-8">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <SearchFilter />
+        {hideSearch ? (
+          <div></div>
+        ) : (
+          <SearchFilter placeholder={searchPlaceholder} />
+        )}
         <div className="flex flex-wrap items-center justify-end gap-2">
           <PageLimit pageNumbers={pageNumbers} />
           <ClearAllFilter />

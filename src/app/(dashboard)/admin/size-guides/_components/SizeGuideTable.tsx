@@ -98,7 +98,7 @@ const SizeGuideTable = ({ sizeGuides, meta }: Props) => {
         </Button>
       }
     >
-      <TableFilters />
+      <TableFilters searchPlaceholder="Search by size guide name" />
       <TableManagement
         data={sizeGuides}
         columns={columns as any}

@@ -49,7 +49,7 @@ const UsersTable = ({ users }: { users: IUser[] }) => {
           </div>
         </div>
       )}
-      <TableFilters />
+      <TableFilters searchPlaceholder="Search by name,email,phone or role" />
       <TableManageMent
         columns={UsersColumn}
         data={users}

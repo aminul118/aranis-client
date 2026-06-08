@@ -47,7 +47,7 @@ const ColorsTable = ({ colors }: { colors: IColor[] }) => {
           </div>
         </div>
       )}
-      <TableFilters />
+      <TableFilters searchPlaceholder="Search by color name or hex code" />
       <TableManageMent
         columns={ColorsColumn}
         data={colors || []}

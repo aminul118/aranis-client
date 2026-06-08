@@ -8,7 +8,7 @@ import CustomerInterestColumn from './CustomerInterestColumn';
 const CustomerInterestTable = ({ data }: { data: ICustomerInterestItem[] }) => {
   return (
     <div className="space-y-4">
-      <TableFilters />
+      <TableFilters searchPlaceholder="Search by product Name" />
       <TableManageMent
         columns={CustomerInterestColumn}
         data={data}

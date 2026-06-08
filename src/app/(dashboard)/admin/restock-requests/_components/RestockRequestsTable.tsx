@@ -54,7 +54,7 @@ const RestockRequestsTable = ({
           </div>
         </div>
       )}
-      <TableFilters />
+      <TableFilters searchPlaceholder="Search by product name or customer name" />
       <TableManageMent
         columns={RestockRequestsColumn}
         data={requests || []}

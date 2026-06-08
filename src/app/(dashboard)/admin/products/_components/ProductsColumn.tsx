@@ -140,7 +140,7 @@ const ProductsColumn: Column<IProduct>[] = [
           />
         </div>
         <div className="flex min-w-0 flex-col">
-          <span className="max-w-[160px] truncate font-medium">{p.name}</span>
+          <span className="font-medium whitespace-normal">{p.name}</span>
           <span className="text-muted-foreground text-xs">
             {p.category} · {p.subCategory}
           </span>

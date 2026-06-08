@@ -50,7 +50,7 @@ const MiniBannerTable = ({ banners }: { banners: IMiniBanner[] }) => {
           </div>
         </div>
       )}
-      <TableFilters />
+      <TableFilters hideSearch={true} />
       <TableManageMent
         columns={MiniBannerColumn}
         data={banners || []}
