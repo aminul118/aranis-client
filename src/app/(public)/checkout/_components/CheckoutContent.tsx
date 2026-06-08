@@ -39,6 +39,7 @@ export default function CheckoutContent() {
   const [submitting, setSubmitting] = useState(false);
   const [addressInput, setAddressInput] = useState('');
   const [phoneInput, setPhoneInput] = useState('');
+  const [phoneError, setPhoneError] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
   const [showRateLimitModal, setShowRateLimitModal] = useState(false);
   const [guestInfo, setGuestInfo] = useState({
@@ -191,6 +192,20 @@ export default function CheckoutContent() {
         );
         return;
       }
+
+      const guestPhoneDigits = guestContactPhone.replace(/\D/g, '');
+      const guestLocalPart = guestPhoneDigits.startsWith('88')
+        ? guestPhoneDigits.substring(2)
+        : guestPhoneDigits;
+      if (
+        !guestContactPhone.includes('@') &&
+        /[0-9]/.test(guestContactPhone) &&
+        guestLocalPart.length > 11
+      ) {
+        setPhoneError('Phone number cannot exceed 11 digits');
+        return;
+      }
+      setPhoneError('');
       setSubmitting(true);
       try {
         const payload = {
@@ -239,6 +254,20 @@ export default function CheckoutContent() {
       );
       return;
     }
+
+    const phoneInputDigits = phoneInput.replace(/\D/g, '');
+    const phoneLocalPart = phoneInputDigits.startsWith('88')
+      ? phoneInputDigits.substring(2)
+      : phoneInputDigits;
+    if (
+      !phoneInput.includes('@') &&
+      /[0-9]/.test(phoneInput) &&
+      phoneLocalPart.length > 11
+    ) {
+      setPhoneError('Phone number cannot exceed 11 digits');
+      return;
+    }
+    setPhoneError('');
 
     setSubmitting(true);
     await executeOrderPlacement(addressInput, phoneInput);
@@ -361,13 +390,20 @@ export default function CheckoutContent() {
               addressInput={addressInput}
               setAddressInput={setAddressInput}
               phoneInput={phoneInput}
-              setPhoneInput={setPhoneInput}
+              setPhoneInput={(val) => {
+                setPhoneInput(val);
+                setPhoneError('');
+              }}
               guestInfo={guestInfo}
-              setGuestInfo={setGuestInfo}
+              setGuestInfo={(val) => {
+                setGuestInfo(val);
+                setPhoneError('');
+              }}
               guestMethod={guestMethod}
               setGuestMethod={setGuestMethod}
               isDeliveryFree={shippingCharge === 0}
               deliverySettings={deliverySettings}
+              phoneError={phoneError}
             />
 
             {/* Payment Section */}

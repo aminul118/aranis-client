@@ -1,7 +1,26 @@
 import { z } from 'zod';
 
 export const loginFormValidation = z.object({
-  identifier: z.string().min(1, 'Email or Phone is required'),
+  identifier: z
+    .string()
+    .min(1, 'Email or Phone is required')
+    .refine(
+      (val) => {
+        if (!val.includes('@') && /[0-9]/.test(val)) {
+          const digitsOnly = val.replace(/\D/g, '');
+          const localPart = digitsOnly.startsWith('88')
+            ? digitsOnly.substring(2)
+            : digitsOnly;
+          if (localPart.length > 11) {
+            return false;
+          }
+        }
+        return true;
+      },
+      {
+        message: 'Phone number cannot exceed 11 digits',
+      },
+    ),
 });
 
 export type LoginFormValues = z.infer<typeof loginFormValidation>;
@@ -77,7 +96,26 @@ export const changePasswordSchema = z
 export type ChangePasswordValues = z.infer<typeof changePasswordSchema>;
 
 export const passwordLoginValidation = z.object({
-  identifier: z.string().min(1, 'Email or Phone is required'),
+  identifier: z
+    .string()
+    .min(1, 'Email or Phone is required')
+    .refine(
+      (val) => {
+        if (!val.includes('@') && /[0-9]/.test(val)) {
+          const digitsOnly = val.replace(/\D/g, '');
+          const localPart = digitsOnly.startsWith('88')
+            ? digitsOnly.substring(2)
+            : digitsOnly;
+          if (localPart.length > 11) {
+            return false;
+          }
+        }
+        return true;
+      },
+      {
+        message: 'Phone number cannot exceed 11 digits',
+      },
+    ),
   password: z.string().min(1, 'Password is required'),
 });
 

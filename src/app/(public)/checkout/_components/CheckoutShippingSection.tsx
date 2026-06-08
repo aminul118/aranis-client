@@ -30,6 +30,7 @@ interface CheckoutShippingSectionProps {
     outsideDhaka: number;
     freeDeliveryThreshold: number;
   };
+  phoneError?: string;
 }
 
 export default function CheckoutShippingSection({
@@ -46,6 +47,7 @@ export default function CheckoutShippingSection({
   setGuestMethod,
   isDeliveryFree,
   deliverySettings,
+  phoneError,
 }: CheckoutShippingSectionProps) {
   const hasSavedAddresses = user?.addresses && user.addresses.length > 0;
   const [showCustomAddress, setShowCustomAddress] =
@@ -280,11 +282,18 @@ export default function CheckoutShippingSection({
                 readOnly={!!user?.phone}
                 placeholder="01XXXXXXXXX"
                 className={`w-full rounded-xl border p-4 transition-all outline-none ${
-                  user?.phone
-                    ? 'bg-muted/50 border-border/50 text-muted-foreground cursor-not-allowed'
-                    : 'bg-muted/10 border-border text-foreground focus:border-blue-500/50'
+                  phoneError
+                    ? 'border-red-500 bg-red-500/5 focus:border-red-500'
+                    : user?.phone
+                      ? 'bg-muted/50 border-border/50 text-muted-foreground cursor-not-allowed'
+                      : 'bg-muted/10 border-border text-foreground focus:border-blue-500/50'
                 }`}
               />
+              {phoneError && (
+                <p className="absolute -bottom-5 left-0 mt-1 text-xs text-red-500">
+                  {phoneError}
+                </p>
+              )}
               {user?.phone && (
                 <div className="text-muted-foreground absolute top-1/2 right-4 flex -translate-y-1/2 items-center gap-2">
                   <span className="rounded-md bg-green-500/10 px-2 py-1 text-[10px] font-bold tracking-wider text-green-600 uppercase">
@@ -352,7 +361,11 @@ export default function CheckoutShippingSection({
                   type="tel"
                   placeholder="01XXXXXXXXX"
                   value={guestInfo.emailOrPhone}
-                  className="bg-muted/50 border-border text-foreground w-full rounded-xl border p-4 transition-all outline-none focus:border-blue-500/50"
+                  className={`w-full rounded-xl border p-4 transition-all outline-none ${
+                    phoneError
+                      ? 'border-red-500 bg-red-500/5 focus:border-red-500'
+                      : 'bg-muted/50 border-border text-foreground focus:border-blue-500/50'
+                  }`}
                   onChange={(e) =>
                     setGuestInfo({
                       ...guestInfo,
@@ -361,6 +374,9 @@ export default function CheckoutShippingSection({
                     })
                   }
                 />
+                {phoneError && (
+                  <p className="mt-1 text-xs text-red-500">{phoneError}</p>
+                )}
               </div>
             </div>
           </div>
