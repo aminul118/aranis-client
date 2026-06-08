@@ -17,6 +17,7 @@ const MiniBannersAdminPage = async ({ searchParams }: SearchParams) => {
   return (
     <ClientTableWrapper
       tableTitle="Mini Banners"
+      description="You can add up to 2 active mini banners. They will be displayed on the homepage."
       meta={meta}
       action={<Actions />}
     >

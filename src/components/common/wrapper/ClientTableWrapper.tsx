@@ -48,9 +48,13 @@ const ClientTableWrapper = ({
       value={{ startTransition, isPending, pendingAction, setPendingAction }}
     >
       <section className={cn('relative mx-auto w-11/12 py-8', className)}>
-        <div className="flex justify-between gap-6">
-          <div className="mb-12 flex justify-start">
-            <GradientTitle title={tableTitle} description={description} />
+        <div className="flex justify-between gap-4">
+          <div className="mb-8 flex justify-start">
+            <GradientTitle
+              title={tableTitle}
+              description={description}
+              className="text-left"
+            />
           </div>
           {action}
         </div>

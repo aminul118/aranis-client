@@ -11,6 +11,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import GradientTitle from '@/components/ui/gradientTitle';
 import { Input } from '@/components/ui/input';
 import useActionHandler from '@/hooks/useActionHandler';
 import {
@@ -18,7 +19,7 @@ import {
   updateDeliveryCharge,
 } from '@/services/delivery-charge/delivery-charge';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Save, Truck } from 'lucide-react';
+import { Save } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
@@ -65,18 +66,12 @@ export default function DeliveryChargeForm({
 
   return (
     <div className="p-6">
-      <div className="mb-6 flex items-center gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
-          <Truck size={20} />
-        </div>
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">
-            Delivery Settings
-          </h1>
-          <p className="text-muted-foreground text-sm">
-            Manage dynamic shipping costs and free delivery rules
-          </p>
-        </div>
+      <div className="mb-8 flex justify-start">
+        <GradientTitle
+          title="Delivery Settings"
+          description="Manage dynamic shipping costs and free delivery rules"
+          className="text-left"
+        />
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
