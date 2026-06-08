@@ -2,8 +2,9 @@
 
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { IUser } from '@/types';
-import { motion } from 'framer-motion';
-import { MapPin, Truck } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Lock, MapPin, Plus, Truck } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 interface CheckoutShippingSectionProps {
   user: IUser | null;
@@ -46,6 +47,30 @@ export default function CheckoutShippingSection({
   isDeliveryFree,
   deliverySettings,
 }: CheckoutShippingSectionProps) {
+  const hasSavedAddresses = user?.addresses && user.addresses.length > 0;
+  const [showCustomAddress, setShowCustomAddress] =
+    useState(!hasSavedAddresses);
+
+  // Auto-select the first saved address if none is selected and the custom form is hidden
+  useEffect(() => {
+    if (hasSavedAddresses && !showCustomAddress && !addressInput) {
+      setAddressInput(user.addresses[0].address);
+    }
+  }, [
+    hasSavedAddresses,
+    showCustomAddress,
+    addressInput,
+    setAddressInput,
+    user,
+  ]);
+
+  // Auto-fill phone if user has it
+  useEffect(() => {
+    if (user?.phone && !phoneInput) {
+      setPhoneInput(user.phone);
+    }
+  }, [user, phoneInput, setPhoneInput]);
+
   return (
     <motion.section
       initial={{ opacity: 0, y: 20 }}
@@ -137,87 +162,144 @@ export default function CheckoutShippingSection({
                   {user.firstName} {user.lastName}
                 </span>
               </div>
-              <div>
-                <span className="text-muted-foreground mb-0.5 block">
-                  Email / Phone
-                </span>
-                <span className="text-foreground font-bold">
-                  {user.email || user.phone || 'N/A'}
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Saved Addresses (Optional Selector) */}
-          <div className="space-y-3">
-            <label className="text-muted-foreground text-xs font-black tracking-widest uppercase">
-              Choose from Saved Addresses (Optional)
-            </label>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              {user.addresses && user.addresses.length > 0 ? (
-                user.addresses.map((addr, idx) => (
-                  <button
-                    type="button"
-                    key={idx}
-                    onClick={() => setAddressInput(addr.address)}
-                    className={`flex flex-col items-start gap-2 rounded-2xl border-2 p-4 transition-all ${
-                      addressInput === addr.address
-                        ? 'border-blue-600 bg-blue-500/5'
-                        : 'border-border bg-card hover:border-blue-500/30'
-                    }`}
-                  >
-                    <div className="flex items-center gap-2">
-                      <MapPin
-                        size={16}
-                        className={
-                          addressInput === addr.address
-                            ? 'text-blue-600'
-                            : 'text-muted-foreground'
-                        }
-                      />
-                      <span className="text-sm font-bold tracking-tight">
-                        {addr.title}
-                      </span>
-                    </div>
-                    <p className="text-muted-foreground line-clamp-2 text-left text-xs">
-                      {addr.address}
-                    </p>
-                  </button>
-                ))
-              ) : (
-                <div className="col-span-full rounded-2xl border border-amber-500/20 bg-amber-500/5 p-4 text-xs text-amber-600 italic">
-                  No saved addresses found. You can enter your delivery address
-                  below.
+              {user.email && (
+                <div>
+                  <span className="text-muted-foreground mb-0.5 block">
+                    Email Address
+                  </span>
+                  <span className="text-foreground font-bold">
+                    {user.email}
+                  </span>
                 </div>
               )}
             </div>
           </div>
 
+          {/* Saved Addresses */}
+          {hasSavedAddresses && (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <label className="text-muted-foreground text-xs font-black tracking-widest uppercase">
+                  Select a Saved Address
+                </label>
+                {!showCustomAddress && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowCustomAddress(true);
+                      setAddressInput('');
+                    }}
+                    className="flex items-center gap-1 text-xs font-bold text-blue-600 transition-all hover:text-blue-700 hover:underline"
+                  >
+                    <Plus size={14} /> Add New Address
+                  </button>
+                )}
+              </div>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                {user.addresses.map((addr, idx) => (
+                  <button
+                    type="button"
+                    key={idx}
+                    onClick={() => {
+                      setAddressInput(addr.address);
+                      setShowCustomAddress(false);
+                    }}
+                    className={`flex flex-col items-start gap-2 rounded-2xl border-2 p-4 transition-all ${
+                      addressInput === addr.address && !showCustomAddress
+                        ? 'border-blue-600 bg-blue-500/5 shadow-md shadow-blue-500/10'
+                        : 'border-border bg-card hover:bg-muted/30 hover:border-blue-500/30'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2">
+                      <div
+                        className={`flex h-6 w-6 items-center justify-center rounded-full ${addressInput === addr.address && !showCustomAddress ? 'bg-blue-600 text-white' : 'bg-muted text-muted-foreground'}`}
+                      >
+                        <MapPin size={12} />
+                      </div>
+                      <span className="text-sm font-bold tracking-tight">
+                        {addr.title}
+                      </span>
+                    </div>
+                    <p className="text-muted-foreground ml-8 line-clamp-2 text-left text-xs leading-relaxed">
+                      {addr.address}
+                    </p>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Delivery Address Input */}
-          <div className="space-y-2">
-            <label className="text-muted-foreground text-xs font-black tracking-widest uppercase">
-              Delivery Address <span className="text-red-500">*</span>
-            </label>
-            <textarea
-              placeholder="House #, Street, City"
-              value={addressInput}
-              onChange={(e) => setAddressInput(e.target.value)}
-              className="bg-muted/50 border-border text-foreground min-h-[80px] w-full rounded-xl border p-4 transition-all outline-none focus:border-blue-500/50"
-            />
-          </div>
+          <AnimatePresence>
+            {showCustomAddress && (
+              <motion.div
+                initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                animate={{ opacity: 1, height: 'auto', marginTop: 24 }}
+                exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                className="space-y-2 overflow-hidden"
+              >
+                <div className="flex items-center justify-between">
+                  <label className="text-muted-foreground text-xs font-black tracking-widest uppercase">
+                    Delivery Address <span className="text-red-500">*</span>
+                  </label>
+                  {hasSavedAddresses && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setShowCustomAddress(false);
+                        setAddressInput(user.addresses[0].address);
+                      }}
+                      className="text-muted-foreground hover:text-foreground text-xs font-bold transition-all hover:underline"
+                    >
+                      Cancel
+                    </button>
+                  )}
+                </div>
+                <textarea
+                  placeholder="House #, Street, City"
+                  value={addressInput}
+                  onChange={(e) => setAddressInput(e.target.value)}
+                  className="bg-muted/30 border-border text-foreground focus:bg-card min-h-[100px] w-full rounded-xl border-2 p-4 transition-all outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {/* Phone Number Input */}
           <div className="space-y-2">
             <label className="text-muted-foreground text-xs font-black tracking-widest uppercase">
               Confirm Phone Number <span className="text-red-500">*</span>
             </label>
-            <input
-              type="text"
-              value={phoneInput}
-              onChange={(e) => setPhoneInput(e.target.value)}
-              placeholder="01XXXXXXXXX"
-              className="bg-muted/50 border-border text-foreground w-full rounded-xl border p-4 transition-all outline-none focus:border-blue-500/50"
-            />
+            <div className="relative">
+              <input
+                type="text"
+                value={user?.phone || phoneInput}
+                onChange={(e) => {
+                  if (!user?.phone) setPhoneInput(e.target.value);
+                }}
+                readOnly={!!user?.phone}
+                placeholder="01XXXXXXXXX"
+                className={`w-full rounded-xl border p-4 transition-all outline-none ${
+                  user?.phone
+                    ? 'bg-muted/50 border-border/50 text-muted-foreground cursor-not-allowed'
+                    : 'bg-muted/10 border-border text-foreground focus:border-blue-500/50'
+                }`}
+              />
+              {user?.phone && (
+                <div className="text-muted-foreground absolute top-1/2 right-4 flex -translate-y-1/2 items-center gap-2">
+                  <span className="rounded-md bg-green-500/10 px-2 py-1 text-[10px] font-bold tracking-wider text-green-600 uppercase">
+                    Verified
+                  </span>
+                  <Lock size={16} />
+                </div>
+              )}
+            </div>
+            {!user?.phone && (
+              <p className="text-muted-foreground text-[10px] italic">
+                * Please provide a valid phone number. We will save this to your
+                account for future orders and updates.
+              </p>
+            )}
           </div>
         </div>
       ) : (

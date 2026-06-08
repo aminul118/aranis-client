@@ -10,7 +10,14 @@ import {
 } from '@/components/ui/card';
 import { formatRole } from '@/lib/utils';
 import { IUser } from '@/types/api.types';
-import { Fingerprint, Mail, PencilLine, Shield, User } from 'lucide-react';
+import {
+  Fingerprint,
+  Mail,
+  PencilLine,
+  Phone,
+  Shield,
+  User,
+} from 'lucide-react';
 
 type Props = {
   user: IUser;
@@ -55,9 +62,21 @@ const ProfileDetails = ({ user, setIsEditing }: Props) => {
               <CardTitle className="from-foreground to-foreground/70 bg-gradient-to-br bg-clip-text text-3xl font-black tracking-tight text-transparent sm:text-4xl">
                 {displayFullName}
               </CardTitle>
-              <CardDescription className="flex items-center justify-center gap-2 text-base font-medium opacity-80 sm:justify-start sm:text-lg">
-                <Mail className="h-4 w-4" /> {user.email}
+              <CardDescription className="flex flex-col items-center gap-1 text-base font-medium opacity-80 sm:items-start sm:text-lg">
+                {user.email && (
+                  <span className="flex items-center gap-2">
+                    <Mail className="h-4 w-4" /> {user.email}
+                  </span>
+                )}
+                {user.phone && (
+                  <span className="flex items-center gap-2">
+                    <Phone className="h-4 w-4" /> {user.phone}
+                  </span>
+                )}
               </CardDescription>
+              <div className="mt-4 inline-flex items-center rounded-full bg-indigo-500/10 px-4 py-1.5 text-xs font-black tracking-widest text-indigo-600 uppercase shadow-sm dark:bg-indigo-500/20 dark:text-indigo-400">
+                {formatRole(user.role)}
+              </div>
             </div>
           </div>
 
@@ -74,7 +93,7 @@ const ProfileDetails = ({ user, setIsEditing }: Props) => {
       {/* Info Grid */}
       <CardContent className="bg-card px-4 py-8 sm:px-12 sm:py-12">
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          {/* Grid Item 1 */}
+          {/* Grid Item: Full Name */}
           <div className="group border-border/50 bg-background relative overflow-hidden rounded-2xl border p-6 transition-all hover:border-indigo-500/30 hover:shadow-lg hover:shadow-indigo-500/5">
             <div className="absolute top-0 right-0 p-4 opacity-5 transition-opacity group-hover:opacity-10">
               <User className="h-24 w-24" />
@@ -92,25 +111,47 @@ const ProfileDetails = ({ user, setIsEditing }: Props) => {
             </div>
           </div>
 
-          {/* Grid Item 2 */}
-          <div className="group border-border/50 bg-background relative overflow-hidden rounded-2xl border p-6 transition-all hover:border-purple-500/30 hover:shadow-lg hover:shadow-purple-500/5">
-            <div className="absolute top-0 right-0 p-4 opacity-5 transition-opacity group-hover:opacity-10">
-              <Mail className="h-24 w-24" />
-            </div>
-            <div className="relative z-10 space-y-3">
-              <div className="flex items-center gap-2">
-                <Mail className="h-4 w-4 text-purple-500" />
-                <h3 className="text-muted-foreground text-xs font-black tracking-widest uppercase">
-                  Email Address
-                </h3>
+          {/* Grid Item: Email Address */}
+          {user.email && (
+            <div className="group border-border/50 bg-background relative overflow-hidden rounded-2xl border p-6 transition-all hover:border-purple-500/30 hover:shadow-lg hover:shadow-purple-500/5">
+              <div className="absolute top-0 right-0 p-4 opacity-5 transition-opacity group-hover:opacity-10">
+                <Mail className="h-24 w-24" />
               </div>
-              <p className="text-foreground truncate text-xl font-bold">
-                {user.email}
-              </p>
+              <div className="relative z-10 space-y-3">
+                <div className="flex items-center gap-2">
+                  <Mail className="h-4 w-4 text-purple-500" />
+                  <h3 className="text-muted-foreground text-xs font-black tracking-widest uppercase">
+                    Email Address
+                  </h3>
+                </div>
+                <p className="text-foreground truncate text-xl font-bold">
+                  {user.email}
+                </p>
+              </div>
             </div>
-          </div>
+          )}
 
-          {/* Grid Item 3 */}
+          {/* Grid Item: Phone Number */}
+          {user.phone && (
+            <div className="group border-border/50 bg-background relative overflow-hidden rounded-2xl border p-6 transition-all hover:border-green-500/30 hover:shadow-lg hover:shadow-green-500/5">
+              <div className="absolute top-0 right-0 p-4 opacity-5 transition-opacity group-hover:opacity-10">
+                <Phone className="h-24 w-24" />
+              </div>
+              <div className="relative z-10 space-y-3">
+                <div className="flex items-center gap-2">
+                  <Phone className="h-4 w-4 text-green-500" />
+                  <h3 className="text-muted-foreground text-xs font-black tracking-widest uppercase">
+                    Phone Number
+                  </h3>
+                </div>
+                <p className="text-foreground text-xl font-bold">
+                  {user.phone}
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* Grid Item: Role */}
           <div className="group border-border/50 bg-background relative overflow-hidden rounded-2xl border p-6 transition-all hover:border-pink-500/30 hover:shadow-lg hover:shadow-pink-500/5">
             <div className="absolute top-0 right-0 p-4 opacity-5 transition-opacity group-hover:opacity-10">
               <Shield className="h-24 w-24" />
@@ -128,8 +169,8 @@ const ProfileDetails = ({ user, setIsEditing }: Props) => {
             </div>
           </div>
 
-          {/* Grid Item 4 */}
-          <div className="group border-border/50 bg-background relative overflow-hidden rounded-2xl border p-6 transition-all hover:border-blue-500/30 hover:shadow-lg hover:shadow-blue-500/5">
+          {/* Grid Item: User ID */}
+          <div className="group border-border/50 bg-background relative overflow-hidden rounded-2xl border p-6 transition-all hover:border-blue-500/30 hover:shadow-lg hover:shadow-blue-500/5 md:col-span-full xl:col-span-1">
             <div className="absolute top-0 right-0 p-4 opacity-5 transition-opacity group-hover:opacity-10">
               <Fingerprint className="h-24 w-24" />
             </div>

@@ -3,6 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { updateUser } from '@/services/user/users';
 import { IUser, IUserAddress } from '@/types/api.types';
 import { Home, MapPin, MapPinned, Plus, Trash2 } from 'lucide-react';
@@ -148,9 +149,9 @@ const AddressManagement = ({ user }: Props) => {
                 <label className="text-muted-foreground text-xs font-black tracking-widest uppercase">
                   Detailed Address
                 </label>
-                <Input
+                <Textarea
                   placeholder="House #, Street, City"
-                  className="bg-background/50 border-border/50 focus:bg-background rounded-xl transition-colors"
+                  className="bg-background/50 border-border/50 focus:bg-background h-36 rounded-xl transition-colors"
                   value={newAddress.address}
                   onChange={(e) =>
                     setNewAddress({ ...newAddress, address: e.target.value })
