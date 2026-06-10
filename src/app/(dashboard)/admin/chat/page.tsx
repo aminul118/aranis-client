@@ -10,6 +10,7 @@ import {
 } from '@/services/chat/chat';
 import { getMe } from '@/services/user/users';
 import {
+  ArrowLeft,
   Check,
   CheckCheck,
   MessageCircle,
@@ -41,11 +42,34 @@ export default function AdminChatPage() {
     init();
   }, []);
 
-  const handleReceiveMessage = useCallback(
+  const processedMessages = useRef(new Set<string>());
+
+  const processIncomingMessage = useCallback(
     (data: any) => {
+      const messageId = data._id || data.tempId;
+      if (messageId) {
+        if (processedMessages.current.has(messageId)) return;
+        processedMessages.current.add(messageId);
+      }
+
       // If message is for currently active chat
       if (activeChat && data.conversationId === activeChat._id) {
-        setMessages((prev) => [...prev, data]);
+        setMessages((prev) => {
+          const exists = prev.some(
+            (m) =>
+              (m._id && m._id === data._id) ||
+              (m.tempId && m.tempId === data.tempId),
+          );
+          if (exists) {
+            return prev.map((m) =>
+              (m._id && m._id === data._id) ||
+              (m.tempId && m.tempId === data.tempId)
+                ? data
+                : m,
+            );
+          }
+          return [...prev, data];
+        });
         getSocket().emit('message-seen', {
           conversationId: activeChat._id,
           userId: admin?._id,
@@ -53,8 +77,12 @@ export default function AdminChatPage() {
         markAsSeen(activeChat._id);
       } else {
         // Update unread count in sidebar
-        setConversations((prev) =>
-          prev.map((c) =>
+        setConversations((prev) => {
+          if (!prev.find((c) => c._id === data.conversationId)) {
+            fetchConversations();
+            return prev;
+          }
+          return prev.map((c) =>
             c._id === data.conversationId
               ? {
                   ...c,
@@ -63,22 +91,12 @@ export default function AdminChatPage() {
                   lastMessageTime: new Date().toISOString(),
                 }
               : c,
-          ),
-        );
+          );
+        });
       }
     },
     [activeChat?._id, admin?._id],
   );
-
-  const handleNewUserMessage = useCallback((data: any) => {
-    // If it's a new conversation not in list
-    setConversations((prev) => {
-      if (!prev.find((c) => c._id === data.conversationId)) {
-        fetchConversations();
-      }
-      return prev;
-    });
-  }, []);
 
   const handleMessagesMarkedSeen = useCallback(
     (data: any) => {
@@ -98,8 +116,8 @@ export default function AdminChatPage() {
     [activeChat?._id],
   );
 
-  useSocket(handleReceiveMessage, admin?._id, 'receive-message', ['admins']);
-  useSocket(handleNewUserMessage, admin?._id, 'new-user-message', ['admins']);
+  useSocket(processIncomingMessage, admin?._id, 'receive-message', ['admins']);
+  useSocket(processIncomingMessage, admin?._id, 'new-user-message', ['admins']);
   useSocket(handleMessagesMarkedSeen, admin?._id, 'messages-marked-seen', [
     'admins',
   ]);
@@ -212,7 +230,12 @@ export default function AdminChatPage() {
   return (
     <div className="flex h-[calc(100vh-100px)] overflow-hidden rounded-2xl border border-gray-100 bg-white dark:border-white/5 dark:bg-[#0a0a0a]">
       {/* Sidebar: Chat List */}
-      <div className="flex w-[350px] shrink-0 flex-col border-r border-gray-100 dark:border-white/5">
+      <div
+        className={cn(
+          'w-full shrink-0 flex-col border-r border-gray-100 md:w-[350px] dark:border-white/5',
+          activeChat ? 'hidden md:flex' : 'flex',
+        )}
+      >
         <div className="border-b border-gray-100 p-6 dark:border-white/5">
           <h1 className="mb-4 text-xl font-black tracking-widest uppercase">
             Support Center
@@ -301,7 +324,12 @@ export default function AdminChatPage() {
 
       {/* Main: Chat Thread */}
       {activeChat ? (
-        <div className="flex flex-1 flex-col overflow-hidden bg-gray-50/30 dark:bg-black/20">
+        <div
+          className={cn(
+            'w-full flex-1 flex-col overflow-hidden bg-gray-50/30 dark:bg-black/20',
+            activeChat ? 'flex' : 'hidden md:flex',
+          )}
+        >
           {/* Active Chat Header */}
           <div className="flex shrink-0 items-center justify-between border-b border-gray-100 bg-white p-4 dark:border-white/5 dark:bg-[#0a0a0a]">
             {(() => {
@@ -318,6 +346,12 @@ export default function AdminChatPage() {
 
               return (
                 <div className="flex items-center gap-4">
+                  <button
+                    onClick={() => setActiveChat(null)}
+                    className="-ml-2 p-2 text-gray-400 transition-colors hover:text-gray-900 md:hidden dark:hover:text-white"
+                  >
+                    <ArrowLeft size={20} />
+                  </button>
                   <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600 font-bold text-white">
                     {userParticipant?.firstName?.[0] || 'U'}
                   </div>
@@ -425,7 +459,7 @@ export default function AdminChatPage() {
           </div>
         </div>
       ) : (
-        <div className="flex flex-1 flex-col items-center justify-center bg-gray-50/30 p-12 text-center dark:bg-black/20">
+        <div className="hidden flex-1 flex-col items-center justify-center bg-gray-50/30 p-12 text-center md:flex dark:bg-black/20">
           <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-blue-600/10 text-blue-600">
             <MessageCircle size={40} />
           </div>

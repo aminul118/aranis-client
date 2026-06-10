@@ -37,6 +37,10 @@ const ChatFloatingButton = ({
   const [unreadCount, setUnreadCount] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
 
+  if (user?.role === 'ADMIN' || user?.role === 'SUPER_ADMIN') {
+    return null;
+  }
+
   useEffect(() => {
     if (!user) return;
 

@@ -79,8 +79,43 @@ const DynamicMenu = ({ menuGroups, role, user }: DynamicMenuProps) => {
     return () => clearInterval(interval);
   }, [role]);
 
+  const playNotificationSound = () => {
+    try {
+      const audioCtx = new (window.AudioContext ||
+        (window as any).webkitAudioContext)();
+      const oscillator = audioCtx.createOscillator();
+      const gainNode = audioCtx.createGain();
+
+      oscillator.type = 'sine';
+      oscillator.frequency.setValueAtTime(880, audioCtx.currentTime);
+      gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+
+      oscillator.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+
+      oscillator.start();
+      gainNode.gain.exponentialRampToValueAtTime(
+        0.00001,
+        audioCtx.currentTime + 0.5,
+      );
+      oscillator.stop(audioCtx.currentTime + 0.5);
+    } catch (e) {
+      console.error('Audio play failed', e);
+    }
+  };
+
   const handleSocketUpdate = () => {
     fetchUnreadCount();
+  };
+
+  const lastBeep = useRef(0);
+  const handleNewMessage = () => {
+    fetchUnreadCount();
+    const now = Date.now();
+    if (now - lastBeep.current > 1000) {
+      lastBeep.current = now;
+      playNotificationSound();
+    }
   };
 
   const handleOrderSocketUpdate = () => {
@@ -94,8 +129,8 @@ const DynamicMenu = ({ menuGroups, role, user }: DynamicMenuProps) => {
     role === 'ADMIN' || role === 'SUPER_ADMIN' ? ['admins'] : [],
   );
   useSocket(handleSocketUpdate, user?._id, 'newNotification');
-  useSocket(handleSocketUpdate, user?._id, 'receive-message');
-  useSocket(handleSocketUpdate, undefined, 'new-user-message');
+  useSocket(handleNewMessage, user?._id, 'receive-message');
+  useSocket(handleNewMessage, undefined, 'new-user-message');
   useSocket(handleSocketUpdate, user?._id, 'messages-marked-seen');
   useSocket(handleOrderSocketUpdate, undefined, 'unread-orders-updated');
 
