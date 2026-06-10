@@ -88,6 +88,8 @@ export interface IProduct {
     description: string;
     keywords: string;
   };
+  createdAt: string | Date;
+  updatedAt: string | Date;
 }
 
 export interface ICartItem extends IProduct {

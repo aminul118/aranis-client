@@ -1,4 +1,5 @@
 import { clsx, type ClassValue } from 'clsx';
+import { format } from 'date-fns';
 import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
@@ -37,4 +38,16 @@ export const formatRole = (role?: string): string => {
     role.charAt(0).toUpperCase() +
     role.slice(1).toLowerCase().replace(/_/g, ' ')
   );
+};
+
+export const formatDate = (
+  date: string | Date,
+  formatStr: string = 'dd MMM yyyy, hh:mm a',
+): string => {
+  if (!date) return 'N/A';
+  try {
+    return format(new Date(date), formatStr);
+  } catch (error) {
+    return 'Invalid Date';
+  }
 };

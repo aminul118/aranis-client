@@ -1,4 +1,5 @@
 import { Column } from '@/components/common/table/TableManageMent';
+import { formatDate } from '@/lib/utils';
 import { IProduct } from '@/types';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -193,6 +194,15 @@ const ProductsColumn: Column<IProduct>[] = [
         <span className="text-muted-foreground text-xs">No</span>
       ),
     sortKey: 'featured',
+  },
+  {
+    header: 'Created At',
+    accessor: (p) => (
+      <span className="text-muted-foreground text-xs font-medium">
+        {formatDate(p.createdAt)}
+      </span>
+    ),
+    sortKey: 'createdAt',
   },
   {
     header: 'Actions',
