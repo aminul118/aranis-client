@@ -15,7 +15,7 @@ export const loginWithPassword = async (data: any) => {
     },
   );
 
-  if (res.success && res.data) {
+  if (res.success && res.data && res.data.accessToken) {
     const cookieStore = await cookies();
     cookieStore.set('accessToken', res.data.accessToken, {
       httpOnly: true,

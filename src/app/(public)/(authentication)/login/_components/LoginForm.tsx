@@ -72,7 +72,12 @@ const LoginForm = () => {
           password: values.password,
         });
         if (res.success) {
-          if (redirect) {
+          if (res.data?.requiresVerification) {
+            const attemptsLeft = res.data.remainingAttempts;
+            router.push(
+              `/verify?identifier=${encodeURIComponent(values.identifier)}${redirect ? `&redirect=${redirect}` : ''}${attemptsLeft !== undefined ? `&attemptsLeft=${attemptsLeft}` : ''}`,
+            );
+          } else if (redirect) {
             window.location.href = redirect.startsWith('/')
               ? redirect
               : `/${redirect}`;

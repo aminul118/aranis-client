@@ -1,11 +1,8 @@
 'use client';
 
 import NotificationBell from '@/components/layouts/NotificationBell';
-import { useUser } from '@/context/UserContext';
 import { toUrlSlug } from '@/lib/url-slugs';
 import { cn } from '@/lib/utils';
-import { logOut } from '@/services/auth/logout';
-import { getDefaultDashboardRoute } from '@/services/user/user-access';
 import { IUser } from '@/types';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Fade as Hamburger } from 'hamburger-react';
@@ -51,12 +48,7 @@ const MobileNavbar = ({
 
       <AnimatePresence>
         {menuOpen && (
-          <Mobile
-            navItems={navItems}
-            setMenuOpen={setMenuOpen}
-            logo={logo}
-            user={user}
-          />
+          <Mobile navItems={navItems} setMenuOpen={setMenuOpen} logo={logo} />
         )}
       </AnimatePresence>
     </div>
@@ -66,44 +58,13 @@ const MobileNavbar = ({
 interface MobileProps {
   navItems: NavMenu[];
   setMenuOpen: Dispatch<SetStateAction<boolean>>;
-  user: IUser | null;
   logo?: React.ReactNode;
 }
 
-const Mobile = ({ navItems, setMenuOpen, logo, user }: MobileProps) => {
+const Mobile = ({ navItems, setMenuOpen, logo }: MobileProps) => {
   const pathname = usePathname();
   const router = useRouter();
-  const pathSegments = pathname.split('/').filter(Boolean);
-  const currentCategorySlug = pathSegments[0];
   const [expandedItem, setExpandedItem] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-  const { setUser } = useUser();
-
-  const fullName =
-    `${user?.firstName ?? ''} ${user?.lastName ?? ''}`.trim() || 'User';
-  const initials = fullName
-    ? fullName
-        .split(' ')
-        .map((word) => word[0])
-        .slice(0, 2)
-        .join('')
-        .toUpperCase()
-    : 'U';
-
-  const handleDashboardRedirect = () => {
-    const route = getDefaultDashboardRoute(user?.role as any);
-    setMenuOpen(false);
-    router.push(route);
-  };
-
-  const handleLogout = async () => {
-    setLoading(true);
-    await logOut();
-    setUser(null);
-    setMenuOpen(false);
-    router.push('/login');
-    router.refresh();
-  };
 
   return (
     <motion.div

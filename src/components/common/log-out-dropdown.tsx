@@ -18,7 +18,7 @@ const LogOutDropDown = ({ className }: { className?: string }) => {
     setLoading(true);
     await logOut();
     setUser(null);
-    router.push('/login');
+    window.location.href = '/login';
   };
 
   return (
