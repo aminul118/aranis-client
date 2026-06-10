@@ -48,7 +48,7 @@ export default function GiftCardList({
         description: '',
         keywords: '',
       },
-    } as IProduct;
+    } as unknown as IProduct;
 
     addToCart(mappedProduct);
     toast.success('Gift Card added to cart');

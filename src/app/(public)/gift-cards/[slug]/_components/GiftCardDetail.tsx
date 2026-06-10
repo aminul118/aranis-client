@@ -49,7 +49,7 @@ export default function GiftCardDetail({ giftCard }: { giftCard: IGiftCard }) {
         description: '',
         keywords: '',
       },
-    } as IProduct;
+    } as unknown as IProduct;
 
     addToCart(mappedProduct);
 
