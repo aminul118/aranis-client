@@ -1,7 +1,7 @@
 import Grid from '@/components/common/Grid';
 import ProductCard from '@/components/common/ProductCard';
-import { Button } from '@/components/ui/button';
 import { getProducts } from '@/services/product/product';
+import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import AnimatedSection from './AnimatedSection';
 
@@ -26,13 +26,16 @@ const FeaturedProducts = async () => {
               Our hand-picked selections for this season
             </p>
           </div>
-          <Button
-            asChild
-            variant="link"
-            className="text-primary hover:text-primary/80 h-auto p-0 font-bold tracking-widest uppercase"
+          <Link
+            href="/shop"
+            className="group border-primary/20 bg-primary/5 text-primary hover:bg-primary hover:text-background flex items-center gap-3 rounded-full border px-8 py-3 text-sm font-black tracking-widest uppercase transition-all"
           >
-            <Link href="/shop">View All Products</Link>
-          </Button>
+            View All Products
+            <ArrowRight
+              size={18}
+              className="transition-transform group-hover:translate-x-1"
+            />
+          </Link>
         </AnimatedSection>
 
         <Grid cols={4} className="gap-x-4 gap-y-6 md:gap-x-8 md:gap-y-12">
