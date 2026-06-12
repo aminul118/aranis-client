@@ -82,10 +82,8 @@ const LoginForm = () => {
               ? redirect
               : `/${redirect}`;
           } else {
-            // Fetch user to determine role
-            const { getMe } = await import('@/services/user/users');
-            const userRes = await getMe();
-            const role = userRes.data?.role;
+            // Use user role from login response directly
+            const role = res.data?.user?.role;
             if (role === 'ADMIN' || role === 'SUPER_ADMIN') {
               window.location.href = '/admin';
             } else {
