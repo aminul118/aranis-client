@@ -77,7 +77,7 @@ export async function POST(req: NextRequest) {
         .resize(1200, 1200, { fit: 'inside', withoutEnlargement: true })
         .avif({
           quality: 65,
-          effort: 7,
+          effort: 3, // Lower effort equals drastically faster processing speed
           chromaSubsampling: '4:2:0',
         })
         .toBuffer();
