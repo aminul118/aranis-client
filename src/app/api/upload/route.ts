@@ -65,23 +65,19 @@ export async function POST(req: NextRequest) {
     const folder = (formData.get('folder') as string | null) || 'editor';
 
     // Save under the specified virtual folder
-    const uniqueFileName = `${folder}/${shortId}-${baseName}.avif`;
+    const uniqueFileName = `${folder}/${shortId}-${baseName}.webp`;
 
     let bufferToUpload: any = buffer;
     let contentType = file.type;
     let finalFileName = uniqueFileName;
 
     if (file.type.startsWith('image/')) {
-      // Convert and compress to avif with high quality, preserving zooming quality
+      // Convert and compress to webp with high quality, preserving zooming quality
       bufferToUpload = await sharp(buffer as any)
         .resize(1200, 1200, { fit: 'inside', withoutEnlargement: true })
-        .avif({
-          quality: 65,
-          effort: 3, // Lower effort equals drastically faster processing speed
-          chromaSubsampling: '4:2:0',
-        })
+        .webp({ quality: 80 })
         .toBuffer();
-      contentType = 'image/avif';
+      contentType = 'image/webp';
     } else {
       // For non-images, keep original name format but cute and clean
       const ext = file.name.split('.').pop() || 'bin';
