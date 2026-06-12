@@ -13,8 +13,7 @@ export const productSchema = z.object({
     .array(z.union([z.string(), z.any()]))
     .min(1, 'At least one product thumbnail is required')
     .max(6, 'Maximum 6 product thumbnails allowed'),
-  description: z.string().optional().default(''),
-  details: z.string().optional().default(''),
+  description: z.string().optional().or(z.literal('')),
   slug: z.string().optional(),
   buyPrice: z.coerce
     .number()
@@ -70,7 +69,10 @@ export const productSchema = z.object({
     .default([]),
   featured: z.boolean().default(false),
   sku: z.string().optional(),
-  videoUrl: z.string().url('Invalid URL').optional().or(z.literal('')),
+  videoUrl: z.union([z.string(), z.any()]).optional(),
+  youtubeVideoUrl: z.string().url('Invalid URL').optional().or(z.literal('')),
+  refundPolicy: z.string().optional().or(z.literal('')),
+  returnPolicy: z.string().optional().or(z.literal('')),
   sizeGuide: z.string().optional().or(z.literal('')),
   seo: z.object({
     title: z.string().min(1, 'SEO title is required'),

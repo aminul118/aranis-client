@@ -51,3 +51,12 @@ export const formatDate = (
     return 'Invalid Date';
   }
 };
+
+export const getYoutubeEmbedUrl = (url: string) => {
+  if (!url) return '';
+  const match = url.match(
+    /(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/,
+  );
+  const videoId = match ? match[1] : url.split('/').pop() || '';
+  return `https://www.youtube.com/embed/${videoId}`;
+};

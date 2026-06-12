@@ -28,9 +28,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import SingleVideoUploader from '@/components/ui/single-video-uploader';
 import { Textarea } from '@/components/ui/textarea';
 import useActionHandler from '@/hooks/useActionHandler';
-import { cn } from '@/lib/utils';
+import { cn, getYoutubeEmbedUrl } from '@/lib/utils';
 import { ICategory } from '@/services/category/category';
 import { IColor } from '@/services/color/color';
 import { IOffer } from '@/services/offer/offer';
@@ -59,7 +60,6 @@ type FormValues = {
   stock: number | string;
   slug: string;
   description: string;
-  details: string;
   color: string;
   variants: {
     color: string;
@@ -81,7 +81,10 @@ type FormValues = {
   }[];
   thumbnails: (string | File)[];
   sku: string;
-  videoUrl: string;
+  videoUrl: string | File;
+  youtubeVideoUrl: string;
+  refundPolicy: string;
+  returnPolicy: string;
   sizeGuide: string;
   seo: {
     title: string;
@@ -130,9 +133,6 @@ const ProductForm = ({
       slug: product?.slug || '',
       salePrice: product?.salePrice || 0,
       description: product?.description || '',
-      details: Array.isArray(product?.details)
-        ? (product?.details as string[]).join('\n')
-        : (product?.details as string) || '',
       color: product?.color || '',
       variants:
         product?.variants?.map((v) => ({
@@ -148,6 +148,9 @@ const ProductForm = ({
       thumbnails: product?.thumbnails || [],
       sku: product?.sku || '',
       videoUrl: product?.videoUrl || '',
+      youtubeVideoUrl: product?.youtubeVideoUrl || '',
+      refundPolicy: product?.refundPolicy || '',
+      returnPolicy: product?.returnPolicy || '',
       sizeGuide:
         (product?.sizeGuide as any)?._id ||
         (product?.sizeGuide as string) ||
@@ -164,6 +167,12 @@ const ProductForm = ({
   const [selectedSizeGuideImage, setSelectedSizeGuideImage] = useState<
     string | null
   >(null);
+  const [showCustomRefund, setShowCustomRefund] = useState(
+    !!product?.refundPolicy,
+  );
+  const [showCustomReturn, setShowCustomReturn] = useState(
+    !!product?.returnPolicy,
+  );
 
   // Ensure form is populated when product data is available (for Edit mode)
   useEffect(() => {
@@ -179,9 +188,6 @@ const ProductForm = ({
         slug: product.slug || '',
         salePrice: product.salePrice || 0,
         description: product.description || '',
-        details: Array.isArray(product.details)
-          ? (product.details as string[]).join('\n')
-          : (product.details as string) || '',
         color: product.color || '',
         variants:
           product.variants?.map((v) => ({
@@ -301,8 +307,16 @@ const ProductForm = ({
   const types = selectedSubCategory?.items || [];
 
   const onSubmit = async (data: FormValues) => {
-    // ── Step 1: Upload all images directly from browser → Cloudflare R2 ──
-    const { uploadManyToR2 } = await import('@/lib/r2-upload');
+    // ── Step 1: Upload all images/videos directly from browser → Cloudflare R2 ──
+    const { uploadManyToR2, uploadToR2 } = await import('@/lib/r2-upload');
+
+    // Video — upload if it's a new File
+    let finalVideoUrl = typeof data.videoUrl === 'string' ? data.videoUrl : '';
+    let finalYoutubeUrl = data.youtubeVideoUrl || '';
+
+    if (data.videoUrl instanceof File) {
+      finalVideoUrl = await uploadToR2(data.videoUrl, 'products/videos');
+    }
 
     // Gallery thumbnails — upload new Files in parallel, keep existing URLs
     const galleryFiles: File[] = [];
@@ -369,7 +383,6 @@ const ProductForm = ({
     formData.append('stock', String(totalStock));
     formData.append('salePrice', String(data.salePrice));
     formData.append('description', data.description);
-    formData.append('details', data.details || '');
     formData.append('category', data.category);
     if (data.subCategory) formData.append('subCategory', data.subCategory);
     if (data.type) formData.append('type', data.type);
@@ -378,7 +391,10 @@ const ProductForm = ({
     formData.append('isOffer', String(data.isOffer));
     formData.append('offerTag', data.offerTag || '');
     formData.append('discountPercentage', String(data.discountPercentage));
-    formData.append('videoUrl', data.videoUrl || '');
+    formData.append('videoUrl', finalVideoUrl);
+    formData.append('youtubeVideoUrl', finalYoutubeUrl);
+    formData.append('refundPolicy', data.refundPolicy || '');
+    formData.append('returnPolicy', data.returnPolicy || '');
     formData.append(
       'sizeGuide',
       data.sizeGuide === 'none' ? '' : data.sizeGuide || '',
@@ -694,25 +710,77 @@ const ProductForm = ({
         </div>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          <FormField
-            control={form.control}
-            name="videoUrl"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>YouTube Video URL</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="e.g. https://www.youtube.com/watch?v=..."
-                    {...field}
-                  />
-                </FormControl>
-                <FormDescription>
-                  Paste a YouTube link to show a video of this product.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <div className="flex flex-col gap-4">
+            <FormField
+              control={form.control}
+              name="youtubeVideoUrl"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>YouTube Video URL</FormLabel>
+                  <FormControl>
+                    <div className="space-y-4">
+                      <Input
+                        placeholder="e.g. https://www.youtube.com/watch?v=..."
+                        {...field}
+                      />
+                      {field.value && getYoutubeEmbedUrl(field.value) && (
+                        <div className="relative aspect-video w-full overflow-hidden rounded-xl border bg-black">
+                          <iframe
+                            width="100%"
+                            height="100%"
+                            src={getYoutubeEmbedUrl(field.value)}
+                            title="Product Video"
+                            frameBorder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                            referrerPolicy="origin"
+                            className="absolute inset-0 h-full w-full"
+                          />
+                          <Button
+                            type="button"
+                            variant="destructive"
+                            size="icon"
+                            className="absolute top-2 right-2 z-10"
+                            onClick={() => field.onChange('')}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      )}
+                    </div>
+                  </FormControl>
+                  <FormDescription>
+                    Paste a YouTube link to show a video of this product in the
+                    tabs section.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="videoUrl"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Upload Video</FormLabel>
+                  <FormControl>
+                    <SingleVideoUploader
+                      onChange={field.onChange}
+                      defaultValue={
+                        typeof field.value === 'string' ? field.value : ''
+                      }
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    Upload an MP4 or WebM video to show in a floating modal on
+                    desktop.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
 
           <FormField
             control={form.control}
@@ -1309,36 +1377,109 @@ const ProductForm = ({
               </FormControl>
               <FormDescription>
                 <span className="font-bold text-blue-500">Note:</span> This
-                content will be displayed on the left side of the product page,
-                immediately visible to customers.
+                content will be displayed in the Description tab on the product
+                page.
               </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="details"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Product Details</FormLabel>
-              <FormControl>
-                <PlateRichEditor
-                  value={field.value}
-                  onChange={field.onChange}
+        <div className="bg-muted/5 space-y-6 rounded-xl border border-white/10 p-6">
+          <div className="space-y-1">
+            <h3 className="text-lg font-black tracking-tight uppercase">
+              Policies (Optional)
+            </h3>
+            <p className="text-muted-foreground text-xs font-medium">
+              Override the global refund and return policies for this specific
+              product.
+            </p>
+          </div>
+
+          <div className="space-y-6">
+            <div className="space-y-4">
+              <div className="bg-card flex flex-row items-start space-y-0 space-x-3 rounded-md border p-4 shadow-sm">
+                <FormControl>
+                  <Checkbox
+                    checked={showCustomRefund}
+                    onCheckedChange={(checked) => {
+                      setShowCustomRefund(!!checked);
+                      if (!checked) form.setValue('refundPolicy', '');
+                    }}
+                  />
+                </FormControl>
+                <div className="space-y-1 leading-none">
+                  <FormLabel>Enable Custom Refund Policy</FormLabel>
+                  <FormDescription>
+                    Checking this will allow you to write a refund policy
+                    specific to this product.
+                  </FormDescription>
+                </div>
+              </div>
+
+              {showCustomRefund && (
+                <FormField
+                  control={form.control}
+                  name="refundPolicy"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <div className="border-input bg-card min-h-[200px] rounded-xl border">
+                          <PlateRichEditor
+                            value={field.value}
+                            onChange={field.onChange}
+                          />
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-              </FormControl>
-              <FormDescription>
-                <span className="font-bold text-blue-500">Note:</span> This
-                content will be displayed inside the "Details" tab below the
-                main product information. Use headings and lists to organize
-                extensive product specifications.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+              )}
+            </div>
+
+            <div className="space-y-4">
+              <div className="bg-card flex flex-row items-start space-y-0 space-x-3 rounded-md border p-4 shadow-sm">
+                <FormControl>
+                  <Checkbox
+                    checked={showCustomReturn}
+                    onCheckedChange={(checked) => {
+                      setShowCustomReturn(!!checked);
+                      if (!checked) form.setValue('returnPolicy', '');
+                    }}
+                  />
+                </FormControl>
+                <div className="space-y-1 leading-none">
+                  <FormLabel>Enable Custom Return Policy</FormLabel>
+                  <FormDescription>
+                    Checking this will allow you to write a return policy
+                    specific to this product.
+                  </FormDescription>
+                </div>
+              </div>
+
+              {showCustomReturn && (
+                <FormField
+                  control={form.control}
+                  name="returnPolicy"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <div className="border-input bg-card min-h-[200px] rounded-xl border">
+                          <PlateRichEditor
+                            value={field.value}
+                            onChange={field.onChange}
+                          />
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
+            </div>
+          </div>
+        </div>
 
         <div className="bg-muted/5 space-y-4 rounded-xl border border-white/10 p-6">
           <div className="space-y-1">

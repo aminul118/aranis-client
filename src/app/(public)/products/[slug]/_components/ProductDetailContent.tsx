@@ -1,6 +1,5 @@
 'use client';
 
-import HtmlContent from '@/components/rich-text/core/html-content';
 import { Badge } from '@/components/ui/badge';
 import { useCart } from '@/context/CartContext';
 import { useUser } from '@/context/UserContext';
@@ -14,11 +13,14 @@ import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import ProductDetailActions from './ProductDetailActions';
 import ProductDetailHeader from './ProductDetailHeader';
+import ProductDetailMobileSections from './ProductDetailMobileSections';
 import ProductDetailSizes from './ProductDetailSizes';
 import ProductDetailTabs from './ProductDetailTabs';
 import ProductDetailVariants from './ProductDetailVariants';
 import ProductImageGallery from './ProductImageGallery';
+import ProductVideoModal from './ProductVideoModal';
 
+import { getYoutubeEmbedUrl } from '@/lib/utils';
 import { ShoppingCart } from 'lucide-react';
 interface ProductDetailContentProps {
   product: IProduct;
@@ -38,15 +40,6 @@ const ProductDetailContent = ({
 
   const [selectedSize, setSelectedSize] = useState(product.sizes[0]);
   const [selectedVariantIndex, setSelectedVariantIndex] = useState(-1);
-
-  const getYoutubeEmbedUrl = (url: string) => {
-    if (!url) return '';
-    const match = url.match(
-      /(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/,
-    );
-    const videoId = match ? match[1] : url.split('/').pop() || '';
-    return `https://www.youtube.com/embed/${videoId}`;
-  };
 
   // Initialize variant from URL color
   useEffect(() => {
@@ -214,101 +207,90 @@ const ProductDetailContent = ({
   };
 
   return (
-    <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-20">
-      {/* Image Section */}
-      <div className="space-y-12 lg:col-span-5">
-        <ProductImageGallery
-          key={selectedVariantIndex} // Force re-render of gallery when variant changes
-          thumbnails={allImages}
-          productName={product.name}
-          saleBadge={
-            (product.salePrice ?? 0) > 0 ? (
-              <Badge className="rounded-full border-none bg-red-500 px-4 py-1.5 text-sm font-black text-white shadow-xl shadow-red-500/30">
-                {Math.round(
-                  (1 - (product.salePrice ?? 0) / product.price) * 100,
-                )}
-                % OFF
-              </Badge>
-            ) : undefined
-          }
-        />
+    <div className="flex flex-col gap-16 lg:gap-24">
+      <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-20">
+        {/* Image Section */}
+        <div className="space-y-12 lg:col-span-5">
+          <ProductImageGallery
+            key={selectedVariantIndex} // Force re-render of gallery when variant changes
+            thumbnails={allImages}
+            productName={product.name}
+            saleBadge={
+              (product.salePrice ?? 0) > 0 ? (
+                <Badge className="rounded-full border-none bg-red-500 px-4 py-1.5 text-sm font-black text-white shadow-xl shadow-red-500/30">
+                  {Math.round(
+                    (1 - (product.salePrice ?? 0) / product.price) * 100,
+                  )}
+                  % OFF
+                </Badge>
+              ) : undefined
+            }
+          />
+        </div>
 
-        {/* Artisanal Details Section - Moved here */}
-        {(() => {
-          const stripHtml = (html: string) =>
-            (html || '').replace(/<[^>]*>?/gm, '').trim();
-          const hasDetailsText =
-            !!product.details &&
-            (Array.isArray(product.details)
-              ? product.details.some((d) => stripHtml(d).length > 0)
-              : stripHtml(product.details).length > 0);
+        {/* Content Section */}
+        <div className="flex flex-col pt-4 lg:col-span-7">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="space-y-8"
+          >
+            <ProductDetailHeader
+              product={product}
+              currentVariant={currentVariant}
+              isWishlisted={isWishlisted}
+              toggleWishlist={toggleWishlist}
+              handleShare={handleShare}
+              currentSelectedColor={currentSelectedColor}
+              selectedSize={selectedSize}
+            />
 
-          if (!hasDetailsText) return null;
+            <div className="space-y-10">
+              <ProductDetailVariants
+                product={product}
+                selectedVariantIndex={selectedVariantIndex}
+                setSelectedVariantIndex={setSelectedVariantIndex}
+              />
 
-          return (
-            <div className="border-border/50 hidden border-t pt-8 lg:block">
-              <h2 className="text-foreground mb-4 text-xs font-black tracking-[0.2em] uppercase">
-                Artisanal Details
-              </h2>
-              <HtmlContent
-                content={
-                  Array.isArray(product.details)
-                    ? product.details.join('\n')
-                    : product.details
-                }
-                className="prose prose-sm dark:prose-invert text-muted-foreground/80 max-w-none leading-relaxed font-medium"
+              <ProductDetailSizes
+                product={product}
+                selectedVariantIndex={selectedVariantIndex}
+                selectedSize={selectedSize}
+                setSelectedSize={setSelectedSize}
               />
             </div>
-          );
-        })()}
+
+            <ProductDetailActions
+              currentStock={currentStock}
+              isRequesting={isRequesting}
+              handleRestockRequest={handleRestockRequest}
+              handleAddToCart={handleAddToCart}
+            />
+          </motion.div>
+        </div>
       </div>
 
-      {/* Content Section */}
-      <div className="flex flex-col pt-4 lg:col-span-7">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="space-y-8"
-        >
-          <ProductDetailHeader
-            product={product}
-            currentVariant={currentVariant}
-            isWishlisted={isWishlisted}
-            toggleWishlist={toggleWishlist}
-            handleShare={handleShare}
-            currentSelectedColor={currentSelectedColor}
-            selectedSize={selectedSize}
-          />
+      <div className="hidden w-full lg:block">
+        <ProductDetailTabs
+          product={product}
+          settings={settings}
+          getYoutubeEmbedUrl={getYoutubeEmbedUrl}
+        />
+      </div>
 
-          <div className="space-y-10">
-            <ProductDetailVariants
-              product={product}
-              selectedVariantIndex={selectedVariantIndex}
-              setSelectedVariantIndex={setSelectedVariantIndex}
-            />
+      <div className="w-full lg:hidden">
+        <ProductDetailMobileSections
+          product={product}
+          settings={settings}
+          getYoutubeEmbedUrl={getYoutubeEmbedUrl}
+        />
+      </div>
 
-            <ProductDetailSizes
-              product={product}
-              selectedVariantIndex={selectedVariantIndex}
-              selectedSize={selectedSize}
-              setSelectedSize={setSelectedSize}
-            />
-          </div>
-
-          <ProductDetailActions
-            currentStock={currentStock}
-            isRequesting={isRequesting}
-            handleRestockRequest={handleRestockRequest}
-            handleAddToCart={handleAddToCart}
-          />
-
-          <ProductDetailTabs
-            product={product}
-            settings={settings}
-            getYoutubeEmbedUrl={getYoutubeEmbedUrl}
-          />
-        </motion.div>
+      <div className="hidden lg:block">
+        {!!product.videoUrl && (
+          <ProductVideoModal videoUrl={product.videoUrl} />
+        )}
       </div>
     </div>
   );

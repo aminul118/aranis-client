@@ -22,9 +22,12 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'No file provided' }, { status: 400 });
     }
 
-    if (file.size > 2 * 1024 * 1024) {
+    const isVideo = file.type.startsWith('video/');
+    const maxSize = isVideo ? 30 * 1024 * 1024 : 2 * 1024 * 1024; // 30MB for video, 2MB for image
+
+    if (file.size > maxSize) {
       return NextResponse.json(
-        { error: 'File size exceeds 2MB limit' },
+        { error: `File size exceeds ${isVideo ? '30MB' : '2MB'} limit` },
         { status: 400 },
       );
     }
@@ -39,8 +42,11 @@ export async function POST(req: NextRequest) {
     // 2. Remove the primary file extension (e.g. .jpg, .png, .avif)
     baseName = baseName.replace(/\.[^/.]+$/, '');
 
-    // 3. Remove common sub-extensions like "-jpg", "-png" if present in the filename
-    baseName = baseName.replace(/-(jpg|jpeg|png|gif|webp|avif|svg)$/i, '');
+    // 3. Remove common sub-extensions like "-jpg", "-png", "-mp4" if present in the filename
+    baseName = baseName.replace(
+      /-(jpg|jpeg|png|gif|webp|avif|svg|mp4|webm|mov)$/i,
+      '',
+    );
 
     // 4. Format spaces to dashes and keep only alphanumeric characters and dashes
     baseName = baseName

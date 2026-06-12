@@ -61,8 +61,7 @@ export interface IProduct {
   type: string;
   price: number;
   thumbnails: string[];
-  description: string;
-  details: string | string[];
+  description?: string;
   color: string;
   variants?: IVariant[];
   sizes: string[];
@@ -81,6 +80,9 @@ export interface IProduct {
   rating?: number;
   soldCount?: number;
   videoUrl?: string;
+  youtubeVideoUrl?: string;
+  refundPolicy?: string;
+  returnPolicy?: string;
   sizeGuide?: ISizeGuide | string;
   isDeleted?: boolean;
   seo: {
