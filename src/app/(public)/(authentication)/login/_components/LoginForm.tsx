@@ -78,17 +78,18 @@ const LoginForm = () => {
               `/verify?identifier=${encodeURIComponent(values.identifier)}${redirect ? `&redirect=${redirect}` : ''}${attemptsLeft !== undefined ? `&attemptsLeft=${attemptsLeft}` : ''}`,
             );
           } else if (redirect) {
-            window.location.href = redirect.startsWith('/')
-              ? redirect
-              : `/${redirect}`;
+            const path = redirect.startsWith('/') ? redirect : `/${redirect}`;
+            router.push(path);
+            router.refresh();
           } else {
             // Use user role from login response directly
             const role = res.data?.user?.role;
             if (role === 'ADMIN' || role === 'SUPER_ADMIN') {
-              window.location.href = '/admin';
+              router.push('/admin');
             } else {
-              window.location.href = '/user';
+              router.push('/user');
             }
+            router.refresh();
           }
         } else {
           setAlert({
