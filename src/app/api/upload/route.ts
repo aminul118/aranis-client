@@ -36,11 +36,11 @@ export async function POST(req: NextRequest) {
     // 1. Get base name and convert to lowercase
     let baseName = file.name.toLowerCase();
 
-    // 2. Remove the primary file extension (e.g. .jpg, .png, .webp)
+    // 2. Remove the primary file extension (e.g. .jpg, .png, .avif)
     baseName = baseName.replace(/\.[^/.]+$/, '');
 
     // 3. Remove common sub-extensions like "-jpg", "-png" if present in the filename
-    baseName = baseName.replace(/-(jpg|jpeg|png|gif|webp|svg)$/i, '');
+    baseName = baseName.replace(/-(jpg|jpeg|png|gif|webp|avif|svg)$/i, '');
 
     // 4. Format spaces to dashes and keep only alphanumeric characters and dashes
     baseName = baseName
@@ -65,19 +65,23 @@ export async function POST(req: NextRequest) {
     const folder = (formData.get('folder') as string | null) || 'editor';
 
     // Save under the specified virtual folder
-    const uniqueFileName = `${folder}/${shortId}-${baseName}.webp`;
+    const uniqueFileName = `${folder}/${shortId}-${baseName}.avif`;
 
     let bufferToUpload: any = buffer;
     let contentType = file.type;
     let finalFileName = uniqueFileName;
 
     if (file.type.startsWith('image/')) {
-      // Convert and compress to webp with high quality, preserving zooming quality
+      // Convert and compress to avif with high quality, preserving zooming quality
       bufferToUpload = await sharp(buffer as any)
         .resize(1200, 1200, { fit: 'inside', withoutEnlargement: true })
-        .webp({ quality: 75 })
+        .avif({
+          quality: 65,
+          effort: 7,
+          chromaSubsampling: '4:2:0',
+        })
         .toBuffer();
-      contentType = 'image/webp';
+      contentType = 'image/avif';
     } else {
       // For non-images, keep original name format but cute and clean
       const ext = file.name.split('.').pop() || 'bin';

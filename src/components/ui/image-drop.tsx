@@ -27,7 +27,8 @@ export default function ImageDrop({ onChange }: ImageDropProps) {
       getInputProps,
     },
   ] = useFileUpload({
-    accept: 'image/svg+xml,image/png,image/jpeg,image/jpg,image/gif',
+    accept:
+      'image/svg+xml,image/png,image/jpeg,image/jpg,image/gif,image/webp,image/avif',
     maxSize,
   });
 
@@ -87,7 +88,7 @@ export default function ImageDrop({ onChange }: ImageDropProps) {
               </div>
               <p className="mb-1.5 text-sm font-medium">Drop your image here</p>
               <p className="text-muted-foreground text-xs">
-                SVG, PNG, JPG or GIF (max. {maxSizeMB}MB)
+                SVG, PNG, JPG, AVIF or GIF (max. {maxSizeMB}MB)
               </p>
               {/* IMPORTANT: type="button" so this doesn't submit the parent form */}
               <Button

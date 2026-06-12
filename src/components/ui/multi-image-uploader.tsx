@@ -113,7 +113,7 @@ const MultiImageUploader = ({
               Click to upload or drag and drop
             </p>
             <p className="text-muted-foreground text-xs">
-              PNG, JPG, WebP up to {max} images
+              PNG, JPG, AVIF up to {max} images
             </p>
           </div>
         </div>

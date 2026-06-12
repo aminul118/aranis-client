@@ -50,6 +50,7 @@ export const ProductDetailVariants = ({
             alt={product.color}
             fill
             sizes="80px"
+            quality={100}
             className="object-cover transition-transform duration-700 group-hover:scale-110"
           />
           <div
@@ -90,6 +91,7 @@ export const ProductDetailVariants = ({
               alt={variant.color}
               fill
               sizes="80px"
+              quality={100}
               className="object-cover transition-transform duration-700 group-hover:scale-110"
             />
             <div

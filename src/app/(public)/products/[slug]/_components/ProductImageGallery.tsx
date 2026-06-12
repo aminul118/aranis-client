@@ -62,6 +62,7 @@ const ProductImageGallery = ({
               fill
               sizes="(max-width: 1024px) 100vw, 50vw"
               priority
+              unoptimized
             />
           ))}
         </div>
@@ -95,6 +96,7 @@ const ProductImageGallery = ({
                   sizes="72px"
                   draggable={false}
                   className="pointer-events-none object-cover"
+                  quality={100}
                 />
                 {active && <div className="absolute inset-0 bg-blue-500/10" />}
               </button>
@@ -130,6 +132,7 @@ const ProductImageGallery = ({
                 priority
                 draggable={false}
                 className="pointer-events-none object-cover"
+                unoptimized
               />
               {/* The Lens that follows the cursor */}
               {isZoomed && (
@@ -235,6 +238,7 @@ const ProductImageGallery = ({
                       priority
                       draggable={false}
                       className="object-cover"
+                      unoptimized
                     />
                   </motion.div>
                 </AnimatePresence>

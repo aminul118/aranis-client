@@ -42,7 +42,8 @@ const SingleImageUploader = ({
       getInputProps,
     },
   ] = useFileUpload({
-    accept: 'image/svg+xml,image/png,image/jpeg,image/jpg,image/gif',
+    accept:
+      'image/svg+xml,image/png,image/jpeg,image/jpg,image/gif,image/webp,image/avif',
     maxSize,
     initialFiles,
   });
@@ -105,7 +106,7 @@ const SingleImageUploader = ({
               </div>
               <p className="mb-1.5 text-sm font-medium">Drop your image here</p>
               <p className="text-muted-foreground text-xs">
-                SVG, PNG, JPG or GIF (max. {maxSizeMB}MB)
+                SVG, PNG, JPG, AVIF or GIF (max. {maxSizeMB}MB)
               </p>
               {recommendation && (
                 <p className="mt-2 rounded-full bg-blue-500/10 px-3 py-1 text-[10px] font-black tracking-wider text-blue-600 uppercase dark:bg-blue-500/20 dark:text-blue-400">
