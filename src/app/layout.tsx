@@ -7,10 +7,8 @@ import generateMetaTags from '@/seo/generateMetaTags';
 import '@/styles/custom.css';
 import '@/styles/globals.css';
 import { Children } from '@/types';
-import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
+import { GoogleTagManager } from '@next/third-parties/google';
 import { Metadata } from 'next';
-
-export const dynamic = 'force-dynamic';
 
 const MainLayout = ({ children }: Children) => {
   return (
@@ -27,7 +25,6 @@ const MainLayout = ({ children }: Children) => {
         />
         <link rel="dns-prefetch" href="https://cdn.thearanis.com" />
       </head>
-      <GoogleAnalytics gaId={envVars.analytics.googleAnalytics} />
       <body className={fonts.spaceGrotesk.className} suppressHydrationWarning>
         <TopLoadingBar />
         <ReloadTracker />

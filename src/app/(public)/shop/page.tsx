@@ -71,5 +71,3 @@ export async function generateMetadata(): Promise<Metadata> {
     websitePath: '/shop',
   });
 }
-
-export const dynamic = 'force-dynamic';

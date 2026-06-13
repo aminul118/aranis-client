@@ -154,13 +154,15 @@ const NavSearch = () => {
                   {query && !loading && (
                     <button
                       onClick={() => setQuery('')}
+                      aria-label="Clear search"
                       className="text-muted-foreground hover:text-foreground transition-colors dark:hover:text-white"
                     >
-                      <X size={16} />
+                      <X size={16} aria-hidden="true" />
                     </button>
                   )}
                   <button
                     onClick={handleClose}
+                    aria-label="Close search"
                     className="border-border bg-muted text-muted-foreground hover:bg-muted/80 rounded-lg border px-2 py-1 text-xs transition-colors dark:border-white/10 dark:bg-white/5 dark:text-gray-400 dark:hover:bg-white/10"
                   >
                     Esc

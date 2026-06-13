@@ -96,4 +96,3 @@ const DynamicShopPage = async ({ params, searchParams }: Props) => {
 };
 
 export default DynamicShopPage;
-export const dynamic = 'force-dynamic';

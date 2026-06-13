@@ -146,6 +146,8 @@ const Mobile = ({ navItems, setMenuOpen, logo }: MobileProps) => {
                         router.push(href);
                       }
                     }}
+                    aria-expanded={isExpanded}
+                    aria-controls={`menu-${categorySlug}`}
                     className={cn(
                       'flex w-full items-center justify-between rounded-xl px-4 py-3.5 text-sm font-semibold tracking-wide transition-all',
                       isActive
@@ -161,6 +163,7 @@ const Mobile = ({ navItems, setMenuOpen, logo }: MobileProps) => {
                           isExpanded ? 'rotate-180' : '-rotate-90 opacity-50',
                         )}
                         size={16}
+                        aria-hidden="true"
                       />
                     )}
                   </button>
@@ -168,6 +171,7 @@ const Mobile = ({ navItems, setMenuOpen, logo }: MobileProps) => {
                   <AnimatePresence>
                     {hasSubItems && isExpanded && (
                       <motion.div
+                        id={`menu-${categorySlug}`}
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: 'auto', opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}

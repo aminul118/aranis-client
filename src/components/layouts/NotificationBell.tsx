@@ -438,8 +438,9 @@ const NotificationBell = ({ user }: Props) => {
                     onClick={(e) => handleDeleteOne(e, notif._id)}
                     className="text-muted-foreground/20 absolute top-3 right-3 flex h-6 w-6 items-center justify-center rounded-full opacity-0 transition-all group-hover:opacity-100 hover:bg-red-500/10 hover:text-red-500"
                     title="Delete Notification"
+                    aria-label="Delete Notification"
                   >
-                    <Trash2 size={12} />
+                    <Trash2 size={12} aria-hidden="true" />
                   </button>
                 </div>
               );

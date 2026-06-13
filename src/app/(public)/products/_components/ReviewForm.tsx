@@ -74,6 +74,7 @@ const ReviewForm = ({ productId, onSuccess }: ReviewFormProps) => {
               <button
                 key={star}
                 type="button"
+                aria-label={`Rate ${star} stars`}
                 className="transform transition-all hover:scale-125 focus:outline-none"
                 onMouseEnter={() => setHoverRating(star)}
                 onMouseLeave={() => setHoverRating(0)}

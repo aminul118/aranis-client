@@ -1,6 +1,7 @@
 'use client';
 
 import { useCartOptional } from '@/context/CartContext';
+import { useUser } from '@/context/UserContext';
 import { useWishlistOptional } from '@/context/WishlistContext';
 import { cn } from '@/lib/utils';
 import { Gift, Heart, ShoppingBag, ShoppingCart, User } from 'lucide-react';
@@ -10,7 +11,9 @@ import { usePathname } from 'next/navigation';
 import { getDefaultDashboardRoute } from '@/services/user/user-access';
 import { IUser } from '@/types';
 
-const MobileBottomNav = ({ user }: { user: IUser | null }) => {
+const MobileBottomNav = ({ user: serverUser }: { user: IUser | null }) => {
+  const { user: clientUser } = useUser();
+  const user = clientUser || serverUser;
   const pathname = usePathname();
 
   const cart = useCartOptional();
