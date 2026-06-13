@@ -14,6 +14,18 @@ import getVerifiedUser from './services/user/verified-user';
  * Next.js Middleware to handle authentication, token refresh, and role-based access control.
  */
 export async function proxy(req: NextRequest) {
+  // Check if the block cookie exists
+  const blockCookie = req.cookies.get('aranis_block_until');
+  if (blockCookie && blockCookie.value) {
+    const blockUntil = parseInt(blockCookie.value, 10);
+    if (!isNaN(blockUntil) && Date.now() < blockUntil) {
+      if (req.nextUrl.pathname.startsWith('/blocked')) {
+        return NextResponse.next();
+      }
+      return NextResponse.rewrite(new URL('/blocked', req.url));
+    }
+  }
+
   const { pathname, origin } = req.nextUrl;
 
   const isAuthPage = isAuthRoute(pathname);

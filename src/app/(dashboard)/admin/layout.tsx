@@ -1,6 +1,6 @@
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { getMe } from '@/services/user/users';
-import { Children } from '@/types';
+import { Children, IUser } from '@/types';
 import { Metadata } from 'next';
 import AdminSidebar from './_components/layouts/admin-sidebar';
 import AdminHeader from './_components/layouts/AdminHeader';
@@ -13,9 +13,9 @@ const AdminLayout = async ({ children }: Children) => {
   return (
     <SidebarProvider>
       {/* Sidebar */}
-      <AdminSidebar user={user} />
+      <AdminSidebar user={user as IUser} />
       <SidebarInset>
-        <AdminHeader user={user} />
+        <AdminHeader user={user as IUser} />
         <>{children}</>
       </SidebarInset>
     </SidebarProvider>

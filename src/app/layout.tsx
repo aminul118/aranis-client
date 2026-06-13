@@ -1,4 +1,5 @@
 import TopLoadingBar from '@/components/common/loader/TopLoadingBar';
+import ReloadTracker from '@/components/common/ReloadTracker';
 import envVars from '@/config/env.config';
 import fonts from '@/config/fonts.config';
 import { Providers } from '@/providers/Providers';
@@ -29,6 +30,7 @@ const MainLayout = ({ children }: Children) => {
       <GoogleAnalytics gaId={envVars.analytics.googleAnalytics} />
       <body className={fonts.spaceGrotesk.className} suppressHydrationWarning>
         <TopLoadingBar />
+        <ReloadTracker />
         <Providers>{children}</Providers>
       </body>
       <GoogleTagManager gtmId={envVars.analytics.googleTagManagerId} />
