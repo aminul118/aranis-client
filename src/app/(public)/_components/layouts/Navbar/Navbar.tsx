@@ -5,6 +5,7 @@ import { useWishlistOptional } from '@/context/WishlistContext';
 import { cn } from '@/lib/utils';
 import { IUser } from '@/types';
 import { motion, useMotionValueEvent, useScroll } from 'framer-motion';
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import DesktopNavbar from './DesktopNavbar';
 import MobileNavbar from './MobileNavbar';
@@ -59,6 +60,18 @@ const Navbar = ({
     }
   });
 
+  const resolvedLogo = siteSettings?.logo ? (
+    <Image
+      src={siteSettings.logo}
+      alt="Logo"
+      width={120}
+      height={32}
+      className="h-8 w-auto object-contain"
+    />
+  ) : (
+    logo
+  );
+
   return (
     <motion.header
       variants={{
@@ -77,7 +90,7 @@ const Navbar = ({
         user={user}
         navItems={navItems as any}
         activeOffers={activeOffers}
-        logo={logo}
+        logo={resolvedLogo}
         siteSettings={siteSettings}
         totalItems={totalItems}
         wishlistCount={wishlistCount}
@@ -85,7 +98,7 @@ const Navbar = ({
       <MobileNavbar
         user={user}
         navItems={navItems}
-        logo={logo}
+        logo={resolvedLogo}
         menuOpen={menuOpen}
         setMenuOpen={setMenuOpen}
       />

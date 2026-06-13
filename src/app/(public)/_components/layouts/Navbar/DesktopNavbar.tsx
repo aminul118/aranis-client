@@ -1,7 +1,7 @@
 'use client';
 
 import { IUser } from '@/types';
-import { ReactNode, Suspense } from 'react';
+import { ReactNode } from 'react';
 import CategoryBar from './CategoryBar';
 import MainNavbar from './MainNavbar';
 import TopBar from './TopBar';
@@ -35,14 +35,10 @@ const DesktopNavbar = ({
         wishlistCount={wishlistCount}
       />
 
-      <Suspense
-        fallback={<div className="h-14 w-full bg-white dark:bg-[#0a0a0a]" />}
-      >
-        <CategoryBar
-          initialNavItems={navItems}
-          initialActiveOffers={activeOffers}
-        />
-      </Suspense>
+      <CategoryBar
+        initialNavItems={navItems}
+        initialActiveOffers={activeOffers}
+      />
     </div>
   );
 };

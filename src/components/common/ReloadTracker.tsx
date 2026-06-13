@@ -115,22 +115,22 @@ export default function ReloadTracker() {
 
   if (showWarning) {
     return (
-      <div className="fixed top-4 right-0 left-0 z-50 mx-auto w-[calc(100%-2rem)] max-w-lg transition-all duration-500 ease-in-out">
+      <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm transition-all duration-500 ease-in-out sm:inset-auto sm:top-4 sm:right-0 sm:left-0 sm:mx-auto sm:w-[calc(100%-2rem)] sm:max-w-lg sm:bg-transparent sm:p-0 sm:backdrop-blur-none">
         <Alert
           variant="destructive"
-          className="border-red-500 bg-white shadow-lg dark:bg-zinc-950"
+          className="w-full border-red-500 bg-white shadow-2xl sm:shadow-lg dark:bg-zinc-950"
         >
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle className="flex items-center justify-between">
+          <AlertTitle className="flex items-center justify-between font-bold">
             <span>Warning</span>
             <button
               onClick={() => setShowWarning(false)}
               className="text-zinc-500 transition-colors hover:text-red-500"
             >
-              <X className="h-4 w-4" />
+              <X className="h-5 w-5" />
             </button>
           </AlertTitle>
-          <AlertDescription>
+          <AlertDescription className="mt-2 text-sm leading-relaxed">
             You have rapidly reloaded the page {warningCount} times. If you
             reload again within 10 seconds, you will be blocked for 2 minutes.
           </AlertDescription>

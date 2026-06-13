@@ -154,7 +154,7 @@ export default function UserChatPage() {
   if (!user) return null;
 
   return (
-    <div className="flex h-[calc(100vh-100px)] overflow-hidden rounded-2xl border border-gray-100 bg-white dark:border-white/5 dark:bg-[#0a0a0a]">
+    <div className="flex flex-1 flex-col overflow-hidden bg-white dark:border-white/5 dark:bg-black">
       <div className="flex flex-1 flex-col overflow-hidden bg-gray-50/30 dark:bg-black/20">
         {/* Header */}
         <div className="flex shrink-0 items-center justify-between border-b border-gray-100 bg-white p-4 dark:border-white/5 dark:bg-[#0a0a0a]">
@@ -239,7 +239,7 @@ export default function UserChatPage() {
         </div>
 
         {/* Input */}
-        <div className="shrink-0 border-t border-gray-100 bg-white p-6 dark:border-white/5 dark:bg-[#0a0a0a]">
+        <div className="shrink-0 border-t border-gray-100 bg-white p-6 dark:border-white/5 dark:bg-black">
           <div className="relative flex items-center gap-4">
             <input
               type="text"

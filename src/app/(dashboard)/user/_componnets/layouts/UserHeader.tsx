@@ -15,19 +15,19 @@ const UserHeader = ({ user }: { user: IUser }) => {
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
-    <header className="bg-background/95 supports-backdrop-filter:bg-background/60 sticky top-0 z-50 flex h-16 shrink-0 items-center justify-between border-b px-4 backdrop-blur transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
-      <div className="flex items-center gap-2">
+    <header className="bg-background/95 supports-backdrop-filter:bg-background/60 sticky top-0 z-50 flex h-16 shrink-0 items-center justify-between border-b px-2 backdrop-blur transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 md:px-4">
+      <div className="flex items-center gap-1 md:gap-2">
         <SidebarTrigger className="-ml-1" />
         <Separator
           orientation="vertical"
-          className="mr-2 data-[orientation=vertical]:h-4"
+          className="mx-1 data-[orientation=vertical]:h-4 md:mr-2"
         />
-        <span className="text-muted-foreground text-sm font-medium">
+        <span className="text-muted-foreground hidden text-sm font-medium sm:inline">
           My Portal
         </span>
       </div>
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2 md:gap-4">
         <NotificationBell user={user} />
 
         {/* Cart button */}
@@ -43,7 +43,7 @@ const UserHeader = ({ user }: { user: IUser }) => {
           )}
         </Link>
 
-        <div className="bg-border mx-1 h-6 w-px" />
+        <div className="bg-border mx-1 hidden h-6 w-px sm:block" />
         <HeaderUser user={user} portalType="user" />
       </div>
     </header>
