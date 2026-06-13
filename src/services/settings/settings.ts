@@ -24,7 +24,7 @@ const getSiteSettings = async () => {
   return await serverFetch.get<ApiResponse<ISiteSetting>>('/site-settings', {
     next: {
       tags: ['site-settings'],
-      revalidate: 3600,
+      revalidate: false,
     },
   });
 };

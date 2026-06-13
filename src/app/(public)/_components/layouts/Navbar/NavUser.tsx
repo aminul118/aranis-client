@@ -72,9 +72,14 @@ const NavUser = ({ user }: { user: IUser }) => {
         <DropdownMenuGroup>
           <DropdownMenuItem
             onClick={handleDashboardRedirect}
-            className="text-center"
+            className="flex items-center gap-2"
           >
-            <LayoutGrid /> Dashboard
+            <LayoutGrid className="h-4 w-4" />
+            <span>
+              {user?.role === 'ADMIN' || user?.role === 'SUPER_ADMIN'
+                ? 'Admin Dashboard'
+                : 'User Dashboard'}
+            </span>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
 

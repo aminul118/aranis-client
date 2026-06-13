@@ -57,22 +57,6 @@ export const ProductDetailActions = ({
           </>
         )}
       </div>
-      <div className="flex items-center justify-center gap-8 py-4">
-        <div className="text-muted-foreground flex items-center gap-2 text-[10px] font-black tracking-tighter uppercase">
-          <div
-            className={`h-1.5 w-1.5 rounded-full ${currentStock > 0 ? 'bg-emerald-500' : 'bg-red-500'}`}
-          />
-          {currentStock > 0 ? 'In Stock' : 'Out of Stock'}
-        </div>
-        <div className="text-muted-foreground flex items-center gap-2 text-[10px] font-black tracking-tighter uppercase">
-          <div className="h-1.5 w-1.5 rounded-full bg-blue-500" />
-          24h Shipping
-        </div>
-        <div className="text-muted-foreground flex items-center gap-2 text-[10px] font-black tracking-tighter uppercase">
-          <div className="h-1.5 w-1.5 rounded-full bg-amber-500" />
-          30 Day Return
-        </div>
-      </div>
     </div>
   );
 };

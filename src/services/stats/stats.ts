@@ -6,7 +6,9 @@ import { ApiResponse, IStats } from '@/types';
 const getAdminStats = async (query?: Record<string, string>) => {
   return await serverFetch.get<ApiResponse<IStats>>('/stats', {
     query,
-    cache: 'no-store',
+    next: {
+      tags: ['admin-stats'],
+    },
   });
 };
 

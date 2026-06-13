@@ -23,7 +23,7 @@ const Logo = async ({ className, logoUrl }: Props) => {
     console.error('Failed to fetch site settings for logo:', error);
   }
 
-  const src = logoUrl || settings?.logo || icons.logo;
+  const src = settings?.logo || logoUrl || icons.logo;
 
   return (
     <Link
@@ -33,12 +33,12 @@ const Logo = async ({ className, logoUrl }: Props) => {
     >
       <Image
         src={src}
-        height={80}
-        width={180}
+        height={48}
+        width={140}
         alt="Aranis logo"
         priority={true}
         fetchPriority="high"
-        className="object-contain"
+        className="h-[48px] w-auto object-contain"
       />
     </Link>
   );

@@ -107,7 +107,11 @@ const HeaderUser = ({ user }: Props) => {
                 className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 dark:text-white/90 dark:hover:bg-white/10 dark:hover:text-white dark:focus:bg-white/10"
               >
                 <LayoutDashboard className="h-4 w-4 text-gray-500 dark:text-white/60" />
-                <span className="text-sm">Dashboard</span>
+                <span className="text-sm">
+                  {user?.role === 'ADMIN' || user?.role === 'SUPER_ADMIN'
+                    ? 'Admin Dashboard'
+                    : 'User Dashboard'}
+                </span>
               </Link>
             </DropdownMenuItem>
           )}

@@ -4,7 +4,12 @@ import { revalidate } from '@/lib/revalidate';
 import serverFetch from '@/lib/server-fetch';
 import { ApiResponse, IUser } from '@/types';
 
+import { getCookie } from '@/lib/jwt';
+
 const getMe = async () => {
+  const token = await getCookie('accessToken');
+  if (!token) return { success: false, data: null as any };
+
   return await serverFetch.get<ApiResponse<IUser>>('/user/me', {
     cache: 'no-store',
     next: {

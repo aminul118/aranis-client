@@ -1,4 +1,3 @@
-import { Badge } from '@/components/ui/badge';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,13 +29,7 @@ export const ProductDetailHeader = ({
   return (
     <>
       {/* Brand & Stats */}
-      <div className="flex items-center justify-between">
-        <Badge
-          variant="outline"
-          className="border-primary/30 text-primary rounded-full px-4 py-1 text-xs font-bold tracking-widest uppercase"
-        >
-          Premium {product.category}
-        </Badge>
+      <div className="flex items-center justify-end">
         <div className="flex items-center gap-4">
           <button
             onClick={() =>
