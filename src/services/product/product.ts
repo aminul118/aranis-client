@@ -51,7 +51,7 @@ const getProducts = async (
 ) => {
   return await serverFetch.get<ApiResponse<IProduct[]>>('/products', {
     query,
-    next: { tags: ['product'], ...options?.next },
+    next: { tags: ['product'], revalidate: 3600, ...options?.next },
     ...options,
     headers: {
       ...options?.headers,
@@ -63,6 +63,7 @@ const getSingleProduct = async (id: string) => {
   return await serverFetch.get<ApiResponse<IProduct>>(`/products/${id}`, {
     next: {
       tags: [`product-${id}`, 'product'],
+      revalidate: 3600,
     },
   });
 };
@@ -88,6 +89,7 @@ const getBestSellingProducts = async () => {
     query: { sort: '-inStock -soldCount -createdAt', limit: '12' },
     next: {
       tags: ['product', 'best-selling'],
+      revalidate: 3600,
     },
   });
 };
@@ -97,6 +99,7 @@ const getNewArrivals = async () => {
     query: { sort: '-inStock -createdAt', limit: '12' },
     next: {
       tags: ['product', 'new-arrivals'],
+      revalidate: 3600,
     },
   });
 };
@@ -106,6 +109,7 @@ const getTopRatedProducts = async () => {
     query: { sort: '-rating', limit: '12' },
     next: {
       tags: ['product', 'top-rated'],
+      revalidate: 3600,
     },
   });
 };
