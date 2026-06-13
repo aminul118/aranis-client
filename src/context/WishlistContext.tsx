@@ -33,6 +33,7 @@ const WishlistContext = createContext<WishlistContextType | undefined>(
 );
 
 import { useUser } from '@/context/UserContext';
+import { logger } from '../lib/logger';
 
 const GUEST_WISHLIST_KEY = 'aranis_guest_wishlist';
 
@@ -88,7 +89,7 @@ export const WishlistProvider: React.FC<{ children: React.ReactNode }> = ({
       await fetchWishlist();
       toast.success('Your saved items have been synced!');
     } catch (error) {
-      console.error('Failed to sync wishlist', error);
+      logger.error('Failed to sync wishlist', error);
       // Fall back: clean up storage and fetch to proceed safely
       localStorage.removeItem(GUEST_WISHLIST_KEY);
       await fetchWishlist();

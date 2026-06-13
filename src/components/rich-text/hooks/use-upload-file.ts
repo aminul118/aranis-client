@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { toast } from 'sonner';
 import { z } from 'zod';
+import { logger } from '../../../lib/logger';
 
 export type UploadedFile = {
   key: string;
@@ -86,7 +87,7 @@ export function useUploadFile({
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : 'Upload failed';
-      console.error('R2 Upload Error:', error);
+      logger.error('R2 Upload Error:', error);
       toast.error(errorMessage);
       onUploadError?.(error);
       return undefined;

@@ -12,6 +12,7 @@ import { getMe } from '@/services/user/users';
 import { Check, CheckCheck, MessageCircle, Send } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
+import { logger } from '../../../../lib/logger';
 
 const SOCKET_URL = (
   process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:5000/api/v1'
@@ -49,7 +50,7 @@ export default function UserChatPage() {
             userId: res.data._id,
           });
         } else {
-          console.error('Failed to get conversation:', convRes);
+          logger.error('Failed to get conversation:', convRes);
         }
       }
     };

@@ -4,6 +4,7 @@ import { revalidate } from '@/lib/revalidate';
 import serverFetch from '@/lib/server-fetch';
 import { ApiResponse } from '@/types';
 import { revalidatePath } from 'next/cache';
+import { logger } from '../../lib/logger';
 
 export interface ISocialLink {
   platform: string;
@@ -35,7 +36,7 @@ const updateSiteSettings = async (
   const isFormData = payload instanceof FormData;
 
   // eslint-disable-next-line no-console
-  console.log(
+  logger.info(
     'UPDATE SITE SETTINGS ACTION RECEIVED:',
     isFormData ? 'FormData Object' : payload,
   );

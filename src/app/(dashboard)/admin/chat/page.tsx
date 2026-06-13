@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { logger } from '../../../../lib/logger';
 
 export const dynamic = 'force-dynamic';
 
@@ -128,7 +129,7 @@ export default function AdminChatPage() {
       getSocket().emit('join-room', activeChat._id);
       if (admin) {
         // eslint-disable-next-line no-console
-        console.log(`Admin ${admin._id} entering chat ${activeChat._id}`);
+        logger.info(`Admin ${admin._id} entering chat ${activeChat._id}`);
         getSocket().emit('message-seen', {
           conversationId: activeChat._id,
           userId: admin._id,
@@ -140,7 +141,7 @@ export default function AdminChatPage() {
       }
     } else if (admin) {
       // eslint-disable-next-line no-console
-      console.log(`Admin ${admin._id} leaving chat`);
+      logger.info(`Admin ${admin._id} leaving chat`);
       getSocket().emit('set-active-chat', {
         userId: admin._id,
         conversationId: null,

@@ -2,6 +2,7 @@
 
 import serverFetch from '@/lib/server-fetch';
 import type { ApiResponse } from '@/types';
+import { logger } from '../../lib/logger';
 
 export interface IDeliveryCharge {
   insideDhaka: number;
@@ -33,7 +34,7 @@ export const updateDeliveryCharge = async (data: IDeliveryCharge) => {
     const { revalidateTag } = require('next/cache');
     revalidateTag('delivery-charge');
   } catch (e) {
-    console.error(e);
+    logger.error(e);
   }
 
   return res;

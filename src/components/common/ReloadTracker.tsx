@@ -3,6 +3,7 @@
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AlertCircle, Ban, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { logger } from '../../lib/logger';
 
 const RELOAD_LIMIT = 5;
 const WARNING_RELOAD = 4;
@@ -34,7 +35,7 @@ export default function ReloadTracker() {
         }
       }
     } catch (e) {
-      console.error('Failed to parse reload tracker data', e);
+      logger.error('Failed to parse reload tracker data', e);
     }
 
     const now = Date.now();

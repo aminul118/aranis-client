@@ -15,6 +15,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
+import { logger } from '../../../../lib/logger';
 import CheckoutAdminBlocked from './CheckoutAdminBlocked';
 import CheckoutOrderSuccess from './CheckoutOrderSuccess';
 import CheckoutOrderSummary from './CheckoutOrderSummary';
@@ -96,7 +97,7 @@ export default function CheckoutContent() {
           setDeliverySettings(res.data);
         }
       } catch (e) {
-        console.error('Failed to load delivery settings', e);
+        logger.error('Failed to load delivery settings', e);
       }
     };
     fetchUser();
@@ -144,7 +145,7 @@ export default function CheckoutContent() {
           );
         }
       } catch (err) {
-        console.error('Error parsing pending order data', err);
+        logger.error('Error parsing pending order data', err);
       }
     }
   }, [user, loading]);

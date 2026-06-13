@@ -25,6 +25,7 @@ import {
 import { useRouter } from 'next/navigation';
 import React, { useCallback, useEffect, useState } from 'react';
 import { toast } from 'sonner';
+import { logger } from '../../../lib/logger';
 
 const getNotificationConfig = (type: string) => {
   switch (type) {
@@ -101,7 +102,7 @@ const NotificationsPage = () => {
       const { data } = await getMyNotifications();
       setNotifications(data || []);
     } catch (error) {
-      console.error('Failed to fetch notifications:', error);
+      logger.error('Failed to fetch notifications:', error);
     }
   }, []);
 

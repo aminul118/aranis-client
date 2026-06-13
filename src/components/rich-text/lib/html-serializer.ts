@@ -1,4 +1,5 @@
 import { KEYS } from 'platejs';
+import { logger } from '../../../lib/logger';
 
 export const deserializeHtml = (html: string) => {
   if (typeof window === 'undefined') {
@@ -30,7 +31,7 @@ export const deserializeHtml = (html: string) => {
       return node;
     });
   } catch (e) {
-    console.error('HTML deserialization failed', e);
+    logger.error('HTML deserialization failed', e);
     return [{ type: KEYS.p, children: [{ text: html }] }];
   }
 };

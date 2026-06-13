@@ -3,6 +3,7 @@ import { cn } from '@/lib/utils';
 import { getSiteSettings } from '@/services/settings/settings';
 import Image from 'next/image';
 import Link from 'next/link';
+import { logger } from '../../lib/logger';
 
 interface Props {
   className?: string;
@@ -20,7 +21,7 @@ const Logo = async ({ className, logoUrl }: Props) => {
     settings = res?.data;
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.error('Failed to fetch site settings for logo:', error);
+    logger.error('Failed to fetch site settings for logo:', error);
   }
 
   const src = settings?.logo || logoUrl || icons.logo;

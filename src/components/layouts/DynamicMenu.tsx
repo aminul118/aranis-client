@@ -25,6 +25,7 @@ import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { logger } from '../../lib/logger';
 
 interface DynamicMenuProps {
   menuGroups: MenuGroup[];
@@ -45,7 +46,7 @@ const DynamicMenu = ({ menuGroups, role, user }: DynamicMenuProps) => {
           setUnreadChatCount(res.data);
         }
       } catch (error) {
-        console.error('Failed to fetch unread chat count:', error);
+        logger.error('Failed to fetch unread chat count:', error);
       }
     }
   }, [role]);
@@ -58,7 +59,7 @@ const DynamicMenu = ({ menuGroups, role, user }: DynamicMenuProps) => {
           setUnreadOrderCount(res.data);
         }
       } catch (error) {
-        console.error('Failed to fetch unread orders count:', error);
+        logger.error('Failed to fetch unread orders count:', error);
       }
     }
   }, [role]);
@@ -94,7 +95,7 @@ const DynamicMenu = ({ menuGroups, role, user }: DynamicMenuProps) => {
       );
       oscillator.stop(audioCtx.currentTime + 0.5);
     } catch (e) {
-      console.error('Audio play failed', e);
+      logger.error('Audio play failed', e);
     }
   };
 

@@ -25,6 +25,7 @@ import {
 import { usePathname, useRouter } from 'next/navigation';
 import React, { useCallback, useEffect, useState } from 'react';
 import { toast } from 'sonner';
+import { logger } from '../../lib/logger';
 
 interface Props {
   user: any;
@@ -106,7 +107,7 @@ const NotificationBell = ({ user }: Props) => {
       const res = await getUnreadCount();
       if (res?.success) setUnreadChatCount(res.data || 0);
     } catch (error) {
-      console.error('Failed to fetch unread chat count:', error);
+      logger.error('Failed to fetch unread chat count:', error);
     }
   }, []);
 
@@ -115,7 +116,7 @@ const NotificationBell = ({ user }: Props) => {
       const { data } = await getMyNotifications();
       setNotifications(data || []);
     } catch (error) {
-      console.error('Failed to fetch notifications:', error);
+      logger.error('Failed to fetch notifications:', error);
     }
   }, []);
 

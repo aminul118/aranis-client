@@ -1,5 +1,6 @@
 import envVars from '@/config/env.config';
 import { type NextRequest } from 'next/server';
+import { logger } from '../../lib/logger';
 
 type RefreshResponse = {
   accessToken: string;
@@ -33,7 +34,7 @@ const tryRefreshToken = async (req: NextRequest) => {
       refreshToken: result.data.refreshToken,
     } as RefreshResponse;
   } catch (error) {
-    console.error('tryRefreshToken Edge error:', error);
+    logger.error('tryRefreshToken Edge error:', error);
     return null;
   }
 };

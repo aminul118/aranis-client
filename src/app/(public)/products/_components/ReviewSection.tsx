@@ -9,6 +9,7 @@ import {
 import { Star } from 'lucide-react';
 import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
+import { logger } from '../../../../lib/logger';
 import ReviewForm from './ReviewForm';
 import ReviewList from './ReviewList';
 
@@ -35,7 +36,7 @@ const ReviewSection = ({ productId }: ReviewSectionProps) => {
         setIsLoggedIn(false);
       }
     } catch (error) {
-      console.error('Failed to fetch reviews data', error);
+      logger.error('Failed to fetch reviews data', error);
       setIsLoggedIn(false);
     } finally {
       setLoading(false);

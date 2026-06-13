@@ -4,6 +4,7 @@ import type { FetchOptions } from '@/helpers/serverFetchHelper';
 import { revalidate } from '@/lib/revalidate';
 import serverFetch from '@/lib/server-fetch';
 import type { ApiResponse, IProduct } from '@/types';
+import { logger } from '../../lib/logger';
 
 export const createProduct = async (
   payload: FormData,
@@ -17,7 +18,7 @@ export const createProduct = async (
     revalidatePath('/shop');
     revalidatePath('/');
   } catch (e) {
-    console.error(e);
+    logger.error(e);
   }
   revalidate('product');
   return res;
@@ -39,7 +40,7 @@ export const updateProduct = async (
     revalidatePath('/shop');
     revalidatePath('/');
   } catch (e) {
-    console.error(e);
+    logger.error(e);
   }
   revalidate('product');
   return res;
@@ -78,7 +79,7 @@ const deleteProduct = async (id: string) => {
     revalidatePath('/shop');
     revalidatePath('/');
   } catch (e) {
-    console.error(e);
+    logger.error(e);
   }
   revalidate('product');
   return res;
@@ -130,7 +131,7 @@ const updateProductBulk = async (ids: string[], data: Partial<IProduct>) => {
     revalidatePath('/shop');
     revalidatePath('/');
   } catch (e) {
-    console.error(e);
+    logger.error(e);
   }
   revalidate('product');
   return res;
@@ -152,7 +153,7 @@ const deleteProductBulk = async (ids: string[]) => {
     revalidatePath('/shop');
     revalidatePath('/');
   } catch (e) {
-    console.error(e);
+    logger.error(e);
   }
   revalidate('product');
   return res;

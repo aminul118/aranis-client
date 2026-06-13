@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { io, Socket } from 'socket.io-client';
+import { logger } from '../lib/logger';
 
 const SOCKET_URL = (
   process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:5000/api/v1'
@@ -27,7 +28,7 @@ export const useSocket = (
     const socket = getSocket();
 
     const handleConnect = () => {
-      console.log('Connected to socket server');
+      logger.info('Connected to socket server');
       if (userId) {
         socket.emit('join-user-room', userId);
       }

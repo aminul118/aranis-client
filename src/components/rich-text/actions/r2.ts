@@ -2,6 +2,7 @@
 
 import envVars from '@/config/env.config';
 import { DeleteObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { logger } from '../../../lib/logger';
 
 // Configure R2 Client using envVars
 const s3Client = new S3Client({
@@ -30,7 +31,7 @@ export async function deleteImage(key: string) {
     return { success: true };
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'Delete failed';
-    console.error('Error deleting image from R2:', error);
+    logger.error('Error deleting image from R2:', error);
     return { success: false, error: message };
   }
 }

@@ -24,6 +24,7 @@ import { IUser } from '@/types/api.types';
 import { ShieldCheck, User2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
+import { logger } from '../../../../../lib/logger';
 
 interface Props extends IModal {
   user: IUser;
@@ -44,7 +45,7 @@ export function UserDetailsModal({ user, open, setOpen }: Props) {
             setCurrentUser(res.data!);
           }
         } catch (error) {
-          console.error('Failed to fetch current user', error);
+          logger.error('Failed to fetch current user', error);
         }
       };
       fetchCurrent();

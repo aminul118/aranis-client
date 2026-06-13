@@ -18,6 +18,7 @@ import { updateProductBulk } from '@/services/product/product';
 import { Loader2, Plus } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
+import { logger } from '../../../../../lib/logger';
 
 interface BulkDiscountDialogProps {
   isOpen: boolean;
@@ -142,7 +143,7 @@ const BulkDiscountDialog = ({
       }
     } catch (error) {
       toast.error('Something went wrong');
-      console.error(error);
+      logger.error(error);
     } finally {
       setLoading(false);
     }

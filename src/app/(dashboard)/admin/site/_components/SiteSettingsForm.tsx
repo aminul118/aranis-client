@@ -38,6 +38,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { logger } from '../../../../../lib/logger';
 
 const siteSettingSchema = z.object({
   logo: z.any().optional(),
@@ -96,7 +97,7 @@ const SiteSettingsForm = ({ settings }: Props) => {
 
   const onSubmit = async (values: FormValues) => {
     // eslint-disable-next-line no-console
-    console.log('SITE SETTINGS FORM SUBMIT VALUES:', values);
+    logger.info('SITE SETTINGS FORM SUBMIT VALUES:', values);
     const formData = new FormData();
 
     // Text fields should be appended before files for reliable multer parsing

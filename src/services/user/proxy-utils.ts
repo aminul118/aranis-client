@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import baseCookieOption from '../../config/cookie.config';
 import envVars from '../../config/env.config';
+import { logger } from '../../lib/logger';
 
 /**
  * Decodes a JWT token manually to extract the payload.
@@ -12,7 +13,7 @@ export function decodeToken(token: string) {
     const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
     return JSON.parse(atob(base64));
   } catch (error) {
-    console.error('Failed to decode token:', error);
+    logger.error('Failed to decode token:', error);
     return null;
   }
 }

@@ -45,13 +45,14 @@ const createOrder = async (payload: IOrderPayload) => {
     revalidatePath('/shop');
     revalidatePath('/');
   } catch (e) {
-    console.error(e);
+    logger.error(e);
   }
 
   return res;
 };
 
 import type { FetchOptions } from '@/helpers/serverFetchHelper';
+import { logger } from '../../lib/logger';
 
 const getAllOrders = async (
   query: Record<string, string>,
@@ -98,7 +99,7 @@ const updateOrderStatus = async (id: string, status: OrderStatus) => {
     revalidatePath('/shop');
     revalidatePath('/');
   } catch (e) {
-    console.error(e);
+    logger.error(e);
   }
   return res;
 };
@@ -125,7 +126,7 @@ const deleteOrderBulk = async (ids: string[]) => {
     revalidatePath('/shop');
     revalidatePath('/');
   } catch (e) {
-    console.error(e);
+    logger.error(e);
   }
   return res;
 };

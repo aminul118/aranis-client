@@ -11,6 +11,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
+import { logger } from '../../../../lib/logger';
 import OrderCard from './_components/OrderCard';
 import OrderListSkeleton from './_components/OrderListSkeleton';
 
@@ -38,7 +39,7 @@ const UserOrdersPage = () => {
         const res = await getMyOrders();
         if (res.success) setOrders(res.data || []);
       } catch (error) {
-        console.error('Failed to fetch orders', error);
+        logger.error('Failed to fetch orders', error);
       } finally {
         setLoading(false);
       }

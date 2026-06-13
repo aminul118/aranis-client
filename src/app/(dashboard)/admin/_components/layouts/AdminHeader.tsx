@@ -8,6 +8,7 @@ import { useSocket } from '@/hooks/useSocket';
 import { getAdminStats } from '@/services/stats/stats';
 import { IUser } from '@/types';
 import { useCallback, useEffect, useState } from 'react';
+import { logger } from '../../../../../lib/logger';
 import DashboardBreadcrumb from './DashboardBreadcrumb ';
 
 const AdminHeader = ({ user }: { user: IUser }) => {
@@ -20,7 +21,7 @@ const AdminHeader = ({ user }: { user: IUser }) => {
         setPendingOrders(res.data.orderStatusDistribution.Pending || 0);
       }
     } catch (error) {
-      console.error('Failed to fetch stats for notifications:', error);
+      logger.error('Failed to fetch stats for notifications:', error);
     }
   }, []);
 

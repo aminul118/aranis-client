@@ -1,5 +1,6 @@
 import { getDeliveryCharge } from '@/services/delivery-charge/delivery-charge';
 import { Metadata } from 'next';
+import { logger } from '../../../../lib/logger';
 import DeliveryChargeForm from './_components/DeliveryChargeForm';
 
 export const dynamic = 'force-dynamic';
@@ -16,7 +17,7 @@ export default async function DeliveryChargePage() {
       initialData = res.data;
     }
   } catch (error) {
-    console.error('Failed to load delivery settings', error);
+    logger.error('Failed to load delivery settings', error);
   }
 
   return <DeliveryChargeForm initialData={initialData} />;

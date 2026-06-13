@@ -15,6 +15,7 @@ import { getProducts } from '@/services/product/product';
 import { ICartItem, IProduct } from '@/types';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { toast } from 'sonner';
+import { logger } from '../lib/logger';
 
 interface CartContextType {
   cart: ICartItem[];
@@ -91,7 +92,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
         setCart([]);
       }
     } catch (error) {
-      console.error('Failed to fetch server cart', error);
+      logger.error('Failed to fetch server cart', error);
       setCart([]);
     }
   };
@@ -127,7 +128,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
       await fetchServerCart();
       toast.success('Your cart has been synced!');
     } catch (error) {
-      console.error('Failed to sync cart', error);
+      logger.error('Failed to sync cart', error);
       localStorage.removeItem(GUEST_CART_KEY);
       localStorage.removeItem(OLD_CART_KEY);
       await fetchServerCart();
@@ -243,7 +244,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
         return hasChanges ? newCart : prevCart;
       });
     } catch (error) {
-      console.error('Failed to validate cart stock:', error);
+      logger.error('Failed to validate cart stock:', error);
     }
   };
 

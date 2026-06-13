@@ -4,6 +4,7 @@ import { revalidate } from '@/lib/revalidate';
 import serverFetch from '@/lib/server-fetch';
 import { ApiResponse } from '@/types';
 import { revalidatePath } from 'next/cache';
+import { logger } from '../../lib/logger';
 
 export interface IOffer {
   _id?: string;
@@ -24,7 +25,7 @@ const triggerRevalidations = () => {
     revalidate('product');
     revalidate('offer');
   } catch (error) {
-    console.error('Failed to trigger Next.js cache revalidations:', error);
+    logger.error('Failed to trigger Next.js cache revalidations:', error);
   }
 };
 

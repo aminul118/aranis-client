@@ -41,6 +41,7 @@ import {
   useSelected,
 } from 'platejs/react';
 import { toast } from 'sonner';
+import { logger } from '../../../lib/logger';
 import { deleteImage } from '../actions/r2';
 import { CaptionButton } from './caption';
 
@@ -356,13 +357,13 @@ export function MediaToolbar({
                     if (result.success) {
                       toast.success('Image deleted', { id: toastId });
                     } else {
-                      console.error('Cloudinary delete error:', result.error);
+                      logger.error('Cloudinary delete error:', result.error);
                       toast.error('Failed to delete image from cloud', {
                         id: toastId,
                       });
                     }
                   } catch (error) {
-                    console.error('Failed to delete image:', error);
+                    logger.error('Failed to delete image:', error);
                     toast.error('Error deleting image', { id: toastId });
                   }
                 } else {

@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
 import { AlertOctagon, RefreshCcw } from 'lucide-react';
 import { useEffect } from 'react';
+import { logger } from '../lib/logger';
 
 // Make sure to define proper types for the props
 interface GlobalErrorProps {
@@ -14,7 +15,7 @@ interface GlobalErrorProps {
 const GlobalError = ({ error, reset }: GlobalErrorProps) => {
   useEffect(() => {
     // Log the error to an error reporting service
-    console.error(error);
+    logger.error(error);
   }, [error]);
 
   return (

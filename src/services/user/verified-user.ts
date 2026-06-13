@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { NextRequest } from 'next/server';
+import { logger } from '../../lib/logger';
 
 interface DecodedToken {
   userId: string;
@@ -45,7 +46,7 @@ const getVerifiedUser = async (
           return null;
         }
       } catch (e) {
-        console.error('getVerifiedUser Edge decode error:', e);
+        logger.error('getVerifiedUser Edge decode error:', e);
         return null;
       }
     } else {
@@ -61,7 +62,7 @@ const getVerifiedUser = async (
 
     return { userId, email, role, iat, exp } as DecodedToken;
   } catch (err) {
-    console.error('getVerifiedUser error:', (err as Error).message ?? err);
+    logger.error('getVerifiedUser error:', (err as Error).message ?? err);
     return null;
   }
 };

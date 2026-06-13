@@ -4,6 +4,7 @@
 import { getCookie, verifyAccessToken } from '@/lib/jwt';
 import serverFetch from '@/lib/server-fetch';
 import { ApiResponse } from '@/types';
+import { logger } from '../../lib/logger';
 import {
   removeAccessToken,
   removeRefreshToken,
@@ -46,7 +47,7 @@ const getNewAccessToken = async () => {
         { headers: { Cookie: cookieHeader } },
       );
 
-      console.log('RES=>', res);
+      logger.info('RES=>', res);
 
       await setAccessToken(res.data.accessToken);
 

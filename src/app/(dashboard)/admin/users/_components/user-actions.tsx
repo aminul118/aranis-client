@@ -13,6 +13,7 @@ import { deleteUserBulk, getMe } from '@/services/user/users';
 import { IUser } from '@/types/api.types';
 import { EllipsisIcon, Trash2Icon } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { logger } from '../../../../../lib/logger';
 import { UserDetailsModal } from './UserDetailsModal';
 
 const UserActions = ({ user }: { user: IUser }) => {
@@ -28,7 +29,7 @@ const UserActions = ({ user }: { user: IUser }) => {
           setCurrentUser(res.data!);
         }
       } catch (error) {
-        console.error('Failed to fetch current user', error);
+        logger.error('Failed to fetch current user', error);
       }
     };
     fetchCurrent();
