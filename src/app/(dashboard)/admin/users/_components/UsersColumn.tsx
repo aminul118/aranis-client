@@ -17,8 +17,13 @@ const UsersColumn: Column<IUser>[] = [
     accessor: (u) =>
       u.picture ? (
         <Avatar className="h-10 w-10">
-          <AvatarImage src={u.picture} alt={u.fullName} />
-          <AvatarFallback>{u.fullName?.charAt(0).toUpperCase()}</AvatarFallback>
+          <AvatarImage
+            src={u.picture}
+            alt={u.fullName || u.firstName || 'User'}
+          />
+          <AvatarFallback>
+            {(u.fullName || u.firstName || 'U').charAt(0).toUpperCase()}
+          </AvatarFallback>
         </Avatar>
       ) : (
         <PlaceHolderImage className="rounded-full" />
@@ -26,8 +31,9 @@ const UsersColumn: Column<IUser>[] = [
   },
   {
     header: 'Name',
-    accessor: (u) => u.fullName,
-    sortKey: 'fullName',
+    accessor: (u) =>
+      u.fullName || `${u.firstName || ''} ${u.lastName || ''}`.trim() || 'N/A',
+    sortKey: 'firstName',
   },
   {
     header: 'Email / Phone',
