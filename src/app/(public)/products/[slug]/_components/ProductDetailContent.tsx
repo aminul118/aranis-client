@@ -287,7 +287,7 @@ const ProductDetailContent = ({
         />
       </div>
 
-      <div className="hidden lg:block">
+      <div className="block">
         {!!product.videoUrl && (
           <ProductVideoModal videoUrl={product.videoUrl} />
         )}

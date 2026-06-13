@@ -18,7 +18,7 @@ export const ProductDetailMobileSections = ({
     (html || '').replace(/<[^>]*>?/gm, '').trim();
 
   const hasDescText = stripHtml(product.description || '').length > 0;
-  const hasVideo = !!product.youtubeVideoUrl || !!product.videoUrl;
+  const hasVideo = !!product.youtubeVideoUrl;
   const hasRefundPolicy = stripHtml(product.refundPolicy || '').length > 0;
   const hasReturnPolicy = stripHtml(product.returnPolicy || '').length > 0;
 
@@ -44,7 +44,6 @@ export const ProductDetailMobileSections = ({
             Product Video
           </h2>
           <DraggableVideoPlayer
-            videoUrl={product.videoUrl}
             youtubeVideoUrl={product.youtubeVideoUrl}
             getYoutubeEmbedUrl={getYoutubeEmbedUrl}
           />
