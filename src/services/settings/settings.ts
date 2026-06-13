@@ -22,6 +22,7 @@ export interface ISiteSetting {
 
 const getSiteSettings = async () => {
   return await serverFetch.get<ApiResponse<ISiteSetting>>('/site-settings', {
+    cache: 'force-cache',
     next: {
       tags: ['site-settings'],
     },

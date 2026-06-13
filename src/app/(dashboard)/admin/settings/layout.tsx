@@ -1,10 +1,8 @@
 import SettingsSidebar from '@/app/(dashboard)/admin/settings/_components/SettingsSidebar';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { getMe } from '@/services/user/users';
-import { Suspense } from 'react';
 import AdminSidebar from '../_components/layouts/admin-sidebar';
 import AdminHeader from '../_components/layouts/AdminHeader';
-import { AdminSidebarSkeleton } from '../_components/layouts/AdminSidebarSkeleton';
 
 export default async function AdminSettingsLayout({
   children,
@@ -19,9 +17,7 @@ export default async function AdminSettingsLayout({
 
   return (
     <SidebarProvider>
-      <Suspense fallback={<AdminSidebarSkeleton />}>
-        <AdminSidebar user={user} />
-      </Suspense>
+      <AdminSidebar user={user} />
       <SidebarInset>
         <AdminHeader user={user} />
         <div className="container mx-auto p-6">
