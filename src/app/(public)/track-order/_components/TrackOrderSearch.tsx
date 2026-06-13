@@ -38,7 +38,7 @@ export default function TrackOrderSearch({
                   size={18}
                 />
                 <Input
-                  placeholder="Enter your Order ID (e.g. 6625...)"
+                  placeholder="Enter your Tracking Number (e.g. TRK-...)"
                   value={orderId}
                   onChange={(e) => setOrderId(e.target.value)}
                   className="border-border/50 h-12 rounded-xl bg-black/5 pl-11 text-sm transition-all focus:bg-black/10 focus:ring-blue-500/20 dark:bg-white/5 dark:focus:bg-white/10"

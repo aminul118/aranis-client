@@ -30,7 +30,9 @@ export interface IOrderItem {
 }
 
 export interface IOrder {
-  _id?: string;
+  _id: string;
+  orderNumber?: string;
+  trackingNumber?: string;
   user: IUser;
   items: IOrderItem[];
   totalPrice: number;

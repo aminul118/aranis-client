@@ -17,7 +17,7 @@ const OrdersColumn: Column<IOrder>[] = [
         href={`/admin/orders/${o._id}`}
         className="font-semibold text-blue-500 transition-colors hover:underline"
       >
-        #{o._id?.slice(-6).toUpperCase() || 'N/A'}
+        #{o.orderNumber || o._id?.slice(-6).toUpperCase() || 'N/A'}
       </Link>
     ),
     sortKey: '_id',

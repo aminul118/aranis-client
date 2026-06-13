@@ -163,7 +163,7 @@ const OrderDetailsView = ({ order }: { order: IOrder }) => {
             <h1 className="text-foreground text-3xl font-black tracking-tight">
               Order{' '}
               <span className="text-blue-500">
-                #{order._id?.slice(-6).toUpperCase()}
+                #{order.orderNumber || order._id?.slice(-6).toUpperCase()}
               </span>
             </h1>
             <div className="origin-left scale-110">
@@ -185,6 +185,12 @@ const OrderDetailsView = ({ order }: { order: IOrder }) => {
               })}
             </span>
           </div>
+          {order.trackingNumber && (
+            <div className="text-muted-foreground mt-2 flex items-center gap-2 text-sm font-bold">
+              <Truck size={14} />
+              <span>Tracking Number: {order.trackingNumber}</span>
+            </div>
+          )}
         </div>
         <Button
           variant="outline"

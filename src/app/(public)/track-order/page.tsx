@@ -15,8 +15,8 @@ export default function TrackOrderPage() {
             Track Your <span className="text-blue-500">Journey</span>
           </h1>
           <p className="text-muted-foreground mx-auto max-w-lg text-sm md:text-base">
-            Enter your Order ID to see where your premium pieces are in their
-            journey to your doorstep.
+            Enter your Tracking Number to see where your premium pieces are in
+            their journey to your doorstep.
           </p>
         </div>
 
@@ -29,7 +29,7 @@ export default function TrackOrderPage() {
 export const metadata: Metadata = generateMetaTags({
   title: 'Track Order | Aranis Fashion',
   description:
-    'Real-time tracking of your Aranis Fashion premium order. Enter your Order ID to track the courier journey in real-time.',
+    'Real-time tracking of your Aranis Fashion premium order. Enter your Tracking Number to track the courier journey in real-time.',
   keywords:
     'track order, order tracking, Aranis Fashion, premium clothing tracking, delivery status',
   image: '/seo/aminul-hero-ss.png',
