@@ -29,6 +29,7 @@ interface ShopContentProps {
   };
   isOfferPage?: boolean;
   offerTag?: string;
+  offerName?: string;
   products: IProduct[];
   meta: IMeta | null;
   dbCategories: ICategory[];
@@ -41,6 +42,7 @@ const ShopContent = ({
   initialFilters,
   isOfferPage = false,
   offerTag,
+  offerName,
   products = [],
   meta = null,
   dbCategories = [],
@@ -233,8 +235,14 @@ const ShopContent = ({
               {isOfferPage && (
                 <div className="container mx-auto mb-10 px-4 text-center">
                   <h1 className="text-foreground text-3xl font-black tracking-tight uppercase md:text-5xl">
-                    {offerTag || 'Special'}{' '}
-                    <span className="text-red-500">Offers</span>
+                    {offerName ? (
+                      <span className="text-red-500">{offerName}</span>
+                    ) : (
+                      <>
+                        {offerTag || 'Special'}{' '}
+                        <span className="text-red-500">Offers</span>
+                      </>
+                    )}
                   </h1>
                   <p className="text-muted-foreground mx-auto mt-2 max-w-xl text-sm md:text-base">
                     Discover our premium collections at exclusive, temporary

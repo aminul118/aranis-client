@@ -15,16 +15,9 @@ export interface ISiteSetting {
   _id?: string;
   logo: string;
   socialLinks: ISocialLink[];
-  title?: string;
-  description?: string;
-  keywords?: string;
-  baseImage?: string;
-  activeOfferTag?: string;
   contactNumber?: string;
   email?: string;
   location?: string;
-  returnPolicy?: string;
-  refundPolicy?: string;
 }
 
 const getSiteSettings = async () => {

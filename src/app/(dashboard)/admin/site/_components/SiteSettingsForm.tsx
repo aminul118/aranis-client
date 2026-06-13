@@ -28,7 +28,6 @@ import {
   MessageCircle,
   Phone,
   Save,
-  Search,
   Send,
   Share2,
   Twitter,
@@ -38,22 +37,13 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import RichTextEditor from '@/components/ui/rich-text-editor';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Textarea } from '@/components/ui/textarea';
 
 const siteSettingSchema = z.object({
   logo: z.any().optional(),
-  title: z.string().optional(),
-  description: z.string().optional(),
-  keywords: z.string().optional(),
-  baseImage: z.any().optional(),
-  activeOfferTag: z.string().optional(),
   contactNumber: z.string().optional(),
   email: z.string().email('Invalid email address').or(z.literal('')),
   location: z.string().optional(),
-  returnPolicy: z.string().optional(),
-  refundPolicy: z.string().optional(),
   socialLinks: z.array(
     z.object({
       platform: z.string(),
@@ -80,24 +70,6 @@ const platformIcons: Record<string, any> = {
   GitHub: Globe,
 };
 
-const DEFAULT_REFUND_POLICY = `<p>We believe in the quality of our products. If you are not completely satisfied with your purchase, we offer a straightforward refund policy.</p>
-<ul class="mt-4 space-y-2">
-  <li>Refunds must be requested within 30 days of delivery.</li>
-  <li>The item must be in its original condition, unworn, unwashed, with all original tags attached.</li>
-  <li>Refunds will be processed to the original payment method within 5-7 business days after we receive the returned item.</li>
-  <li>Shipping costs are non-refundable unless the item received was damaged or incorrect.</li>
-</ul>
-<p class="mt-4">Please contact our support team at support@Aranis.com to initiate a refund request.</p>`;
-
-const DEFAULT_RETURN_POLICY = `<p>Our return process is designed to be as seamless as possible for you.</p>
-<ul class="mt-4 space-y-2">
-  <li>You have 30 days from the date of delivery to return your item.</li>
-  <li>To initiate a return, please log in to your account, navigate to "My Orders," and select the item you wish to return.</li>
-  <li>You will receive a pre-paid return shipping label via email.</li>
-  <li>Please package the item securely and drop it off at any authorized shipping location.</li>
-</ul>
-<p class="mt-4">Once your return is received and inspected, we will notify you of the approval or rejection of your return. Approved returns will be refunded or exchanged according to your preference.</p>`;
-
 const SiteSettingsForm = ({ settings }: Props) => {
   const router = useRouter();
   const { executePost } = useActionHandler();
@@ -106,16 +78,9 @@ const SiteSettingsForm = ({ settings }: Props) => {
     resolver: zodResolver(siteSettingSchema) as any,
     defaultValues: {
       logo: settings.logo || '',
-      title: settings.title || '',
-      description: settings.description || '',
-      keywords: settings.keywords || '',
-      baseImage: settings.baseImage || '',
-      activeOfferTag: settings.activeOfferTag || '',
       contactNumber: settings.contactNumber || '',
       email: settings.email || '',
       location: settings.location || '',
-      returnPolicy: settings.returnPolicy || DEFAULT_RETURN_POLICY,
-      refundPolicy: settings.refundPolicy || DEFAULT_REFUND_POLICY,
       socialLinks: settings.socialLinks || [
         { platform: 'Facebook', url: '', isActive: true },
         { platform: 'WhatsApp', url: '', isActive: true },
@@ -135,27 +100,15 @@ const SiteSettingsForm = ({ settings }: Props) => {
     const formData = new FormData();
 
     // Text fields should be appended before files for reliable multer parsing
-    formData.append('title', values.title || '');
-    formData.append('description', values.description || '');
-    formData.append('keywords', values.keywords || '');
-    formData.append('activeOfferTag', values.activeOfferTag || '');
     formData.append('contactNumber', values.contactNumber || '');
     formData.append('email', values.email || '');
     formData.append('location', values.location || '');
-    formData.append('returnPolicy', values.returnPolicy || '');
-    formData.append('refundPolicy', values.refundPolicy || '');
     formData.append('socialLinks', JSON.stringify(values.socialLinks));
 
     if (values.logo instanceof File) {
       formData.append('logo', values.logo);
     } else if (typeof values.logo === 'string') {
       formData.append('logo', values.logo);
-    }
-
-    if (values.baseImage instanceof File) {
-      formData.append('baseImage', values.baseImage);
-    } else if (typeof values.baseImage === 'string') {
-      formData.append('baseImage', values.baseImage);
     }
 
     await executePost({
@@ -182,12 +135,6 @@ const SiteSettingsForm = ({ settings }: Props) => {
               <Layout className="h-4 w-4" /> Branding
             </TabsTrigger>
             <TabsTrigger
-              value="seo"
-              className="flex items-center gap-2 rounded-xl px-6 py-2.5 text-xs font-black tracking-widest uppercase transition-all data-[state=active]:bg-emerald-600 data-[state=active]:text-white"
-            >
-              <Search className="h-4 w-4" /> SEO
-            </TabsTrigger>
-            <TabsTrigger
               value="contact"
               className="flex items-center gap-2 rounded-xl px-6 py-2.5 text-xs font-black tracking-widest uppercase transition-all data-[state=active]:bg-amber-600 data-[state=active]:text-white"
             >
@@ -198,12 +145,6 @@ const SiteSettingsForm = ({ settings }: Props) => {
               className="flex items-center gap-2 rounded-xl px-6 py-2.5 text-xs font-black tracking-widest uppercase transition-all data-[state=active]:bg-purple-600 data-[state=active]:text-white"
             >
               <Share2 className="h-4 w-4" /> Social
-            </TabsTrigger>
-            <TabsTrigger
-              value="policies"
-              className="flex items-center gap-2 rounded-xl px-6 py-2.5 text-xs font-black tracking-widest uppercase transition-all data-[state=active]:bg-red-600 data-[state=active]:text-white"
-            >
-              <Info className="h-4 w-4" /> Policies
             </TabsTrigger>
           </TabsList>
 
@@ -264,134 +205,6 @@ const SiteSettingsForm = ({ settings }: Props) => {
                     </li>
                   ))}
                 </ul>
-              </div>
-            </div>
-          </TabsContent>
-
-          {/* SEO Tab */}
-          <TabsContent value="seo" className="space-y-8 outline-none">
-            <div className="space-y-10">
-              <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-                <div className="border-border bg-card space-y-8 rounded-[32px] border p-10">
-                  <div className="flex items-center gap-4">
-                    <div className="rounded-2xl bg-emerald-500/10 p-4 text-emerald-400">
-                      <Search className="h-6 w-6" />
-                    </div>
-                    <h4 className="text-foreground text-xl font-black tracking-tight uppercase italic">
-                      Core Metadata
-                    </h4>
-                  </div>
-
-                  <FormField
-                    control={form.control}
-                    name="title"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-[10px] font-black tracking-[0.2em] text-emerald-500 uppercase">
-                          Site Meta Title
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            className="border-border bg-muted/50 h-12 rounded-xl font-bold focus:border-emerald-500/50"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="keywords"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-[10px] font-black tracking-[0.2em] text-emerald-500 uppercase">
-                          Global Keywords
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            className="border-border bg-muted/50 h-12 rounded-xl font-bold focus:border-emerald-500/50"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="activeOfferTag"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-[10px] font-black tracking-[0.2em] text-emerald-500 uppercase">
-                          Active Offer Tag (e.g. Eid Offer)
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            className="border-border bg-muted/50 h-12 rounded-xl font-bold focus:border-emerald-500/50"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-
-                <div className="border-border bg-card space-y-8 rounded-[32px] border p-10">
-                  <div className="flex items-center gap-4">
-                    <div className="rounded-2xl bg-purple-500/10 p-4 text-purple-400">
-                      <Share2 className="h-6 w-6" />
-                    </div>
-                    <h4 className="text-foreground text-xl font-black tracking-tight uppercase italic">
-                      Social Visibility
-                    </h4>
-                  </div>
-
-                  <FormField
-                    control={form.control}
-                    name="baseImage"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-[10px] font-black tracking-[0.2em] text-purple-500 uppercase">
-                          OG Share Image
-                        </FormLabel>
-                        <FormControl>
-                          <SingleImageUploader
-                            defaultValue={field.value}
-                            onChange={(file) => field.onChange(file)}
-                            recommendation="Recommended: Landscape (e.g. 1200x630 px, 1.91:1)"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              </div>
-
-              <div className="border-border bg-card rounded-[32px] border p-10">
-                <FormField
-                  control={form.control}
-                  name="description"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-[10px] font-black tracking-[0.2em] text-emerald-500 uppercase">
-                        Global Meta Description
-                      </FormLabel>
-                      <FormControl>
-                        <Textarea
-                          rows={4}
-                          className="border-border bg-muted/50 rounded-2xl font-medium focus:border-emerald-500/50"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
               </div>
             </div>
           </TabsContent>
@@ -541,62 +354,6 @@ const SiteSettingsForm = ({ settings }: Props) => {
                   </div>
                 );
               })}
-            </div>
-          </TabsContent>
-
-          {/* Policies Tab */}
-          <TabsContent value="policies" className="space-y-8 outline-none">
-            <div className="border-border bg-card space-y-8 rounded-[32px] border p-10">
-              <div className="flex items-center gap-4">
-                <div className="rounded-2xl bg-red-500/10 p-4 text-red-400">
-                  <Info className="h-6 w-6" />
-                </div>
-                <h4 className="text-foreground text-xl font-black tracking-tight uppercase italic">
-                  Refund & Return Policies
-                </h4>
-              </div>
-
-              <FormField
-                control={form.control}
-                name="refundPolicy"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-[10px] font-black tracking-[0.2em] text-red-500 uppercase">
-                      Refund Policy
-                    </FormLabel>
-                    <FormControl>
-                      <RichTextEditor
-                        value={field.value || ''}
-                        onChange={(val) => field.onChange(val)}
-                        placeholder="Write dynamic refund policy..."
-                        className="border-border bg-muted/50 rounded-2xl border p-4"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="returnPolicy"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-[10px] font-black tracking-[0.2em] text-red-500 uppercase">
-                      Return Policy
-                    </FormLabel>
-                    <FormControl>
-                      <RichTextEditor
-                        value={field.value || ''}
-                        onChange={(val) => field.onChange(val)}
-                        placeholder="Write dynamic return policy..."
-                        className="border-border bg-muted/50 rounded-2xl border p-4"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
             </div>
           </TabsContent>
         </Tabs>

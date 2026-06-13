@@ -21,15 +21,7 @@ type LinkItem = {
 
 const TopBar = ({ siteSettings }: { siteSettings?: any }) => {
   const pathname = usePathname();
-  const activeOffer = siteSettings?.activeOfferTag || 'Eid offer';
-
   const links: LinkItem[] = [
-    {
-      name: activeOffer,
-      href: `/offers?tag=${encodeURIComponent(activeOffer)}`,
-      icon: Gift,
-      iconColor: 'text-red-500',
-    },
     {
       name: 'Gift Card',
       href: '/gift-cards',
@@ -80,31 +72,29 @@ const TopBar = ({ siteSettings }: { siteSettings?: any }) => {
 
         {/* Right Side Dynamic Links */}
         <div className="flex items-center gap-6">
-          {links
-            .filter((l) => l.name !== activeOffer)
-            .map((link) => {
-              const Icon = link.icon;
+          {links.map((link) => {
+            const Icon = link.icon;
 
-              return (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  className={`group flex items-center gap-1 transition-colors hover:text-blue-600 dark:hover:text-blue-400 ${
-                    pathname === link.href
-                      ? 'text-blue-600 dark:text-blue-400'
-                      : ''
-                  }`}
-                >
-                  {Icon && (
-                    <Icon
-                      size={12}
-                      className={`${link.iconColor} transition-transform group-hover:scale-110`}
-                    />
-                  )}
-                  <span>{link.name}</span>
-                </Link>
-              );
-            })}
+            return (
+              <Link
+                key={link.name}
+                href={link.href}
+                className={`group flex items-center gap-1 transition-colors hover:text-blue-600 dark:hover:text-blue-400 ${
+                  pathname === link.href
+                    ? 'text-blue-600 dark:text-blue-400'
+                    : ''
+                }`}
+              >
+                {Icon && (
+                  <Icon
+                    size={12}
+                    className={`${link.iconColor} transition-transform group-hover:scale-110`}
+                  />
+                )}
+                <span>{link.name}</span>
+              </Link>
+            );
+          })}
         </div>
       </div>
     </div>

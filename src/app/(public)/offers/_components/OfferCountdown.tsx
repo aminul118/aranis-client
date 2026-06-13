@@ -63,7 +63,7 @@ export default function OfferCountdown({ offer }: Props) {
   return (
     <div className="mb-12 flex flex-col items-center justify-center">
       <h2 className="mb-6 text-center text-xl font-black tracking-widest uppercase md:text-2xl">
-        {isStarted ? 'Offer Ends In' : 'Offer Starts In'}
+        {isStarted ? `${offer.name} Ends In` : `${offer.name} Starts In`}
       </h2>
       <div className="flex items-center justify-center gap-4 md:gap-8">
         <TimeBlock value={timeLeft.days} label="Days" />

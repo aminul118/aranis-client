@@ -76,6 +76,7 @@ const OffersPage = async ({ searchParams }: Props) => {
       <ShopContent
         isOfferPage={true}
         offerTag={verifiedTag}
+        offerName={activeOffer?.name}
         products={products || []}
         meta={meta || null}
         dbCategories={dbCategories || []}
