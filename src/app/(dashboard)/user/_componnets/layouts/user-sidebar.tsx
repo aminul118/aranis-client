@@ -9,12 +9,12 @@ import {
 import { IUser } from '@/types';
 import Menu from './Menu';
 
-const UserSidebar = ({ user }: { user: IUser }) => {
+const UserSidebar = ({ user, logoUrl }: { user: IUser; logoUrl?: string }) => {
   return (
     <Sidebar collapsible="offcanvas" className="bg-black! text-white!">
       <SidebarHeader>
         <div className="flex items-center gap-2 px-4 py-4">
-          <Logo />
+          <Logo logoUrl={logoUrl} />
         </div>
       </SidebarHeader>
       <Separator className="bg-white/10" />

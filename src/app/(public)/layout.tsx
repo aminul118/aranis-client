@@ -39,7 +39,7 @@ const RootLayout = async ({ children }: Children) => {
         user={user as any}
         navItems={sortedNavItems as any}
         activeOffers={activeOffers}
-        logo={<Logo className="text-white" />}
+        logo={<Logo className="text-white" logoUrl={siteSettings?.logo} />}
         siteSettings={siteSettings}
       />
       <div className="grow pt-[60px] lg:pt-[176px]">{children}</div>

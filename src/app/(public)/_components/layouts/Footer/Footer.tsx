@@ -32,7 +32,7 @@ const Footer = ({
           {/* Brand Column */}
           <div className="lg:col-span-1">
             <div className="mb-4">
-              <AminulLogo />
+              <AminulLogo logoUrl={siteSettings?.logo} />
             </div>
             <p className="mb-6 max-w-xs text-sm leading-relaxed font-medium text-slate-400 italic">
               The Aranis - Discover the latest trends in high-quality apparel.

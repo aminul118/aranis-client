@@ -1,4 +1,3 @@
-import icons from '@/config/icons';
 import { cn } from '@/lib/utils';
 import { getSiteSettings } from '@/services/settings/settings';
 import Image from 'next/image';
@@ -16,15 +15,21 @@ interface Props {
  */
 const Logo = async ({ className, logoUrl }: Props) => {
   let settings = null;
-  try {
-    const res = await getSiteSettings();
-    settings = res?.data;
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    logger.error('Failed to fetch site settings for logo:', error);
+  if (!logoUrl) {
+    try {
+      const res = await getSiteSettings();
+      settings = res?.data;
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      logger.error('Failed to fetch site settings for logo:', error);
+    }
   }
 
-  const src = settings?.logo || logoUrl || icons.logo;
+  const src = logoUrl || settings?.logo;
+
+  if (!src) {
+    return null; // Return null instead of falling back to static logo to strictly enforce server logo
+  }
 
   return (
     <Link
