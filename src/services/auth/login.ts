@@ -2,7 +2,7 @@
 
 import serverFetch from '@/lib/server-fetch';
 import { ApiResponse } from '@/types';
-import { cookies } from 'next/headers';
+import { setAccessToken, setRefreshToken } from './cookie-token';
 
 export const loginWithPassword = async (data: any) => {
   const res = await serverFetch.post<ApiResponse<any>>(
@@ -16,19 +16,10 @@ export const loginWithPassword = async (data: any) => {
   );
 
   if (res.success && res.data && res.data.accessToken) {
-    const cookieStore = await cookies();
-    cookieStore.set('accessToken', res.data.accessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      path: '/',
-    });
-    cookieStore.set('refreshToken', res.data.refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      path: '/',
-    });
+    await setAccessToken(res.data.accessToken);
+    if (res.data.refreshToken) {
+      await setRefreshToken(res.data.refreshToken);
+    }
   }
 
   return res;

@@ -1,22 +1,21 @@
 'use server';
 
+import { getCookie } from '@/lib/jwt';
 import { revalidate } from '@/lib/revalidate';
 import serverFetch from '@/lib/server-fetch';
 import { ApiResponse, IUser } from '@/types';
+import { cache } from 'react';
 
-import { getCookie } from '@/lib/jwt';
-
-const getMe = async () => {
+const getMe = cache(async () => {
   const token = await getCookie('accessToken');
   if (!token) return { success: false, data: null as any };
 
   return await serverFetch.get<ApiResponse<IUser>>('/user/me', {
-    cache: 'no-store',
     next: {
       tags: ['ME'],
     },
   });
-};
+});
 
 const getUsers = async (query: Record<string, string>) => {
   return await serverFetch.get<ApiResponse<IUser[]>>('/user/all-users', {

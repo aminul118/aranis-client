@@ -12,6 +12,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useUser } from '@/context/UserContext';
 import useSearchParamsValues from '@/hooks/useSearchParamsValues';
 import { loginWithPassword } from '@/services/auth/login';
 import { requestOTP } from '@/services/auth/otp/sendOTP';
@@ -37,6 +38,7 @@ const LoginForm = () => {
   const [loginMode, setLoginMode] = useState<'otp' | 'password'>('otp');
   const [showPassword, setShowPassword] = useState(false);
 
+  const { refreshUser } = useUser();
   const form = useForm<any>({
     resolver: zodResolver(
       loginMode === 'otp' ? loginFormValidation : passwordLoginValidation,
@@ -78,10 +80,12 @@ const LoginForm = () => {
               `/verify?identifier=${encodeURIComponent(values.identifier)}${redirect ? `&redirect=${redirect}` : ''}${attemptsLeft !== undefined ? `&attemptsLeft=${attemptsLeft}` : ''}`,
             );
           } else if (redirect) {
+            await refreshUser();
             const path = redirect.startsWith('/') ? redirect : `/${redirect}`;
             router.push(path);
             router.refresh();
           } else {
+            await refreshUser();
             // Use user role from login response directly
             const role = res.data?.user?.role;
             if (role === 'ADMIN' || role === 'SUPER_ADMIN') {
