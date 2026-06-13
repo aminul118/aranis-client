@@ -7,10 +7,11 @@ import { useEffect, useState } from 'react';
 const RELOAD_LIMIT = 5;
 const WARNING_RELOAD = 4;
 const BLOCK_DURATION_MS = 2 * 60 * 1000; // 2 minutes
+const TIME_WINDOW_MS = 10 * 1000; // 10 seconds window for rapid reloads
 const STORAGE_KEY = 'aranis_reload_tracker';
 
 interface ReloadData {
-  count: number;
+  timestamps: number[];
   date: string;
   blockUntil?: number;
 }
@@ -18,10 +19,11 @@ interface ReloadData {
 export default function ReloadTracker() {
   const [showWarning, setShowWarning] = useState(false);
   const [isBlocked, setIsBlocked] = useState(false);
+  const [warningCount, setWarningCount] = useState(0);
 
   useEffect(() => {
     const today = new Date().toDateString();
-    let reloadData: ReloadData = { count: 0, date: today };
+    let reloadData: ReloadData = { timestamps: [], date: today };
 
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
@@ -42,21 +44,30 @@ export default function ReloadTracker() {
       setIsBlocked(true);
       document.cookie = `aranis_block_until=${reloadData.blockUntil}; path=/; max-age=${Math.ceil((reloadData.blockUntil - now) / 1000)}`;
     } else {
-      // Block expired or not blocked, increment count
+      // Block expired or not blocked
       if (reloadData.blockUntil && now >= reloadData.blockUntil) {
         // Reset after block expires
-        reloadData.count = 0;
+        reloadData.timestamps = [];
         delete reloadData.blockUntil;
       }
 
-      reloadData.count += 1;
+      // Filter out timestamps that are older than the time window
+      reloadData.timestamps = (reloadData.timestamps || []).filter(
+        (t) => now - t <= TIME_WINDOW_MS,
+      );
 
-      if (reloadData.count >= RELOAD_LIMIT) {
+      // Add current reload timestamp
+      reloadData.timestamps.push(now);
+
+      const currentReloads = reloadData.timestamps.length;
+      setWarningCount(currentReloads);
+
+      if (currentReloads >= RELOAD_LIMIT) {
         reloadData.blockUntil = now + BLOCK_DURATION_MS;
         setIsBlocked(true);
         // Set a cookie so Next.js middleware knows this user is blocked
         document.cookie = `aranis_block_until=${reloadData.blockUntil}; path=/; max-age=${2 * 60}`;
-      } else if (reloadData.count === WARNING_RELOAD) {
+      } else if (currentReloads >= WARNING_RELOAD) {
         setShowWarning(true);
       }
     }
@@ -68,7 +79,7 @@ export default function ReloadTracker() {
       const timeRemaining = reloadData.blockUntil - Date.now();
       const timeoutId = setTimeout(() => {
         setIsBlocked(false);
-        reloadData.count = 0;
+        reloadData.timestamps = [];
         delete reloadData.blockUntil;
         localStorage.setItem(STORAGE_KEY, JSON.stringify(reloadData));
         // Remove the cookie
@@ -120,8 +131,8 @@ export default function ReloadTracker() {
             </button>
           </AlertTitle>
           <AlertDescription>
-            You have reloaded the page {WARNING_RELOAD} times. If you reload
-            again, you will be blocked for 2 minutes.
+            You have rapidly reloaded the page {warningCount} times. If you
+            reload again within 10 seconds, you will be blocked for 2 minutes.
           </AlertDescription>
         </Alert>
       </div>
