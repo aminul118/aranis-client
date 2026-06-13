@@ -24,7 +24,7 @@ import { MenuGroup, UserRole } from '@/types/admin-menu';
 import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Socket } from 'socket.io-client';
 
 const SOCKET_URL = (
@@ -43,7 +43,7 @@ const DynamicMenu = ({ menuGroups, role, user }: DynamicMenuProps) => {
   const [unreadOrderCount, setUnreadOrderCount] = useState(0);
   const socketRef = useRef<Socket | null>(null);
 
-  const fetchUnreadCount = async () => {
+  const fetchUnreadCount = useCallback(async () => {
     if (role === 'ADMIN' || role === 'SUPER_ADMIN') {
       try {
         const res = await getUnreadCount();
@@ -54,9 +54,9 @@ const DynamicMenu = ({ menuGroups, role, user }: DynamicMenuProps) => {
         console.error('Failed to fetch unread chat count:', error);
       }
     }
-  };
+  }, [role]);
 
-  const fetchUnreadOrdersCount = async () => {
+  const fetchUnreadOrdersCount = useCallback(async () => {
     if (role === 'ADMIN' || role === 'SUPER_ADMIN') {
       try {
         const res = await getUnreadOrdersCount();
@@ -67,7 +67,7 @@ const DynamicMenu = ({ menuGroups, role, user }: DynamicMenuProps) => {
         console.error('Failed to fetch unread orders count:', error);
       }
     }
-  };
+  }, [role]);
 
   useEffect(() => {
     fetchUnreadCount();
@@ -104,23 +104,23 @@ const DynamicMenu = ({ menuGroups, role, user }: DynamicMenuProps) => {
     }
   };
 
-  const handleSocketUpdate = () => {
+  const handleSocketUpdate = useCallback(() => {
     fetchUnreadCount();
-  };
+  }, [role]);
 
   const lastBeep = useRef(0);
-  const handleNewMessage = () => {
+  const handleNewMessage = useCallback(() => {
     fetchUnreadCount();
     const now = Date.now();
     if (now - lastBeep.current > 1000) {
       lastBeep.current = now;
       playNotificationSound();
     }
-  };
+  }, [role]);
 
-  const handleOrderSocketUpdate = () => {
+  const handleOrderSocketUpdate = useCallback(() => {
     fetchUnreadOrdersCount();
-  };
+  }, [role]);
 
   useSocket(
     handleSocketUpdate,

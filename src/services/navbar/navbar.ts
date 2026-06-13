@@ -51,7 +51,6 @@ const getNavbars = async (query: Record<string, string>) => {
     query,
     next: {
       tags: ['navbar'],
-      revalidate: 3600,
     },
   });
 };

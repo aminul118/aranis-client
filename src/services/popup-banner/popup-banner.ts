@@ -17,7 +17,7 @@ const getActivePopupBanner = async () => {
   return await serverFetch.get<ApiResponse<IPopupBanner>>(
     '/popup-banners/active',
     {
-      next: { tags: ['popup-banners'], revalidate: 3600 },
+      next: { tags: ['popup-banners'] },
     },
   );
 };
@@ -25,7 +25,7 @@ const getActivePopupBanner = async () => {
 const getPopupBanners = async (query: Record<string, string> = {}) => {
   return await serverFetch.get<ApiResponse<IPopupBanner[]>>('/popup-banners', {
     query,
-    next: { tags: ['popup-banners'], revalidate: 3600 },
+    next: { tags: ['popup-banners'] },
   });
 };
 
