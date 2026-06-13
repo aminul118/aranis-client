@@ -75,7 +75,7 @@ const ProductPage = async ({ params }: Props) => {
       .slice(0, 10) || [];
 
   return (
-    <div className="bg-background min-h-screen pt-8 pb-16">
+    <div className="bg-background pt-8 pb-16">
       <div className="container mx-auto px-4 md:px-6">
         <Link
           href="/shop"
@@ -88,7 +88,7 @@ const ProductPage = async ({ params }: Props) => {
         <ProductDetailContent product={product} settings={settings} />
 
         {relatedProducts.length > 0 && (
-          <div className="border-border/50 mt-24 border-t pt-16">
+          <div className="mt-12 pt-16">
             <div className="mb-10 text-center">
               <h2 className="text-foreground mb-4 text-3xl font-black tracking-tight capitalize md:text-4xl">
                 You May Also Like

@@ -42,15 +42,17 @@ export const ProductDetailTabs = ({
     hasReturnPolicy,
   ].filter(Boolean).length;
 
+  if (tabCount === 0) return null;
+
   return (
-    <div className="border-border/50 space-y-10 border-t pt-8">
+    <div className="space-y-10 pt-8">
       <Tabs defaultValue={defaultTab} className="w-full">
         {tabCount > 1 && (
-          <TabsList className="mb-6 flex w-fit max-w-full justify-start gap-2 overflow-x-auto rounded-none border-b bg-transparent p-0">
+          <TabsList className="mb-12 flex h-12 w-full max-w-2xl overflow-x-auto rounded-full bg-[#334155]/60 p-0 shadow-inner dark:bg-slate-800/80">
             {hasDescriptionTab && (
               <TabsTrigger
                 value="description"
-                className="text-muted-foreground data-[state=active]:border-foreground data-[state=active]:text-foreground rounded-none border-b-2 border-transparent px-3 py-2 text-xs font-bold tracking-wide uppercase data-[state=active]:bg-transparent data-[state=active]:shadow-none"
+                className="flex h-full flex-1 items-center justify-center gap-2 rounded-full px-6 text-base font-medium text-slate-300 transition-all duration-300 data-[state=active]:bg-[#3b82f6] data-[state=active]:text-white data-[state=active]:shadow-md"
               >
                 Description
               </TabsTrigger>
@@ -58,7 +60,7 @@ export const ProductDetailTabs = ({
             {!!product.youtubeVideoUrl && (
               <TabsTrigger
                 value="video"
-                className="text-muted-foreground data-[state=active]:border-foreground data-[state=active]:text-foreground rounded-none border-b-2 border-transparent px-3 py-2 text-xs font-bold tracking-wide uppercase data-[state=active]:bg-transparent data-[state=active]:shadow-none"
+                className="flex h-full flex-1 items-center justify-center gap-2 rounded-full px-6 text-base font-medium text-slate-300 transition-all duration-300 data-[state=active]:bg-[#3b82f6] data-[state=active]:text-white data-[state=active]:shadow-md"
               >
                 Product Video
               </TabsTrigger>
@@ -66,7 +68,7 @@ export const ProductDetailTabs = ({
             {hasRefundPolicy && (
               <TabsTrigger
                 value="refund"
-                className="text-muted-foreground data-[state=active]:border-foreground data-[state=active]:text-foreground rounded-none border-b-2 border-transparent px-3 py-2 text-xs font-bold tracking-wide uppercase data-[state=active]:bg-transparent data-[state=active]:shadow-none"
+                className="flex h-full flex-1 items-center justify-center gap-2 rounded-full px-6 text-base font-medium text-slate-300 transition-all duration-300 data-[state=active]:bg-[#3b82f6] data-[state=active]:text-white data-[state=active]:shadow-md"
               >
                 Refund Policy
               </TabsTrigger>
@@ -74,7 +76,7 @@ export const ProductDetailTabs = ({
             {hasReturnPolicy && (
               <TabsTrigger
                 value="return"
-                className="text-muted-foreground data-[state=active]:border-foreground data-[state=active]:text-foreground rounded-none border-b-2 border-transparent px-3 py-2 text-xs font-bold tracking-wide uppercase data-[state=active]:bg-transparent data-[state=active]:shadow-none"
+                className="flex h-full flex-1 items-center justify-center gap-2 rounded-full px-6 text-base font-medium text-slate-300 transition-all duration-300 data-[state=active]:bg-[#3b82f6] data-[state=active]:text-white data-[state=active]:shadow-md"
               >
                 Return Policy
               </TabsTrigger>

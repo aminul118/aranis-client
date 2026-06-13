@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils';
 import { IUser } from '@/types';
 import { motion, useMotionValueEvent, useScroll } from 'framer-motion';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import DesktopNavbar from './DesktopNavbar';
 import MobileNavbar from './MobileNavbar';
@@ -60,7 +61,7 @@ const Navbar = ({
     }
   });
 
-  const resolvedLogo = siteSettings?.logo ? (
+  const rawLogo = siteSettings?.logo ? (
     <Image
       src={siteSettings.logo}
       alt="Logo"
@@ -71,6 +72,15 @@ const Navbar = ({
     />
   ) : (
     logo
+  );
+
+  const resolvedLogo = (
+    <Link
+      href="/"
+      className="inline-block transition-transform hover:scale-105 active:scale-95"
+    >
+      {rawLogo}
+    </Link>
   );
 
   return (

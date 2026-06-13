@@ -96,7 +96,7 @@
     "nprogress": "^0.2.0",
     "pdf-lib": "^1.17.1",
     "platejs": "^52.0.17",
-    "radix-ui": "^1.4.3",
+    "radix-ui": "^1.5.0",
     "react": "19.2.4",
     "react-day-picker": "^9.13.2",
     "react-dnd": "^16.0.1",

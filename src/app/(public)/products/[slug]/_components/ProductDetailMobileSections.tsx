@@ -1,4 +1,10 @@
 import HtmlContent from '@/components/rich-text/core/html-content';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
 import { ISiteSetting } from '@/services/settings/settings';
 import { IProduct } from '@/types';
 import { DraggableVideoPlayer } from './DraggableVideoPlayer';
@@ -22,64 +28,87 @@ export const ProductDetailMobileSections = ({
   const hasRefundPolicy = stripHtml(product.refundPolicy || '').length > 0;
   const hasReturnPolicy = stripHtml(product.returnPolicy || '').length > 0;
 
+  if (!hasDescText && !hasVideo && !hasRefundPolicy && !hasReturnPolicy) {
+    return null;
+  }
+
+  const defaultValues = [];
+  if (hasDescText) defaultValues.push('description');
+
   return (
-    <div className="border-border/50 flex flex-col gap-12 border-t pt-8">
-      {hasDescText && (
-        <section>
-          <h2 className="text-foreground mb-4 text-xl font-bold tracking-tight uppercase">
-            Description
-          </h2>
-          <div className="space-y-8">
-            <HtmlContent
-              content={product.description || ''}
-              className="prose prose-sm dark:prose-invert text-muted-foreground/80 max-w-none text-base leading-relaxed font-medium"
-            />
-          </div>
-        </section>
-      )}
+    <div className="pt-8">
+      <Accordion
+        type="multiple"
+        defaultValue={defaultValues}
+        className="w-full"
+      >
+        {hasDescText && (
+          <AccordionItem value="description">
+            <AccordionTrigger className="text-foreground text-xl font-bold tracking-tight uppercase hover:no-underline">
+              Description
+            </AccordionTrigger>
+            <AccordionContent>
+              <div className="pt-4 pb-6">
+                <HtmlContent
+                  content={product.description || ''}
+                  className="prose prose-sm dark:prose-invert text-muted-foreground/80 max-w-none text-base leading-relaxed font-medium"
+                />
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+        )}
 
-      {hasVideo && (
-        <section>
-          <h2 className="text-foreground mb-4 text-xl font-bold tracking-tight uppercase">
-            Product Video
-          </h2>
-          <DraggableVideoPlayer
-            youtubeVideoUrl={product.youtubeVideoUrl}
-            getYoutubeEmbedUrl={getYoutubeEmbedUrl}
-          />
-          <p className="text-muted-foreground mt-4 text-center text-sm font-medium italic">
-            Experience the elegance and movement of this piece in motion.
-          </p>
-        </section>
-      )}
+        {hasVideo && (
+          <AccordionItem value="video">
+            <AccordionTrigger className="text-foreground text-xl font-bold tracking-tight uppercase hover:no-underline">
+              Product Video
+            </AccordionTrigger>
+            <AccordionContent>
+              <div className="flex flex-col items-center pt-4 pb-6">
+                <DraggableVideoPlayer
+                  youtubeVideoUrl={product.youtubeVideoUrl}
+                  getYoutubeEmbedUrl={getYoutubeEmbedUrl}
+                />
+                <p className="text-muted-foreground mt-4 text-center text-sm font-medium italic">
+                  Experience the elegance and movement of this piece in motion.
+                </p>
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+        )}
 
-      {hasRefundPolicy && (
-        <section>
-          <h2 className="text-foreground mb-4 text-xl font-bold tracking-tight uppercase">
-            Refund Policy
-          </h2>
-          <div className="space-y-8">
-            <HtmlContent
-              content={product.refundPolicy || ''}
-              className="prose prose-sm dark:prose-invert text-muted-foreground/80 max-w-none text-base leading-relaxed font-medium"
-            />
-          </div>
-        </section>
-      )}
+        {hasRefundPolicy && (
+          <AccordionItem value="refund">
+            <AccordionTrigger className="text-foreground text-xl font-bold tracking-tight uppercase hover:no-underline">
+              Refund Policy
+            </AccordionTrigger>
+            <AccordionContent>
+              <div className="pt-4 pb-6">
+                <HtmlContent
+                  content={product.refundPolicy || ''}
+                  className="prose prose-sm dark:prose-invert text-muted-foreground/80 max-w-none text-base leading-relaxed font-medium"
+                />
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+        )}
 
-      {hasReturnPolicy && (
-        <section>
-          <h2 className="text-foreground mb-4 text-xl font-bold tracking-tight uppercase">
-            Return Policy
-          </h2>
-          <div className="space-y-8">
-            <HtmlContent
-              content={product.returnPolicy || ''}
-              className="prose prose-sm dark:prose-invert text-muted-foreground/80 max-w-none text-base leading-relaxed font-medium"
-            />
-          </div>
-        </section>
-      )}
+        {hasReturnPolicy && (
+          <AccordionItem value="return">
+            <AccordionTrigger className="text-foreground text-xl font-bold tracking-tight uppercase hover:no-underline">
+              Return Policy
+            </AccordionTrigger>
+            <AccordionContent>
+              <div className="pt-4 pb-6">
+                <HtmlContent
+                  content={product.returnPolicy || ''}
+                  className="prose prose-sm dark:prose-invert text-muted-foreground/80 max-w-none text-base leading-relaxed font-medium"
+                />
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+        )}
+      </Accordion>
     </div>
   );
 };
