@@ -26,6 +26,11 @@ export async function proxy(req: NextRequest) {
     }
   }
 
+  // If user is NOT blocked but tries to access /blocked manually, redirect to home
+  if (req.nextUrl.pathname.startsWith('/blocked')) {
+    return NextResponse.redirect(new URL('/', req.url));
+  }
+
   const { pathname, origin } = req.nextUrl;
 
   const isAuthPage = isAuthRoute(pathname);

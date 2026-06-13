@@ -47,26 +47,38 @@ export default function BlockedPage() {
   }, []);
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 p-4 backdrop-blur-md">
-      <div className="flex w-full max-w-md gap-4 rounded-lg border border-red-600 bg-white p-6 shadow-2xl dark:bg-zinc-950">
-        <Ban className="h-6 w-6 shrink-0 text-red-500" />
-        <div>
-          <h2 className="text-lg font-bold text-gray-900 dark:text-white">
-            Access Blocked
-          </h2>
-          <p className="mt-2 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
-            You have reached the maximum allowed page reloads. You are blocked
-            from visiting any page for 2 minutes to prevent server overload.
-          </p>
-          <div className="mt-4 flex flex-col items-center justify-center rounded-md bg-red-50 p-4 dark:bg-red-500/10">
-            <span className="text-xs font-bold tracking-widest text-red-500 uppercase">
-              Time Remaining
-            </span>
-            <span className="mt-1 font-mono text-3xl font-black text-red-600">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-zinc-950/90 p-4 backdrop-blur-lg">
+      <div className="relative flex w-full max-w-lg flex-col items-center overflow-hidden rounded-[2rem] border border-red-500/20 bg-white p-10 text-center shadow-2xl dark:bg-zinc-950">
+        {/* Ambient red glow behind icon */}
+        <div className="absolute top-0 left-1/2 -z-10 h-32 w-32 -translate-x-1/2 rounded-full bg-red-500/20 blur-[50px]" />
+
+        <div className="mb-6 flex h-24 w-24 items-center justify-center rounded-[2rem] bg-red-50 text-red-500 ring-8 ring-red-500/10 dark:bg-red-500/10 dark:text-red-400">
+          <Ban className="h-10 w-10 animate-pulse" />
+        </div>
+
+        <h2 className="mb-3 text-3xl font-black tracking-tight text-gray-900 dark:text-white">
+          Access Temporarily Blocked
+        </h2>
+        <p className="mb-8 max-w-sm text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
+          We detected an unusually high number of page reloads. To protect our
+          servers, your access has been paused.
+        </p>
+
+        <div className="flex w-full flex-col items-center justify-center rounded-2xl border border-red-500/20 bg-red-50/50 p-6 dark:bg-red-500/5">
+          <span className="mb-2 text-[10px] font-black tracking-[0.2em] text-red-500 uppercase">
+            Time Remaining
+          </span>
+          <div className="flex items-center gap-3 text-red-600 dark:text-red-500">
+            <span className="font-mono text-5xl font-black tracking-tighter">
               {timeLeft}
             </span>
           </div>
         </div>
+
+        <p className="mt-8 text-xs font-medium text-zinc-500">
+          Your access will be automatically restored when the timer reaches
+          zero.
+        </p>
       </div>
     </div>
   );
