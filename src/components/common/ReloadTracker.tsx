@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 
 const RELOAD_LIMIT = 5;
 const WARNING_RELOAD = 4;
-const BLOCK_DURATION_MS = 5 * 60 * 1000; // 5 minutes
+const BLOCK_DURATION_MS = 2 * 60 * 1000; // 2 minutes
 const STORAGE_KEY = 'aranis_reload_tracker';
 
 interface ReloadData {
@@ -55,7 +55,7 @@ export default function ReloadTracker() {
         reloadData.blockUntil = now + BLOCK_DURATION_MS;
         setIsBlocked(true);
         // Set a cookie so Next.js middleware knows this user is blocked
-        document.cookie = `aranis_block_until=${reloadData.blockUntil}; path=/; max-age=${5 * 60}`;
+        document.cookie = `aranis_block_until=${reloadData.blockUntil}; path=/; max-age=${2 * 60}`;
       } else if (reloadData.count === WARNING_RELOAD) {
         setShowWarning(true);
       }
@@ -95,7 +95,7 @@ export default function ReloadTracker() {
           <AlertTitle className="text-lg font-bold">Access Blocked</AlertTitle>
           <AlertDescription className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
             You have reached the maximum allowed page reloads. You are blocked
-            from visiting any page for 5 minutes. Please wait.
+            from visiting any page for 2 minutes. Please wait.
           </AlertDescription>
         </Alert>
       </div>
@@ -121,7 +121,7 @@ export default function ReloadTracker() {
           </AlertTitle>
           <AlertDescription>
             You have reloaded the page {WARNING_RELOAD} times. If you reload
-            again, you will be blocked for 5 minutes.
+            again, you will be blocked for 2 minutes.
           </AlertDescription>
         </Alert>
       </div>

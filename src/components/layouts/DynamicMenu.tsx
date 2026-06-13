@@ -25,11 +25,6 @@ import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Socket } from 'socket.io-client';
-
-const SOCKET_URL = (
-  process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:5000/api/v1'
-).replace('/api/v1', '');
 
 interface DynamicMenuProps {
   menuGroups: MenuGroup[];
@@ -41,7 +36,6 @@ const DynamicMenu = ({ menuGroups, role, user }: DynamicMenuProps) => {
   const pathname = usePathname();
   const [unreadChatCount, setUnreadChatCount] = useState(0);
   const [unreadOrderCount, setUnreadOrderCount] = useState(0);
-  const socketRef = useRef<Socket | null>(null);
 
   const fetchUnreadCount = useCallback(async () => {
     if (role === 'ADMIN' || role === 'SUPER_ADMIN') {
@@ -129,10 +123,30 @@ const DynamicMenu = ({ menuGroups, role, user }: DynamicMenuProps) => {
     role === 'ADMIN' || role === 'SUPER_ADMIN' ? ['admins'] : [],
   );
   useSocket(handleSocketUpdate, user?._id, 'newNotification');
-  useSocket(handleNewMessage, user?._id, 'receive-message');
-  useSocket(handleNewMessage, undefined, 'new-user-message');
-  useSocket(handleSocketUpdate, user?._id, 'messages-marked-seen');
-  useSocket(handleOrderSocketUpdate, undefined, 'unread-orders-updated');
+  useSocket(
+    handleNewMessage,
+    user?._id,
+    'receive-message',
+    role === 'ADMIN' || role === 'SUPER_ADMIN' ? ['admins'] : [],
+  );
+  useSocket(
+    handleNewMessage,
+    undefined,
+    'new-user-message',
+    role === 'ADMIN' || role === 'SUPER_ADMIN' ? ['admins'] : [],
+  );
+  useSocket(
+    handleSocketUpdate,
+    user?._id,
+    'messages-marked-seen',
+    role === 'ADMIN' || role === 'SUPER_ADMIN' ? ['admins'] : [],
+  );
+  useSocket(
+    handleOrderSocketUpdate,
+    undefined,
+    'unread-orders-updated',
+    role === 'ADMIN' || role === 'SUPER_ADMIN' ? ['admins'] : [],
+  );
 
   const isLinkActive = (url: string) => {
     if (url === '/admin' || url === '/user') return pathname === url;

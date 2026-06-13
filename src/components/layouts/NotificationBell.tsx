@@ -3,6 +3,7 @@
 import { playNotificationSound } from '@/helpers/audio';
 import { useSocket } from '@/hooks/useSocket';
 import { cn } from '@/lib/utils';
+import { getUnreadCount } from '@/services/chat/chat';
 import {
   clearAll,
   deleteOneNotification,
@@ -21,7 +22,7 @@ import {
   RefreshCw,
   Trash2,
 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import React, { useCallback, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -95,8 +96,19 @@ const getRelativeTime = (dateString: string) => {
 
 const NotificationBell = ({ user }: Props) => {
   const [notifications, setNotifications] = useState<INotification[]>([]);
+  const [unreadChatCount, setUnreadChatCount] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
+
+  const fetchChatCount = useCallback(async () => {
+    try {
+      const res = await getUnreadCount();
+      if (res?.success) setUnreadChatCount(res.data || 0);
+    } catch (error) {
+      console.error('Failed to fetch unread chat count:', error);
+    }
+  }, []);
 
   const fetchNotifications = useCallback(async () => {
     try {
@@ -109,10 +121,14 @@ const NotificationBell = ({ user }: Props) => {
 
   useEffect(() => {
     fetchNotifications();
+    fetchChatCount();
     // Poll every 60 seconds as fallback
-    const interval = setInterval(fetchNotifications, 60000);
+    const interval = setInterval(() => {
+      fetchNotifications();
+      fetchChatCount();
+    }, 60000);
     return () => clearInterval(interval);
-  }, [fetchNotifications]);
+  }, [fetchNotifications, fetchChatCount]);
 
   const handleSocketNotification = useCallback(
     (data: any) => {
@@ -146,8 +162,15 @@ const NotificationBell = ({ user }: Props) => {
 
   // Sync with chat status
   useSocket(
-    () => {
+    (data: any) => {
       fetchNotifications();
+      fetchChatCount();
+      if (!pathname.includes('/chat')) {
+        playNotificationSound();
+        toast.info('New Chat Message', {
+          description: data?.text || 'You received a new message.',
+        });
+      }
     },
     user?._id || user?.userId,
     'receive-message',
@@ -155,8 +178,24 @@ const NotificationBell = ({ user }: Props) => {
   );
 
   useSocket(
+    (data: any) => {
+      fetchChatCount();
+      if (!pathname.includes('/chat')) {
+        playNotificationSound();
+        toast.info('New Chat Message', {
+          description: data?.text || 'A user started a new conversation.',
+        });
+      }
+    },
+    user?._id || user?.userId,
+    'new-user-message',
+    user?.role === 'ADMIN' || user?.role === 'SUPER_ADMIN' ? ['admins'] : [],
+  );
+
+  useSocket(
     () => {
       fetchNotifications();
+      fetchChatCount();
     },
     user?._id || user?.userId,
     'messages-marked-seen',
@@ -252,6 +291,7 @@ const NotificationBell = ({ user }: Props) => {
   }, [isOpen]);
 
   const unreadCount = notifications.filter((n) => !n.isRead).length;
+  const totalUnread = unreadCount + unreadChatCount;
 
   return (
     <div className="notification-container relative">
@@ -268,9 +308,9 @@ const NotificationBell = ({ user }: Props) => {
             isOpen ? 'text-primary' : 'text-zinc-400 group-hover:text-white',
           )}
         />
-        {unreadCount > 0 && (
+        {totalUnread > 0 && (
           <span className="absolute top-1 right-1 flex h-4 w-4 animate-pulse items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white transition-all">
-            {unreadCount > 99 ? '99+' : unreadCount}
+            {totalUnread > 99 ? '99+' : totalUnread}
           </span>
         )}
       </div>
@@ -289,9 +329,9 @@ const NotificationBell = ({ user }: Props) => {
             <h4 className="text-sm font-black tracking-tight uppercase">
               Notifications
             </h4>
-            {unreadCount > 0 && (
+            {totalUnread > 0 && (
               <span className="rounded-full bg-blue-500/10 px-2 py-0.5 text-[10px] font-black text-blue-600">
-                {unreadCount} New
+                {totalUnread} New
               </span>
             )}
           </div>
@@ -324,6 +364,35 @@ const NotificationBell = ({ user }: Props) => {
         </div>
 
         <div className="scrollbar-hide max-h-80 space-y-2.5 overflow-y-auto">
+          {unreadChatCount > 0 && (
+            <div
+              onClick={() =>
+                router.push(
+                  user?.role === 'ADMIN' || user?.role === 'SUPER_ADMIN'
+                    ? '/admin/chat'
+                    : '/user/chat',
+                )
+              }
+              className="group relative flex cursor-pointer items-start gap-3.5 rounded-xl border border-emerald-500/10 bg-emerald-600/[0.05] p-3 transition-all hover:bg-emerald-600/[0.08]"
+            >
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-600 transition-all group-hover:scale-105">
+                <MessageSquare size={16} strokeWidth={2.5} />
+              </div>
+              <div className="flex-1 space-y-0.5">
+                <div className="flex items-start justify-between gap-2">
+                  <p className="text-foreground text-xs leading-snug font-black tracking-tight">
+                    Unread Chat Messages
+                  </p>
+                </div>
+                <p className="text-muted-foreground line-clamp-2 text-[10px] leading-normal font-medium">
+                  You have {unreadChatCount} unread message
+                  {unreadChatCount > 1 ? 's' : ''} in your chat. Click here to
+                  view.
+                </p>
+              </div>
+            </div>
+          )}
+
           {notifications.length > 0 ? (
             notifications.map((notif) => {
               const config = getNotificationConfig(notif.type);
