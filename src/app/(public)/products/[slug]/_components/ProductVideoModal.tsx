@@ -52,7 +52,7 @@ export default function ProductVideoModal({
             playsInline
             controlsList="nodownload"
             onContextMenu={(e) => e.preventDefault()}
-            onClick={(e) => {
+            onDoubleClick={(e) => {
               e.stopPropagation();
               if (videoRef.current) {
                 if (videoRef.current.requestFullscreen) {
