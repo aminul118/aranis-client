@@ -1,6 +1,5 @@
 import { toUrlSlug } from '@/lib/url-slugs';
 import { getNavbars } from '@/services/navbar/navbar';
-import { getSiteSettings } from '@/services/settings/settings';
 import { Metadata } from 'next';
 import generateMetaTags from './generateMetaTags';
 
@@ -9,27 +8,21 @@ export async function generateDynamicMeta(
   fallbackTitle: string,
   fallbackDesc?: string,
 ): Promise<Metadata> {
-  const [settingsRes, navItemsRes] = await Promise.all([
-    getSiteSettings(),
-    getNavbars({ limit: '1000' }),
-  ]);
+  const { data: navItems } = await getNavbars({ limit: '1000' });
 
-  const settings = settingsRes?.data;
-  const navItem = navItemsRes?.data?.find(
+  const navItem = navItems?.find(
     (item) => item.href === path || item.href === `/${path}`,
   );
 
   return generateMetaTags({
     title: navItem
-      ? `${navItem.title} | ${settings?.title || 'Aranis Fashion'}`
-      : `${fallbackTitle} | ${settings?.title || 'Aranis Fashion'}`,
+      ? `${navItem.title} | Aranis Fashion`
+      : `${fallbackTitle} | Aranis Fashion`,
     description:
-      settings?.description ||
       fallbackDesc ||
       'The Aranis - Premium contemporary apparel and accessories.',
-    keywords: settings?.keywords || 'Aranis Fashion, Clothing, Premium',
+    keywords: 'Aranis Fashion, Clothing, Premium',
     websitePath: path,
-    image: settings?.baseImage,
   });
 }
 
@@ -47,13 +40,7 @@ export async function generateCategorizedMeta(
     return {};
   }
 
-  const [settingsRes, navItemsRes] = await Promise.all([
-    getSiteSettings(),
-    getNavbars({ limit: '1000' }),
-  ]);
-
-  const settings = settingsRes?.data;
-  const navItems = navItemsRes?.data || [];
+  const { data: navItems } = await getNavbars({ limit: '1000' });
 
   // 1. Find the Category (Primary Nav Item)
   const categorySlug = slugs[0]?.toLowerCase();
@@ -137,15 +124,11 @@ export async function generateCategorizedMeta(
   }
 
   return generateMetaTags({
-    title: `${finalTitle} | ${settings?.title || 'Aranis Fashion'}`,
+    title: `${finalTitle} | Aranis Fashion`,
     description:
       finalDesc ||
-      settings?.description ||
       `Explore our dynamic collection of ${finalTitle}. Premium quality apparel at Aranis Fashion.`,
-    keywords:
-      finalKeywords ||
-      `${settings?.keywords || ''}, ${slugs.join(', ')}`.trim(),
+    keywords: finalKeywords || `${slugs.join(', ')}`.trim(),
     websitePath: `/${slugs.join('/')}`,
-    image: settings?.baseImage,
   });
 }

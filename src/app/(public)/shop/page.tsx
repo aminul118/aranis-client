@@ -63,15 +63,12 @@ export async function generateMetadata(): Promise<Metadata> {
 
   return generateMetaTags({
     title: shopNavItem
-      ? `${shopNavItem.title} | ${settings?.title || 'Aranis Fashion'}`
-      : `Shop | ${settings?.title || 'Aranis Fashion'}`,
+      ? `${shopNavItem.title} | Aranis Fashion`
+      : `Shop | Aranis Fashion`,
     description:
-      settings?.description ||
       'Explore our curated collections of premium contemporary apparel.',
-    keywords:
-      settings?.keywords || 'Shop, Collection, Premium Clothing, Fashion',
+    keywords: 'Shop, Collection, Premium Clothing, Fashion',
     websitePath: '/shop',
-    image: settings?.baseImage,
   });
 }
 

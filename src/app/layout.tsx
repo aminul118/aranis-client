@@ -3,7 +3,6 @@ import envVars from '@/config/env.config';
 import fonts from '@/config/fonts.config';
 import { Providers } from '@/providers/Providers';
 import generateMetaTags from '@/seo/generateMetaTags';
-import { getSiteSettings } from '@/services/settings/settings';
 import '@/styles/custom.css';
 import '@/styles/globals.css';
 import { Children } from '@/types';
@@ -41,16 +40,11 @@ export default MainLayout;
 
 // Global SEO Metatag
 export async function generateMetadata(): Promise<Metadata> {
-  const { data: settings } = await getSiteSettings();
-
   return generateMetaTags({
-    title: settings?.title || 'The Aranis | Premium Contemporary Clothing',
+    title: 'The Aranis | Premium Contemporary Clothing',
     description:
-      settings?.description ||
       'The Aranis - Discover curated collections of luxury apparel blending modern design with timeless elegance.',
     keywords:
-      settings?.keywords ||
       'The Aranis, Luxury Apparel, Premium Clothing, Fashion E-commerce, Designer Wear',
-    image: settings?.baseImage,
   });
 }

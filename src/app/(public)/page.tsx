@@ -8,7 +8,6 @@ import {
   getHeroBanners,
   getMiniBanners,
 } from '@/services/hero-banner/hero-banner';
-import { getSiteSettings } from '@/services/settings/settings';
 import { Metadata } from 'next';
 
 const HomePage = async () => {
@@ -33,19 +32,14 @@ const HomePage = async () => {
 
 export default HomePage;
 
-// Dynamic SEO Metatag
+// SEO Metatag
 export async function generateMetadata(): Promise<Metadata> {
-  const { data: settings } = await getSiteSettings();
-
   return generateMetaTags({
-    title: settings?.title || 'The Aranis | Premium Contemporary Apparel',
+    title: 'The Aranis | Premium Contemporary Apparel',
     description:
-      settings?.description ||
       'The Aranis offers a curated collection of premium clothing, blending contemporary design with timeless elegance.',
     keywords:
-      settings?.keywords ||
       'Aranis Fashion, Premium Clothing, Luxury Apparel, Fashion E-commerce, Men Fashion, Women Fashion',
     websitePath: '/',
-    image: settings?.baseImage,
   });
 }
