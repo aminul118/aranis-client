@@ -115,7 +115,7 @@ export default function ReloadTracker() {
 
   if (showWarning) {
     return (
-      <div className="fixed top-4 left-1/2 z-50 w-full max-w-lg -translate-x-1/2 px-4 transition-all duration-500 ease-in-out">
+      <div className="fixed top-4 right-0 left-0 z-50 mx-auto w-[calc(100%-2rem)] max-w-lg transition-all duration-500 ease-in-out">
         <Alert
           variant="destructive"
           className="border-red-500 bg-white shadow-lg dark:bg-zinc-950"
