@@ -1,9 +1,11 @@
 import ThemeClient from '@/app/admin/settings/_components/ThemeClient';
 import { Metadata } from 'next';
 
-export const dynamic = 'force-dynamic';
+export const metadata: Metadata = {
+  title: 'Appearance Settings | Aranis',
+};
 
-export default function AppearanceSettingsPage() {
+export default function DashboardAppearancePage() {
   return (
     <div className="space-y-6">
       <div className="mb-6">
@@ -11,16 +13,11 @@ export default function AppearanceSettingsPage() {
           Appearance
         </h1>
         <p className="text-muted-foreground mt-1">
-          Customize your theme and appearance settings.
+          Customize the theme and appearance of your dashboard.
         </p>
       </div>
-      <div className="border-border/50 bg-card text-card-foreground overflow-hidden rounded-xl border shadow-sm">
-        <ThemeClient />
-      </div>
+
+      <ThemeClient />
     </div>
   );
 }
-
-export const metadata: Metadata = {
-  title: 'Appearance Settings | Aranis',
-};

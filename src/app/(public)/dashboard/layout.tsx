@@ -13,11 +13,11 @@ const UserLayout = async ({ children }: Children) => {
   ]);
 
   return (
-    <div className="min-h-screen bg-[#F4F5F7] py-8 dark:bg-black/95">
+    <div className="min-h-screen py-8">
       <div className="container mx-auto max-w-7xl px-4 md:px-6">
         <div className="flex flex-col gap-6 lg:flex-row">
           {/* User Sidebar */}
-          <aside className="w-full shrink-0 lg:w-72">
+          <aside className="h-fit w-full shrink-0 lg:sticky lg:top-32 lg:w-72">
             <UserSidebar
               user={user as any}
               logoUrl={siteSettingsRes?.data?.logo}

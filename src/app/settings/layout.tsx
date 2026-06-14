@@ -1,10 +1,9 @@
-import SettingsSidebar from '@/app/admin/settings/_components/SettingsSidebar';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { getSiteSettings } from '@/services/settings/settings';
 import { getMe } from '@/services/user/users';
 import { Role } from '@/types';
+import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
-import UserSidebar from '../(public)/dashboard/_componnets/layouts/user-sidebar';
 import AdminSidebar from '../admin/_components/layouts/admin-sidebar';
 import AdminHeader from '../admin/_components/layouts/AdminHeader';
 import { AdminSidebarSkeleton } from '../admin/_components/layouts/AdminSidebarSkeleton';
@@ -36,43 +35,13 @@ export default async function SettingsLayout({
         <SidebarInset>
           <AdminHeader user={user} />
           <div className="container mx-auto p-6">
-            <div className="mb-8">
-              <h1 className="text-3xl font-bold">Settings</h1>
-              <p className="text-muted-foreground mt-2">
-                Manage your admin account settings and preferences
-              </p>
-            </div>
-            <div className="flex flex-col gap-6 lg:flex-row">
-              <SettingsSidebar basePath="/settings" user={user} />
-              <main className="max-w-3xl flex-1">{children}</main>
-            </div>
+            <main className="max-w-3xl flex-1">{children}</main>
           </div>
         </SidebarInset>
       </SidebarProvider>
     );
   }
 
-  return (
-    <SidebarProvider>
-      <Suspense fallback={<AdminSidebarSkeleton />}>
-        <UserSidebar user={user} />
-      </Suspense>
-      <SidebarInset>
-        <div className="container mx-auto p-6">
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold tracking-tight">
-              Account Settings
-            </h1>
-            <p className="text-muted-foreground mt-1">
-              Update your profile, change password and manage your preferences.
-            </p>
-          </div>
-          <div className="flex flex-col gap-8 lg:flex-row">
-            <SettingsSidebar basePath="/settings" user={user} />
-            <main className="max-w-4xl flex-1">{children}</main>
-          </div>
-        </div>
-      </SidebarInset>
-    </SidebarProvider>
-  );
+  // If not admin, redirect them to the new dashboard structure
+  redirect('/dashboard/profile');
 }

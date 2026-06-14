@@ -2,7 +2,11 @@ import ProfileClient from '@/app/admin/settings/_components/profile/ProfileClien
 import { getMe } from '@/services/user/users';
 import { Metadata } from 'next';
 
-export default async function ProfilePage() {
+export const metadata: Metadata = {
+  title: 'My Profile | Aranis',
+};
+
+export default async function DashboardProfilePage() {
   const { data: user } = await getMe();
 
   if (!user) {
@@ -19,11 +23,8 @@ export default async function ProfilePage() {
           Manage your personal information.
         </p>
       </div>
+
       <ProfileClient user={user} />
     </div>
   );
 }
-
-export const metadata: Metadata = {
-  title: 'Profile Settings | Aranis',
-};

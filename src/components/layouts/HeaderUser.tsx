@@ -13,13 +13,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { getDefaultDashboardRoute } from '@/services/user/user-access';
 import { IUser } from '@/types';
-import {
-  LayoutDashboard,
-  Lock,
-  MessageCircle,
-  Palette,
-  User,
-} from 'lucide-react';
+import { LayoutDashboard, User } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -90,61 +84,60 @@ const HeaderUser = ({ user }: Props) => {
         <DropdownMenuSeparator className="my-2 bg-gray-100 dark:bg-white/10" />
 
         <DropdownMenuGroup className="space-y-1">
-          <DropdownMenuItem asChild>
-            <Link
-              href="/settings/profile"
-              className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 dark:text-white/90 dark:hover:bg-white/10 dark:hover:text-white dark:focus:bg-white/10"
-            >
-              <User className="h-4 w-4 text-gray-500 dark:text-white/60" />
-              <span className="text-sm">My Profile</span>
-            </Link>
-          </DropdownMenuItem>
-
-          {!isInsidePortal && (
-            <DropdownMenuItem asChild>
-              <Link
-                href={dashboardRoute}
-                className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 dark:text-white/90 dark:hover:bg-white/10 dark:hover:text-white dark:focus:bg-white/10"
-              >
-                <LayoutDashboard className="h-4 w-4 text-gray-500 dark:text-white/60" />
-                <span className="text-sm">
-                  {user?.role === 'ADMIN' || user?.role === 'SUPER_ADMIN'
-                    ? 'Admin Dashboard'
-                    : 'User Dashboard'}
-                </span>
-              </Link>
-            </DropdownMenuItem>
+          {user?.role === 'ADMIN' || user?.role === 'SUPER_ADMIN' ? (
+            <>
+              <DropdownMenuItem asChild>
+                <Link
+                  href={dashboardRoute}
+                  className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 dark:text-white/90 dark:hover:bg-white/10 dark:hover:text-white dark:focus:bg-white/10"
+                >
+                  <LayoutDashboard className="h-4 w-4 text-gray-500 dark:text-white/60" />
+                  <span className="text-sm">Admin Dashboard</span>
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link
+                  href="/settings/profile"
+                  className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 dark:text-white/90 dark:hover:bg-white/10 dark:hover:text-white dark:focus:bg-white/10"
+                >
+                  <User className="h-4 w-4 text-gray-500 dark:text-white/60" />
+                  <span className="text-sm">Profile</span>
+                </Link>
+              </DropdownMenuItem>
+            </>
+          ) : (
+            <>
+              <DropdownMenuItem asChild>
+                <Link
+                  href={dashboardRoute}
+                  className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 dark:text-white/90 dark:hover:bg-white/10 dark:hover:text-white dark:focus:bg-white/10"
+                >
+                  <LayoutDashboard className="h-4 w-4 text-gray-500 dark:text-white/60" />
+                  <span className="text-sm">Dashboard</span>
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link
+                  href="/dashboard/profile"
+                  className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 dark:text-white/90 dark:hover:bg-white/10 dark:hover:text-white dark:focus:bg-white/10"
+                >
+                  <User className="h-4 w-4 text-gray-500 dark:text-white/60" />
+                  <span className="text-sm">Profile</span>
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link
+                  href="/track-order"
+                  className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 dark:text-white/90 dark:hover:bg-white/10 dark:hover:text-white dark:focus:bg-white/10"
+                >
+                  <span className="flex h-4 w-4 items-center justify-center text-gray-500 dark:text-white/60">
+                    🚚
+                  </span>
+                  <span className="text-sm">Track Order</span>
+                </Link>
+              </DropdownMenuItem>
+            </>
           )}
-
-          <DropdownMenuItem asChild>
-            <Link
-              href="/settings/password"
-              className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 dark:text-white/90 dark:hover:bg-white/10 dark:hover:text-white dark:focus:bg-white/10"
-            >
-              <Lock className="h-4 w-4 text-gray-500 dark:text-white/60" />
-              <span className="text-sm">Password</span>
-            </Link>
-          </DropdownMenuItem>
-
-          <DropdownMenuItem asChild>
-            <Link
-              href="/settings/appearance"
-              className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 dark:text-white/90 dark:hover:bg-white/10 dark:hover:text-white dark:focus:bg-white/10"
-            >
-              <Palette className="h-4 w-4 text-gray-500 dark:text-white/60" />
-              <span className="text-sm">Appearance</span>
-            </Link>
-          </DropdownMenuItem>
-
-          <DropdownMenuItem asChild>
-            <Link
-              href="/dashboard/chat"
-              className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 font-medium text-blue-600 transition-colors hover:bg-blue-50 hover:text-blue-700 focus:bg-blue-50 dark:text-blue-400 dark:hover:bg-white/10 dark:hover:text-blue-300 dark:focus:bg-white/10"
-            >
-              <MessageCircle className="h-4 w-4" />
-              <span className="text-sm">Live Support Chat</span>
-            </Link>
-          </DropdownMenuItem>
         </DropdownMenuGroup>
 
         <DropdownMenuSeparator className="my-2 bg-gray-100 dark:bg-white/10" />

@@ -27,7 +27,7 @@ const UserSidebar = ({ user, logoUrl }: { user: IUser; logoUrl?: string }) => {
   };
 
   return (
-    <div className="flex w-full flex-col overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm dark:border-white/10 dark:bg-[#111111]">
+    <div className="dark:bg- flex w-full flex-col overflow-hidden rounded-xl border border-gray-100 shadow-sm dark:border-white/10">
       {/* Profile Info */}
       <div className="flex items-center gap-4 p-6">
         <div className="relative h-14 w-14 overflow-hidden rounded-full border border-gray-200 dark:border-white/10">

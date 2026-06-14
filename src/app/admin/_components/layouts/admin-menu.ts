@@ -7,6 +7,7 @@ import {
   ImageIcon,
   Layers,
   LayoutDashboard,
+  Lock,
   MapPin,
   Megaphone,
   Menu as MenuIcon,
@@ -17,6 +18,7 @@ import {
   ShoppingCart,
   TicketPercent,
   Truck,
+  User,
   Users,
 } from 'lucide-react';
 
@@ -70,6 +72,15 @@ const adminSidebarMenu: MenuGroup[] = [
       { name: 'Hero Banners', url: '/admin/hero-banners', icon: ImageIcon },
       { name: 'Mini Banners', url: '/admin/mini-banners', icon: ImageIcon },
       { name: 'Popup Banner', url: '/admin/popup-banners', icon: Megaphone },
+    ],
+  },
+  {
+    title: 'Account Settings',
+    roles: ['SUPER_ADMIN', 'ADMIN'] as UserRole[],
+    menu: [
+      { name: 'My Profile', url: '/settings/profile', icon: User },
+      { name: 'Security', url: '/settings/password', icon: Lock },
+      { name: 'Appearance', url: '/settings/appearance', icon: Palette },
     ],
   },
 ];

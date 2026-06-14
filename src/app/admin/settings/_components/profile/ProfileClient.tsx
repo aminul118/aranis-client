@@ -2,7 +2,6 @@
 
 import { IUser } from '@/types';
 import { useState } from 'react';
-import AddressManagement from './AddressManagement';
 import ProfileDetails from './ProfileDetails';
 import UpdateProfileForm from './UpdateProfileForm';
 
@@ -22,12 +21,6 @@ const ProfileClient = ({ user }: Props) => {
           <ProfileDetails user={user} setIsEditing={setIsEditing} />
         )}
       </div>
-
-      {!isEditing && (
-        <div className="border-border/50 bg-card text-card-foreground overflow-hidden rounded-xl border shadow-sm">
-          <AddressManagement user={user} />
-        </div>
-      )}
     </section>
   );
 };

@@ -56,31 +56,85 @@ const NavUser = ({ user }: { user: IUser }) => {
         <DropdownMenuGroup className="mt-3 flex flex-col items-center gap-2">
           <Avatar className="h-14 w-14 object-cover">
             <AvatarImage
-              src={user?.picture || './user-placeholder.jpg'}
+              src={
+                (user as any)?.image ||
+                user?.picture ||
+                '/images/default-avatar.png'
+              }
               alt={fullName}
             />
             <AvatarFallback>{initials}</AvatarFallback>
             <AvatarBadge className="bg-green-600 dark:bg-green-800" />
           </Avatar>
-          <DropdownMenuItem>
-            <Link href={'/my-profile'}>View Profile</Link>
-          </DropdownMenuItem>
+          <div className="flex flex-col items-center justify-center space-y-1 pb-2">
+            <p className="text-sm leading-none font-medium">{fullName}</p>
+            <p className="text-muted-foreground text-xs leading-none">
+              {user?.email}
+            </p>
+          </div>
         </DropdownMenuGroup>
 
         <DropdownMenuSeparator />
 
         <DropdownMenuGroup>
-          <DropdownMenuItem
-            onClick={handleDashboardRedirect}
-            className="flex items-center gap-2"
-          >
-            <LayoutGrid className="h-4 w-4" />
-            <span>
-              {user?.role === 'ADMIN' || user?.role === 'SUPER_ADMIN'
-                ? 'Admin Dashboard'
-                : 'User Dashboard'}
-            </span>
-          </DropdownMenuItem>
+          {user?.role === 'ADMIN' || user?.role === 'SUPER_ADMIN' ? (
+            <>
+              <DropdownMenuItem
+                onClick={handleDashboardRedirect}
+                className="flex cursor-pointer items-center gap-2"
+              >
+                <LayoutGrid className="h-4 w-4" />
+                <span>Admin Dashboard</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild className="cursor-pointer">
+                <Link
+                  href="/settings/profile"
+                  className="flex items-center gap-2"
+                >
+                  <span className="flex h-4 w-4 items-center justify-center">
+                    👤
+                  </span>
+                  <span>Profile</span>
+                </Link>
+              </DropdownMenuItem>
+            </>
+          ) : (
+            <>
+              <DropdownMenuItem
+                onClick={handleDashboardRedirect}
+                className="flex cursor-pointer items-center gap-2"
+              >
+                <LayoutGrid className="h-4 w-4" />
+                <span>Dashboard</span>
+              </DropdownMenuItem>
+              {user?.role !== 'ADMIN' && user?.role !== 'SUPER_ADMIN' && (
+                <>
+                  <DropdownMenuItem asChild className="cursor-pointer">
+                    <Link
+                      href="/dashboard/profile"
+                      className="flex items-center gap-2"
+                    >
+                      <span className="flex h-4 w-4 items-center justify-center">
+                        👤
+                      </span>
+                      <span>Profile</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild className="cursor-pointer">
+                    <Link
+                      href="/track-order"
+                      className="flex items-center gap-2"
+                    >
+                      <span className="flex h-4 w-4 items-center justify-center">
+                        🚚
+                      </span>
+                      <span>Track Order</span>
+                    </Link>
+                  </DropdownMenuItem>
+                </>
+              )}
+            </>
+          )}
           <DropdownMenuSeparator />
 
           <LogOutDropDown />

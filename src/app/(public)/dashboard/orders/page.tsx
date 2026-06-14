@@ -57,31 +57,29 @@ const UserOrdersPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen py-10">
-        <div className="container mx-auto max-w-5xl px-4">
-          <div className="mb-12 flex animate-pulse flex-col items-start justify-between gap-6 md:flex-row md:items-end">
-            <div className="space-y-4">
-              <Skeleton className="h-12 w-64" />
-              <Skeleton className="h-4 w-48" />
-            </div>
-            <Skeleton className="h-12 w-full rounded-full md:w-80" />
+      <div className="space-y-6">
+        <div className="mb-6 flex animate-pulse flex-col items-start justify-between gap-6 md:flex-row md:items-end">
+          <div className="space-y-4">
+            <Skeleton className="h-10 w-48" />
+            <Skeleton className="h-4 w-64" />
           </div>
-          <OrderListSkeleton />
+          <Skeleton className="h-10 w-full rounded-lg md:w-80" />
         </div>
+        <OrderListSkeleton />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen py-10">
-      <div className="container mx-auto max-w-5xl px-4">
-        <div className="mb-12 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
+    <>
+      <div className="space-y-6">
+        <div className="mb-6 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
           <div>
-            <h1 className="text-foreground mb-2 text-4xl font-black tracking-tighter">
-              My <span className="text-blue-600">Orders</span>
+            <h1 className="text-3xl font-bold tracking-tight text-slate-800 dark:text-slate-100">
+              My Orders
             </h1>
-            <p className="text-muted-foreground">
-              Track your purchases and leave reviews
+            <p className="text-muted-foreground mt-1">
+              Track your purchases and leave reviews.
             </p>
           </div>
           <div className="relative w-full md:w-80">
@@ -91,7 +89,7 @@ const UserOrdersPage = () => {
               placeholder="Search by Order ID or Product..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="bg-muted/50 border-border w-full rounded-full border py-3 pr-6 pl-12 text-sm transition-all focus:border-blue-500/50 focus:outline-none"
+              className="bg-muted/50 border-border w-full rounded-lg border py-2 pr-4 pl-10 text-sm transition-all focus:border-blue-500/50 focus:outline-none"
             />
           </div>
         </div>
@@ -154,8 +152,7 @@ const UserOrdersPage = () => {
             : []
         }
       />
-    </div>
+    </>
   );
 };
-
 export default UserOrdersPage;
