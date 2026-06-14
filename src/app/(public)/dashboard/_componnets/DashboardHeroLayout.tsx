@@ -3,9 +3,11 @@ import { IUser } from '@/types';
 import {
   Book,
   Gift,
+  Lock,
   MapPin,
   MessageSquare,
   Package,
+  Palette,
   Truck,
 } from 'lucide-react';
 import Link from 'next/link';
@@ -82,7 +84,62 @@ const DashboardHeroLayout = ({ user }: { user: IUser }) => {
             </CardContent>
           </Card>
 
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div className="mt-2 grid grid-cols-2 gap-4 md:grid-cols-4 lg:hidden">
+            {[
+              {
+                title: 'Order Tracking',
+                url: '/track-order',
+                desc: 'Track shipment status',
+                icon: MapPin,
+                color: 'text-emerald-500',
+                bg: 'bg-emerald-100 dark:bg-emerald-500/20',
+              },
+              {
+                title: 'Address Book',
+                url: '/dashboard/address',
+                desc: 'Manage delivery locations',
+                icon: Book,
+                color: 'text-blue-500',
+                bg: 'bg-blue-100 dark:bg-blue-500/20',
+              },
+              {
+                title: 'Security',
+                url: '/dashboard/security',
+                desc: 'Update your password',
+                icon: Lock,
+                color: 'text-rose-500',
+                bg: 'bg-rose-100 dark:bg-rose-500/20',
+              },
+              {
+                title: 'Appearance',
+                url: '/dashboard/appearance',
+                desc: 'Customize your theme',
+                icon: Palette,
+                color: 'text-indigo-500',
+                bg: 'bg-indigo-100 dark:bg-indigo-500/20',
+              },
+            ].map((item, idx) => (
+              <Link key={idx} href={item.url} className="outline-none">
+                <Card className="group h-full cursor-pointer transition-colors hover:border-slate-300 dark:hover:border-slate-700">
+                  <CardContent className="flex h-full flex-col items-center justify-center p-4 text-center">
+                    <div
+                      className={`mb-3 flex h-12 w-12 items-center justify-center rounded-full ${item.bg} ${item.color} transition-transform group-hover:scale-110`}
+                    >
+                      <item.icon size={22} strokeWidth={2.5} />
+                    </div>
+                    <span className="text-sm font-bold text-slate-600 dark:text-slate-300">
+                      {item.title}
+                    </span>
+                    <p className="mt-1 text-[10px] text-slate-500 dark:text-slate-400">
+                      {item.desc}
+                    </p>
+                  </CardContent>
+                </Card>
+              </Link>
+            ))}
+          </div>
+
+          <div className="hidden grid-cols-1 gap-4 md:grid-cols-2 lg:grid">
             <Link href="/track-order" className="outline-none">
               <Card className="group h-full cursor-pointer transition-colors hover:border-slate-300 dark:hover:border-slate-700">
                 <CardContent className="flex h-full flex-col items-center justify-center p-6 text-center">

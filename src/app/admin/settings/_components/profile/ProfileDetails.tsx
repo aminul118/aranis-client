@@ -26,7 +26,7 @@ type Props = {
 
 const ProfileDetails = ({ user, setIsEditing }: Props) => {
   const displayFullName = user.fullName;
-  const displayPicture = user.picture || '/profile.jpg';
+  const displayPicture = user.picture || '';
 
   const displayInitials = displayFullName
     .split(' ')

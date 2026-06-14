@@ -1,9 +1,9 @@
 'use client';
 
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useUser } from '@/context/UserContext';
 import { logOut } from '@/services/auth/logout';
 import { IUser } from '@/types';
-import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
@@ -26,18 +26,32 @@ const UserSidebar = ({ user, logoUrl }: { user: IUser; logoUrl?: string }) => {
     return pathname === url || pathname.startsWith(`${url}/`);
   };
 
+  const fullName =
+    `${user?.firstName ?? ''} ${user?.lastName ?? ''}`.trim() ||
+    (user as IUser)?.fullName;
+  const initials = fullName
+    ? fullName
+        .split(' ')
+        .map((word) => word[0])
+        .slice(0, 2)
+        .join('')
+        .toUpperCase()
+    : 'U';
+
   return (
     <div className="dark:bg- flex w-full flex-col overflow-hidden rounded-xl border border-gray-100 shadow-sm dark:border-white/10">
       {/* Profile Info */}
       <div className="flex items-center gap-4 p-6">
-        <div className="relative h-14 w-14 overflow-hidden rounded-full border border-gray-200 dark:border-white/10">
-          <Image
-            src={(user as any)?.image || '/images/default-avatar.png'}
-            alt={user?.firstName || 'User'}
-            fill
+        <Avatar className="h-14 w-14 border border-gray-200 dark:border-white/10">
+          <AvatarImage
+            src={user?.picture || ''}
+            alt={fullName || 'User'}
             className="object-cover"
           />
-        </div>
+          <AvatarFallback className="bg-gray-100 font-bold text-gray-900 dark:bg-white/10 dark:text-white">
+            {initials}
+          </AvatarFallback>
+        </Avatar>
         <div>
           <h3 className="font-semibold text-gray-900 uppercase dark:text-white">
             {user?.firstName} {user?.lastName}
