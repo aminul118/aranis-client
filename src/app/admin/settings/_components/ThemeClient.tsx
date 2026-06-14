@@ -41,8 +41,8 @@ const ThemeClient = () => {
   ];
 
   return (
-    <section className="flex flex-1 items-center justify-center py-8">
-      <div className="group relative w-full max-w-3xl overflow-hidden rounded-xl border border-blue-100 bg-gradient-to-br from-blue-50 to-white p-6 shadow-sm sm:p-10 dark:border-blue-900/30 dark:from-blue-950/20 dark:to-[#0a0a0a]">
+    <section className="w-full">
+      <div className="group relative w-full overflow-hidden rounded-xl border border-blue-100 bg-gradient-to-br from-blue-50 to-white p-6 shadow-sm sm:p-10 dark:border-blue-900/30 dark:from-blue-950/20 dark:to-[#0a0a0a]">
         {/* Decorative dots (cutouts) */}
         <div className="absolute top-1/2 -left-3 h-6 w-6 -translate-y-1/2 rounded-full border border-blue-100 bg-white dark:border-blue-900/30 dark:bg-[#0a0a0a]" />
         <div className="absolute top-1/2 -right-3 h-6 w-6 -translate-y-1/2 rounded-full border border-blue-100 bg-white dark:border-blue-900/30 dark:bg-[#0a0a0a]" />

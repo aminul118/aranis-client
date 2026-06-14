@@ -40,58 +40,60 @@ const ProfileDetails = ({ user, setIsEditing }: Props) => {
         </Button>
       </div>
 
-      {/* Avatar Section */}
-      <div className="my-12 flex justify-center">
-        <Avatar className="h-44 w-44 border-[6px] border-gray-300 shadow-sm dark:border-gray-700">
-          <AvatarImage
-            src={displayPicture}
-            alt={displayFullName}
-            className="object-cover"
-          />
-          <AvatarFallback className="bg-blue-100 text-5xl font-bold text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
-            {displayInitials}
-          </AvatarFallback>
-        </Avatar>
-      </div>
-
-      {/* Info Grid */}
-      <div className="flex flex-wrap justify-center gap-8 md:gap-16">
-        {/* Full Name */}
-        <div className="flex min-w-[200px] flex-col gap-2">
-          <div className="flex items-center gap-2 font-bold text-gray-500 dark:text-gray-400">
-            <User className="h-4 w-4" />
-            <span>Full Name:</span>
-          </div>
-          <div className="text-lg font-black text-gray-900 dark:text-white">
-            {displayFullName}
-          </div>
+      <div className="mt-8 overflow-hidden rounded-xl border border-blue-100 bg-gradient-to-br from-blue-50 to-white p-6 shadow-sm sm:p-10 dark:border-blue-900/30 dark:from-blue-950/20 dark:to-[#0a0a0a]">
+        {/* Avatar Section */}
+        <div className="mb-12 flex justify-center">
+          <Avatar className="h-44 w-44 border-[6px] border-white shadow-md dark:border-gray-800">
+            <AvatarImage
+              src={displayPicture}
+              alt={displayFullName}
+              className="object-cover"
+            />
+            <AvatarFallback className="bg-blue-100 text-5xl font-bold text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
+              {displayInitials}
+            </AvatarFallback>
+          </Avatar>
         </div>
 
-        {/* Contact Number */}
-        {user.phone && (
+        {/* Info Grid */}
+        <div className="flex flex-wrap justify-center gap-8 md:gap-16">
+          {/* Full Name */}
           <div className="flex min-w-[200px] flex-col gap-2">
             <div className="flex items-center gap-2 font-bold text-gray-500 dark:text-gray-400">
-              <Phone className="h-4 w-4" />
-              <span>Contact Number:</span>
+              <User className="h-4 w-4" />
+              <span>Full Name:</span>
             </div>
             <div className="text-lg font-black text-gray-900 dark:text-white">
-              {user.phone}
+              {displayFullName}
             </div>
           </div>
-        )}
 
-        {/* Email Address */}
-        {user.email && (
-          <div className="flex min-w-[200px] flex-col gap-2">
-            <div className="flex items-center gap-2 font-bold text-gray-500 dark:text-gray-400">
-              <Mail className="h-4 w-4" />
-              <span>Email:</span>
+          {/* Contact Number */}
+          {user.phone && (
+            <div className="flex min-w-[200px] flex-col gap-2">
+              <div className="flex items-center gap-2 font-bold text-gray-500 dark:text-gray-400">
+                <Phone className="h-4 w-4" />
+                <span>Contact Number:</span>
+              </div>
+              <div className="text-lg font-black text-gray-900 dark:text-white">
+                {user.phone}
+              </div>
             </div>
-            <div className="text-lg font-black text-gray-900 dark:text-white">
-              {user.email}
+          )}
+
+          {/* Email Address */}
+          {user.email && (
+            <div className="flex min-w-[200px] flex-col gap-2">
+              <div className="flex items-center gap-2 font-bold text-gray-500 dark:text-gray-400">
+                <Mail className="h-4 w-4" />
+                <span>Email:</span>
+              </div>
+              <div className="text-lg font-black text-gray-900 dark:text-white">
+                {user.email}
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
