@@ -39,19 +39,18 @@ const RecentOrdersTable = ({ orders }: { orders: IOrder[] }) => {
           {recentOrders.map((order) => (
             <Card
               key={order._id}
-              className="group relative overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-all hover:border-blue-500/20 hover:shadow-md dark:border-white/10 dark:bg-black"
+              className="group relative overflow-hidden rounded-2xl border border-gray-100 bg-white pt-0 shadow-sm transition-all hover:border-blue-500/20 hover:shadow-md dark:border-white/10 dark:bg-black"
             >
               <CardHeader className="flex flex-col justify-between gap-4 border-b border-slate-100 bg-slate-50 p-4 sm:flex-row sm:items-center sm:px-6 dark:border-slate-800 dark:bg-slate-900/50">
                 <div className="flex flex-col">
-                  <span className="text-sm text-slate-500">
+                  <p>
+                    {' '}
                     Invoice No:{' '}
-                    <Link
-                      href={`/dashboard/orders/${order._id}`}
-                      className="font-bold text-blue-600 hover:underline dark:text-blue-400"
-                    >
+                    <span className="text-lg font-bold text-slate-500">
                       {order.orderNumber || order._id}
-                    </Link>
-                  </span>
+                    </span>
+                  </p>
+
                   <span className="mt-0.5 text-xs text-slate-400">
                     Order Date:{' '}
                     {order.createdAt
@@ -69,15 +68,6 @@ const RecentOrdersTable = ({ orders }: { orders: IOrder[] }) => {
                       {order.paymentStatus}
                     </span>
                   </div>
-                  <Link href={`/dashboard/orders/${order._id}`}>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="rounded-full"
-                    >
-                      See Details
-                    </Button>
-                  </Link>
                 </div>
               </CardHeader>
 

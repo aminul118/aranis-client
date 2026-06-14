@@ -3,11 +3,9 @@ import { IUser } from '@/types';
 import {
   Book,
   Gift,
-  Lock,
   MapPin,
   MessageSquare,
   Package,
-  Palette,
   Truck,
 } from 'lucide-react';
 import Link from 'next/link';
@@ -16,57 +14,57 @@ const DashboardHeroLayout = ({ user }: { user: IUser }) => {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
-        <div className="space-y-4 lg:col-span-12">
-          <Card className="group relative overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-all hover:border-blue-500/20 hover:shadow-md dark:border-white/10 dark:bg-black">
-            <div className="flex items-center justify-between border-b border-slate-100 p-4 dark:border-slate-800">
-              <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">
+        {/* Left Side (7 columns on large screens) */}
+        <div className="space-y-6 lg:col-span-7">
+          {/* My Orders Primary Card */}
+          <Card className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm dark:border-white/10 dark:bg-black">
+            <div className="flex items-center justify-between p-5 pb-2">
+              <h2 className="text-lg font-bold text-gray-900 dark:text-white">
                 My Orders
               </h2>
               <Link
                 href="/dashboard/orders"
-                className="flex items-center rounded-full border border-blue-600/30 px-3 py-1 text-sm font-semibold text-blue-600 hover:text-blue-700 hover:underline dark:text-blue-400"
+                className="flex items-center rounded-md border border-blue-600 px-3 py-1 text-sm font-semibold text-blue-600 transition-colors hover:bg-blue-50 dark:border-blue-400 dark:text-blue-400 dark:hover:bg-blue-900/20"
               >
-                See All Orders &rarr;
+                See More &rarr;
               </Link>
             </div>
             <CardContent className="p-6">
-              <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+              <div className="grid grid-cols-4 gap-4">
                 {[
                   {
                     title: 'Processing',
                     icon: Gift,
                     color: 'text-purple-500',
-                    bg: 'bg-purple-100 dark:bg-purple-500/20',
                   },
                   {
                     title: 'Ready To Ship',
                     icon: Package,
                     color: 'text-teal-500',
-                    bg: 'bg-teal-100 dark:bg-teal-500/20',
                   },
                   {
                     title: 'Shipped',
                     icon: Truck,
                     color: 'text-blue-500',
-                    bg: 'bg-blue-100 dark:bg-blue-500/20',
                   },
                   {
                     title: 'Review',
                     icon: MessageSquare,
                     color: 'text-emerald-500',
-                    bg: 'bg-emerald-100 dark:bg-emerald-500/20',
                   },
                 ].map((item, idx) => (
                   <div
                     key={idx}
-                    className="group flex cursor-pointer flex-col items-center rounded-xl border border-transparent p-4 text-center transition-all hover:border-slate-100 hover:bg-slate-50 dark:hover:border-slate-800 dark:hover:bg-slate-800/50"
+                    className="flex flex-col items-center gap-3 text-center"
                   >
-                    <div
-                      className={`flex h-14 w-14 items-center justify-center rounded-full ${item.bg} ${item.color} mb-3 transition-transform group-hover:scale-110 group-hover:shadow-sm`}
-                    >
-                      <item.icon size={24} strokeWidth={2.5} />
+                    <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gray-100 dark:bg-slate-800/80">
+                      <item.icon
+                        size={26}
+                        strokeWidth={2.5}
+                        className={item.color}
+                      />
                     </div>
-                    <span className="text-sm font-bold text-slate-600 dark:text-slate-300">
+                    <span className="text-xs font-bold text-gray-400 sm:text-sm dark:text-slate-400">
                       {item.title}
                     </span>
                   </div>
@@ -75,93 +73,109 @@ const DashboardHeroLayout = ({ user }: { user: IUser }) => {
             </CardContent>
           </Card>
 
-          <div className="mt-2 grid grid-cols-2 gap-4 md:grid-cols-4 lg:hidden">
-            {[
-              {
-                title: 'Order Tracking',
-                url: '/track-order',
-                desc: 'Track shipment status',
-                icon: MapPin,
-                color: 'text-emerald-500',
-                bg: 'bg-emerald-100 dark:bg-emerald-500/20',
-              },
-              {
-                title: 'Address Book',
-                url: '/dashboard/address',
-                desc: 'Manage delivery locations',
-                icon: Book,
-                color: 'text-blue-500',
-                bg: 'bg-blue-100 dark:bg-blue-500/20',
-              },
-              {
-                title: 'Security',
-                url: '/dashboard/security',
-                desc: 'Update your password',
-                icon: Lock,
-                color: 'text-rose-500',
-                bg: 'bg-rose-100 dark:bg-rose-500/20',
-              },
-              {
-                title: 'Appearance',
-                url: '/dashboard/appearance',
-                desc: 'Customize your theme',
-                icon: Palette,
-                color: 'text-indigo-500',
-                bg: 'bg-indigo-100 dark:bg-indigo-500/20',
-              },
-            ].map((item, idx) => (
-              <Link key={idx} href={item.url} className="outline-none">
-                <Card className="group relative h-full cursor-pointer overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-all hover:border-blue-500/20 hover:shadow-md dark:border-white/10 dark:bg-black">
-                  <CardContent className="flex h-full flex-col items-center justify-center p-4 text-center">
-                    <div
-                      className={`mb-3 flex h-12 w-12 items-center justify-center rounded-full ${item.bg} ${item.color} transition-transform group-hover:scale-110`}
-                    >
-                      <item.icon size={22} strokeWidth={2.5} />
-                    </div>
-                    <span className="text-sm font-bold text-slate-600 dark:text-slate-300">
-                      {item.title}
-                    </span>
-                    <p className="mt-1 text-[10px] text-slate-500 dark:text-slate-400">
-                      {item.desc}
-                    </p>
-                  </CardContent>
-                </Card>
-              </Link>
-            ))}
-          </div>
+          {/* Quick Links (Order Tracking & Address Book) */}
+          <div className="grid grid-cols-2 gap-6">
+            <Link href="/track-order" className="group outline-none">
+              <Card className="flex h-full flex-col items-center justify-center rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition-all hover:shadow-md dark:border-white/10 dark:bg-black">
+                <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gray-100 text-emerald-500 transition-transform group-hover:scale-110 dark:bg-gray-800">
+                  <MapPin size={28} strokeWidth={2.5} />
+                </div>
+                <span className="text-sm font-bold text-gray-500 transition-colors group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white">
+                  Order Tracking
+                </span>
+              </Card>
+            </Link>
 
-          <div className="hidden grid-cols-1 gap-4 md:grid-cols-2 lg:grid">
-            <Link href="/track-order" className="outline-none">
-              <Card className="group relative h-full cursor-pointer overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-all hover:border-blue-500/20 hover:shadow-md dark:border-white/10 dark:bg-black">
-                <CardContent className="flex h-full flex-col items-center justify-center p-6 text-center">
-                  <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-emerald-100 text-emerald-500 transition-transform group-hover:scale-110 dark:bg-emerald-500/20">
-                    <MapPin size={26} strokeWidth={2.5} />
-                  </div>
-                  <span className="text-base font-bold text-slate-600 dark:text-slate-300">
-                    Order Tracking
-                  </span>
-                  <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-                    Track your current shipment status
-                  </p>
-                </CardContent>
-              </Card>
-            </Link>
-            <Link href="/dashboard/address" className="outline-none">
-              <Card className="group relative h-full cursor-pointer overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-all hover:border-blue-500/20 hover:shadow-md dark:border-white/10 dark:bg-black">
-                <CardContent className="flex h-full flex-col items-center justify-center p-6 text-center">
-                  <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-blue-100 text-blue-500 transition-transform group-hover:scale-110 dark:bg-blue-500/20">
-                    <Book size={26} strokeWidth={2.5} />
-                  </div>
-                  <span className="text-base font-bold text-slate-600 dark:text-slate-300">
-                    Address Book
-                  </span>
-                  <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-                    Manage your delivery locations
-                  </p>
-                </CardContent>
+            <Link href="/dashboard/address" className="group outline-none">
+              <Card className="flex h-full flex-col items-center justify-center rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition-all hover:shadow-md dark:border-white/10 dark:bg-black">
+                <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gray-100 text-blue-600 transition-transform group-hover:scale-110 dark:bg-gray-800">
+                  <Book size={28} strokeWidth={2.5} />
+                </div>
+                <span className="text-sm font-bold text-gray-500 transition-colors group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white">
+                  Address Book
+                </span>
               </Card>
             </Link>
           </div>
+        </div>
+
+        {/* Right Side (5 columns on large screens) */}
+        <div className="grid grid-cols-2 gap-4 lg:col-span-5">
+          {/* My Orders Card */}
+          <Link href="/dashboard/orders" className="group block outline-none">
+            <Card className="h-full overflow-hidden rounded-2xl border border-gray-100 bg-white pt-0 shadow-sm transition-all hover:-translate-y-1 hover:shadow-md dark:border-white/10 dark:bg-black">
+              <div className="relative flex h-32 items-center justify-center bg-gradient-to-br from-purple-300 via-purple-400 to-purple-500">
+                <Package className="h-16 w-16 text-white/50" strokeWidth={1} />
+              </div>
+              <div className="relative flex flex-col items-center px-2 pt-10 pb-6 text-center">
+                <div className="absolute -top-8 flex h-16 w-16 items-center justify-center rounded-full border-[5px] border-white bg-white shadow-sm dark:border-black dark:bg-black">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-purple-100 text-purple-600 transition-transform group-hover:scale-110 dark:bg-purple-900/40 dark:text-purple-400">
+                    <Package size={22} strokeWidth={2.5} />
+                  </div>
+                </div>
+                <h3 className="mb-1 text-sm font-bold text-gray-900 dark:text-white">
+                  My Orders
+                </h3>
+                <p className="text-[10px] leading-tight text-gray-500 dark:text-gray-400">
+                  All of your orders in here
+                </p>
+              </div>
+            </Card>
+          </Link>
+
+          {/* Coupon Card */}
+          <Link href="/dashboard/coupons" className="group block outline-none">
+            <Card className="h-full overflow-hidden rounded-2xl border border-gray-100 bg-white pt-0 shadow-sm transition-all hover:-translate-y-1 hover:shadow-md dark:border-white/10 dark:bg-black">
+              <div className="relative flex h-32 items-center justify-center bg-gradient-to-br from-pink-200 via-rose-300 to-rose-400">
+                {/* Coupon percent icon placeholder */}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="64"
+                  height="64"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="text-white/60"
+                >
+                  <line x1="19" x2="5" y1="5" y2="19" />
+                  <circle cx="6.5" cy="6.5" r="2.5" />
+                  <circle cx="17.5" cy="17.5" r="2.5" />
+                </svg>
+              </div>
+              <div className="relative flex flex-col items-center px-2 pt-10 pb-6 text-center">
+                <div className="absolute -top-8 flex h-16 w-16 items-center justify-center rounded-full border-[5px] border-white bg-white shadow-sm dark:border-black dark:bg-black">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-500 text-white transition-transform group-hover:scale-110">
+                    {/* Percent icon */}
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="22"
+                      height="22"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="m15 5 4 4" />
+                      <path d="M13 7 8.7 11.3a2.83 2.83 0 0 0 0 4l.3.3" />
+                      <path d="m15 15-4-4" />
+                      <path d="m8.7 15.3 4.3-4.3" />
+                    </svg>
+                  </div>
+                </div>
+                <h3 className="mb-1 text-sm font-bold text-gray-900 dark:text-white">
+                  Coupon
+                </h3>
+                <p className="text-[10px] leading-tight text-gray-500 dark:text-gray-400">
+                  All of your coupons in here
+                </p>
+              </div>
+            </Card>
+          </Link>
         </div>
       </div>
     </div>
