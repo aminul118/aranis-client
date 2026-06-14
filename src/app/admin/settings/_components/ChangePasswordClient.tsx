@@ -3,13 +3,6 @@
 import SubmitButton from '@/components/common/button/submit-button';
 import { Button } from '@/components/ui/button';
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import {
   Form,
   FormControl,
   FormField,
@@ -60,23 +53,27 @@ const ChangePasswordClient = () => {
   };
 
   return (
-    <section className="w-full">
-      <Card>
-        <CardHeader>
-          <div className="flex items-center gap-3">
-            <div className="bg-primary/10 flex h-12 w-12 items-center justify-center rounded-full">
-              <KeyRound className="text-primary h-6 w-6" />
-            </div>
+    <section className="flex flex-1 items-center justify-center py-8">
+      <div className="group relative w-full max-w-3xl overflow-hidden rounded-xl border border-blue-100 bg-gradient-to-br from-blue-50 to-white p-6 shadow-sm sm:p-10 dark:border-blue-900/30 dark:from-blue-950/20 dark:to-[#0a0a0a]">
+        {/* Decorative dots (cutouts) */}
+        <div className="absolute top-1/2 -left-3 h-6 w-6 -translate-y-1/2 rounded-full border border-blue-100 bg-white dark:border-blue-900/30 dark:bg-[#0a0a0a]" />
+        <div className="absolute top-1/2 -right-3 h-6 w-6 -translate-y-1/2 rounded-full border border-blue-100 bg-white dark:border-blue-900/30 dark:bg-[#0a0a0a]" />
+
+        <div className="mb-6 flex flex-col gap-4">
+          <div className="flex items-start justify-between">
             <div>
-              <CardTitle className="text-2xl">Change Password</CardTitle>
-              <CardDescription>
-                Update your password to keep your account secure
-              </CardDescription>
+              <h3 className="font-bold text-gray-900 dark:text-white">
+                Change Password
+              </h3>
+              <div className="mt-1 flex items-center gap-1.5 text-xs font-medium text-blue-600 dark:text-blue-400">
+                <KeyRound className="h-3.5 w-3.5" />
+                <span>Update your password to keep your account secure</span>
+              </div>
             </div>
           </div>
-        </CardHeader>
+        </div>
 
-        <CardContent>
+        <div className="rounded-lg border border-dashed border-blue-200 bg-blue-50/50 p-6 dark:border-blue-800/50 dark:bg-blue-900/10">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <FormField
@@ -84,19 +81,22 @@ const ChangePasswordClient = () => {
                 name="oldPassword"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Current Password</FormLabel>
+                    <FormLabel className="text-gray-900 dark:text-white">
+                      Current Password
+                    </FormLabel>
                     <FormControl>
                       <div className="relative">
                         <Input
                           type={showOldPassword ? 'text' : 'password'}
                           placeholder="Enter your current password"
+                          className="border-blue-100 bg-white focus-visible:ring-blue-500 dark:border-blue-900/30 dark:bg-[#0a0a0a]"
                           {...field}
                         />
                         <Button
                           type="button"
                           variant="ghost"
                           size="sm"
-                          className="absolute top-0 right-0 h-full px-3 py-2 hover:bg-transparent"
+                          className="absolute top-0 right-0 h-full px-3 py-2 text-gray-500 hover:bg-transparent hover:text-blue-600 dark:text-gray-400"
                           onClick={() => setShowOldPassword(!showOldPassword)}
                         >
                           {showOldPassword ? (
@@ -117,19 +117,22 @@ const ChangePasswordClient = () => {
                 name="newPassword"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>New Password</FormLabel>
+                    <FormLabel className="text-gray-900 dark:text-white">
+                      New Password
+                    </FormLabel>
                     <FormControl>
                       <div className="relative">
                         <Input
                           type={showNewPassword ? 'text' : 'password'}
                           placeholder="Enter your new password"
+                          className="border-blue-100 bg-white focus-visible:ring-blue-500 dark:border-blue-900/30 dark:bg-[#0a0a0a]"
                           {...field}
                         />
                         <Button
                           type="button"
                           variant="ghost"
                           size="sm"
-                          className="absolute top-0 right-0 h-full px-3 py-2 hover:bg-transparent"
+                          className="absolute top-0 right-0 h-full px-3 py-2 text-gray-500 hover:bg-transparent hover:text-blue-600 dark:text-gray-400"
                           onClick={() => setShowNewPassword(!showNewPassword)}
                         >
                           {showNewPassword ? (
@@ -141,7 +144,7 @@ const ChangePasswordClient = () => {
                       </div>
                     </FormControl>
                     <FormMessage />
-                    <p className="text-muted-foreground text-xs">
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
                       Must be at least 8 characters with uppercase, lowercase,
                       and numbers
                     </p>
@@ -154,19 +157,22 @@ const ChangePasswordClient = () => {
                 name="confirmPassword"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Confirm New Password</FormLabel>
+                    <FormLabel className="text-gray-900 dark:text-white">
+                      Confirm New Password
+                    </FormLabel>
                     <FormControl>
                       <div className="relative">
                         <Input
                           type={showConfirmPassword ? 'text' : 'password'}
                           placeholder="Confirm your new password"
+                          className="border-blue-100 bg-white focus-visible:ring-blue-500 dark:border-blue-900/30 dark:bg-[#0a0a0a]"
                           {...field}
                         />
                         <Button
                           type="button"
                           variant="ghost"
                           size="sm"
-                          className="absolute top-0 right-0 h-full px-3 py-2 hover:bg-transparent"
+                          className="absolute top-0 right-0 h-full px-3 py-2 text-gray-500 hover:bg-transparent hover:text-blue-600 dark:text-gray-400"
                           onClick={() =>
                             setShowConfirmPassword(!showConfirmPassword)
                           }
@@ -184,20 +190,23 @@ const ChangePasswordClient = () => {
                 )}
               />
 
-              <div className="flex justify-end gap-2 pt-4">
+              <div className="flex justify-end gap-3 pt-4">
                 <Button
                   type="button"
                   variant="outline"
+                  className="rounded-full px-6 font-bold"
                   onClick={() => form.reset()}
                 >
                   Cancel
                 </Button>
-                <SubmitButton />
+                <div className="[&>button]:rounded-full [&>button]:bg-blue-600 [&>button]:px-8 [&>button]:font-bold [&>button]:text-white hover:[&>button]:bg-blue-700">
+                  <SubmitButton />
+                </div>
               </div>
             </form>
           </Form>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </section>
   );
 };

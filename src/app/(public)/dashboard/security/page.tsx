@@ -1,5 +1,6 @@
 import ChangePasswordClient from '@/app/admin/settings/_components/ChangePasswordClient';
 import { getMe } from '@/services/user/users';
+import { Lock } from 'lucide-react';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -14,14 +15,12 @@ export default async function DashboardSecurityPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold tracking-tight text-slate-800 dark:text-slate-100">
+    <div className="flex h-full flex-col gap-6 rounded-xl border border-gray-100 bg-white p-6 shadow-sm sm:p-8 dark:border-white/10 dark:bg-[#0a0a0a]">
+      <div className="flex items-center gap-3 border-b border-gray-100 pb-4 dark:border-white/10">
+        <Lock className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+        <h2 className="text-xl font-bold text-gray-900 dark:text-white">
           Security Settings
-        </h1>
-        <p className="text-muted-foreground mt-1">
-          Update your password and secure your account.
-        </p>
+        </h2>
       </div>
 
       <ChangePasswordClient />

@@ -13,8 +13,8 @@ const ProfileClient = ({ user }: Props) => {
   const [isEditing, setIsEditing] = useState(false);
 
   return (
-    <section className="space-y-6">
-      <div className="border-border/50 bg-card text-card-foreground overflow-hidden rounded-xl border shadow-sm">
+    <section className="w-full py-2">
+      <div className="w-full">
         {isEditing ? (
           <UpdateProfileForm user={user} setIsEditing={setIsEditing} />
         ) : (

@@ -1,15 +1,8 @@
 'use client';
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Monitor, Moon, Palette, Sun } from 'lucide-react';
+import { Monitor, Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 
@@ -48,27 +41,16 @@ const ThemeClient = () => {
   ];
 
   return (
-    <section>
-      <Card>
-        <CardHeader>
-          <div className="flex items-center gap-3">
-            <div className="bg-primary/10 flex h-12 w-12 items-center justify-center rounded-full">
-              <Palette className="text-primary h-6 w-6" />
-            </div>
-            <div>
-              <CardTitle className="text-2xl">Appearance</CardTitle>
-              <CardDescription>
-                Customize how the application looks
-              </CardDescription>
-            </div>
-          </div>
-        </CardHeader>
+    <section className="flex flex-1 items-center justify-center py-8">
+      <div className="group relative w-full max-w-3xl overflow-hidden rounded-xl border border-blue-100 bg-gradient-to-br from-blue-50 to-white p-6 shadow-sm sm:p-10 dark:border-blue-900/30 dark:from-blue-950/20 dark:to-[#0a0a0a]">
+        {/* Decorative dots (cutouts) */}
+        <div className="absolute top-1/2 -left-3 h-6 w-6 -translate-y-1/2 rounded-full border border-blue-100 bg-white dark:border-blue-900/30 dark:bg-[#0a0a0a]" />
+        <div className="absolute top-1/2 -right-3 h-6 w-6 -translate-y-1/2 rounded-full border border-blue-100 bg-white dark:border-blue-900/30 dark:bg-[#0a0a0a]" />
 
-        <CardContent className="space-y-6">
+        <div className="flex flex-col gap-6">
           <div>
-            <h3 className="mb-4 text-sm font-medium">Theme</h3>
             <RadioGroup value={theme} onValueChange={setTheme}>
-              <div className="grid gap-4">
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                 {themes.map((themeOption) => {
                   const Icon = themeOption.icon;
                   const isSelected = theme === themeOption.value;
@@ -77,22 +59,25 @@ const ThemeClient = () => {
                     <Label
                       key={themeOption.value}
                       htmlFor={themeOption.value}
-                      className={`hover:bg-muted/50 flex cursor-pointer items-center gap-4 rounded-lg border-2 p-4 transition-all ${
+                      className={`flex cursor-pointer flex-col items-center justify-center gap-4 rounded-xl border-2 p-6 transition-all hover:border-blue-300 hover:bg-white dark:hover:border-blue-700 dark:hover:bg-black/50 ${
                         isSelected
-                          ? 'border-primary bg-primary/5'
-                          : 'border-border'
+                          ? 'border-blue-500 bg-white dark:border-blue-500 dark:bg-black/50'
+                          : 'border-transparent bg-white/50 dark:bg-[#0a0a0a]/50'
                       }`}
                     >
                       <RadioGroupItem
                         value={themeOption.value}
                         id={themeOption.value}
+                        className="sr-only"
                       />
-                      <div className="bg-primary/10 flex h-10 w-10 items-center justify-center rounded-lg">
-                        <Icon className="text-primary h-5 w-5" />
+                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
+                        <Icon className="h-6 w-6" />
                       </div>
-                      <div className="flex-1">
-                        <div className="font-medium">{themeOption.label}</div>
-                        <div className="text-muted-foreground text-sm">
+                      <div className="text-center">
+                        <div className="font-bold text-gray-900 dark:text-white">
+                          {themeOption.label}
+                        </div>
+                        <div className="mt-1 text-xs text-gray-500 dark:text-gray-400">
                           {themeOption.description}
                         </div>
                       </div>
@@ -103,17 +88,17 @@ const ThemeClient = () => {
             </RadioGroup>
           </div>
 
-          <div className="border-muted bg-muted/20 rounded-lg border p-4">
-            <p className="text-muted-foreground text-sm">
+          <div className="rounded-xl border border-blue-100 bg-white/50 p-4 dark:border-blue-900/30 dark:bg-[#0a0a0a]/50">
+            <p className="text-sm text-gray-600 dark:text-gray-300">
               <strong>Current theme:</strong>{' '}
               <span className="capitalize">{theme}</span>
             </p>
-            <p className="text-muted-foreground mt-1 text-xs">
+            <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
               Changes are applied immediately and saved automatically.
             </p>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </section>
   );
 };

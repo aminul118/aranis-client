@@ -14,19 +14,8 @@ export default async function AddressBookPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold tracking-tight text-slate-800 dark:text-slate-100">
-          Address Book
-        </h1>
-        <p className="text-muted-foreground mt-1">
-          Manage your saved delivery addresses for faster checkout.
-        </p>
-      </div>
-
-      <div className="border-border/50 bg-card text-card-foreground overflow-hidden rounded-xl border shadow-sm">
-        <AddressManagement user={user} />
-      </div>
+    <div className="flex h-full flex-col gap-6 rounded-xl border border-gray-100 bg-white p-6 shadow-sm sm:p-8 dark:border-white/10 dark:bg-[#0a0a0a]">
+      <AddressManagement user={user} />
     </div>
   );
 }

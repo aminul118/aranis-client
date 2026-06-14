@@ -14,16 +14,7 @@ export default async function DashboardProfilePage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold tracking-tight text-slate-800 dark:text-slate-100">
-          My Profile
-        </h1>
-        <p className="text-muted-foreground mt-1">
-          Manage your personal information.
-        </p>
-      </div>
-
+    <div className="flex h-full flex-col gap-6 rounded-xl border border-gray-100 bg-white p-6 shadow-sm sm:p-8 dark:border-white/10 dark:bg-[#0a0a0a]">
       <ProfileClient user={user} />
     </div>
   );

@@ -1,12 +1,11 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { updateUser } from '@/services/user/users';
 import { IUser, IUserAddress } from '@/types/api.types';
-import { Home, MapPin, MapPinned, Plus, Trash2 } from 'lucide-react';
+import { BookOpen, Home, MapPin, Plus, Trash2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -66,58 +65,66 @@ const AddressManagement = ({ user }: Props) => {
   };
 
   return (
-    <div className="flex flex-col">
-      <CardHeader className="border-border/10 bg-muted/5 flex flex-row items-center justify-between border-b px-6 py-8 sm:px-12">
-        <div className="space-y-1">
-          <CardTitle className="flex items-center gap-2 text-2xl font-black tracking-tight">
-            <MapPinned className="h-6 w-6 text-indigo-500" /> Saved Addresses
-          </CardTitle>
-          <p className="text-muted-foreground text-sm font-medium">
-            Manage up to 4 delivery locations
-          </p>
+    <div className="flex flex-col gap-6">
+      <div className="flex items-center justify-between border-b border-gray-100 pb-4 dark:border-white/10">
+        <div className="flex items-center gap-3">
+          <BookOpen className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+            Address Book
+          </h2>
         </div>
         {addresses.length < 4 && !isAdding && (
           <Button
             onClick={() => setIsAdding(true)}
-            className="rounded-xl shadow-md transition-all hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0"
+            className="rounded-full bg-blue-600 px-6 font-bold text-white hover:bg-blue-700"
           >
             <Plus className="mr-2 h-4 w-4" /> Add New
           </Button>
         )}
-      </CardHeader>
+      </div>
 
-      <CardContent className="bg-card space-y-6 px-6 py-8 sm:px-12">
+      <div className="flex flex-col gap-6">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           {addresses.map((addr, index) => (
             <div
               key={index}
-              className="group border-border/50 bg-background relative flex items-start justify-between overflow-hidden rounded-2xl border p-6 transition-all hover:border-indigo-500/30 hover:shadow-lg hover:shadow-indigo-500/5"
+              className="group relative overflow-hidden rounded-xl border border-blue-100 bg-gradient-to-br from-blue-50 to-white p-6 shadow-sm transition-all hover:shadow-md dark:border-blue-900/30 dark:from-blue-950/20 dark:to-[#0a0a0a]"
             >
-              <div className="absolute top-0 right-0 h-full w-1/2 bg-gradient-to-l from-indigo-500/5 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"></div>
+              {/* Decorative dots (cutouts) */}
+              <div className="absolute top-1/2 -left-3 h-6 w-6 -translate-y-1/2 rounded-full border border-blue-100 bg-white dark:border-blue-900/30 dark:bg-[#0a0a0a]" />
+              <div className="absolute top-1/2 -right-3 h-6 w-6 -translate-y-1/2 rounded-full border border-blue-100 bg-white dark:border-blue-900/30 dark:bg-[#0a0a0a]" />
 
-              <div className="relative z-10 flex gap-4">
-                <div className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-indigo-500/10 text-indigo-500 shadow-sm ring-1 ring-indigo-500/20">
-                  <Home size={18} />
+              <div className="flex flex-col gap-4">
+                <div className="flex items-start justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
+                      <Home size={16} />
+                    </div>
+                    <h3 className="font-bold text-gray-900 dark:text-white">
+                      {addr.title}
+                    </h3>
+                  </div>
+
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="relative z-10 h-8 w-8 rounded-full text-red-500 opacity-0 transition-all duration-300 group-hover:opacity-100 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-500/20 dark:hover:text-red-400"
+                    onClick={() => removeAddress(index)}
+                    disabled={loading}
+                  >
+                    <Trash2 size={14} />
+                  </Button>
                 </div>
-                <div className="space-y-1">
-                  <h4 className="text-foreground text-base font-bold tracking-tight">
-                    {addr.title}
-                  </h4>
-                  <p className="text-muted-foreground line-clamp-2 text-sm leading-relaxed">
-                    {addr.address}
-                  </p>
+
+                <div className="flex flex-col gap-3 rounded-lg border border-dashed border-blue-200 bg-blue-50/50 p-4 dark:border-blue-800/50 dark:bg-blue-900/10">
+                  <div className="flex items-start gap-3">
+                    <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-blue-500" />
+                    <span className="line-clamp-2 text-sm leading-relaxed text-gray-600 dark:text-gray-300">
+                      {addr.address}
+                    </span>
+                  </div>
                 </div>
               </div>
-
-              <Button
-                variant="ghost"
-                size="icon"
-                className="text-destructive hover:bg-destructive hover:text-destructive-foreground relative z-10 h-8 w-8 rounded-full opacity-0 transition-all duration-300 group-hover:opacity-100"
-                onClick={() => removeAddress(index)}
-                disabled={loading}
-              >
-                <Trash2 size={14} />
-              </Button>
             </div>
           ))}
         </div>
@@ -196,7 +203,7 @@ const AddressManagement = ({ user }: Props) => {
             </Button>
           </div>
         )}
-      </CardContent>
+      </div>
     </div>
   );
 };

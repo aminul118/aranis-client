@@ -5,12 +5,6 @@ import SubmitButton from '@/components/common/button/submit-button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import {
   Form,
   FormControl,
   FormField,
@@ -20,12 +14,11 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import useActionHandler from '@/hooks/useActionHandler';
-import { formatRole } from '@/lib/utils';
 import { updateUser, updateUserWithFormData } from '@/services/user/users';
 import { IUser } from '@/types/api.types';
 import { userUpdateSchema, UserUpdateValues } from '@/zod/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Camera, X } from 'lucide-react';
+import { Camera } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -112,71 +105,61 @@ const UpdateProfileForm = ({ user, setIsEditing }: Props) => {
   };
 
   return (
-    <div className="flex flex-col gap-6">
-      <CardHeader className="border-border/50 rounded-t-2xl border-b bg-gradient-to-br from-blue-500/5 via-purple-500/5 to-transparent pt-12 pb-10">
-        <div className="flex flex-col items-center gap-8 px-4 sm:flex-row sm:justify-between sm:px-8">
-          <div className="flex flex-col items-center gap-6 sm:flex-row">
-            <div className="group relative">
-              <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 opacity-20 blur transition duration-500 group-hover:opacity-40"></div>
-              <Avatar className="ring-background relative h-28 w-28 shadow-2xl ring-4 transition-transform duration-300 hover:scale-105">
-                <AvatarImage
-                  src={displayPicture}
-                  alt={displayFullName}
-                  className="object-cover"
-                />
-                <AvatarFallback className="bg-muted text-3xl font-black">
-                  {displayInitials}
-                </AvatarFallback>
-              </Avatar>
-              <div
-                className="absolute inset-0 z-10 flex cursor-pointer items-center justify-center rounded-full bg-black/60 opacity-0 backdrop-blur-sm transition-all duration-300 group-hover:opacity-100"
-                onClick={() => fileInputRef.current?.click()}
-              >
-                <div className="flex flex-col items-center gap-1 text-white">
-                  <Camera className="h-6 w-6" />
-                  <span className="text-[10px] font-bold tracking-wider uppercase">
-                    Change
-                  </span>
-                </div>
-              </div>
-              <input
-                type="file"
-                ref={fileInputRef}
-                className="hidden"
-                accept="image/*"
-                onChange={onFileChange}
-              />
-            </div>
-            <div className="space-y-2 text-center sm:text-left">
-              <CardTitle className="text-3xl font-black tracking-tight sm:text-4xl">
-                {displayFullName}
-              </CardTitle>
-              <CardDescription className="text-base font-medium opacity-80 sm:text-lg">
-                {user.email}
-              </CardDescription>
-              <div className="mt-2 inline-flex items-center rounded-full bg-blue-500/10 px-4 py-1.5 text-xs font-black tracking-widest text-blue-600 uppercase shadow-sm dark:bg-blue-500/20 dark:text-blue-400">
-                {formatRole(user.role)}
-              </div>
+    <div className="flex flex-col gap-8">
+      <div className="flex flex-col items-center justify-center gap-6">
+        <div className="group relative">
+          <div className="absolute -inset-1 rounded-full bg-blue-500 opacity-20 blur transition duration-500 group-hover:opacity-40"></div>
+          <Avatar className="relative h-44 w-44 border-[6px] border-gray-300 shadow-sm transition-transform duration-300 hover:scale-105 dark:border-gray-700">
+            <AvatarImage
+              src={displayPicture}
+              alt={displayFullName}
+              className="object-cover"
+            />
+            <AvatarFallback className="bg-blue-100 text-5xl font-bold text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
+              {displayInitials}
+            </AvatarFallback>
+          </Avatar>
+          <div
+            className="absolute inset-0 z-10 flex cursor-pointer items-center justify-center rounded-full bg-black/60 opacity-0 backdrop-blur-sm transition-all duration-300 group-hover:opacity-100"
+            onClick={() => fileInputRef.current?.click()}
+          >
+            <div className="flex flex-col items-center gap-1 text-white">
+              <Camera className="h-6 w-6" />
+              <span className="text-[10px] font-bold tracking-wider uppercase">
+                Change
+              </span>
             </div>
           </div>
+          <input
+            type="file"
+            ref={fileInputRef}
+            className="hidden"
+            accept="image/*"
+            onChange={onFileChange}
+          />
         </div>
-      </CardHeader>
+        <div className="space-y-2 text-center">
+          <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
+            {displayFullName}
+          </h3>
+        </div>
+      </div>
 
-      <CardContent className="px-4 pt-6 pb-12 sm:px-12">
+      <div className="rounded-lg border border-dashed border-blue-200 bg-blue-50/50 p-6 dark:border-blue-800/50 dark:bg-blue-900/10">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
               <FormField
                 control={form.control}
                 name="firstName"
                 render={({ field }) => (
                   <FormItem className="space-y-2">
-                    <FormLabel className="text-muted-foreground text-xs font-black tracking-widest uppercase">
+                    <FormLabel className="text-xs font-bold tracking-widest text-gray-900 uppercase dark:text-white">
                       First Name
                     </FormLabel>
                     <FormControl>
                       <Input
-                        className="h-12 rounded-xl px-4 text-base transition-shadow focus-visible:ring-blue-500"
+                        className="h-12 rounded-xl border-blue-100 bg-white px-4 text-base focus-visible:ring-blue-500 dark:border-blue-900/30 dark:bg-[#0a0a0a]"
                         {...field}
                       />
                     </FormControl>
@@ -189,12 +172,12 @@ const UpdateProfileForm = ({ user, setIsEditing }: Props) => {
                 name="lastName"
                 render={({ field }) => (
                   <FormItem className="space-y-2">
-                    <FormLabel className="text-muted-foreground text-xs font-black tracking-widest uppercase">
+                    <FormLabel className="text-xs font-bold tracking-widest text-gray-900 uppercase dark:text-white">
                       Last Name
                     </FormLabel>
                     <FormControl>
                       <Input
-                        className="h-12 rounded-xl px-4 text-base transition-shadow focus-visible:ring-blue-500"
+                        className="h-12 rounded-xl border-blue-100 bg-white px-4 text-base focus-visible:ring-blue-500 dark:border-blue-900/30 dark:bg-[#0a0a0a]"
                         {...field}
                       />
                     </FormControl>
@@ -208,21 +191,22 @@ const UpdateProfileForm = ({ user, setIsEditing }: Props) => {
               <Button
                 type="button"
                 variant="outline"
-                size="lg"
-                className="rounded-xl"
+                className="rounded-full px-6 font-bold"
                 onClick={() => {
                   setIsEditing(false);
                   setUploadedImageBlob(null);
                   form.reset();
                 }}
               >
-                <X className="mr-2 h-4 w-4" /> Cancel
+                Cancel
               </Button>
-              <SubmitButton className="rounded-xl px-8" />
+              <div className="[&>button]:rounded-full [&>button]:bg-blue-600 [&>button]:px-8 [&>button]:font-bold [&>button]:text-white hover:[&>button]:bg-blue-700">
+                <SubmitButton />
+              </div>
             </div>
           </form>
         </Form>
-      </CardContent>
+      </div>
 
       {showCropper && tempImageSrc && (
         <ImageCropper

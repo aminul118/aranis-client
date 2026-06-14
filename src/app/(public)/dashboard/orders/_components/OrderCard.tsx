@@ -208,7 +208,7 @@ export default function OrderCard({
             <Button
               asChild
               variant="outline"
-              className="shrink-0 gap-2 rounded-full border-blue-500/50 px-6 font-bold text-blue-600 hover:bg-blue-50"
+              className="shrink-0 gap-2 rounded-full border-blue-500/50 px-6 font-bold text-blue-600 hover:bg-blue-50 hover:text-blue-700 dark:text-blue-400 dark:hover:bg-blue-500/20 dark:hover:text-blue-300"
             >
               <Link href={`/track-order?id=${order._id}`}>
                 <Truck className="h-4 w-4" />
@@ -219,7 +219,7 @@ export default function OrderCard({
             <Button
               onClick={() => onOrderAgain(order)}
               variant="outline"
-              className="shrink-0 gap-2 rounded-full border-emerald-500/50 px-6 font-bold text-emerald-600 hover:bg-emerald-50"
+              className="shrink-0 gap-2 rounded-full border-emerald-500/50 px-6 font-bold text-emerald-600 hover:bg-emerald-50 hover:text-emerald-700 dark:text-emerald-400 dark:hover:bg-emerald-500/20 dark:hover:text-emerald-300"
             >
               <RefreshCcw className="h-4 w-4" />
               Order Again

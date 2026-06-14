@@ -15,18 +15,9 @@ import Link from 'next/link';
 const DashboardHeroLayout = ({ user }: { user: IUser }) => {
   return (
     <div className="space-y-6">
-      <div className="text-center md:text-left">
-        <h1 className="text-center text-3xl font-semibold text-slate-800 sm:text-4xl dark:text-slate-100">
-          Good Morning{' '}
-          <span className="font-bold text-blue-600 uppercase dark:text-blue-400">
-            {user?.fullName}!
-          </span>
-        </h1>
-      </div>
-
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
         <div className="space-y-4 lg:col-span-12">
-          <Card className="overflow-hidden border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+          <Card className="group relative overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-all hover:border-blue-500/20 hover:shadow-md dark:border-white/10 dark:bg-black">
             <div className="flex items-center justify-between border-b border-slate-100 p-4 dark:border-slate-800">
               <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">
                 My Orders
@@ -120,7 +111,7 @@ const DashboardHeroLayout = ({ user }: { user: IUser }) => {
               },
             ].map((item, idx) => (
               <Link key={idx} href={item.url} className="outline-none">
-                <Card className="group h-full cursor-pointer transition-colors hover:border-slate-300 dark:hover:border-slate-700">
+                <Card className="group relative h-full cursor-pointer overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-all hover:border-blue-500/20 hover:shadow-md dark:border-white/10 dark:bg-black">
                   <CardContent className="flex h-full flex-col items-center justify-center p-4 text-center">
                     <div
                       className={`mb-3 flex h-12 w-12 items-center justify-center rounded-full ${item.bg} ${item.color} transition-transform group-hover:scale-110`}
@@ -141,7 +132,7 @@ const DashboardHeroLayout = ({ user }: { user: IUser }) => {
 
           <div className="hidden grid-cols-1 gap-4 md:grid-cols-2 lg:grid">
             <Link href="/track-order" className="outline-none">
-              <Card className="group h-full cursor-pointer transition-colors hover:border-slate-300 dark:hover:border-slate-700">
+              <Card className="group relative h-full cursor-pointer overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-all hover:border-blue-500/20 hover:shadow-md dark:border-white/10 dark:bg-black">
                 <CardContent className="flex h-full flex-col items-center justify-center p-6 text-center">
                   <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-emerald-100 text-emerald-500 transition-transform group-hover:scale-110 dark:bg-emerald-500/20">
                     <MapPin size={26} strokeWidth={2.5} />
@@ -156,7 +147,7 @@ const DashboardHeroLayout = ({ user }: { user: IUser }) => {
               </Card>
             </Link>
             <Link href="/dashboard/address" className="outline-none">
-              <Card className="group h-full cursor-pointer transition-colors hover:border-slate-300 dark:hover:border-slate-700">
+              <Card className="group relative h-full cursor-pointer overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-all hover:border-blue-500/20 hover:shadow-md dark:border-white/10 dark:bg-black">
                 <CardContent className="flex h-full flex-col items-center justify-center p-6 text-center">
                   <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-blue-100 text-blue-500 transition-transform group-hover:scale-110 dark:bg-blue-500/20">
                     <Book size={26} strokeWidth={2.5} />

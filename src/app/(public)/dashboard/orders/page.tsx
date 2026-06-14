@@ -6,7 +6,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useCartOptional } from '@/context/CartContext';
 import { getMyOrders } from '@/services/order/order';
 import { AnimatePresence } from 'framer-motion';
-import { ArrowRight, Search, ShoppingBag } from 'lucide-react';
+import { ArrowRight, Package, Search, ShoppingBag } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -55,6 +55,23 @@ const UserOrdersPage = () => {
       ),
   );
 
+  const reviewItems = reviewOrder
+    ? (Array.from(
+        new Map(
+          reviewOrder.items
+            .filter((item: any) => item.product)
+            .map((item: any) => [
+              item.product._id,
+              {
+                productId: item.product._id,
+                productName: item.product.name,
+                productImage: item.product.thumbnails?.[0] || '',
+              },
+            ]),
+        ).values(),
+      ) as any[])
+    : [];
+
   if (loading) {
     return (
       <div className="space-y-6">
@@ -72,15 +89,13 @@ const UserOrdersPage = () => {
 
   return (
     <>
-      <div className="space-y-6">
-        <div className="mb-6 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight text-slate-800 dark:text-slate-100">
+      <div className="flex h-full flex-col gap-6 rounded-xl border border-gray-100 bg-white p-6 shadow-sm sm:p-8 dark:border-white/10 dark:bg-[#0a0a0a]">
+        <div className="flex flex-col items-start justify-between gap-4 border-b border-gray-100 pb-4 md:flex-row md:items-center dark:border-white/10">
+          <div className="flex items-center gap-3">
+            <Package className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white">
               My Orders
-            </h1>
-            <p className="text-muted-foreground mt-1">
-              Track your purchases and leave reviews.
-            </p>
+            </h2>
           </div>
           <div className="relative w-full md:w-80">
             <Search className="text-muted-foreground absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2" />
@@ -133,24 +148,7 @@ const UserOrdersPage = () => {
       <WriteReviewModal
         open={!!reviewOrder}
         onClose={() => setReviewOrder(null)}
-        items={
-          reviewOrder
-            ? (Array.from(
-                new Map(
-                  reviewOrder.items
-                    .filter((item: any) => item.product)
-                    .map((item: any) => [
-                      item.product._id,
-                      {
-                        productId: item.product._id,
-                        productName: item.product.name,
-                        productImage: item.product.thumbnails?.[0] || '',
-                      },
-                    ]),
-                ).values(),
-              ) as any[])
-            : []
-        }
+        items={reviewItems}
       />
     </>
   );

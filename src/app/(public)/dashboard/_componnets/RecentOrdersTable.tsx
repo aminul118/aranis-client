@@ -18,7 +18,7 @@ const RecentOrdersTable = ({ orders }: { orders: IOrder[] }) => {
       </h2>
 
       {recentOrders.length === 0 ? (
-        <Card className="border-2 border-dashed bg-slate-50 dark:bg-slate-900/50">
+        <Card className="group relative overflow-hidden rounded-2xl border border-dashed border-gray-200 bg-white shadow-sm transition-all dark:border-white/10 dark:bg-black">
           <CardContent className="flex flex-col items-center justify-center p-10 text-center">
             <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800">
               <span className="text-2xl opacity-50">📦</span>
@@ -39,7 +39,7 @@ const RecentOrdersTable = ({ orders }: { orders: IOrder[] }) => {
           {recentOrders.map((order) => (
             <Card
               key={order._id}
-              className="overflow-hidden border-slate-200 dark:border-slate-800"
+              className="group relative overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-all hover:border-blue-500/20 hover:shadow-md dark:border-white/10 dark:bg-black"
             >
               <CardHeader className="flex flex-col justify-between gap-4 border-b border-slate-100 bg-slate-50 p-4 sm:flex-row sm:items-center sm:px-6 dark:border-slate-800 dark:bg-slate-900/50">
                 <div className="flex flex-col">
