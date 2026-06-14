@@ -136,6 +136,8 @@ export interface IStats {
     inactiveCount: number;
     blockedCount: number;
     deletedCount: number;
+    login24hCount?: number;
+    suspiciousLoginCount?: number;
   };
   productCount: number;
   orderCount: number;

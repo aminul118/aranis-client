@@ -64,6 +64,8 @@ const Stats = ({ stats }: StatsProps) => {
       inactiveCount: 0,
       blockedCount: 0,
       deletedCount: 0,
+      login24hCount: 0,
+      suspiciousLoginCount: 0,
     },
   } = stats;
 
@@ -259,20 +261,67 @@ const Stats = ({ stats }: StatsProps) => {
                   {orderStatusDistribution.Processing || 0}
                 </span>
               </div>
-              <div className="flex items-center justify-between">
-                <span className="text-muted-foreground flex items-center gap-2 text-sm font-bold">
-                  <UserCheck className="text-blue-500" size={16} /> Active Users
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* User Activity & Security */}
+        <Card className="col-span-1 border-none bg-white shadow-xl dark:bg-[#151722] dark:shadow-2xl">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-lg font-black text-gray-900 dark:text-white">
+              <UserCheck className="text-blue-500" size={20} />
+              User Activity
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between rounded-xl bg-gray-50 p-4 transition-colors hover:bg-gray-100 dark:bg-white/5 dark:hover:bg-white/10">
+                <span className="text-muted-foreground flex items-center gap-3 text-sm font-bold">
+                  <div className="rounded-lg bg-blue-500/10 p-2">
+                    <UserCheck className="text-blue-500" size={18} />
+                  </div>
+                  Active Users
                 </span>
-                <span className="text-lg font-black text-gray-900 dark:text-white">
+                <span className="text-xl font-black text-gray-900 dark:text-white">
                   {user.activeCount}
                 </span>
               </div>
+
+              <div className="flex items-center justify-between rounded-xl bg-gray-50 p-4 transition-colors hover:bg-gray-100 dark:bg-white/5 dark:hover:bg-white/10">
+                <span className="text-muted-foreground flex items-center gap-3 text-sm font-bold">
+                  <div className="rounded-lg bg-green-500/10 p-2">
+                    <Users className="text-green-500" size={18} />
+                  </div>
+                  Logins (24h)
+                </span>
+                <span className="text-xl font-black text-gray-900 dark:text-white">
+                  {user.login24hCount || 0}
+                </span>
+              </div>
+
+              {user.suspiciousLoginCount !== undefined &&
+                user.suspiciousLoginCount > 0 && (
+                  <div className="flex items-center justify-between rounded-xl bg-red-50 p-4 transition-colors hover:bg-red-100 dark:bg-red-500/10 dark:hover:bg-red-500/20">
+                    <span className="flex items-center gap-3 text-sm font-bold text-red-600 dark:text-red-400">
+                      <div className="rounded-lg bg-red-500/20 p-2">
+                        <AlertTriangle
+                          className="text-red-600 dark:text-red-400"
+                          size={18}
+                        />
+                      </div>
+                      Suspicious Logins
+                    </span>
+                    <span className="text-xl font-black text-red-600 dark:text-red-400">
+                      {user.suspiciousLoginCount}
+                    </span>
+                  </div>
+                )}
             </div>
           </CardContent>
         </Card>
 
         {/* Operational Status (Pie-style bars) */}
-        <Card className="col-span-1 border-none bg-white shadow-xl lg:col-span-2 dark:bg-[#151722] dark:shadow-2xl">
+        <Card className="col-span-1 border-none bg-white shadow-xl dark:bg-[#151722] dark:shadow-2xl">
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle className="flex items-center gap-2 text-lg font-black text-gray-900 dark:text-white">
               <PieChart className="text-purple-500" size={20} />
