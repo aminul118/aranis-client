@@ -47,9 +47,9 @@ export const updateCategory = async (
 export const getCategories = async (query: Record<string, string>) => {
   return await serverFetch.get<ApiResponse<ICategory[]>>('/categories', {
     query,
+    cache: 'force-cache',
     next: {
       tags: ['category'],
-      revalidate: 3600,
     },
   });
 };

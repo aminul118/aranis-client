@@ -43,6 +43,7 @@ export const createOffer = async (payload: Partial<IOffer>) => {
 export const getOffers = async (params: Record<string, any> = {}) => {
   const query = new URLSearchParams(params).toString();
   return await serverFetch.get<ApiResponse<IOffer[]>>(`/offers?${query}`, {
+    cache: 'force-cache',
     next: { tags: ['offer'] },
   });
 };
@@ -88,6 +89,7 @@ export const applyOfferToAll = async (tag: string) => {
 
 export const getActiveOffer = async () => {
   return await serverFetch.get<ApiResponse<IOffer>>('/offers/active', {
+    cache: 'force-cache',
     next: { tags: ['offer'] },
   });
 };

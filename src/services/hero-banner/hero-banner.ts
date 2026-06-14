@@ -28,6 +28,7 @@ export interface IMiniBanner {
 const getHeroBanners = async (query: Record<string, string> = {}) => {
   return await serverFetch.get<ApiResponse<IHeroBanner[]>>('/hero-banners', {
     query,
+    cache: 'force-cache',
     next: { tags: ['hero-banners'] },
   });
 };
@@ -87,6 +88,7 @@ const deleteHeroBannerBulk = async (ids: string[]) => {
 const getMiniBanners = async (query: Record<string, string> = {}) => {
   return await serverFetch.get<ApiResponse<IMiniBanner[]>>('/mini-banners', {
     query,
+    cache: 'force-cache',
     next: { tags: ['mini-banners'] },
   });
 };

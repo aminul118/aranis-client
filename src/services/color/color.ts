@@ -36,6 +36,7 @@ export const updateColor = async (payload: Partial<IColor>, id: string) => {
 export const getColors = async (query: Record<string, string>) => {
   return await serverFetch.get<ApiResponse<IColor[]>>('/colors', {
     query,
+    cache: 'force-cache',
     next: {
       tags: ['color'],
     },

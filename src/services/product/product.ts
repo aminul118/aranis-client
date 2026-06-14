@@ -52,7 +52,8 @@ const getProducts = async (
 ) => {
   return await serverFetch.get<ApiResponse<IProduct[]>>('/products', {
     query,
-    next: { tags: ['product'], revalidate: 3600, ...options?.next },
+    cache: 'force-cache',
+    next: { tags: ['product'], ...options?.next },
     ...options,
     headers: {
       ...options?.headers,

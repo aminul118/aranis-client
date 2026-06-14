@@ -63,12 +63,21 @@ export async function proxy(req: NextRequest) {
     if (refreshed?.accessToken) {
       const { accessToken, refreshToken } = refreshed;
 
-      // Set the new tokens in the response cookies
-      setAuthCookies(response, accessToken, refreshToken);
-
       // Update request headers so Server Components can see the new token in this request
       req.cookies.set('accessToken', accessToken);
       if (refreshToken) req.cookies.set('refreshToken', refreshToken);
+
+      const requestHeaders = new Headers(req.headers);
+      requestHeaders.set('cookie', req.cookies.toString());
+
+      response = NextResponse.next({
+        request: {
+          headers: requestHeaders,
+        },
+      });
+
+      // Set the new tokens in the response cookies
+      setAuthCookies(response, accessToken, refreshToken);
 
       // Decode token to get user info (role, etc.)
       user = decodeToken(accessToken);

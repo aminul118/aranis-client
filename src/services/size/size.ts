@@ -36,6 +36,7 @@ export const updateSize = async (payload: Partial<ISize>, id: string) => {
 export const getSizes = async (query?: Record<string, string>) => {
   return await serverFetch.get<ApiResponse<ISize[]>>('/sizes', {
     query,
+    cache: 'force-cache',
     next: {
       tags: ['size'],
     },

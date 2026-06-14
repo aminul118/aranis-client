@@ -49,6 +49,7 @@ const updateNavbar = async (payload: Partial<INavItem>, id: string) => {
 const getNavbars = async (query: Record<string, string>) => {
   return await serverFetch.get<ApiResponse<INavItem[]>>('/navbar', {
     query,
+    cache: 'force-cache',
     next: {
       tags: ['navbar'],
     },
