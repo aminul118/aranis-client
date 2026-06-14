@@ -88,7 +88,7 @@ export async function proxy(req: NextRequest) {
 
   // 5) Logged-in users should not see auth pages (login/register/etc.)
   if (user && isAuthPage) {
-    return redirectTo('/');
+    return redirectTo(getDefaultDashboardRoute(role!));
   }
 
   // 6) Protect protected routes for guests
