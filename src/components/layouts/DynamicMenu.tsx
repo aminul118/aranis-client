@@ -197,7 +197,15 @@ const DynamicMenu = ({ menuGroups, role, user }: DynamicMenuProps) => {
                 if (!hasSubMenu) {
                   return (
                     <SidebarMenuItem key={i}>
-                      <SidebarMenuButton asChild isActive={active}>
+                      <SidebarMenuButton
+                        asChild
+                        isActive={active}
+                        className={
+                          active
+                            ? '!rounded-l-none !border-l-4 !border-blue-700 !bg-blue-50 !text-blue-700 dark:!border-blue-400 dark:!bg-blue-900/20 dark:!text-blue-400'
+                            : ''
+                        }
+                      >
                         <Link href={menu.url}>
                           {menu.icon && <menu.icon />}
                           <span>{menu.name}</span>
@@ -221,7 +229,15 @@ const DynamicMenu = ({ menuGroups, role, user }: DynamicMenuProps) => {
                   >
                     <SidebarMenuItem>
                       <CollapsibleTrigger asChild>
-                        <SidebarMenuButton asChild isActive={active}>
+                        <SidebarMenuButton
+                          asChild
+                          isActive={active}
+                          className={
+                            active
+                              ? '!rounded-l-none !border-l-4 !border-blue-700 !bg-blue-50 !text-blue-700 dark:!border-blue-400 dark:!bg-blue-900/20 dark:!text-blue-400'
+                              : ''
+                          }
+                        >
                           <div className="flex w-full items-center">
                             {menu.icon && <menu.icon />}
                             <span>{menu.name}</span>
@@ -253,6 +269,11 @@ const DynamicMenu = ({ menuGroups, role, user }: DynamicMenuProps) => {
                                   <SidebarMenuSubButton
                                     asChild
                                     isActive={subActive}
+                                    className={
+                                      subActive
+                                        ? '!border-l-2 !border-blue-700 !bg-blue-50 !text-blue-700 dark:!border-blue-400 dark:!bg-blue-900/20 dark:!text-blue-400'
+                                        : ''
+                                    }
                                   >
                                     <Link
                                       href={subItem.url}

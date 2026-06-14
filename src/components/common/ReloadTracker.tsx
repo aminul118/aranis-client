@@ -19,7 +19,6 @@ interface ReloadData {
 
 export default function ReloadTracker() {
   const [showWarning, setShowWarning] = useState(false);
-  const [isBlocked, setIsBlocked] = useState(false);
   const [warningCount, setWarningCount] = useState(0);
 
   useEffect(() => {
@@ -42,7 +41,7 @@ export default function ReloadTracker() {
 
     if (reloadData.blockUntil && now < reloadData.blockUntil) {
       // Still blocked
-      setIsBlocked(true);
+
       document.cookie = `aranis_block_until=${reloadData.blockUntil}; path=/; max-age=${Math.ceil((reloadData.blockUntil - now) / 1000)}`;
     } else {
       // Block expired or not blocked
@@ -65,7 +64,7 @@ export default function ReloadTracker() {
 
       if (currentReloads >= RELOAD_LIMIT) {
         reloadData.blockUntil = now + BLOCK_DURATION_MS;
-        setIsBlocked(true);
+
         // Set a cookie so Next.js middleware knows this user is blocked
         document.cookie = `aranis_block_until=${reloadData.blockUntil}; path=/; max-age=${2 * 60}`;
       } else if (currentReloads >= WARNING_RELOAD) {
@@ -79,7 +78,6 @@ export default function ReloadTracker() {
     if (reloadData.blockUntil && reloadData.blockUntil > Date.now()) {
       const timeRemaining = reloadData.blockUntil - Date.now();
       const timeoutId = setTimeout(() => {
-        setIsBlocked(false);
         reloadData.timestamps = [];
         delete reloadData.blockUntil;
         localStorage.setItem(STORAGE_KEY, JSON.stringify(reloadData));

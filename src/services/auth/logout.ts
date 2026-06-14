@@ -1,13 +1,10 @@
 'use server';
 
-import { revalidate } from '@/lib/revalidate';
 import { removeAccessToken, removeRefreshToken } from './cookie-token';
 
 const logOut = async () => {
   await removeAccessToken();
   await removeRefreshToken();
-
-  await revalidate('ME');
 
   return {
     success: true,

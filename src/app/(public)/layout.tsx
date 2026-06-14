@@ -1,14 +1,24 @@
-import ChatFloatingButton from '@/app/(public)/_components/layouts/ChatFloatingButton';
-import Footer from '@/app/(public)/_components/layouts/Footer/Footer';
-import MobileBottomNav from '@/app/(public)/_components/layouts/Navbar/MobileBottomNav';
 import Navbar from '@/app/(public)/_components/layouts/Navbar/Navbar';
-import GlobalOfferModal from '@/components/common/GlobalOfferModal';
 import Logo from '@/components/common/Logo';
 import { getNavbars } from '@/services/navbar/navbar';
 import { getOffers } from '@/services/offer/offer';
 import { getSiteSettings } from '@/services/settings/settings';
 import { getMe } from '@/services/user/users';
 import { Children } from '@/types';
+import nextDynamic from 'next/dynamic';
+
+const ChatFloatingButton = nextDynamic(
+  () => import('@/app/(public)/_components/layouts/ChatFloatingButton'),
+);
+const Footer = nextDynamic(
+  () => import('@/app/(public)/_components/layouts/Footer/Footer'),
+);
+const MobileBottomNav = nextDynamic(
+  () => import('@/app/(public)/_components/layouts/Navbar/MobileBottomNav'),
+);
+const GlobalOfferModal = nextDynamic(
+  () => import('@/components/common/GlobalOfferModal'),
+);
 
 export const dynamic = 'force-dynamic';
 

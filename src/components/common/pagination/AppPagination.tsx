@@ -65,6 +65,12 @@ const AppPagination = ({ meta, className }: IPaginationProps) => {
     });
   };
 
+  const getPageHref = (newPage: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('page', newPage.toString());
+    return `?${params.toString()}`;
+  };
+
   const paginationItems = getPaginationItems();
 
   return (
@@ -73,12 +79,17 @@ const AppPagination = ({ meta, className }: IPaginationProps) => {
         {/* Previous */}
         <PaginationItem>
           <PaginationPrevious
+            href={page > 1 ? getPageHref(page - 1) : '#'}
             className={cn(
               (page <= 1 || isPending) && 'pointer-events-none opacity-50',
               'h-10 cursor-pointer rounded-full border-none px-4 font-bold transition-all duration-300',
               'bg-black/[0.03] text-zinc-700 hover:bg-black/[0.06] hover:text-zinc-900 dark:bg-white/[0.04] dark:text-zinc-300 dark:hover:bg-white/[0.07] dark:hover:text-white',
             )}
-            onClick={() => page > 1 && handlePageChange(page - 1)}
+            onClick={(e) => {
+              if (page <= 1) return;
+              e.preventDefault();
+              handlePageChange(page - 1);
+            }}
             aria-disabled={page <= 1 || isPending}
           />
         </PaginationItem>
@@ -90,8 +101,12 @@ const AppPagination = ({ meta, className }: IPaginationProps) => {
               <PaginationEllipsis />
             ) : (
               <PaginationLink
+                href={getPageHref(item as number)}
                 isActive={item === page}
-                onClick={() => handlePageChange(item as number)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handlePageChange(item as number);
+                }}
                 className={cn(
                   isPending && 'pointer-events-none',
                   'flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border-none! font-bold transition-all duration-300',
@@ -109,13 +124,18 @@ const AppPagination = ({ meta, className }: IPaginationProps) => {
         {/* Next */}
         <PaginationItem>
           <PaginationNext
+            href={page < totalPage ? getPageHref(page + 1) : '#'}
             className={cn(
               (page >= totalPage || isPending) &&
                 'pointer-events-none opacity-50',
               'h-10 cursor-pointer rounded-full border-none px-4 font-bold transition-all duration-300',
               'bg-black/[0.03] text-zinc-700 hover:bg-black/[0.06] hover:text-zinc-900 dark:bg-white/[0.04] dark:text-zinc-300 dark:hover:bg-white/[0.07] dark:hover:text-white',
             )}
-            onClick={() => page < totalPage && handlePageChange(page + 1)}
+            onClick={(e) => {
+              if (page >= totalPage) return;
+              e.preventDefault();
+              handlePageChange(page + 1);
+            }}
             aria-disabled={page >= totalPage || isPending}
           />
         </PaginationItem>

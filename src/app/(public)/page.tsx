@@ -1,7 +1,4 @@
-import BestSellingProducts from '@/app/(public)/_components/BestSellingProducts';
-import FeaturedProducts from '@/app/(public)/_components/FeaturedProducts';
 import HeroBanner from '@/app/(public)/_components/HeroBanner';
-import HomeSEOContent from '@/app/(public)/_components/HomeSEOContent';
 import NewArrivals from '@/app/(public)/_components/NewArrivals';
 import generateMetaTags from '@/seo/generateMetaTags';
 import {
@@ -9,6 +6,16 @@ import {
   getMiniBanners,
 } from '@/services/hero-banner/hero-banner';
 import { Metadata } from 'next';
+import dynamic from 'next/dynamic';
+const BestSellingProducts = dynamic(
+  () => import('@/app/(public)/_components/BestSellingProducts'),
+);
+const FeaturedProducts = dynamic(
+  () => import('@/app/(public)/_components/FeaturedProducts'),
+);
+const HomeSEOContent = dynamic(
+  () => import('@/app/(public)/_components/HomeSEOContent'),
+);
 
 const HomePage = async () => {
   const [heroBannersRes, miniBannersRes] = await Promise.all([

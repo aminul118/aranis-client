@@ -39,12 +39,12 @@ const Logo = async ({ className, logoUrl }: Props) => {
     >
       <Image
         src={src}
-        height={48}
-        width={140}
+        height={60}
+        width={240}
         alt="Aranis logo"
         priority={true}
         fetchPriority="high"
-        className="h-[48px] w-auto object-contain"
+        className="h-[60px] w-auto object-contain"
       />
     </Link>
   );
