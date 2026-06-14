@@ -26,7 +26,6 @@ import {
 } from '@/services/user/user-access';
 import { otpValidation } from '@/zod/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -35,7 +34,7 @@ import { z } from 'zod';
 type FormValues = z.infer<typeof otpValidation>;
 
 const VerifyOTPForm = () => {
-  const [counter, setCounter] = useState(60); // 1 min timer
+  const [counter, setCounter] = useState(120); // 2 min timer
   const {
     identifier,
     redirect,
@@ -44,7 +43,6 @@ const VerifyOTPForm = () => {
   const [attemptsLeft, setAttemptsLeft] = useState<number | null>(
     initialAttempts ? parseInt(initialAttempts, 10) : null,
   );
-  const router = useRouter();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(otpValidation),
@@ -96,7 +94,7 @@ const VerifyOTPForm = () => {
 
     if (res.success) {
       toast.success(`OTP sent to ${identifier}`);
-      setCounter(60); // ✅ reset timer
+      setCounter(120); // ✅ reset timer
       if ((res as any).data?.remainingAttempts !== undefined) {
         setAttemptsLeft((res as any).data.remainingAttempts);
       }
@@ -167,7 +165,7 @@ const VerifyOTPForm = () => {
         <div className="text-center text-sm">
           {counter > 0 ? (
             <Button variant="link" disabled className="text-muted-foreground">
-              {` Resend available in ${counter}`}
+              {` Resend available in ${Math.floor(counter / 60)}:${(counter % 60).toString().padStart(2, '0')}`}
             </Button>
           ) : (
             <Button variant="link" onClick={handleResend}>

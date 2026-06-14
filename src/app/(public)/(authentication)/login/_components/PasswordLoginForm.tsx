@@ -63,11 +63,11 @@ const PasswordLoginForm = () => {
         } else if (redirect) {
           await refreshUser();
           const path = redirect.startsWith('/') ? redirect : `/${redirect}`;
-          router.push(path);
+          window.location.href = path;
         } else {
           await refreshUser();
           const role = res.data?.user?.role;
-          router.push(getDefaultDashboardRoute(role));
+          window.location.href = getDefaultDashboardRoute(role);
         }
       } else {
         setAlert({
