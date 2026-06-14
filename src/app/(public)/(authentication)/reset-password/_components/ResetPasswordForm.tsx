@@ -90,7 +90,7 @@ const ResetPasswordForm = () => {
             if (role === 'ADMIN' || role === 'SUPER_ADMIN') {
               window.location.href = '/admin';
             } else {
-              window.location.href = '/user';
+              window.location.href = '/dashboard';
             }
           } catch (e) {
             window.location.href = '/login';

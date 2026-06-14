@@ -150,7 +150,7 @@ const DynamicMenu = ({ menuGroups, role, user }: DynamicMenuProps) => {
   );
 
   const isLinkActive = (url: string) => {
-    if (url === '/admin' || url === '/user') return pathname === url;
+    if (url === '/admin' || url === '/dashboard') return pathname === url;
     return pathname === url || pathname.startsWith(`${url}/`);
   };
 

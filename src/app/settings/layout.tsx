@@ -1,14 +1,13 @@
-import SettingsSidebar from '@/app/(dashboard)/admin/settings/_components/SettingsSidebar';
+import SettingsSidebar from '@/app/admin/settings/_components/SettingsSidebar';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { getSiteSettings } from '@/services/settings/settings';
 import { getMe } from '@/services/user/users';
 import { Role } from '@/types';
 import { Suspense } from 'react';
-import AdminSidebar from '../(dashboard)/admin/_components/layouts/admin-sidebar';
-import AdminHeader from '../(dashboard)/admin/_components/layouts/AdminHeader';
-import { AdminSidebarSkeleton } from '../(dashboard)/admin/_components/layouts/AdminSidebarSkeleton';
-import UserSidebar from '../(dashboard)/user/_componnets/layouts/user-sidebar';
-import UserHeader from '../(dashboard)/user/_componnets/layouts/UserHeader';
+import UserSidebar from '../(public)/dashboard/_componnets/layouts/user-sidebar';
+import AdminSidebar from '../admin/_components/layouts/admin-sidebar';
+import AdminHeader from '../admin/_components/layouts/AdminHeader';
+import { AdminSidebarSkeleton } from '../admin/_components/layouts/AdminSidebarSkeleton';
 
 export const dynamic = 'force-dynamic';
 
@@ -59,7 +58,6 @@ export default async function SettingsLayout({
         <UserSidebar user={user} />
       </Suspense>
       <SidebarInset>
-        <UserHeader user={user} />
         <div className="container mx-auto p-6">
           <div className="mb-8">
             <h1 className="text-3xl font-bold tracking-tight">

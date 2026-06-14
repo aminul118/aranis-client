@@ -16,7 +16,7 @@ const metaConfig: MetaConfig = {
     microsoft_bing: '',
   },
   publisher: 'The Aranis',
-  preventCrawler: ['/user', '/admin'],
+  preventCrawler: ['/dashboard', '/admin'],
 };
 
 export default metaConfig;

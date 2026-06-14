@@ -259,9 +259,9 @@ const NotificationBell = ({ user }: Props) => {
     } else {
       // Regular User
       if (isChat) {
-        router.push('/user/chat');
+        router.push('/dashboard/chat');
       } else if (isOrder) {
-        router.push('/user/orders');
+        router.push('/dashboard/orders');
       } else if (notif.link) {
         router.push(notif.link);
       } else {
@@ -371,7 +371,7 @@ const NotificationBell = ({ user }: Props) => {
                 router.push(
                   user?.role === 'ADMIN' || user?.role === 'SUPER_ADMIN'
                     ? '/admin/chat'
-                    : '/user/chat',
+                    : '/dashboard/chat',
                 )
               }
               className="group relative flex cursor-pointer items-start gap-3.5 rounded-xl border border-emerald-500/10 bg-emerald-600/[0.05] p-3 transition-all hover:bg-emerald-600/[0.08]"

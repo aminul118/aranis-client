@@ -45,7 +45,7 @@ const MobileBottomNav = ({ user: serverUser }: { user: IUser | null }) => {
     },
     {
       label: 'Orders',
-      href: '/user/orders',
+      href: '/dashboard/orders',
       icon: ShoppingBag,
     },
     {

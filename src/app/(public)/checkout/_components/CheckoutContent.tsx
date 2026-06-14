@@ -325,7 +325,7 @@ export default function CheckoutContent() {
 
         // Short delay to let the user see the success state
         setTimeout(() => {
-          router.push('/user/orders');
+          router.push('/dashboard/orders');
         }, 3000);
       } else {
         toast.error(res.message || 'Failed to place order');

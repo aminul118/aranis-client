@@ -196,9 +196,9 @@ const NotificationsPage = () => {
     } else {
       // Regular User
       if (isChat) {
-        router.push('/user/chat');
+        router.push('/dashboard/chat');
       } else if (isOrder) {
-        router.push('/user/orders');
+        router.push('/dashboard/orders');
       } else if (notif.link) {
         router.push(notif.link);
       }

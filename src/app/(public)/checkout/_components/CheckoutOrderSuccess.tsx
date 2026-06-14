@@ -30,7 +30,7 @@ export default function CheckoutOrderSuccess() {
             asChild
             className="h-14 w-full rounded-full bg-emerald-500 px-8 text-sm font-black tracking-widest text-white uppercase shadow-lg shadow-emerald-500/25 transition-all hover:scale-105 hover:bg-emerald-600 active:scale-95 sm:w-auto sm:px-10 sm:text-base"
           >
-            <Link href="/user/orders">View Your Orders</Link>
+            <Link href="/dashboard/orders">View Your Orders</Link>
           </Button>
           <Button
             asChild

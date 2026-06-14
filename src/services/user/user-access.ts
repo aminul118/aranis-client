@@ -34,7 +34,7 @@ const adminProtectedRoutes: RouteConfig = {
 
 // USER only routes
 const userProtectedRoutes: RouteConfig = {
-  patterns: [/^\/user(\/|$)/],
+  patterns: [/^\/dashboard(\/|$)/],
   exact: [],
 };
 
@@ -62,7 +62,7 @@ const getRouteOwner = (
 // Default dashboard per role
 const getDefaultDashboardRoute = (role: UserRole): string => {
   if (role === 'ADMIN' || role === 'SUPER_ADMIN') return '/admin';
-  if (role === 'USER') return '/user';
+  if (role === 'USER') return '/dashboard';
   return '/';
 };
 

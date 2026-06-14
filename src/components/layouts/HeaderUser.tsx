@@ -31,7 +31,7 @@ interface Props {
 const HeaderUser = ({ user }: Props) => {
   const pathname = usePathname();
   const isInsidePortal =
-    pathname.startsWith('/admin') || pathname.startsWith('/user');
+    pathname.startsWith('/admin') || pathname.startsWith('/dashboard');
 
   const fullName = `${user?.firstName ?? ''} ${user?.lastName ?? ''}`.trim();
   const initials = fullName
@@ -138,7 +138,7 @@ const HeaderUser = ({ user }: Props) => {
 
           <DropdownMenuItem asChild>
             <Link
-              href="/user/chat"
+              href="/dashboard/chat"
               className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 font-medium text-blue-600 transition-colors hover:bg-blue-50 hover:text-blue-700 focus:bg-blue-50 dark:text-blue-400 dark:hover:bg-white/10 dark:hover:text-blue-300 dark:focus:bg-white/10"
             >
               <MessageCircle className="h-4 w-4" />

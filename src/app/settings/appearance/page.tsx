@@ -1,4 +1,4 @@
-import ThemeClient from '@/app/(dashboard)/admin/settings/_components/ThemeClient';
+import ThemeClient from '@/app/admin/settings/_components/ThemeClient';
 import { Metadata } from 'next';
 
 export const dynamic = 'force-dynamic';
