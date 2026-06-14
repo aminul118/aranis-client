@@ -3,6 +3,7 @@ import {
   BookOpen,
   LayoutDashboard,
   Lock,
+  MessageCirclePlus,
   Package,
   Palette,
   Ticket,
@@ -15,6 +16,11 @@ const userSidebarMenu: MenuGroup[] = [
     menu: [
       { name: 'Dashboard', url: '/dashboard', icon: LayoutDashboard },
       { name: 'My Orders', url: '/dashboard/orders', icon: Package },
+      {
+        name: 'Customer Support',
+        url: '/dashboard/chat',
+        icon: MessageCirclePlus,
+      },
       { name: 'My Coupons', url: '/dashboard/coupons', icon: Ticket },
       { name: 'My Profile', url: '/dashboard/profile', icon: User },
       { name: 'Address Book', url: '/dashboard/address', icon: BookOpen },

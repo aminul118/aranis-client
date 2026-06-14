@@ -19,7 +19,7 @@ const UserLayout = async ({ children }: Children) => {
       <div className="container mx-auto max-w-7xl px-4 md:px-6">
         <div className="flex flex-col gap-6 lg:flex-row">
           {/* User Sidebar (Hidden on Mobile) */}
-          <aside className="hidden h-fit w-full shrink-0 lg:sticky lg:top-32 lg:block lg:w-72">
+          <aside className="hidden h-[calc(100vh-240px)] min-h-[500px] w-full shrink-0 lg:sticky lg:top-24 lg:block lg:w-72">
             <UserSidebar
               user={user as any}
               logoUrl={siteSettingsRes?.data?.logo}
