@@ -46,7 +46,14 @@ export async function proxy(req: NextRequest) {
     if (path === '/login' && pathname !== '/') {
       url.searchParams.set('redirect', pathname);
     }
-    return NextResponse.redirect(url);
+    const redirectResponse = NextResponse.redirect(url);
+
+    // Preserve any cookies set during the request (e.g. refreshed tokens)
+    response.cookies.getAll().forEach((cookie) => {
+      redirectResponse.cookies.set(cookie.name, cookie.value, cookie);
+    });
+
+    return redirectResponse;
   };
 
   // 2) If access is invalid but refresh exists -> refresh once
@@ -68,7 +75,7 @@ export async function proxy(req: NextRequest) {
     }
   }
 
-  const role = user?.role as UserRole | undefined;
+  const role = (user?.role as UserRole) || 'USER';
 
   // 3) Handle Root Route
   if (pathname === '/') {
@@ -88,7 +95,7 @@ export async function proxy(req: NextRequest) {
 
   // 5) Logged-in users should not see auth pages (login/register/etc.)
   if (user && isAuthPage) {
-    return redirectTo(getDefaultDashboardRoute(role!));
+    return redirectTo(getDefaultDashboardRoute(role));
   }
 
   // 6) Protect protected routes for guests
@@ -97,8 +104,8 @@ export async function proxy(req: NextRequest) {
   }
 
   // 7) Role-based protection
-  if (user && !isValidRedirectForRole(pathname, role!)) {
-    return redirectTo(getDefaultDashboardRoute(role!));
+  if (user && !isValidRedirectForRole(pathname, role)) {
+    return redirectTo(getDefaultDashboardRoute(role));
   }
 
   return response;

@@ -32,7 +32,13 @@ const getVerifiedUser = async (
       // Edge runtime safe decoding
       try {
         const base64Url = accessToken.split('.')[1];
-        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+
+        // Pad the base64 string to a multiple of 4 to prevent atob DOMException
+        while (base64.length % 4) {
+          base64 += '=';
+        }
+
         const jsonPayload = decodeURIComponent(
           atob(base64)
             .split('')
