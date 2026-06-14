@@ -58,7 +58,7 @@ const getVerifiedUser = async (
     if (!payload) return null;
 
     const { userId, email, role, iat, exp } = payload;
-    if (!userId || !email) return null;
+    if (!userId) return null;
 
     return { userId, email, role, iat, exp } as DecodedToken;
   } catch (err) {

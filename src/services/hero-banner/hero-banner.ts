@@ -3,6 +3,7 @@
 import { revalidate } from '@/lib/revalidate';
 import serverFetch from '@/lib/server-fetch';
 import { ApiResponse } from '@/types';
+import { revalidatePath } from 'next/cache';
 
 export interface IHeroBanner {
   _id?: string;
@@ -43,6 +44,7 @@ const createHeroBanner = async (payload: FormData) => {
     },
   );
   revalidate('hero-banners');
+  revalidatePath('/', 'layout');
   return res;
 };
 
@@ -54,6 +56,7 @@ const updateHeroBanner = async (payload: FormData, id: string) => {
     },
   );
   revalidate('hero-banners');
+  revalidatePath('/', 'layout');
   return res;
 };
 
@@ -62,6 +65,7 @@ const deleteHeroBanner = async (id: string) => {
     `/hero-banners/${id}`,
   );
   revalidate('hero-banners');
+  revalidatePath('/', 'layout');
   return res;
 };
 
@@ -74,6 +78,7 @@ const deleteHeroBannerBulk = async (ids: string[]) => {
     },
   );
   revalidate('hero-banners');
+  revalidatePath('/', 'layout');
   return res;
 };
 
@@ -98,6 +103,7 @@ const createMiniBanner = async (payload: FormData) => {
     },
   );
   revalidate('mini-banners');
+  revalidatePath('/', 'layout');
   return res;
 };
 
@@ -109,6 +115,7 @@ const updateMiniBanner = async (payload: FormData, id: string) => {
     },
   );
   revalidate('mini-banners');
+  revalidatePath('/', 'layout');
   return res;
 };
 
@@ -117,6 +124,7 @@ const deleteMiniBanner = async (id: string) => {
     `/mini-banners/${id}`,
   );
   revalidate('mini-banners');
+  revalidatePath('/', 'layout');
   return res;
 };
 
@@ -129,6 +137,7 @@ const deleteMiniBannerBulk = async (ids: string[]) => {
     },
   );
   revalidate('mini-banners');
+  revalidatePath('/', 'layout');
   return res;
 };
 

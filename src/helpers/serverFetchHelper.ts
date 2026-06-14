@@ -6,17 +6,28 @@ import { logger } from '@/lib/logger';
 
 export type FetchOptions = RequestInit & {
   query?: Record<string, string>;
+  skipAuth?: boolean;
 };
 
 const serverFetchHelper = async <T>(
   endpoint: string,
   options: FetchOptions,
 ): Promise<T> => {
-  const { headers, query, ...rest } = options;
+  const { headers, query, skipAuth, ...rest } = options;
   const url = generateQueryUrl(endpoint, query);
 
   const makeRequest = async () => {
-    const accessToken = await getCookie('accessToken');
+    // If the request is highly cached, explicitly opting out of auth prevents
+    // Next.js from calling cookies() and dynamically rendering the entire page.
+    const shouldSkipAuth =
+      skipAuth ||
+      rest.cache === 'force-cache' ||
+      typeof rest.next?.revalidate === 'number';
+
+    let accessToken: string | null = null;
+    if (!shouldSkipAuth) {
+      accessToken = await getCookie('accessToken');
+    }
 
     const finalHeaders: any = {
       ...(accessToken

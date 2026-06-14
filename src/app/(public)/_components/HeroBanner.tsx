@@ -43,7 +43,8 @@ const HeroBanner = ({ mainSlides, miniBanners }: HeroBannerProps) => {
     return null;
   }
 
-  const slide = slides[current];
+  const currentSafe = current >= slides.length ? 0 : current;
+  const slide = slides[currentSafe];
 
   const variants = {
     enter: (dir: number) => ({ x: dir > 0 ? '100%' : '-100%', opacity: 0 }),
@@ -65,31 +66,33 @@ const HeroBanner = ({ mainSlides, miniBanners }: HeroBannerProps) => {
             <div className="group bg-muted relative aspect-[16/9] w-full overflow-hidden rounded-2xl">
               {/* Slides */}
               <AnimatePresence custom={direction} initial={false}>
-                <motion.div
-                  key={slide._id ?? String(current)}
-                  custom={direction}
-                  variants={variants}
-                  initial="enter"
-                  animate="center"
-                  exit="exit"
-                  transition={{ duration: 0.55, ease: 'easeInOut' }}
-                  className="absolute inset-0"
-                >
-                  <Link
-                    href={slide.link || '#'}
-                    className="block h-full w-full"
+                {slide && (
+                  <motion.div
+                    key={slide._id ?? String(currentSafe)}
+                    custom={direction}
+                    variants={variants}
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
+                    transition={{ duration: 0.55, ease: 'easeInOut' }}
+                    className="absolute inset-0"
                   >
-                    {/* Background image */}
-                    <Image
-                      src={slide.image}
-                      alt="Hero Banner"
-                      fill
-                      className="object-cover object-top"
-                      priority
-                      sizes="(max-width: 1024px) 100vw, 75vw"
-                    />
-                  </Link>
-                </motion.div>
+                    <Link
+                      href={slide.link || '#'}
+                      className="block h-full w-full"
+                    >
+                      {/* Background image */}
+                      <Image
+                        src={slide.image}
+                        alt="Hero Banner"
+                        fill
+                        className="object-cover object-top"
+                        priority
+                        sizes="(max-width: 1024px) 100vw, 75vw"
+                      />
+                    </Link>
+                  </motion.div>
+                )}
               </AnimatePresence>
 
               {/* Arrow controls */}
