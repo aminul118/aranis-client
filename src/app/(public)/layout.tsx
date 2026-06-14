@@ -1,5 +1,5 @@
+import ChatFloatingButton from '@/app/(public)/_components/layouts/ChatFloatingButton';
 import Footer from '@/app/(public)/_components/layouts/Footer/Footer';
-
 import MobileBottomNav from '@/app/(public)/_components/layouts/Navbar/MobileBottomNav';
 import Navbar from '@/app/(public)/_components/layouts/Navbar/Navbar';
 import GlobalOfferModal from '@/components/common/GlobalOfferModal';
@@ -45,6 +45,7 @@ const RootLayout = async ({ children }: Children) => {
       <div className="grow pt-[60px] lg:pt-[176px]">{children}</div>
       <GlobalOfferModal />
       <MobileBottomNav user={user as any} />
+      <ChatFloatingButton user={user as any} siteSettings={siteSettings} />
       <Footer
         socialLinks={siteSettings?.socialLinks}
         navItems={sortedNavItems as any}

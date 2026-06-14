@@ -22,7 +22,7 @@ const serverFetchHelper = async <T>(
     const shouldSkipAuth =
       skipAuth ||
       rest.cache === 'force-cache' ||
-      typeof rest.next?.revalidate === 'number';
+      (typeof rest.next?.revalidate === 'number' && rest.next.revalidate > 0);
 
     let accessToken: string | null = null;
     if (!shouldSkipAuth) {

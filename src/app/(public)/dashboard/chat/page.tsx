@@ -132,15 +132,18 @@ export default function UserChatPage() {
   const handleSend = () => {
     if (!message.trim() || !conversation || !user) return;
 
-    const adminParticipant = conversation.participants.find(
-      (p: any) => p.role === 'ADMIN' || p.role === 'SUPER_ADMIN',
-    );
+    const receiverId =
+      conversation.participants.find(
+        (p: any) => p.role === 'ADMIN' || p.role === 'SUPER_ADMIN',
+      )?._id ||
+      conversation.participants.find((p: any) => p._id !== user._id)?._id ||
+      conversation.participants[0]?._id;
 
     const newMessage: any = {
       tempId: `temp-${Date.now()}`,
       sender: user._id,
       senderRole: user.role,
-      receiver: adminParticipant?._id,
+      receiver: receiverId,
       text: message,
       conversationId: conversation._id,
       status: 'sent',

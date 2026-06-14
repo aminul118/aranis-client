@@ -1,4 +1,3 @@
-import ChatFloatingButton from '@/app/(public)/_components/layouts/Navbar/ChatFloatingButton';
 import { getSiteSettings } from '@/services/settings/settings';
 import { getMe } from '@/services/user/users';
 import { Children } from '@/types';
@@ -35,10 +34,6 @@ const UserLayout = async ({ children }: Children) => {
           </main>
         </div>
       </div>
-      <ChatFloatingButton
-        user={user as any}
-        siteSettings={siteSettingsRes?.data}
-      />
     </div>
   );
 };

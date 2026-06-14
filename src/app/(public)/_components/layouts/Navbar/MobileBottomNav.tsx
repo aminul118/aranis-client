@@ -1,15 +1,20 @@
 'use client';
 
+import UserSidebar from '@/app/(public)/dashboard/_componnets/layouts/user-sidebar';
+import {
+  Sheet,
+  SheetContent,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
 import { useCartOptional } from '@/context/CartContext';
 import { useUser } from '@/context/UserContext';
 import { useWishlistOptional } from '@/context/WishlistContext';
 import { cn } from '@/lib/utils';
+import { IUser } from '@/types';
 import { Gift, Heart, ShoppingBag, ShoppingCart, User } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-
-import { getDefaultDashboardRoute } from '@/services/user/user-access';
-import { IUser } from '@/types';
 
 const MobileBottomNav = ({ user: serverUser }: { user: IUser | null }) => {
   const { user: clientUser } = useUser();
@@ -50,7 +55,7 @@ const MobileBottomNav = ({ user: serverUser }: { user: IUser | null }) => {
     },
     {
       label: 'ACCOUNT',
-      href: user ? getDefaultDashboardRoute(user.role as any) : '/login',
+      href: user ? '/dashboard' : '/login',
       icon: User,
     },
   ];
@@ -62,6 +67,60 @@ const MobileBottomNav = ({ user: serverUser }: { user: IUser | null }) => {
           const isActive = pathname === item.href;
           const Icon = item.icon;
 
+          const NavItemContent = (
+            <div className="relative">
+              <Icon
+                size={20}
+                className={cn(
+                  'transition-transform duration-200',
+                  isActive && 'scale-110',
+                  item.color,
+                )}
+              />
+              {(item.count ?? 0) > 0 && (
+                <span
+                  className={cn(
+                    'absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center rounded-full border-2 border-white text-[8px] font-bold text-white dark:border-[#0a0a0a]',
+                    item.badgeColor,
+                  )}
+                >
+                  {item.count}
+                </span>
+              )}
+            </div>
+          );
+
+          if (item.label === 'ACCOUNT' && user) {
+            return (
+              <Sheet key={item.label}>
+                <SheetTrigger asChild>
+                  <button
+                    className={cn(
+                      'flex min-w-[64px] flex-col items-center justify-center gap-1',
+                      isActive
+                        ? 'text-blue-600'
+                        : 'text-gray-500 dark:text-gray-400',
+                    )}
+                  >
+                    {NavItemContent}
+                    <span className="text-[9px] font-black tracking-tighter uppercase">
+                      {item.label}
+                    </span>
+                  </button>
+                </SheetTrigger>
+                <SheetContent
+                  side="left"
+                  className="w-[85%] max-w-sm p-0 sm:max-w-sm"
+                >
+                  <SheetTitle className="sr-only">Account Menu</SheetTitle>
+                  <div className="h-full overflow-y-auto bg-white dark:bg-[#0a0a0a]">
+                    <UserSidebar user={user} variant="flush" />
+                  </div>
+                </SheetContent>
+              </Sheet>
+            );
+          }
+
           return (
             <Link
               key={item.label}
@@ -71,26 +130,7 @@ const MobileBottomNav = ({ user: serverUser }: { user: IUser | null }) => {
                 isActive ? 'text-blue-600' : 'text-gray-500 dark:text-gray-400',
               )}
             >
-              <div className="relative">
-                <Icon
-                  size={20}
-                  className={cn(
-                    'transition-transform duration-200',
-                    isActive && 'scale-110',
-                    item.color,
-                  )}
-                />
-                {(item.count ?? 0) > 0 && (
-                  <span
-                    className={cn(
-                      'absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center rounded-full border-2 border-white text-[8px] font-bold text-white dark:border-[#0a0a0a]',
-                      item.badgeColor,
-                    )}
-                  >
-                    {item.count}
-                  </span>
-                )}
-              </div>
+              {NavItemContent}
               <span className="text-[9px] font-black tracking-tighter uppercase">
                 {item.label}
               </span>

@@ -9,7 +9,15 @@ import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { userSidebarMenu } from './user-menu';
 
-const UserSidebar = ({ user, logoUrl }: { user: IUser; logoUrl?: string }) => {
+const UserSidebar = ({
+  user,
+  logoUrl,
+  variant = 'default',
+}: {
+  user: IUser;
+  logoUrl?: string;
+  variant?: 'default' | 'flush';
+}) => {
   const pathname = usePathname();
   const [loading, setLoading] = useState(false);
   const { setUser } = useUser();
@@ -39,7 +47,13 @@ const UserSidebar = ({ user, logoUrl }: { user: IUser; logoUrl?: string }) => {
     : 'U';
 
   return (
-    <div className="dark:bg- flex w-full flex-col overflow-hidden rounded-xl border border-gray-100 shadow-sm dark:border-white/10">
+    <div
+      className={`flex h-full w-full flex-col overflow-y-auto bg-white dark:bg-[#0a0a0a] ${
+        variant === 'default'
+          ? 'rounded-xl border border-gray-100 shadow-sm dark:border-white/10'
+          : ''
+      }`}
+    >
       {/* Profile Info */}
       <div className="flex items-center gap-4 p-6">
         <Avatar className="h-14 w-14 border border-gray-200 dark:border-white/10">

@@ -17,7 +17,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { getDefaultDashboardRoute } from '@/services/user/user-access';
 import { IUser } from '@/types';
-import { LayoutGrid } from 'lucide-react';
+import { LayoutGrid, Truck, User } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
@@ -104,9 +104,7 @@ const NavUser = ({ user }: { user: IUser }) => {
                       href="/dashboard/profile"
                       className="flex items-center gap-2"
                     >
-                      <span className="flex h-4 w-4 items-center justify-center">
-                        👤
-                      </span>
+                      <User className="h-4 w-4" />
                       <span>Profile</span>
                     </Link>
                   </DropdownMenuItem>
@@ -115,9 +113,7 @@ const NavUser = ({ user }: { user: IUser }) => {
                       href="/track-order"
                       className="flex items-center gap-2"
                     >
-                      <span className="flex h-4 w-4 items-center justify-center">
-                        🚚
-                      </span>
+                      <Truck className="h-4 w-4" />
                       <span>Track Order</span>
                     </Link>
                   </DropdownMenuItem>

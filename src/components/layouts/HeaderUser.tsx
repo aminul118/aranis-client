@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { getDefaultDashboardRoute } from '@/services/user/user-access';
 import { IUser } from '@/types';
-import { LayoutDashboard, User } from 'lucide-react';
+import { LayoutDashboard, Truck, User } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -124,9 +124,7 @@ const HeaderUser = ({ user }: Props) => {
                   href="/track-order"
                   className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 dark:text-white/90 dark:hover:bg-white/10 dark:hover:text-white dark:focus:bg-white/10"
                 >
-                  <span className="flex h-4 w-4 items-center justify-center text-gray-500 dark:text-white/60">
-                    🚚
-                  </span>
+                  <Truck className="h-4 w-4 text-gray-500 dark:text-white/60" />
                   <span className="text-sm">Track Order</span>
                 </Link>
               </DropdownMenuItem>
