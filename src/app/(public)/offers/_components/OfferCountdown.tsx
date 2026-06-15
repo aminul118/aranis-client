@@ -62,6 +62,9 @@ export default function OfferCountdown({ offer }: Props) {
 
   return (
     <div className="mb-12 flex flex-col items-center justify-center">
+      <div className="mb-3 rounded-full bg-red-100 px-4 py-1.5 text-sm font-bold text-red-600 dark:bg-red-900/30 dark:text-red-400">
+        Get {offer.discountPercentage}% OFF
+      </div>
       <h2 className="mb-6 text-center text-xl font-black tracking-widest uppercase md:text-2xl">
         {isStarted ? `${offer.name} Ends In` : `${offer.name} Starts In`}
       </h2>
@@ -91,7 +94,7 @@ const TimeBlock = ({ value, label }: { value: number; label: string }) => {
         ))}
       </div>
       <span className="text-muted-foreground mt-2 text-xs font-semibold tracking-wider uppercase md:text-sm">
-        {label}
+        {label} {}
       </span>
     </div>
   );

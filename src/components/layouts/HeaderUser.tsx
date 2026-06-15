@@ -42,12 +42,14 @@ const HeaderUser = ({ user }: Props) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Avatar className="h-9 w-9 cursor-pointer border-2 border-gray-200 transition-all hover:border-gray-300 dark:border-white/15 dark:hover:border-white/30">
-          <AvatarImage src={user?.picture || ''} alt={user?.fullName} />
-          <AvatarFallback className="bg-gray-100 text-gray-900 dark:bg-white/10 dark:text-white">
-            {initials}
-          </AvatarFallback>
-        </Avatar>
+        <button className="focus:outline-none">
+          <Avatar className="h-9 w-9 cursor-pointer border-2 border-gray-200 transition-all hover:border-gray-300 dark:border-white/15 dark:hover:border-white/30">
+            <AvatarImage src={user?.picture || ''} alt={user?.fullName} />
+            <AvatarFallback className="bg-gray-100 text-gray-900 dark:bg-white/10 dark:text-white">
+              {initials}
+            </AvatarFallback>
+          </Avatar>
+        </button>
       </DropdownMenuTrigger>
 
       <DropdownMenuContent
