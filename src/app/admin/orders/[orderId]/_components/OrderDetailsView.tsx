@@ -194,7 +194,7 @@ const OrderDetailsView = ({ order }: { order: IOrder }) => {
         </div>
         <Button
           variant="outline"
-          className="group self-start rounded-full border-blue-500/30 font-bold text-blue-600 hover:border-blue-500 hover:bg-blue-50 md:self-auto"
+          className="group self-start rounded-full border-blue-500/30 font-bold text-blue-600 hover:border-blue-500 hover:bg-blue-50 hover:text-blue-700 md:self-auto dark:hover:bg-blue-900/30 dark:hover:text-blue-400"
           onClick={() => window.print()}
         >
           <CreditCard className="mr-2 h-4 w-4" />
