@@ -108,7 +108,7 @@ const AddressManagement = ({ user }: Props) => {
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="relative z-10 h-8 w-8 rounded-full text-red-500 opacity-0 transition-all duration-300 group-hover:opacity-100 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-500/20 dark:hover:text-red-400"
+                    className="relative z-10 h-8 w-8 rounded-full text-red-500 opacity-100 transition-all duration-300 hover:bg-red-50 hover:text-red-600 md:opacity-0 md:group-hover:opacity-100 dark:hover:bg-red-500/20 dark:hover:text-red-400"
                     onClick={() => removeAddress(index)}
                     disabled={loading}
                   >

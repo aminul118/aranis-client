@@ -1,71 +1,16 @@
-'use client';
-
-import LocationForm from '@/app/admin/locations/_components/LocationForm';
-import LocationTable from '@/app/admin/locations/_components/LocationTable';
-import ClientTableWrapper from '@/components/common/wrapper/ClientTableWrapper';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
-import { getAllLocations, ILocation } from '@/services/location/location';
-import { MapPin, Plus } from 'lucide-react';
-import { useEffect, useState } from 'react';
-
-import { Button } from '@/components/ui/button';
+import generateMetaTags from '@/seo/generateMetaTags';
+import { Metadata } from 'next';
+import AdminLocationsContent from './_components/AdminLocationsContent';
 
 export const dynamic = 'force-dynamic';
 
-const LocationsPage = () => {
-  const [locations, setLocations] = useState<ILocation[]>([]);
-  const [isOpen, setIsOpen] = useState(false);
+export const metadata: Metadata = generateMetaTags({
+  title: 'Outlet Locations | Aranis Admin',
+  description: 'Manage physical store presence and outlet details.',
+  websitePath: '/admin/locations',
+  keywords: 'locations, outlets, admin, stores',
+});
 
-  const fetchLocations = async () => {
-    const res = await getAllLocations();
-    setLocations(res?.data || []);
-  };
-
-  useEffect(() => {
-    fetchLocations();
-  }, []);
-
-  return (
-    <ClientTableWrapper
-      tableTitle="Outlet Locations"
-      description="Manage your physical store presence and outlet details"
-      action={
-        <Dialog open={isOpen} onOpenChange={setIsOpen}>
-          <DialogTrigger asChild>
-            <Button>
-              <Plus className="mr-2 h-4 w-4" /> Add Outlet
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-2xl border-gray-200 bg-white p-0 dark:border-white/5 dark:bg-[#0a0b10]">
-            <DialogHeader className="p-8 pb-0">
-              <DialogTitle className="flex items-center gap-3 text-2xl font-black text-gray-900 uppercase italic dark:text-white">
-                <div className="rounded-xl bg-blue-500/10 p-2.5 text-blue-400">
-                  <MapPin size={24} />
-                </div>
-                Add New <span className="text-blue-600">Outlet</span>
-              </DialogTitle>
-            </DialogHeader>
-            <div className="p-8 pt-4">
-              <LocationForm
-                onSuccess={() => {
-                  setIsOpen(false);
-                  fetchLocations();
-                }}
-              />
-            </div>
-          </DialogContent>
-        </Dialog>
-      }
-    >
-      <LocationTable locations={locations} onRefresh={fetchLocations} />
-    </ClientTableWrapper>
-  );
-};
-
-export default LocationsPage;
+export default function AdminLocationsPage() {
+  return <AdminLocationsContent />;
+}

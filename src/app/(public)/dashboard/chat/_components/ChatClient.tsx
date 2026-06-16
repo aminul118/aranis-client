@@ -2,91 +2,39 @@
 
 export const dynamic = 'force-dynamic';
 
-import { logger } from '@/lib/logger';
-import {
-  getMessages,
-  getOrCreateConversation,
-  markAsSeen,
-} from '@/services/chat/chat';
-import { getMe } from '@/services/user/users';
-import { useEffect, useRef, useState } from 'react';
-import { io, Socket } from 'socket.io-client';
+import { getSocket, useSocket } from '@/hooks/useSocket';
+import { playNotificationSound } from '@/lib/playSound';
+import { markAsSeen } from '@/services/chat/chat';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import ChatEmptyState from './ChatEmptyState';
 import ChatHeader from './ChatHeader';
 import ChatInput from './ChatInput';
 import ChatLoading from './ChatLoading';
 import ChatMessage from './ChatMessage';
 
-const SOCKET_URL = (
-  process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:5000/api/v1'
-).replace('/api/v1', '');
+interface ChatClientProps {
+  initialUser: any;
+  initialConversation: any;
+  initialMessages: any[];
+}
 
-export default function ChatClient() {
-  const [user, setUser] = useState<any>(null);
-  const [messages, setMessages] = useState<any[]>([]);
+export default function ChatClient({
+  initialUser,
+  initialConversation,
+  initialMessages,
+}: ChatClientProps) {
+  const [user, setUser] = useState<any>(initialUser);
+  const [messages, setMessages] = useState<any[]>(initialMessages || []);
   const [message, setMessage] = useState('');
-  const [conversation, setConversation] = useState<any>(null);
+  const [conversation, setConversation] = useState<any>(initialConversation);
   const [loading, setLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const socketRef = useRef<Socket | null>(null);
+  const socketRef = useRef<any>(null);
 
-  // 1. Initial Data Fetch (User and Conversation)
-  useEffect(() => {
-    const init = async () => {
-      const res = await getMe();
-      if (res?.success) {
-        setUser(res.data);
-        const convRes = await getOrCreateConversation([res.data._id]);
-        if (convRes?.success) {
-          setConversation(convRes.data);
-          // Initial fetch of messages
-          setLoading(true);
-          const msgRes = await getMessages(convRes.data._id);
-          if (msgRes?.success) {
-            setMessages(msgRes.data || []);
-          }
-          setLoading(false);
-          // mark as seen in DB and notify via socket
-          markAsSeen(convRes.data._id);
-          socketRef.current?.emit('message-seen', {
-            conversationId: convRes.data._id,
-            userId: res.data._id,
-          });
-        } else {
-          logger.error('Failed to get conversation:', convRes);
-        }
-      }
-    };
-    init();
-  }, []);
-
-  // 2. Socket Initialization and Room Joining
-  useEffect(() => {
-    if (!user?._id) return;
-
-    const socket = io(SOCKET_URL);
-    socketRef.current = socket;
-
-    const handleConnect = () => {
-      socket.emit('join-user-room', user._id);
-      if (conversation?._id) {
-        socket.emit('join-room', conversation._id);
-        socket.emit('set-active-chat', {
-          userId: user._id,
-          conversationId: conversation._id,
-        });
-      }
-    };
-
-    if (socket.connected) {
-      handleConnect();
-    }
-    socket.on('connect', handleConnect);
-
-    socket.on('receive-message', (data) => {
+  const handleReceiveMessage = useCallback(
+    (data: any) => {
       if (conversation?._id === data.conversationId) {
         setMessages((prev) => {
-          // Prevent duplicates if optimistic update already added it
           if (
             prev.find(
               (m) =>
@@ -95,16 +43,21 @@ export default function ChatClient() {
             )
           )
             return prev;
+
+          playNotificationSound();
           return [...prev, data];
         });
-        socket.emit('message-seen', {
+        getSocket().emit('message-seen', {
           conversationId: conversation._id,
-          userId: user._id,
+          userId: user?._id,
         });
       }
-    });
+    },
+    [conversation?._id, user?._id],
+  );
 
-    socket.on('messages-marked-seen', (data) => {
+  const handleMessagesMarkedSeen = useCallback(
+    (data: any) => {
       if (conversation?._id === data.conversationId) {
         setMessages((prev) =>
           prev.map((msg) =>
@@ -114,16 +67,46 @@ export default function ChatClient() {
           ),
         );
       }
-    });
+    },
+    [conversation?._id],
+  );
 
-    return () => {
+  useSocket(
+    handleReceiveMessage,
+    user?._id,
+    'receive-message',
+    conversation?._id ? [conversation._id] : [],
+  );
+  useSocket(
+    handleMessagesMarkedSeen,
+    user?._id,
+    'messages-marked-seen',
+    conversation?._id ? [conversation._id] : [],
+  );
+
+  useEffect(() => {
+    if (user?._id && conversation?._id) {
+      const socket = getSocket();
+      socketRef.current = socket;
+
+      markAsSeen(conversation._id);
+      socket.emit('message-seen', {
+        conversationId: conversation._id,
+        userId: user._id,
+      });
+
       socket.emit('set-active-chat', {
         userId: user._id,
-        conversationId: null,
+        conversationId: conversation._id,
       });
-      socket.disconnect();
-      socketRef.current = null;
-    };
+
+      return () => {
+        socket.emit('set-active-chat', {
+          userId: user._id,
+          conversationId: null,
+        });
+      };
+    }
   }, [user?._id, conversation?._id]);
 
   useEffect(() => {

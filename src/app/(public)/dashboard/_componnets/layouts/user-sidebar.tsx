@@ -54,14 +54,14 @@ const UserSidebar = ({
 
   return (
     <div
-      className={`flex h-full w-full flex-col overflow-y-auto bg-white dark:bg-[#0a0a0a] ${
+      className={`flex h-full w-full flex-col overflow-hidden bg-white dark:bg-[#0a0a0a] ${
         variant === 'default'
           ? 'rounded-xl border border-gray-100 shadow-sm dark:border-white/10'
           : ''
       }`}
     >
       {/* Profile Info */}
-      <div className="flex items-center gap-4 p-6">
+      <div className="flex shrink-0 items-center gap-4 p-6">
         <Avatar className="h-14 w-14 border border-gray-200 dark:border-white/10">
           <AvatarImage
             src={user?.picture || ''}
@@ -83,7 +83,7 @@ const UserSidebar = ({
       </div>
 
       {/* Navigation Menu */}
-      <div className="flex flex-col px-4 pb-4">
+      <div className="scrollbar-small flex flex-1 flex-col overflow-y-auto px-4 pb-4">
         {userSidebarMenu[0].menu.map((item, index) => {
           const active = isLinkActive(item.url);
           return (
@@ -106,7 +106,7 @@ const UserSidebar = ({
       </div>
 
       {/* Logout Button */}
-      <div className="mt-auto p-4">
+      <div className="mt-auto shrink-0 p-4">
         <button
           onClick={handleLogout}
           disabled={loading}

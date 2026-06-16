@@ -32,11 +32,10 @@ const ProfileDetails = ({ user, setIsEditing }: Props) => {
           </h2>
         </div>
         <Button
-          variant="ghost"
           onClick={() => setIsEditing(true)}
-          className="font-bold text-gray-500 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+          className="rounded-full bg-blue-600 px-6 font-bold text-white hover:bg-blue-700"
         >
-          <PencilLine className="mr-2 h-5 w-5" /> Edit Profile
+          <PencilLine className="mr-2 h-4 w-4" /> Edit Profile
         </Button>
       </div>
 
