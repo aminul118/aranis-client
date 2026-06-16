@@ -42,7 +42,7 @@ export default function OrderItemsCard({ order }: OrderItemsCardProps) {
                 {imageSrc && (
                   <Image
                     src={imageSrc}
-                    alt={item.product.name}
+                    alt={item.product?.name || 'Deleted Product'}
                     fill
                     className="object-cover transition-transform duration-500 group-hover:scale-110"
                   />
@@ -50,7 +50,7 @@ export default function OrderItemsCard({ order }: OrderItemsCardProps) {
               </div>
               <div className="flex-1">
                 <p className="text-card-foreground text-lg leading-tight font-black">
-                  {item.product.name}
+                  {item.product?.name || 'Deleted Product'}
                 </p>
                 <p className="text-muted-foreground mt-1 text-sm font-bold opacity-60">
                   {item.quantity} × ৳{item.price}

@@ -10,6 +10,7 @@ export interface IRestockRequest {
   product: IProduct;
   status: 'Pending' | 'Resolved';
   createdAt: string;
+  updatedAt: string;
 }
 
 export const createRestockRequest = async (productId: string) => {
@@ -35,6 +36,18 @@ export const getRestockRequests = async (
   );
 };
 
+export const getMyRestockRequests = async (
+  params: Record<string, string> = {},
+) => {
+  const query = new URLSearchParams(params).toString();
+  return await serverFetch.get<ApiResponse<IRestockRequest[]>>(
+    `/restock-request/my-requests${query ? `?${query}` : ''}`,
+    {
+      next: { tags: ['restock'] },
+    },
+  );
+};
+
 export const resolveRestockRequest = async (id: string) => {
   const res = await serverFetch.patch<ApiResponse<null>>(
     `/restock-request/${id}/resolve`,
@@ -52,6 +65,14 @@ export const deleteRestockRequestBulk = async (ids: string[]) => {
         'Content-Type': 'application/json',
       },
     },
+  );
+  revalidate('restock');
+  return res;
+};
+
+export const deleteRestockRequest = async (id: string) => {
+  const res = await serverFetch.delete<ApiResponse<any>>(
+    `/restock-request/${id}`,
   );
   revalidate('restock');
   return res;

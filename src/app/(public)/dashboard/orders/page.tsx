@@ -1,14 +1,15 @@
 'use client';
 
 import WriteReviewModal from '@/app/(public)/dashboard/orders/_components/WriteReviewModal';
+import AppSearching from '@/components/common/searching/AppSearching';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useCartOptional } from '@/context/CartContext';
 import { getMyOrders } from '@/services/order/order';
 import { AnimatePresence } from 'framer-motion';
-import { ArrowRight, Package, Search, ShoppingBag } from 'lucide-react';
+import { ArrowRight, Package, ShoppingBag } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { logger } from '../../../../lib/logger';
@@ -20,17 +21,30 @@ const UserOrdersPage = () => {
   const cartContext = useCartOptional();
   const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
+  const searchParams = useSearchParams();
+  const searchTerm = searchParams.get('search') || '';
   const [reviewOrder, setReviewOrder] = useState<any | null>(null);
 
   const handleOrderAgain = (order: any) => {
+    let addedCount = 0;
     order.items.forEach((item: any) => {
-      if (item.product && cartContext) {
+      if (
+        item.product &&
+        cartContext &&
+        !item.product.isDeleted &&
+        (item.product.stock ?? 0) > 0
+      ) {
         cartContext.addToCart(item.product, item.color, item.size);
+        addedCount++;
       }
     });
-    toast.success('Items added to cart!');
-    router.push('/cart');
+
+    if (addedCount > 0) {
+      toast.success(`${addedCount} available item(s) added to cart!`);
+      router.push('/cart');
+    } else {
+      toast.error('No items available to reorder');
+    }
   };
 
   useEffect(() => {
@@ -98,13 +112,9 @@ const UserOrdersPage = () => {
             </h2>
           </div>
           <div className="relative w-full md:w-80">
-            <Search className="text-muted-foreground absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2" />
-            <input
-              type="text"
+            <AppSearching
               placeholder="Search by Order ID or Product..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="bg-muted/50 border-border w-full rounded-lg border py-2 pr-4 pl-10 text-sm transition-all focus:border-blue-500/50 focus:outline-none"
+              className="w-full"
             />
           </div>
         </div>

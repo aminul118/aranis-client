@@ -2,6 +2,7 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useUser } from '@/context/UserContext';
+import { logger } from '@/lib/logger';
 import { logOut } from '@/services/auth/logout';
 import { IUser } from '@/types';
 import Link from 'next/link';
@@ -24,9 +25,14 @@ const UserSidebar = ({
 
   const handleLogout = async () => {
     setLoading(true);
-    await logOut();
-    setUser(null);
-    window.location.href = '/login';
+    try {
+      await logOut();
+    } catch (error) {
+      logger.error('Logout failed on server:', error);
+    } finally {
+      setUser(null);
+      window.location.href = '/login';
+    }
   };
 
   const isLinkActive = (url: string) => {

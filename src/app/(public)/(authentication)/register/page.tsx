@@ -28,9 +28,6 @@ const RegisterPage = () => {
                 <h1 className="text-foreground text-3xl font-bold tracking-tight">
                   Register
                 </h1>
-                <p className="text-muted-foreground mt-2 text-sm">
-                  Join The Aranis today and experience premium shopping.
-                </p>
               </div>
               <RegisterForm />
             </div>

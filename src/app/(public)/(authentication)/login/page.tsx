@@ -16,9 +16,6 @@ const LoginPage = () => {
                 <h1 className="text-foreground text-3xl font-bold tracking-tight">
                   Login
                 </h1>
-                <p className="text-muted-foreground mt-2 text-sm">
-                  Welcome back to Aranis Fashion. Please enter your details.
-                </p>
               </div>
               <LoginForm />
             </div>

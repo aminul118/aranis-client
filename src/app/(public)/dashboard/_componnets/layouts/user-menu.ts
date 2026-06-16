@@ -6,6 +6,7 @@ import {
   MessageCirclePlus,
   Package,
   Palette,
+  RefreshCcw,
   Ticket,
   User,
 } from 'lucide-react';
@@ -22,6 +23,11 @@ const userSidebarMenu: MenuGroup[] = [
         icon: MessageCirclePlus,
       },
       { name: 'My Coupons', url: '/dashboard/coupons', icon: Ticket },
+      {
+        name: 'Restock Requests',
+        url: '/dashboard/restock-requests',
+        icon: RefreshCcw,
+      },
       { name: 'My Profile', url: '/dashboard/profile', icon: User },
       { name: 'Address Book', url: '/dashboard/address', icon: BookOpen },
       { name: 'Security', url: '/dashboard/security', icon: Lock },

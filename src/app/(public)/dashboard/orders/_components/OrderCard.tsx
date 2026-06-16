@@ -159,9 +159,27 @@ export default function OrderCard({
                   )}
                 </div>
                 <div className="min-w-0 flex-1">
-                  <h4 className="text-foreground truncate font-bold">
-                    {item.product?.name || 'Product Unavailable'}
-                  </h4>
+                  <div className="mb-1 flex items-center gap-2">
+                    <h4 className="text-foreground truncate font-bold">
+                      {item.product?.name || 'Product Unavailable'}
+                    </h4>
+                    {item.product?.isDeleted ? (
+                      <Badge
+                        variant="destructive"
+                        className="h-5 px-1.5 py-0 text-[10px]"
+                      >
+                        Deleted
+                      </Badge>
+                    ) : (item.product?.stock ?? 0) <= 0 &&
+                      item.product?.name ? (
+                      <Badge
+                        variant="secondary"
+                        className="h-5 bg-red-500/10 px-1.5 py-0 text-[10px] text-red-500 hover:bg-red-500/20"
+                      >
+                        Out of Stock
+                      </Badge>
+                    ) : null}
+                  </div>
                   <p className="text-muted-foreground text-xs font-bold tracking-widest uppercase">
                     Qty: {item.quantity} • ৳{item.price.toFixed(2)}
                     {item.size && ` • Size: ${item.size}`}
@@ -216,14 +234,36 @@ export default function OrderCard({
               </Link>
             </Button>
 
-            <Button
-              onClick={() => onOrderAgain(order)}
-              variant="outline"
-              className="shrink-0 gap-2 rounded-full border-emerald-500/50 px-6 font-bold text-emerald-600 hover:bg-emerald-50 hover:text-emerald-700 dark:text-emerald-400 dark:hover:bg-emerald-500/20 dark:hover:text-emerald-300"
-            >
-              <RefreshCcw className="h-4 w-4" />
-              Order Again
-            </Button>
+            {(() => {
+              const hasAvailableItems = order.items.some(
+                (item: any) =>
+                  item.product &&
+                  !item.product.isDeleted &&
+                  (item.product.stock ?? 0) > 0,
+              );
+
+              if (!hasAvailableItems) {
+                return (
+                  <Badge
+                    variant="outline"
+                    className="border-red-500/30 bg-red-500/5 px-4 py-2 text-red-500"
+                  >
+                    Order Unavailable
+                  </Badge>
+                );
+              }
+
+              return (
+                <Button
+                  onClick={() => onOrderAgain(order)}
+                  variant="outline"
+                  className="shrink-0 gap-2 rounded-full border-emerald-500/50 px-6 font-bold text-emerald-600 hover:bg-emerald-50 hover:text-emerald-700 dark:text-emerald-400 dark:hover:bg-emerald-500/20 dark:hover:text-emerald-300"
+                >
+                  <RefreshCcw className="h-4 w-4" />
+                  Order Again
+                </Button>
+              );
+            })()}
 
             {/* Review button — only when delivered */}
             {isDelivered && (

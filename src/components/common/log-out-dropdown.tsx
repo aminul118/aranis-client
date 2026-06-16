@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import { useUser } from '@/context/UserContext';
+import { logger } from '@/lib/logger';
 
 const LogOutDropDown = ({ className }: { className?: string }) => {
   const [loading, setLoading] = useState(false);
@@ -16,9 +17,14 @@ const LogOutDropDown = ({ className }: { className?: string }) => {
 
   const handleLogout = async () => {
     setLoading(true);
-    await logOut();
-    setUser(null);
-    window.location.href = '/login';
+    try {
+      await logOut();
+    } catch (error) {
+      logger.error('Logout failed on server:', error);
+    } finally {
+      setUser(null);
+      window.location.href = '/login';
+    }
   };
 
   return (
