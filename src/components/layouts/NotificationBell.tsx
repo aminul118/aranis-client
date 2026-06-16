@@ -134,13 +134,24 @@ const NotificationBell = ({ user }: Props) => {
   const handleSocketNotification = useCallback(
     (data: any) => {
       fetchNotifications();
-      playNotificationSound(); // Play soft dual-tone chime instantly!
 
-      toast.info(data.title || 'Notification', {
-        description: data.message,
-      });
+      const isChat = data.type === 'Chat';
+
+      if (isChat) {
+        fetchChatCount();
+        if (pathname.includes('/chat')) {
+          return; // Do nothing if already in chat tab
+        }
+        playNotificationSound(); // Only play sound, no toast
+      } else {
+        playNotificationSound();
+        toast.info(data.title || 'Notification', {
+          id: data._id || data.orderId || JSON.stringify(data),
+          description: data.message,
+        });
+      }
     },
-    [fetchNotifications],
+    [fetchNotifications, fetchChatCount, pathname],
   );
 
   // Listen for all notifications globally
@@ -167,10 +178,7 @@ const NotificationBell = ({ user }: Props) => {
       fetchNotifications();
       fetchChatCount();
       if (!pathname.includes('/chat')) {
-        playNotificationSound();
-        toast.info('New Chat Message', {
-          description: data?.text || 'You received a new message.',
-        });
+        // Redundant manual toast removed since backend emits new-notification
       }
     },
     user?._id || user?.userId,
@@ -182,10 +190,7 @@ const NotificationBell = ({ user }: Props) => {
     (data: any) => {
       fetchChatCount();
       if (!pathname.includes('/chat')) {
-        playNotificationSound();
-        toast.info('New Chat Message', {
-          description: data?.text || 'A user started a new conversation.',
-        });
+        // Redundant manual toast removed since backend emits new-notification
       }
     },
     user?._id || user?.userId,
