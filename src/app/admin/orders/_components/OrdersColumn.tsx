@@ -27,7 +27,10 @@ const OrdersColumn: Column<IOrder>[] = [
     accessor: (o) => (
       <div className="flex flex-col">
         <span className="text-foreground font-bold">
-          {o.user?.fullName || 'Guest'}
+          {o.user?.fullName ||
+            (o.user?.firstName
+              ? `${o.user.firstName} ${o.user.lastName}`
+              : 'Guest')}
         </span>
         <span className="text-muted-foreground text-xs">
           {o.user?.email || 'N/A'}
