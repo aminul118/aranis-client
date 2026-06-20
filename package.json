@@ -49,7 +49,7 @@
     "@platejs/list": "^52.0.11",
     "@platejs/markdown": "^52.1.0",
     "@platejs/math": "^52.0.11",
-    "@platejs/media": "^53.1.4",
+    "@platejs/media": "^52.0.11",
     "@platejs/mention": "^52.0.15",
     "@platejs/resizable": "^52.0.11",
     "@platejs/selection": "^52.0.16",
