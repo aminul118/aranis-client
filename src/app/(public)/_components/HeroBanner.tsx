@@ -86,6 +86,7 @@ const HeroBanner = ({ mainSlides, miniBanners }: HeroBannerProps) => {
                         priority
                         fetchPriority="high"
                         sizes="(max-width: 1024px) 100vw, 75vw"
+                        quality={60}
                       />
                     </Link>
                   </motion.div>
@@ -171,6 +172,7 @@ const HeroBanner = ({ mainSlides, miniBanners }: HeroBannerProps) => {
                     priority={i < 2}
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                     sizes="320px"
+                    quality={60}
                   />
                 </Link>
               ))}
@@ -196,6 +198,7 @@ const HeroBanner = ({ mainSlides, miniBanners }: HeroBannerProps) => {
                   fetchPriority={i === 0 ? 'high' : 'auto'}
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
                   sizes="50vw"
+                  quality={60}
                 />
               </Link>
             ))}

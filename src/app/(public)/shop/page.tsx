@@ -6,7 +6,6 @@ import { getProductPriceRange, getProducts } from '@/services/product/product';
 import { getSiteSettings } from '@/services/settings/settings';
 import { getSizes } from '@/services/size/size';
 import { Metadata } from 'next';
-import { Suspense } from 'react';
 import ShopContent from './_components/ShopContent';
 
 export const dynamic = 'force-dynamic';
@@ -41,16 +40,14 @@ const ShopPage = async ({ searchParams }: Props) => {
   ]);
 
   return (
-    <Suspense fallback={null}>
-      <ShopContent
-        products={products || []}
-        meta={meta || null}
-        dbCategories={dbCategories || []}
-        dbColors={dbColors || []}
-        dbSizes={dbSizes || []}
-        priceRange={priceRange || null}
-      />
-    </Suspense>
+    <ShopContent
+      products={products || []}
+      meta={meta || null}
+      dbCategories={dbCategories || []}
+      dbColors={dbColors || []}
+      dbSizes={dbSizes || []}
+      priceRange={priceRange || null}
+    />
   );
 };
 
