@@ -3,7 +3,6 @@
 import Image from '@/components/common/SafeImage';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ReactNode, useCallback, useRef, useState } from 'react';
-import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch';
 
 interface ProductImageGalleryProps {
   thumbnails: string[];
@@ -189,71 +188,34 @@ const ProductImageGallery = ({
         className="border-border/50 bg-secondary/30 relative aspect-[4/5] flex-1 overflow-hidden rounded-3xl border backdrop-blur-sm md:hidden"
         style={{ isolation: 'isolate' }}
       >
-        <TransformWrapper
-          initialScale={1}
-          minScale={1}
-          maxScale={4}
-          centerOnInit
-          doubleClick={{ mode: 'zoomIn' }}
-          wheel={{ step: 0.1 }}
-          pinch={{ step: 5 }}
-          panning={{ disabled: true }}
+        <div
+          key={selectedImage}
+          className="relative h-full w-full touch-pan-y touch-pinch-zoom overflow-hidden"
+          style={{ width: '100%', height: '100%' }}
         >
-          {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
-            <>
-              <TransformComponent
-                wrapperStyle={{ width: '100%', height: '100%' }}
-                contentStyle={{ width: '100%', height: '100%' }}
-              >
-                <div
-                  key={selectedImage}
-                  className="relative h-full w-full"
-                  style={{ width: '100%', height: '100%' }}
-                >
-                  <Image
-                    src={selectedImage}
-                    alt={productName}
-                    fill
-                    sizes="100vw"
-                    priority
-                    fetchPriority="high"
-                    draggable={false}
-                    className="object-cover"
-                  />
-                </div>
-              </TransformComponent>
+          <Image
+            src={selectedImage}
+            alt={productName}
+            fill
+            sizes="(max-width: 1024px) 100vw, 50vw"
+            priority
+            fetchPriority="high"
+            draggable={false}
+            className="object-cover"
+          />
+        </div>
 
-              {saleBadge && (
-                <div className="pointer-events-none absolute top-4 left-4 z-10">
-                  {saleBadge}
-                </div>
-              )}
+        {saleBadge && (
+          <div className="pointer-events-none absolute top-4 left-4 z-10">
+            {saleBadge}
+          </div>
+        )}
 
-              <div className="pointer-events-none absolute right-3 bottom-10 z-10 flex items-center gap-1.5 rounded-full bg-black/50 px-3 py-1.5 text-[10px] font-bold tracking-wide text-white/80 backdrop-blur-sm">
-                <svg
-                  className="h-3 w-3"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2.5}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM10.5 7.5v6m3-3h-6"
-                  />
-                </svg>
-                Pinch to zoom
-              </div>
-
-              {hasMultiple && (
-                <div className="pointer-events-none absolute right-3 bottom-3 z-10 rounded-full bg-black/60 px-3 py-1 text-xs font-bold text-white backdrop-blur-sm">
-                  {currentIdx + 1} / {thumbnails.length}
-                </div>
-              )}
-            </>
-          )}
-        </TransformWrapper>
+        {hasMultiple && (
+          <div className="pointer-events-none absolute right-3 bottom-3 z-10 rounded-full bg-black/60 px-3 py-1 text-xs font-bold text-white backdrop-blur-sm">
+            {currentIdx + 1} / {thumbnails.length}
+          </div>
+        )}
       </div>
     </div>
   );
