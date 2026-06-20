@@ -38,6 +38,33 @@ const DynamicMenu = ({ menuGroups, role, user }: DynamicMenuProps) => {
   const [unreadChatCount, setUnreadChatCount] = useState(0);
   const [unreadOrderCount, setUnreadOrderCount] = useState(0);
 
+  const isLinkActive = (url: string) => {
+    if (url === '/admin' || url === '/dashboard') return pathname === url;
+    return pathname === url || pathname.startsWith(`${url}/`);
+  };
+
+  // Track the currently open accordion
+  const [openMenu, setOpenMenu] = useState<string | null>(null);
+
+  // Initialize openMenu based on current pathname
+  useEffect(() => {
+    for (const group of menuGroups) {
+      for (const menu of group.menu) {
+        if (menu.subMenu && menu.subMenu.length > 0) {
+          // If any submenu item is active, or the parent URL is active
+          const isAnySubActive = menu.subMenu.some((sub) =>
+            isLinkActive(sub.url),
+          );
+          const isParentActive = isLinkActive(menu.url);
+          if (isAnySubActive || isParentActive) {
+            setOpenMenu(menu.name);
+            return;
+          }
+        }
+      }
+    }
+  }, [pathname, menuGroups]);
+
   const fetchUnreadCount = useCallback(async () => {
     if (role === 'ADMIN' || role === 'SUPER_ADMIN') {
       try {
@@ -115,6 +142,11 @@ const DynamicMenu = ({ menuGroups, role, user }: DynamicMenuProps) => {
 
   const handleOrderSocketUpdate = useCallback(() => {
     fetchUnreadOrdersCount();
+    const now = Date.now();
+    if (now - lastBeep.current > 1000) {
+      lastBeep.current = now;
+      playNotificationSound();
+    }
   }, [role]);
 
   useSocket(
@@ -148,11 +180,12 @@ const DynamicMenu = ({ menuGroups, role, user }: DynamicMenuProps) => {
     'unread-orders-updated',
     role === 'ADMIN' || role === 'SUPER_ADMIN' ? ['admins'] : [],
   );
-
-  const isLinkActive = (url: string) => {
-    if (url === '/admin' || url === '/dashboard') return pathname === url;
-    return pathname === url || pathname.startsWith(`${url}/`);
-  };
+  useSocket(
+    handleOrderSocketUpdate,
+    undefined,
+    'new-order-placed',
+    role === 'ADMIN' || role === 'SUPER_ADMIN' ? ['admins'] : [],
+  );
 
   // Filter groups by role — if a group has no `roles`, it's visible to everyone
   const visibleGroups = menuGroups.filter((group) => {
@@ -184,7 +217,12 @@ const DynamicMenu = ({ menuGroups, role, user }: DynamicMenuProps) => {
             <SidebarMenu>
               {visibleItems.map((menu, i) => {
                 const hasSubMenu = menu.subMenu && menu.subMenu.length > 0;
-                const active = isLinkActive(menu.url);
+
+                // If it has submenus, determine active state based on children
+                const active = hasSubMenu
+                  ? menu.subMenu!.some((sub) => isLinkActive(sub.url)) ||
+                    isLinkActive(menu.url)
+                  : isLinkActive(menu.url);
 
                 // Inject dynamic badge for Support Center and Orders
                 const displayBadge =
@@ -220,12 +258,17 @@ const DynamicMenu = ({ menuGroups, role, user }: DynamicMenuProps) => {
                   );
                 }
 
+                const isOpen = openMenu === menu.name;
+
                 // Collapsible menu with sub-items
                 return (
                   <Collapsible
                     key={i}
                     className="group/collapsible"
-                    defaultOpen={active}
+                    open={isOpen}
+                    onOpenChange={(open) => {
+                      setOpenMenu(open ? menu.name : null);
+                    }}
                   >
                     <SidebarMenuItem>
                       <CollapsibleTrigger asChild>
@@ -238,7 +281,7 @@ const DynamicMenu = ({ menuGroups, role, user }: DynamicMenuProps) => {
                               : ''
                           }
                         >
-                          <div className="flex w-full items-center">
+                          <div className="flex w-full cursor-pointer items-center">
                             {menu.icon && <menu.icon />}
                             <span>{menu.name}</span>
                             {displayBadge !== undefined && displayBadge > 0 && (
