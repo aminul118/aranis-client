@@ -2,13 +2,13 @@
 
 import Image from '@/components/common/SafeImage';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useCallback, useRef, useState } from 'react';
+import { ReactNode, useCallback, useRef, useState } from 'react';
 import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch';
 
 interface ProductImageGalleryProps {
   thumbnails: string[];
   productName: string;
-  saleBadge?: React.ReactNode;
+  saleBadge?: ReactNode;
 }
 
 const ZOOM_SCALE = 2.4;
@@ -61,8 +61,6 @@ const ProductImageGallery = ({
               alt="preload"
               fill
               sizes="(max-width: 1024px) 100vw, 50vw"
-              priority
-              unoptimized
             />
           ))}
         </div>
@@ -115,7 +113,7 @@ const ProductImageGallery = ({
           className="border-border/50 bg-secondary/30 absolute inset-0 cursor-crosshair overflow-hidden rounded-3xl border backdrop-blur-sm"
           style={{ isolation: 'isolate' }}
         >
-          <AnimatePresence mode="wait">
+          <AnimatePresence mode="wait" initial={false}>
             <motion.div
               key={selectedImage}
               initial={{ opacity: 0 }}
@@ -130,9 +128,9 @@ const ProductImageGallery = ({
                 fill
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 priority
+                fetchPriority="high"
                 draggable={false}
                 className="pointer-events-none object-cover"
-                unoptimized
               />
               {/* The Lens that follows the cursor */}
               {isZoomed && (
@@ -220,7 +218,7 @@ const ProductImageGallery = ({
                 wrapperStyle={{ width: '100%', height: '100%' }}
                 contentStyle={{ width: '100%', height: '100%' }}
               >
-                <AnimatePresence mode="wait">
+                <AnimatePresence mode="wait" initial={false}>
                   <motion.div
                     key={selectedImage}
                     initial={{ opacity: 0 }}
@@ -236,9 +234,9 @@ const ProductImageGallery = ({
                       fill
                       sizes="100vw"
                       priority
+                      fetchPriority="high"
                       draggable={false}
                       className="object-cover"
-                      unoptimized
                     />
                   </motion.div>
                 </AnimatePresence>

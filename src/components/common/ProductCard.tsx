@@ -85,7 +85,7 @@ const ProductCard = ({
           alt={product.name}
           fill
           priority={index !== undefined && index < 4}
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
           className="object-cover transition-transform duration-1000 ease-out group-hover:scale-110"
         />
         {secondaryThumbnail && (
@@ -94,7 +94,7 @@ const ProductCard = ({
             src={secondaryThumbnail}
             alt={`${product.name} - View 2`}
             fill
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
             className="object-cover opacity-0 transition-all duration-1000 ease-out group-hover:scale-110 group-hover:opacity-100"
           />
         )}
@@ -127,7 +127,7 @@ const ProductCard = ({
           }}
           aria-label={wishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
           className={cn(
-            'absolute top-4 right-4 z-20 flex h-9 w-9 items-center justify-center rounded-full transition-all duration-500 active:scale-90',
+            'absolute top-4 right-4 z-20 flex h-12 w-12 items-center justify-center rounded-full transition-all duration-500 active:scale-90',
             wishlisted
               ? 'bg-red-500 text-white shadow-[0_8px_20px_rgba(239,68,68,0.4)]'
               : 'bg-white/90 text-zinc-900 shadow-sm hover:bg-white dark:bg-zinc-900/90 dark:text-white dark:hover:bg-zinc-800',
@@ -149,7 +149,7 @@ const ProductCard = ({
         )}
       >
         <div className="mb-1 flex items-center justify-between">
-          <p className="text-muted-foreground/80 text-[10px] font-bold tracking-[0.15em] uppercase">
+          <p className="text-muted-foreground text-[10px] font-bold tracking-[0.15em] uppercase">
             {product.category || 'Collection'}
           </p>
         </div>
@@ -175,7 +175,7 @@ const ProductCard = ({
                       'en-IN',
                     )}
                   </span>
-                  <span className="text-muted-foreground/50 text-[11px] font-medium line-through">
+                  <span className="text-muted-foreground/80 text-[11px] font-medium line-through">
                     ৳{product.price.toLocaleString('en-IN')}
                   </span>
                 </div>
@@ -206,7 +206,7 @@ const ProductCard = ({
                 router.push(productUrl);
               }}
               className={cn(
-                'h-10 w-10 rounded-full border-none transition-all duration-500 active:scale-95',
+                'h-12 w-12 rounded-full border-none transition-all duration-500 active:scale-95',
                 'bg-zinc-900 text-white shadow-xl shadow-zinc-900/10 hover:-translate-y-1 dark:bg-white dark:text-zinc-900 dark:shadow-white/5',
               )}
             >

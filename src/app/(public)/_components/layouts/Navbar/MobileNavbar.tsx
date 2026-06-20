@@ -42,6 +42,7 @@ const MobileNavbar = ({
             size={20}
             color="white"
             rounded
+            label="Toggle menu"
           />
         </div>
       </div>
@@ -192,7 +193,7 @@ const Mobile = ({ navItems, setMenuOpen, logo }: MobileProps) => {
                                   </p>
                                 )}
                                 <div className="flex flex-col gap-1">
-                                  {sub.items.map((item: any) => {
+                                  {sub.items?.map((item: any) => {
                                     const isObj = typeof item === 'object';
                                     const label = isObj ? item.label : item;
                                     const itemSlug = toUrlSlug(label);

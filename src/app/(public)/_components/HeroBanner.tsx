@@ -80,6 +80,7 @@ const HeroBanner = ({ mainSlides, miniBanners }: HeroBannerProps) => {
                     <Link
                       href={slide.link || '#'}
                       className="block h-full w-full"
+                      aria-label={`Main Banner ${currentSafe + 1}`}
                     >
                       {/* Background image */}
                       <Image
@@ -88,6 +89,7 @@ const HeroBanner = ({ mainSlides, miniBanners }: HeroBannerProps) => {
                         fill
                         className="object-cover object-top"
                         priority
+                        fetchPriority="high"
                         sizes="(max-width: 1024px) 100vw, 75vw"
                       />
                     </Link>
@@ -103,7 +105,7 @@ const HeroBanner = ({ mainSlides, miniBanners }: HeroBannerProps) => {
                       e.preventDefault();
                       prev();
                     }}
-                    className="absolute top-1/2 left-3 z-20 -translate-y-1/2 rounded-full bg-black/40 p-2 text-white opacity-0 backdrop-blur-sm transition-all group-hover:opacity-100 hover:bg-black/70"
+                    className="absolute top-1/2 left-3 z-20 -translate-y-1/2 rounded-full bg-black/40 p-3.5 text-white opacity-0 backdrop-blur-sm transition-all group-hover:opacity-100 hover:bg-black/70"
                     aria-label="Previous"
                   >
                     <ChevronLeft size={22} />
@@ -113,7 +115,7 @@ const HeroBanner = ({ mainSlides, miniBanners }: HeroBannerProps) => {
                       e.preventDefault();
                       next();
                     }}
-                    className="absolute top-1/2 right-3 z-20 -translate-y-1/2 rounded-full bg-black/40 p-2 text-white opacity-0 backdrop-blur-sm transition-all group-hover:opacity-100 hover:bg-black/70"
+                    className="absolute top-1/2 right-3 z-20 -translate-y-1/2 rounded-full bg-black/40 p-3.5 text-white opacity-0 backdrop-blur-sm transition-all group-hover:opacity-100 hover:bg-black/70"
                     aria-label="Next"
                   >
                     <ChevronRight size={22} />
@@ -128,7 +130,7 @@ const HeroBanner = ({ mainSlides, miniBanners }: HeroBannerProps) => {
                     <button
                       key={s._id ?? i}
                       onClick={() => goTo(i)}
-                      className={`box-content h-1.5 rounded-full bg-clip-content p-2 transition-all duration-300 ${
+                      className={`box-content h-1.5 rounded-full bg-clip-content p-[21px] transition-all duration-300 ${
                         i === current
                           ? 'w-6 bg-white'
                           : 'w-1.5 bg-white/40 hover:bg-white/70'
@@ -165,11 +167,13 @@ const HeroBanner = ({ mainSlides, miniBanners }: HeroBannerProps) => {
                   key={banner._id ?? i}
                   href={banner.link || '#'}
                   className="group relative block flex-1 overflow-hidden rounded-2xl"
+                  aria-label={`Mini Banner ${i + 1}`}
                 >
                   <Image
                     src={banner.image}
                     alt="Mini Banner"
                     fill
+                    priority={i < 2}
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                     sizes="320px"
                   />
@@ -187,11 +191,14 @@ const HeroBanner = ({ mainSlides, miniBanners }: HeroBannerProps) => {
                 key={(banner._id ?? i) + '-m'}
                 href={banner.link || '#'}
                 className="group relative h-28 overflow-hidden rounded-xl"
+                aria-label={`Mobile Mini Banner ${i + 1}`}
               >
                 <Image
                   src={banner.image}
                   alt="Mini Banner"
                   fill
+                  priority={i < 2}
+                  fetchPriority={i === 0 ? 'high' : 'auto'}
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
                   sizes="50vw"
                 />

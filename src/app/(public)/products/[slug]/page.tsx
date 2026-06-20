@@ -50,6 +50,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         },
       ],
     },
+    alternates: {
+      canonical: `${process.env.NEXT_PUBLIC_COOKIE_DOMAIN || 'https://thearanis.com'}/products/${slug}`,
+    },
   };
 }
 

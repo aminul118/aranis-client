@@ -1,6 +1,5 @@
 import SocialLinks from '@/app/(public)/_components/SocialLinks';
 import AminulLogo from '@/components/common/Logo';
-import { Button } from '@/components/ui/button';
 import { INavItem } from '@/services/navbar/navbar';
 import { ISocialLink } from '@/services/settings/settings';
 import Link from 'next/link';
@@ -54,7 +53,7 @@ const Footer = ({
                 <li key={title}>
                   <Link
                     href={href}
-                    className="group flex items-center text-sm font-medium text-slate-400 transition-colors duration-300 hover:text-blue-400"
+                    className="group flex items-center py-2 text-sm font-medium text-slate-400 transition-colors duration-300 hover:text-blue-400"
                   >
                     <span className="mr-2 inline-block h-px w-0 bg-blue-400 transition-all duration-300 group-hover:w-4" />
                     {title}
@@ -80,7 +79,7 @@ const Footer = ({
                 <li key={title}>
                   <Link
                     href={href}
-                    className="group flex items-center text-sm font-medium text-slate-400 transition-colors duration-300 hover:text-blue-400"
+                    className="group flex items-center py-2 text-sm font-medium text-slate-400 transition-colors duration-300 hover:text-blue-400"
                   >
                     <span className="mr-2 inline-block h-px w-0 bg-blue-400 transition-all duration-300 group-hover:w-4" />
                     {title}
@@ -106,12 +105,13 @@ const Footer = ({
 
           <p className="hidden items-center gap-1.5 text-xs text-slate-400 lg:flex">
             Developed by
-            <Button variant="link" className="px-0 text-xs">
-              {' '}
-              <Link target="_blank" href="https://rangdhanuit.com">
-                Rangdhanu IT
-              </Link>
-            </Button>
+            <Link
+              target="_blank"
+              href="https://rangdhanuit.com"
+              className="py-3 font-medium text-blue-500 underline-offset-4 hover:underline"
+            >
+              Rangdhanu IT
+            </Link>
           </p>
         </div>
       </div>

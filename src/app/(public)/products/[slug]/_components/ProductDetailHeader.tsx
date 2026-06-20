@@ -36,7 +36,7 @@ export const ProductDetailHeader = ({
               toggleWishlist(product, currentSelectedColor, selectedSize)
             }
             aria-label="Toggle wishlist"
-            className={`border-border/50 hover:bg-muted rounded-full border p-2.5 transition-all ${isWishlisted ? 'bg-red-50 text-red-500' : 'text-muted-foreground'}`}
+            className={`border-border/50 hover:bg-muted rounded-full border p-3.5 transition-all ${isWishlisted ? 'bg-red-50 text-red-500' : 'text-muted-foreground'}`}
           >
             <Heart size={20} fill={isWishlisted ? 'currentColor' : 'none'} />
           </button>
@@ -44,7 +44,7 @@ export const ProductDetailHeader = ({
             <DropdownMenuTrigger asChild>
               <button
                 aria-label="Share product"
-                className="border-border/50 text-muted-foreground hover:bg-muted rounded-full border p-2.5 transition-all outline-none"
+                className="border-border/50 text-muted-foreground hover:bg-muted rounded-full border p-3.5 transition-all outline-none"
               >
                 <Share2 size={20} />
               </button>

@@ -39,7 +39,7 @@ const HomePage = async () => {
 
 export default HomePage;
 
-// SEO Metatag
+// SEO MetaTag
 export async function generateMetadata(): Promise<Metadata> {
   return generateMetaTags({
     title: 'The Aranis | Premium Contemporary Apparel',

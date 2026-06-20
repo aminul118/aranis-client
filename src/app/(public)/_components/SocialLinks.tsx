@@ -60,7 +60,7 @@ const SocialLinks = ({ className, links }: Props) => {
             rel="noopener noreferrer"
             aria-label={platform}
             className={cn(
-              'flex h-10 w-10 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-slate-400 transition-all duration-300 hover:scale-110 hover:border-transparent hover:shadow-lg',
+              'flex h-12 w-12 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-slate-400 transition-all duration-300 hover:scale-110 hover:border-transparent hover:shadow-lg',
               hoverColor,
             )}
           >
