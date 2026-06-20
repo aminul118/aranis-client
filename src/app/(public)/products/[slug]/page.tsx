@@ -6,7 +6,6 @@ import { ArrowLeft } from 'lucide-react';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { Suspense } from 'react';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -89,13 +88,7 @@ const ProductPage = async ({ params }: Props) => {
           Explore More Collections
         </Link>
 
-        <Suspense
-          fallback={
-            <div className="min-h-[500px] w-full animate-pulse rounded-xl bg-gray-100 dark:bg-gray-800" />
-          }
-        >
-          <ProductDetailContent product={product} settings={settings} />
-        </Suspense>
+        <ProductDetailContent product={product} settings={settings} />
 
         {relatedProducts.length > 0 && (
           <div className="mt-12 pt-16">
