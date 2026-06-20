@@ -51,4 +51,3 @@ export const metadata: Metadata = generateMetaTags({
   image: '/seo/aminul-hero-ss.png',
   websitePath: '/forgot-password',
 });
-// >> SEO End

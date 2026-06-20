@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import LoginForm from '@/app/(public)/(authentication)/login/_components/LoginForm';
 import { Card, CardContent } from '@/components/ui/card';
 import images from '@/config/images';

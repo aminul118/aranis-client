@@ -5,6 +5,8 @@ import generateMetaTags from '@/seo/generateMetaTags';
 import { Metadata } from 'next';
 import Image from 'next/image';
 
+export const dynamic = 'force-dynamic';
+
 const VerifyOTPPage = () => {
   return (
     <section className="center">

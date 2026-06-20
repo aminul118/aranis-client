@@ -4,7 +4,7 @@ import images from '@/config/images';
 import generateMetaTags from '@/seo/generateMetaTags';
 import { Metadata } from 'next';
 import Image from 'next/image';
-import { Suspense } from 'react';
+export const dynamic = 'force-dynamic';
 
 const ResetPasswordPage = () => {
   return (
@@ -21,13 +21,7 @@ const ResetPasswordPage = () => {
                   Create a new password for your account.
                 </p>
               </div>
-              <Suspense
-                fallback={
-                  <div className="border-primary mx-auto mt-20 h-12 w-12 animate-spin rounded-full border-t-2 border-b-2"></div>
-                }
-              >
-                <ResetPasswordForm />
-              </Suspense>
+              <ResetPasswordForm />
             </div>
 
             {/* Image Section */}
@@ -58,4 +52,3 @@ export const metadata: Metadata = generateMetaTags({
   image: '/seo/aminul-hero-ss.png',
   websitePath: '/reset-password',
 });
-// >> SEO End
