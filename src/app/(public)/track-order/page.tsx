@@ -1,5 +1,6 @@
 import generateMetaTags from '@/seo/generateMetaTags';
 import { Metadata } from 'next';
+import { Suspense } from 'react';
 import TrackOrderContent from './_components/TrackOrderContent';
 
 export default function TrackOrderPage() {

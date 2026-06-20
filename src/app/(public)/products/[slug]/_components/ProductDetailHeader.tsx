@@ -91,7 +91,7 @@ export const ProductDetailHeader = ({
                 ৳{(product.salePrice ?? product.price).toLocaleString('en-IN')}
               </span>
               <div className="flex flex-col gap-1">
-                <span className="text-lg font-medium text-zinc-500 line-through md:text-xl">
+                <span className="text-lg font-medium text-zinc-600 line-through md:text-xl dark:text-zinc-400">
                   ৳{product.price.toLocaleString('en-IN')}
                 </span>
                 {(product.salePrice ?? 0) > 0 && (

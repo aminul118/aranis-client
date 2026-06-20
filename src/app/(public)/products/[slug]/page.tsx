@@ -83,7 +83,7 @@ const ProductPage = async ({ params }: Props) => {
       <div className="container mx-auto px-4 md:px-6">
         <Link
           href="/shop"
-          className="hover:text-foreground group mb-12 inline-flex items-center text-xs font-bold tracking-widest text-zinc-600 uppercase transition-all dark:text-zinc-400"
+          className="hover:text-foreground group mb-12 inline-flex items-center text-xs font-bold tracking-widest text-zinc-700 uppercase transition-all dark:text-zinc-300"
         >
           <ArrowLeft className="mr-3 h-4 w-4 transition-transform group-hover:-translate-x-1" />
           Explore More Collections
@@ -91,30 +91,30 @@ const ProductPage = async ({ params }: Props) => {
 
         <Suspense fallback={null}>
           <ProductDetailContent product={product} settings={settings} />
-        </Suspense>
 
-        {relatedProducts.length > 0 && (
-          <div className="mt-12 pt-16">
-            <div className="mb-10 text-center">
-              <h2 className="text-foreground mb-4 text-3xl font-black tracking-tight capitalize md:text-4xl">
-                You May Also Like
-              </h2>
-              <p className="text-muted-foreground mx-auto max-w-2xl">
-                Discover more premium pieces from our {product.category}{' '}
-                collection.
-              </p>
+          {relatedProducts.length > 0 && (
+            <div className="mt-12 pt-16">
+              <div className="mb-10 text-center">
+                <h2 className="text-foreground mb-4 text-3xl font-black tracking-tight capitalize md:text-4xl">
+                  You May Also Like
+                </h2>
+                <p className="text-muted-foreground mx-auto max-w-2xl">
+                  Discover more premium pieces from our {product.category}{' '}
+                  collection.
+                </p>
+              </div>
+              <div className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+                {relatedProducts.map((relatedProduct, index) => (
+                  <ProductCard
+                    key={relatedProduct._id}
+                    product={relatedProduct}
+                    index={index}
+                  />
+                ))}
+              </div>
             </div>
-            <div className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-              {relatedProducts.map((relatedProduct, index) => (
-                <ProductCard
-                  key={relatedProduct._id}
-                  product={relatedProduct}
-                  index={index}
-                />
-              ))}
-            </div>
-          </div>
-        )}
+          )}
+        </Suspense>
       </div>
     </div>
   );
