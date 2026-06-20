@@ -31,6 +31,7 @@ const ForgotPasswordPage = () => {
                 height={400}
                 width={400}
                 alt="Forgot Password Image"
+                priority
               />
             </div>
           </CardContent>

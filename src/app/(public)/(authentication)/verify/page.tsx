@@ -23,6 +23,7 @@ const VerifyOTPPage = () => {
                 height={400}
                 width={400}
                 alt="Verify Image"
+                priority
               />
             </div>
           </CardContent>

@@ -28,6 +28,7 @@ const LoginPage = () => {
                 height={400}
                 width={400}
                 alt="Login Image"
+                priority
               />
             </div>
           </CardContent>

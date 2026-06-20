@@ -16,6 +16,7 @@ const MainLayout = ({ children }: Children) => {
       lang="en"
       className={fonts.spaceGrotesk.variable}
       suppressHydrationWarning
+      data-scroll-behavior="smooth"
     >
       <head>
         <link

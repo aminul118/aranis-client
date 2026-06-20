@@ -37,7 +37,8 @@ const ResetPasswordPage = () => {
                 src={images.auth}
                 height={400}
                 width={400}
-                alt="Reset Password Image"
+                alt="Reset Password"
+                priority
               />
             </div>
           </CardContent>

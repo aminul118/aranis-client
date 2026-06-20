@@ -19,6 +19,7 @@ const RegisterPage = () => {
                 height={400}
                 width={400}
                 alt="Register Image"
+                priority
               />
             </div>
 

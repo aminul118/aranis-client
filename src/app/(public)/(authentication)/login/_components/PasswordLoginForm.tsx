@@ -22,6 +22,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import AlertPopUp from './AlertPopUp';
 
 type AlertState = {
@@ -55,17 +56,16 @@ const PasswordLoginForm = () => {
       });
 
       if (res.success) {
+        toast.success(res.message || 'Login successful');
         if (res.data?.requiresVerification) {
           const attemptsLeft = res.data.remainingAttempts;
           router.push(
             `/verify?identifier=${encodeURIComponent(values.identifier)}${redirect ? `&redirect=${redirect}` : ''}${attemptsLeft !== undefined ? `&attemptsLeft=${attemptsLeft}` : ''}`,
           );
         } else if (redirect) {
-          await refreshUser();
           const path = redirect.startsWith('/') ? redirect : `/${redirect}`;
           window.location.href = path;
         } else {
-          await refreshUser();
           const role = res.data?.user?.role;
           window.location.href = getDefaultDashboardRoute(role);
         }
