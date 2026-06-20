@@ -53,12 +53,7 @@ const HeroBanner = ({ mainSlides, miniBanners }: HeroBannerProps) => {
   };
 
   return (
-    <motion.section
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8, ease: 'easeOut' }}
-      className="bg-background w-full pb-4"
-    >
+    <section className="bg-background w-full pb-4">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 gap-3 lg:grid-cols-[1fr_320px]">
           {/* ── Main Carousel ─────────────────────────────────────── */}
@@ -207,7 +202,7 @@ const HeroBanner = ({ mainSlides, miniBanners }: HeroBannerProps) => {
           </div>
         )}
       </div>
-    </motion.section>
+    </section>
   );
 };
 

@@ -85,8 +85,8 @@ const ProductCard = ({
           alt={product.name}
           fill
           priority={index !== undefined && index < 4}
-          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-          quality={60}
+          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+          quality={50}
           className="object-cover transition-transform duration-1000 ease-out group-hover:scale-110"
         />
         {secondaryThumbnail && (
@@ -95,8 +95,8 @@ const ProductCard = ({
             src={secondaryThumbnail}
             alt={`${product.name} - View 2`}
             fill
-            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-            quality={60}
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+            quality={50}
             className="object-cover opacity-0 transition-all duration-1000 ease-out group-hover:scale-110 group-hover:opacity-100"
           />
         )}

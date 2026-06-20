@@ -7,7 +7,6 @@ import { useWishlist } from '@/context/WishlistContext';
 import { createRestockRequest } from '@/services/restock/restock';
 import { ISiteSetting } from '@/services/settings/settings';
 import { IProduct, IVariantSize } from '@/types';
-import { motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -236,12 +235,7 @@ const ProductDetailContent = ({
 
         {/* Content Section */}
         <div className="flex flex-col pt-4 lg:col-span-7">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="space-y-8"
-          >
+          <div className="space-y-8">
             <ProductDetailHeader
               product={product}
               currentVariant={currentVariant}
@@ -273,7 +267,7 @@ const ProductDetailContent = ({
               handleRestockRequest={handleRestockRequest}
               handleAddToCart={handleAddToCart}
             />
-          </motion.div>
+          </div>
         </div>
       </div>
 
