@@ -6,8 +6,7 @@ import { ArrowLeft } from 'lucide-react';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-
-export const dynamic = 'force-dynamic';
+import { Suspense } from 'react';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -84,13 +83,15 @@ const ProductPage = async ({ params }: Props) => {
       <div className="container mx-auto px-4 md:px-6">
         <Link
           href="/shop"
-          className="text-muted-foreground hover:text-foreground group mb-12 inline-flex items-center text-xs font-bold tracking-widest uppercase transition-all"
+          className="hover:text-foreground group mb-12 inline-flex items-center text-xs font-bold tracking-widest text-zinc-600 uppercase transition-all dark:text-zinc-400"
         >
           <ArrowLeft className="mr-3 h-4 w-4 transition-transform group-hover:-translate-x-1" />
           Explore More Collections
         </Link>
 
-        <ProductDetailContent product={product} settings={settings} />
+        <Suspense fallback={null}>
+          <ProductDetailContent product={product} settings={settings} />
+        </Suspense>
 
         {relatedProducts.length > 0 && (
           <div className="mt-12 pt-16">

@@ -222,7 +222,7 @@ const ProductDetailContent = ({
             productName={product.name}
             saleBadge={
               (product.salePrice ?? 0) > 0 ? (
-                <Badge className="rounded-full border-none bg-red-500 px-4 py-1.5 text-sm font-black text-white shadow-xl shadow-red-500/30">
+                <Badge className="rounded-full border-none bg-red-600 px-4 py-1.5 text-sm font-black text-white shadow-xl shadow-red-500/30">
                   {Math.round(
                     (1 - (product.salePrice ?? 0) / product.price) * 100,
                   )}

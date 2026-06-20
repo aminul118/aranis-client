@@ -4,8 +4,6 @@ import { Metadata } from 'next';
 import { Suspense } from 'react';
 import UserOrdersContent from './_components/UserOrdersContent';
 
-export const dynamic = 'force-dynamic';
-
 export const metadata: Metadata = generateMetaTags({
   title: 'My Orders | Dashboard | Aranis Fashion',
   description:

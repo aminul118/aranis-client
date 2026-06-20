@@ -91,11 +91,11 @@ export const ProductDetailHeader = ({
                 ৳{(product.salePrice ?? product.price).toLocaleString('en-IN')}
               </span>
               <div className="flex flex-col gap-1">
-                <span className="text-muted-foreground/60 text-lg font-medium line-through md:text-xl">
+                <span className="text-lg font-medium text-zinc-500 line-through md:text-xl">
                   ৳{product.price.toLocaleString('en-IN')}
                 </span>
                 {(product.salePrice ?? 0) > 0 && (
-                  <span className="w-fit rounded-full bg-red-50 px-2.5 py-0.5 text-[11px] font-bold text-red-600">
+                  <span className="w-fit rounded-full bg-red-50 px-2.5 py-0.5 text-[11px] font-bold text-red-700">
                     Save ৳
                     {(product.price - (product.salePrice ?? 0)).toLocaleString(
                       'en-IN',
