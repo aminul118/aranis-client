@@ -11,14 +11,12 @@ import { useCartOptional } from '@/context/CartContext';
 import { useUser } from '@/context/UserContext';
 import { useWishlistOptional } from '@/context/WishlistContext';
 import { cn } from '@/lib/utils';
-import { IUser } from '@/types';
 import { Gift, Heart, ShoppingBag, ShoppingCart, User } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-const MobileBottomNav = ({ user: serverUser }: { user: IUser | null }) => {
-  const { user: clientUser } = useUser();
-  const user = clientUser || serverUser;
+const MobileBottomNav = () => {
+  const { user } = useUser();
   const pathname = usePathname();
 
   const cart = useCartOptional();

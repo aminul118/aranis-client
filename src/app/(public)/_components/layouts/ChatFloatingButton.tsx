@@ -5,6 +5,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { useUser } from '@/context/UserContext';
 import { getSocket, useSocket } from '@/hooks/useSocket';
 import { cn } from '@/lib/utils';
 import {
@@ -12,25 +13,17 @@ import {
   getOrCreateConversation,
   markAsSeen,
 } from '@/services/chat/chat';
-import { IUser } from '@/types';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Check, CheckCheck, MessageCircle, Send, X } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-interface ChatFloatingButtonProps {
-  user: IUser | null;
-  siteSettings?: any;
-}
-
 const SOCKET_URL = (
   process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:5000/api/v1'
 ).replace('/api/v1', '');
 
-const ChatFloatingButton = ({
-  user,
-  siteSettings,
-}: ChatFloatingButtonProps) => {
+const ChatFloatingButton = ({ siteSettings }: { siteSettings?: any }) => {
+  const { user } = useUser();
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState('');

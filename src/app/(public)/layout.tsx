@@ -3,7 +3,6 @@ import Logo from '@/components/common/Logo';
 import { getNavbars } from '@/services/navbar/navbar';
 import { getOffers } from '@/services/offer/offer';
 import { getSiteSettings } from '@/services/settings/settings';
-import { getMe } from '@/services/user/users';
 import { Children } from '@/types';
 import nextDynamic from 'next/dynamic';
 
@@ -20,17 +19,7 @@ const GlobalOfferModal = nextDynamic(
   () => import('@/components/common/GlobalOfferModal'),
 );
 
-export const dynamic = 'force-dynamic';
-
 const RootLayout = async ({ children }: Children) => {
-  let user = null;
-  try {
-    const { data } = await getMe();
-    user = data;
-  } catch (error) {
-    // Gracefully handle unauthenticated user
-  }
-
   const [navItemsRes, siteSettingsRes, offersRes] = await Promise.all([
     getNavbars({ limit: '1000' }),
     getSiteSettings(),
@@ -46,7 +35,6 @@ const RootLayout = async ({ children }: Children) => {
   return (
     <main className="mt-4 flex min-h-screen flex-col pb-16 lg:mt-0 lg:pb-0">
       <Navbar
-        user={user as any}
         navItems={sortedNavItems as any}
         activeOffers={activeOffers}
         logo={<Logo className="text-white" logoUrl={siteSettings?.logo} />}
@@ -54,8 +42,8 @@ const RootLayout = async ({ children }: Children) => {
       />
       <div className="grow pt-[60px] lg:pt-[176px]">{children}</div>
       <GlobalOfferModal />
-      <MobileBottomNav user={user} />
-      <ChatFloatingButton user={user} siteSettings={siteSettings} />
+      <MobileBottomNav />
+      <ChatFloatingButton siteSettings={siteSettings} />
       <Footer
         socialLinks={siteSettings?.socialLinks}
         navItems={sortedNavItems}

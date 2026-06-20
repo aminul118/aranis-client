@@ -1,9 +1,9 @@
 'use client';
 
 import { useCartOptional } from '@/context/CartContext';
+import { useUser } from '@/context/UserContext';
 import { useWishlistOptional } from '@/context/WishlistContext';
 import { cn } from '@/lib/utils';
-import { IUser } from '@/types';
 import { motion, useMotionValueEvent, useScroll } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -13,18 +13,17 @@ import MobileNavbar from './MobileNavbar';
 import { NavMenu } from './nav-menu';
 
 const Navbar = ({
-  user,
   navItems = [],
   activeOffers = [],
   logo,
   siteSettings,
 }: {
-  user: IUser | null;
   navItems?: NavMenu[];
   activeOffers?: any[];
   logo?: React.ReactNode;
   siteSettings?: any;
 }) => {
+  const { user } = useUser();
   const cart = useCartOptional();
   let totalItems = cart?.totalItems || 0;
 
