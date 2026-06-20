@@ -205,28 +205,22 @@ const ProductImageGallery = ({
                 wrapperStyle={{ width: '100%', height: '100%' }}
                 contentStyle={{ width: '100%', height: '100%' }}
               >
-                <AnimatePresence mode="wait" initial={false}>
-                  <motion.div
-                    key={selectedImage}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                    className="relative h-full w-full"
-                    style={{ width: '100%', height: '100%' }}
-                  >
-                    <Image
-                      src={selectedImage}
-                      alt={productName}
-                      fill
-                      sizes="100vw"
-                      priority
-                      fetchPriority="high"
-                      draggable={false}
-                      className="object-cover"
-                    />
-                  </motion.div>
-                </AnimatePresence>
+                <div
+                  key={selectedImage}
+                  className="relative h-full w-full"
+                  style={{ width: '100%', height: '100%' }}
+                >
+                  <Image
+                    src={selectedImage}
+                    alt={productName}
+                    fill
+                    sizes="100vw"
+                    priority
+                    fetchPriority="high"
+                    draggable={false}
+                    className="object-cover"
+                  />
+                </div>
               </TransformComponent>
 
               {saleBadge && (
