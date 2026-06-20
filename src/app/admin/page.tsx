@@ -14,7 +14,7 @@ const AdminHomePage = async ({
 }) => {
   const resolvedSearchParams = await searchParams;
   const [statsRes, userRes] = await Promise.all([
-    getAdminStats(resolvedSearchParams as Record<string, string>),
+    getAdminStats(resolvedSearchParams),
     getMe(),
   ]);
 

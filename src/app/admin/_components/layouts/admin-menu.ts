@@ -9,7 +9,6 @@ import {
   LayoutDashboard,
   Lock,
   MapPin,
-  Megaphone,
   Menu as MenuIcon,
   MessageCircle,
   Package,
@@ -69,9 +68,16 @@ const adminSidebarMenu: MenuGroup[] = [
       { name: 'Colors', url: '/admin/colors', icon: Palette },
       { name: 'Sizes', url: '/admin/sizes', icon: Ruler },
       { name: 'Size Guides', url: '/admin/size-guides', icon: Ruler },
-      { name: 'Hero Banners', url: '/admin/hero-banners', icon: ImageIcon },
-      { name: 'Mini Banners', url: '/admin/mini-banners', icon: ImageIcon },
-      { name: 'Popup Banner', url: '/admin/popup-banners', icon: Megaphone },
+      {
+        name: 'Banners',
+        url: '/admin/banners',
+        icon: ImageIcon,
+        subMenu: [
+          { name: 'Hero Banners', url: '/admin/hero-banners' },
+          { name: 'Mini Banners', url: '/admin/mini-banners' },
+          { name: 'Popup Banner', url: '/admin/popup-banners' },
+        ],
+      },
     ],
   },
   {
