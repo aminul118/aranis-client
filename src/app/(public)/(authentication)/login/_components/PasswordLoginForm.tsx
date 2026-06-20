@@ -17,6 +17,7 @@ import { loginWithPassword } from '@/services/auth/login';
 import { getDefaultDashboardRoute } from '@/services/user/user-access';
 import { passwordLoginValidation } from '@/zod/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Turnstile } from '@marsidev/react-turnstile';
 import { Eye, EyeOff, Lock, Mail } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -53,6 +54,7 @@ const PasswordLoginForm = () => {
       const res = await loginWithPassword({
         identifier: values.identifier,
         password: values.password,
+        turnstileToken: values.turnstileToken,
       });
 
       if (res.success) {
@@ -163,12 +165,33 @@ const PasswordLoginForm = () => {
             )}
           />
 
+          <div className="flex flex-col gap-2">
+            <Turnstile
+              siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
+              onSuccess={(token) => {
+                form.setValue('turnstileToken', token);
+                form.clearErrors('turnstileToken');
+              }}
+              onError={() =>
+                form.setError('turnstileToken', { message: 'Captcha failed' })
+              }
+              onExpire={() => form.setValue('turnstileToken', '')}
+              options={{ theme: 'auto', size: 'flexible' }}
+            />
+            {form.formState.errors.turnstileToken && (
+              <p className="text-destructive text-sm font-medium">
+                {form.formState.errors.turnstileToken.message as string}
+              </p>
+            )}
+          </div>
+
           <SubmitButton
             loading={form.formState.isSubmitting}
             className="h-12 w-full rounded-full text-sm font-black tracking-widest uppercase shadow-md transition-transform hover:scale-[1.02]"
             text="Login Now"
             loadingText="Logging in..."
             loadingEffect
+            disabled={!form.watch('turnstileToken')}
           />
 
           <div className="mt-2 text-center text-xs font-medium text-slate-500 dark:text-slate-400">

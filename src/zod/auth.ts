@@ -21,6 +21,7 @@ export const loginFormValidation = z.object({
         message: 'Phone number cannot exceed 11 digits',
       },
     ),
+  turnstileToken: z.string().min(1, 'Please complete the captcha'),
 });
 
 export type LoginFormValues = z.infer<typeof loginFormValidation>;
@@ -37,6 +38,7 @@ export const registrationFormValidation = z
     email: z.string().email('Invalid email address').optional(),
     phone: z.string().optional(),
     addresses: z.array(userAddressZodSchema).max(4).optional(),
+    turnstileToken: z.string().min(1, 'Please complete the captcha'),
   })
   .refine((data) => data.email || data.phone, {
     message: 'Either email or phone is required',
@@ -117,6 +119,7 @@ export const passwordLoginValidation = z.object({
       },
     ),
   password: z.string().min(1, 'Password is required'),
+  turnstileToken: z.string().min(1, 'Please complete the captcha'),
 });
 
 export type PasswordLoginValues = z.infer<typeof passwordLoginValidation>;

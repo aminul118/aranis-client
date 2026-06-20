@@ -17,6 +17,7 @@ import useSearchParamsValues from '@/hooks/useSearchParamsValues';
 import { registerWithOTP } from '@/services/auth/register';
 import { registrationFormValidation } from '@/zod/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Turnstile } from '@marsidev/react-turnstile';
 import { Mail, Phone } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -210,10 +211,31 @@ const RegisterForm = () => {
           />
         )}
 
+        <div className="flex flex-col gap-2">
+          <Turnstile
+            siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
+            onSuccess={(token) => {
+              form.setValue('turnstileToken', token);
+              form.clearErrors('turnstileToken');
+            }}
+            onError={() =>
+              form.setError('turnstileToken', { message: 'Captcha failed' })
+            }
+            onExpire={() => form.setValue('turnstileToken', '')}
+            options={{ theme: 'auto', size: 'flexible' }}
+          />
+          {form.formState.errors.turnstileToken && (
+            <p className="text-destructive text-sm font-medium">
+              {form.formState.errors.turnstileToken.message as string}
+            </p>
+          )}
+        </div>
+
         <SubmitButton
           loading={form.formState.isSubmitting}
           className="h-12 w-full rounded-xl text-lg font-bold shadow-lg shadow-blue-500/20"
           text="Get Started →"
+          disabled={!form.watch('turnstileToken')}
         />
 
         <div className="text-muted-foreground pt-4 text-center text-sm">

@@ -15,6 +15,7 @@ import useSearchParamsValues from '@/hooks/useSearchParamsValues';
 import { requestOTP } from '@/services/auth/otp/sendOTP';
 import { loginFormValidation } from '@/zod/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Turnstile } from '@marsidev/react-turnstile';
 import { Mail } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -44,7 +45,7 @@ const OtpLoginForm = () => {
     setAlert(null);
 
     try {
-      const res = await requestOTP(values.identifier);
+      const res = await requestOTP(values.identifier, values.turnstileToken);
       if (res.success) {
         const attemptsLeft = (res as any).data?.remainingAttempts;
         router.push(
@@ -105,12 +106,33 @@ const OtpLoginForm = () => {
             )}
           />
 
+          <div className="flex flex-col gap-2">
+            <Turnstile
+              siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
+              onSuccess={(token) => {
+                form.setValue('turnstileToken', token);
+                form.clearErrors('turnstileToken');
+              }}
+              onError={() =>
+                form.setError('turnstileToken', { message: 'Captcha failed' })
+              }
+              onExpire={() => form.setValue('turnstileToken', '')}
+              options={{ theme: 'auto', size: 'flexible' }}
+            />
+            {form.formState.errors.turnstileToken && (
+              <p className="text-destructive text-sm font-medium">
+                {form.formState.errors.turnstileToken.message as string}
+              </p>
+            )}
+          </div>
+
           <SubmitButton
             loading={form.formState.isSubmitting}
             className="h-12 w-full rounded-full text-sm font-black tracking-widest uppercase shadow-md transition-transform hover:scale-[1.02]"
             text="Send OTP →"
             loadingText="Sending OTP..."
             loadingEffect
+            disabled={!form.watch('turnstileToken')}
           />
 
           <div className="mt-2 text-center text-xs font-medium text-slate-500 dark:text-slate-400">

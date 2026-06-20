@@ -14,6 +14,7 @@ import {
 import { forgotPassword } from '@/services/auth/password-reset';
 import { loginFormValidation } from '@/zod/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Turnstile } from '@marsidev/react-turnstile';
 import { Mail } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -41,7 +42,10 @@ const ForgotPasswordForm = () => {
     setAlert(null);
 
     try {
-      const res = await forgotPassword(values.identifier);
+      const res = await forgotPassword(
+        values.identifier,
+        values.turnstileToken,
+      );
       if (res.success) {
         setIsSuccess(true);
         const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.identifier);
@@ -112,12 +116,35 @@ const ForgotPasswordForm = () => {
                 )}
               />
 
+              <div className="flex flex-col gap-2">
+                <Turnstile
+                  siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
+                  onSuccess={(token) => {
+                    form.setValue('turnstileToken', token);
+                    form.clearErrors('turnstileToken');
+                  }}
+                  onError={() =>
+                    form.setError('turnstileToken', {
+                      message: 'Captcha failed',
+                    })
+                  }
+                  onExpire={() => form.setValue('turnstileToken', '')}
+                  options={{ theme: 'auto', size: 'flexible' }}
+                />
+                {form.formState.errors.turnstileToken && (
+                  <p className="text-destructive text-sm font-medium">
+                    {form.formState.errors.turnstileToken.message as string}
+                  </p>
+                )}
+              </div>
+
               <SubmitButton
                 loading={form.formState.isSubmitting}
                 className="h-12 w-full rounded-xl text-sm font-black tracking-widest uppercase"
                 text="Send Reset Link"
                 loadingText="Sending..."
                 loadingEffect
+                disabled={!form.watch('turnstileToken')}
               />
             </>
           )}

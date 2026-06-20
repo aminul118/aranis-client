@@ -27,7 +27,7 @@ const nextConfig: NextConfig = {
   images: {
     // Prefer modern image formats if the browser supports them
     formats: ['image/avif', 'image/webp'],
-    qualities: [75, 100],
+    qualities: [50, 75, 100],
     // Allow external images to be optimized and served from our specific CDN
     remotePatterns: [
       {

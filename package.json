@@ -22,6 +22,7 @@
     "@emoji-mart/data": "1.2.1",
     "@faker-js/faker": "^10.3.0",
     "@hookform/resolvers": "^5.2.2",
+    "@marsidev/react-turnstile": "^1.5.3",
     "@next/third-parties": "16.1.6",
     "@platejs/ai": "^52.1.0",
     "@platejs/autoformat": "^52.0.11",

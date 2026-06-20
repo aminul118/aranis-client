@@ -4,12 +4,15 @@ import serverFetch from '@/lib/server-fetch';
 import { ApiResponse } from '@/types';
 import { cookies } from 'next/headers';
 
-export const forgotPassword = async (identifier: string) => {
+export const forgotPassword = async (
+  identifier: string,
+  turnstileToken?: string,
+) => {
   try {
     const res = await serverFetch.post<ApiResponse<any>>(
       `/auth/forgot-password`,
       {
-        body: JSON.stringify({ identifier }),
+        body: JSON.stringify({ identifier, turnstileToken }),
         headers: {
           'Content-Type': 'application/json',
         },
