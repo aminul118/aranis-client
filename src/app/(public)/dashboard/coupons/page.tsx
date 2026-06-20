@@ -4,9 +4,12 @@ import { Calendar, Percent, Ticket } from 'lucide-react';
 
 const CouponsPage = async () => {
   const res = await getCoupons();
-  const coupons = res?.data || [];
+  const allCoupons = res?.data || [];
+  const validCoupons = allCoupons.filter(
+    (coupon: any) => new Date(coupon.expiryDate).getTime() >= Date.now(),
+  );
 
-  if (coupons.length === 0) {
+  if (validCoupons.length === 0) {
     return (
       <div className="flex h-full min-h-[400px] flex-col items-center justify-center rounded-xl border border-gray-100 bg-white p-8 text-center shadow-sm dark:border-white/10 dark:bg-[#0a0a0a]">
         <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-blue-50 dark:bg-blue-900/20">
@@ -34,7 +37,7 @@ const CouponsPage = async () => {
       </div>
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-2">
-        {coupons.map((coupon) => (
+        {validCoupons.map((coupon: any) => (
           <div
             key={coupon._id}
             className="relative overflow-hidden rounded-xl border border-blue-100 bg-gradient-to-br from-blue-50 to-white p-6 shadow-sm transition-all hover:shadow-md dark:border-blue-900/30 dark:from-blue-950/20 dark:to-[#0a0a0a]"
