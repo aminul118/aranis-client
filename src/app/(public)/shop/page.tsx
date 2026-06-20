@@ -1,13 +1,15 @@
 import generateMetaTags from '@/seo/generateMetaTags';
-import { getNavbars } from '@/services/navbar/navbar';
-import { getSiteSettings } from '@/services/settings/settings';
-import { Metadata } from 'next';
-
 import { getCategories } from '@/services/category/category';
 import { getColors } from '@/services/color/color';
+import { getNavbars } from '@/services/navbar/navbar';
 import { getProductPriceRange, getProducts } from '@/services/product/product';
+import { getSiteSettings } from '@/services/settings/settings';
 import { getSizes } from '@/services/size/size';
+import { Metadata } from 'next';
+import { Suspense } from 'react';
 import ShopContent from './_components/ShopContent';
+
+export const dynamic = 'force-dynamic';
 
 interface Props {
   searchParams: Promise<Record<string, string>>;
@@ -39,14 +41,16 @@ const ShopPage = async ({ searchParams }: Props) => {
   ]);
 
   return (
-    <ShopContent
-      products={products || []}
-      meta={meta || null}
-      dbCategories={dbCategories || []}
-      dbColors={dbColors || []}
-      dbSizes={dbSizes || []}
-      priceRange={priceRange || null}
-    />
+    <Suspense fallback={null}>
+      <ShopContent
+        products={products || []}
+        meta={meta || null}
+        dbCategories={dbCategories || []}
+        dbColors={dbColors || []}
+        dbSizes={dbSizes || []}
+        priceRange={priceRange || null}
+      />
+    </Suspense>
   );
 };
 

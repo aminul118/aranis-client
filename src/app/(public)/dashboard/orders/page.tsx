@@ -1,7 +1,10 @@
 import generateMetaTags from '@/seo/generateMetaTags';
 import { getMyOrders } from '@/services/order/order';
 import { Metadata } from 'next';
+import { Suspense } from 'react';
 import UserOrdersContent from './_components/UserOrdersContent';
+
+export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = generateMetaTags({
   title: 'My Orders | Dashboard | Aranis Fashion',
@@ -14,5 +17,9 @@ export const metadata: Metadata = generateMetaTags({
 export default async function UserOrdersPage() {
   const res = await getMyOrders();
   const initialOrders = res?.data || [];
-  return <UserOrdersContent initialOrders={initialOrders} />;
+  return (
+    <Suspense fallback={null}>
+      <UserOrdersContent initialOrders={initialOrders} />
+    </Suspense>
+  );
 }
