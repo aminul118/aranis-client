@@ -10,6 +10,7 @@ import {
 import { createOrder } from '@/services/order/order';
 import { getMe } from '@/services/user/users';
 import { IUser, Role } from '@/types';
+import { Turnstile } from '@marsidev/react-turnstile';
 import { ArrowLeft, ShieldCheck } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -59,6 +60,7 @@ export default function CheckoutContent() {
     outsideDhaka: 150,
     freeDeliveryThreshold: 0,
   });
+  const [turnstileToken, setTurnstileToken] = useState('');
 
   // Calculate dynamic shipping charge based on settings
   const shippingCharge =
@@ -194,6 +196,11 @@ export default function CheckoutContent() {
         return;
       }
 
+      if (!turnstileToken) {
+        toast.error('Please complete the captcha');
+        return;
+      }
+
       const guestPhoneDigits = guestContactPhone.replace(/\D/g, '');
       const guestLocalPart = guestPhoneDigits.startsWith('88')
         ? guestPhoneDigits.substring(2)
@@ -216,6 +223,7 @@ export default function CheckoutContent() {
           phone:
             guestMethod === 'phone' ? guestInfo.emailOrPhone : guestInfo.phone,
           addresses: [{ title: 'Home', address: guestInfo.address }],
+          turnstileToken,
         };
 
         const res = await registerWithOTP(payload);
@@ -413,13 +421,33 @@ export default function CheckoutContent() {
               setPaymentMethod={setPaymentMethod}
             />
 
-            <div className="border-primary/20 bg-primary/5 flex items-center gap-4 rounded-2xl border p-6">
-              <ShieldCheck className="text-primary" size={24} />
-              <div>
-                <h4 className="text-sm font-bold">Protected Transaction</h4>
-                <p className="text-muted-foreground text-xs">
-                  Your order is secured by Aranis's elite encryption protocols
-                </p>
+            <div className="border-primary/20 bg-primary/5 flex flex-col gap-6 rounded-2xl border p-6">
+              {!user && (
+                <div className="flex justify-center sm:justify-start">
+                  <Turnstile
+                    siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
+                    onSuccess={(token) => {
+                      setTurnstileToken(token);
+                    }}
+                    onError={() => {
+                      setTurnstileToken('');
+                    }}
+                    onExpire={() => {
+                      setTurnstileToken('');
+                    }}
+                    options={{ theme: 'auto', size: 'flexible' }}
+                  />
+                </div>
+              )}
+
+              <div className="flex items-center gap-4">
+                <ShieldCheck className="text-primary" size={24} />
+                <div>
+                  <h4 className="text-sm font-bold">Protected Transaction</h4>
+                  <p className="text-muted-foreground text-xs">
+                    Your order is secured by Aranis's elite encryption protocols
+                  </p>
+                </div>
               </div>
             </div>
           </div>
