@@ -5,6 +5,8 @@ import { Plate, usePlateEditor } from 'platejs/react';
 
 import { EditorKit } from '@/components/rich-text/kits/editor-kit';
 import { Editor, EditorContainer } from '@/components/rich-text/ui/editor';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 
 export function PlateEditor() {
   const editor = usePlateEditor({
@@ -13,11 +15,13 @@ export function PlateEditor() {
   });
 
   return (
-    <Plate editor={editor}>
-      <EditorContainer>
-        <Editor variant="demo" />
-      </EditorContainer>
-    </Plate>
+    <DndProvider backend={HTML5Backend}>
+      <Plate editor={editor}>
+        <EditorContainer>
+          <Editor variant="demo" />
+        </EditorContainer>
+      </Plate>
+    </DndProvider>
   );
 }
 
