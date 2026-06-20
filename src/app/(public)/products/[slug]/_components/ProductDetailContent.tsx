@@ -7,7 +7,6 @@ import { useWishlist } from '@/context/WishlistContext';
 import { createRestockRequest } from '@/services/restock/restock';
 import { ISiteSetting } from '@/services/settings/settings';
 import { IProduct, IVariantSize } from '@/types';
-import dynamic from 'next/dynamic';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
@@ -17,13 +16,9 @@ import ProductDetailSizes from './ProductDetailSizes';
 import ProductDetailVariants from './ProductDetailVariants';
 import ProductImageGallery from './ProductImageGallery';
 
-const ProductVideoModal = dynamic(() => import('./ProductVideoModal'), {
-  ssr: false,
-});
-const ProductDetailTabs = dynamic(() => import('./ProductDetailTabs'));
-const ProductDetailMobileSections = dynamic(
-  () => import('./ProductDetailMobileSections'),
-);
+import ProductDetailMobileSections from './ProductDetailMobileSections';
+import ProductDetailTabs from './ProductDetailTabs';
+import ProductVideoModal from './ProductVideoModal';
 
 import { getYoutubeEmbedUrl } from '@/lib/utils';
 import { ShoppingCart } from 'lucide-react';
