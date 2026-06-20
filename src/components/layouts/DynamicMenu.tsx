@@ -259,6 +259,7 @@ const DynamicMenu = ({ menuGroups, role, user }: DynamicMenuProps) => {
                 }
 
                 const isOpen = openMenu === menu.name;
+                const parentActive = isLinkActive(menu.url);
 
                 // Collapsible menu with sub-items
                 return (
@@ -274,9 +275,9 @@ const DynamicMenu = ({ menuGroups, role, user }: DynamicMenuProps) => {
                       <CollapsibleTrigger asChild>
                         <SidebarMenuButton
                           asChild
-                          isActive={active}
+                          isActive={parentActive}
                           className={
-                            active
+                            parentActive
                               ? '!rounded-l-none !border-l-4 !border-blue-700 !bg-blue-50 !text-blue-700 dark:!border-blue-400 dark:!bg-blue-900/20 dark:!text-blue-400'
                               : ''
                           }
