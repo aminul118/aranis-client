@@ -421,8 +421,8 @@ const ProductForm = ({
         action: () => updateProduct(formData as any, product._id as string),
         success: {
           onSuccess: () => {
-            router.push('/admin/products');
-            router.refresh();
+            // Force a hard navigation to guarantee the table gets fresh data
+            window.location.href = '/admin/products';
             onSuccess?.();
           },
           loadingText: 'Product updating...',

@@ -13,15 +13,15 @@ export const createProduct = async (
     body: payload,
   });
   try {
-    const { revalidatePath } = require('next/cache');
+    const { revalidatePath, revalidateTag } = require('next/cache');
     revalidatePath('/offers');
     revalidatePath('/shop');
     revalidatePath('/');
     revalidatePath('/admin/products', 'layout');
+    revalidateTag('product');
   } catch (e) {
     logger.error(e);
   }
-  revalidate('product');
   return res;
 };
 
@@ -40,14 +40,14 @@ export const updateProduct = async (
     revalidatePath('/offers');
     revalidatePath('/shop');
     revalidatePath('/');
-    revalidatePath('/admin/products', 'layout');
+    revalidatePath('/admin/products', 'page');
     revalidatePath(`/admin/products/${id}`, 'page');
     revalidatePath(`/admin/products/${id}/edit`, 'page');
     revalidateTag(`product-${id}`);
+    revalidateTag('product');
   } catch (e) {
     logger.error(e);
   }
-  revalidate('product');
   return res;
 };
 
