@@ -113,7 +113,7 @@ const ProductImageGallery = ({
                 src={selectedImage}
                 alt={productName}
                 fill
-                sizes="(max-width: 1024px) 100vw, 42vw"
+                sizes="(max-width: 1024px) 100vw, 50vw"
                 priority
                 fetchPriority="high"
                 draggable={false}
@@ -214,7 +214,7 @@ const ProductImageGallery = ({
                     src={selectedImage}
                     alt={productName}
                     fill
-                    sizes="(max-width: 1024px) 100vw, 42vw"
+                    sizes="(max-width: 1024px) 100vw, 50vw"
                     priority
                     fetchPriority="high"
                     draggable={false}
