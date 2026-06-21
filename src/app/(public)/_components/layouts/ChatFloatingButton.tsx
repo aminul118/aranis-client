@@ -32,12 +32,10 @@ const ChatFloatingButton = ({ siteSettings }: { siteSettings?: any }) => {
   const [unreadCount, setUnreadCount] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  if (user?.role === 'ADMIN' || user?.role === 'SUPER_ADMIN') {
-    return null;
-  }
+  const isAdmin = user?.role === 'ADMIN' || user?.role === 'SUPER_ADMIN';
 
   useEffect(() => {
-    if (!user) return;
+    if (!user || isAdmin) return;
 
     const initChat = async () => {
       const res = await getOrCreateConversation([user._id as any]);
@@ -159,6 +157,10 @@ const ChatFloatingButton = ({ siteSettings }: { siteSettings?: any }) => {
   const contactNumber = siteSettings?.contactNumber || '+8801886877730';
   const whatsappNumber = contactNumber.replace(/[^0-9]/g, '');
   const whatsappLink = `https://wa.me/${whatsappNumber}`;
+
+  if (isAdmin) {
+    return null;
+  }
 
   return (
     <div className="fixed right-4 bottom-[calc(4rem+env(safe-area-inset-bottom)+1rem)] z-50 flex flex-col items-end gap-4 lg:right-6 lg:bottom-6">
