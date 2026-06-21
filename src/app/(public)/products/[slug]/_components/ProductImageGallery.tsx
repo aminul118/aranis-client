@@ -128,6 +128,7 @@ const ProductImageGallery = ({
                 fetchPriority="high"
                 draggable={false}
                 className="pointer-events-none object-cover"
+                quality={60}
               />
               {/* The Lens that follows the cursor */}
               {isZoomed && (
@@ -210,6 +211,7 @@ const ProductImageGallery = ({
             fetchPriority="high"
             draggable={false}
             className="object-cover"
+            quality={60}
           />
         </div>
 
@@ -245,6 +247,7 @@ const ProductImageGallery = ({
                       fetchPriority="high"
                       draggable={false}
                       className="object-cover"
+                      quality={60}
                     />
                   </div>
                 </TransformComponent>
