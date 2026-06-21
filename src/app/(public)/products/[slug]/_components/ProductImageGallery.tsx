@@ -5,15 +5,9 @@ import { AnimatePresence, motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
 import { ReactNode, useCallback, useRef, useState } from 'react';
 
-const TransformWrapper = dynamic(
-  () => import('react-zoom-pan-pinch').then((mod) => mod.TransformWrapper),
-  { ssr: false },
-);
-
-const TransformComponent = dynamic(
-  () => import('react-zoom-pan-pinch').then((mod) => mod.TransformComponent),
-  { ssr: false },
-);
+const MobileZoomViewer = dynamic(() => import('./MobileZoomViewer'), {
+  ssr: false,
+});
 
 interface ProductImageGalleryProps {
   thumbnails: string[];
@@ -217,49 +211,13 @@ const ProductImageGallery = ({
 
         {/* Interactive Zoom Overlay (Client-only) */}
         <div className="absolute inset-0 z-10">
-          <TransformWrapper
-            initialScale={1}
-            minScale={1}
-            maxScale={4}
-            centerOnInit
-            doubleClick={{ mode: 'zoomIn' }}
-            wheel={{ step: 0.1 }}
-            pinch={{ step: 5 }}
-            panning={{ disabled: true }}
-          >
-            {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
-              <>
-                <TransformComponent
-                  wrapperStyle={{ width: '100%', height: '100%' }}
-                  contentStyle={{ width: '100%', height: '100%' }}
-                >
-                  <div
-                    key={selectedImage}
-                    className="relative h-full w-full overflow-hidden"
-                    style={{ width: '100%', height: '100%' }}
-                  >
-                    <Image
-                      src={selectedImage}
-                      alt={productName}
-                      fill
-                      sizes="(max-width: 1024px) 100vw, 50vw"
-                      priority
-                      fetchPriority="high"
-                      draggable={false}
-                      className="object-cover"
-                      quality={60}
-                    />
-                  </div>
-                </TransformComponent>
-
-                {hasMultiple && (
-                  <div className="pointer-events-none absolute right-3 bottom-3 z-10 rounded-full bg-black/60 px-3 py-1 text-xs font-bold text-white backdrop-blur-sm">
-                    {currentIdx + 1} / {thumbnails.length}
-                  </div>
-                )}
-              </>
-            )}
-          </TransformWrapper>
+          <MobileZoomViewer
+            selectedImage={selectedImage}
+            productName={productName}
+            hasMultiple={hasMultiple}
+            thumbnailsLength={thumbnails.length}
+            currentIdx={currentIdx}
+          />
         </div>
 
         {saleBadge && (
