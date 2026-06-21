@@ -6,10 +6,10 @@ import { ArrowLeft } from 'lucide-react';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { Suspense } from 'react';
 
 interface Props {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 export async function generateStaticParams() {
@@ -57,8 +57,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-const ProductPage = async ({ params }: Props) => {
+const ProductPage = async ({ params, searchParams }: Props) => {
   const { slug } = await params;
+  const sp = await searchParams;
+  const urlColor = typeof sp?.color === 'string' ? sp.color : undefined;
   const [{ data: product }, { data: settings }] = await Promise.all([
     getSingleProduct(slug),
     getSiteSettings(),
@@ -89,32 +91,34 @@ const ProductPage = async ({ params }: Props) => {
           Explore More Collections
         </Link>
 
-        <Suspense fallback={null}>
-          <ProductDetailContent product={product} settings={settings} />
+        <ProductDetailContent
+          product={product}
+          settings={settings}
+          urlColor={urlColor}
+        />
 
-          {relatedProducts.length > 0 && (
-            <div className="mt-12 pt-16">
-              <div className="mb-10 text-center">
-                <h2 className="text-foreground mb-4 text-3xl font-black tracking-tight capitalize md:text-4xl">
-                  You May Also Like
-                </h2>
-                <p className="text-muted-foreground mx-auto max-w-2xl">
-                  Discover more premium pieces from our {product.category}{' '}
-                  collection.
-                </p>
-              </div>
-              <div className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-                {relatedProducts.map((relatedProduct, index) => (
-                  <ProductCard
-                    key={relatedProduct._id}
-                    product={relatedProduct}
-                    index={index}
-                  />
-                ))}
-              </div>
+        {relatedProducts.length > 0 && (
+          <div className="mt-12 pt-16">
+            <div className="mb-10 text-center">
+              <h2 className="text-foreground mb-4 text-3xl font-black tracking-tight capitalize md:text-4xl">
+                You May Also Like
+              </h2>
+              <p className="text-muted-foreground mx-auto max-w-2xl">
+                Discover more premium pieces from our {product.category}{' '}
+                collection.
+              </p>
             </div>
-          )}
-        </Suspense>
+            <div className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+              {relatedProducts.map((relatedProduct, index) => (
+                <ProductCard
+                  key={relatedProduct._id}
+                  product={relatedProduct}
+                  index={index}
+                />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

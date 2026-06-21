@@ -7,7 +7,7 @@ import { useWishlist } from '@/context/WishlistContext';
 import { createRestockRequest } from '@/services/restock/restock';
 import { ISiteSetting } from '@/services/settings/settings';
 import { IProduct, IVariantSize } from '@/types';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import ProductDetailActions from './ProductDetailActions';
@@ -25,18 +25,18 @@ import { ShoppingCart } from 'lucide-react';
 interface ProductDetailContentProps {
   product: IProduct;
   settings?: ISiteSetting;
+  urlColor?: string;
 }
 
 const ProductDetailContent = ({
   product,
   settings,
+  urlColor,
 }: ProductDetailContentProps) => {
   const router = useRouter();
   const { addToCart } = useCart();
   const { user } = useUser();
   const { toggleWishlist, isInWishlist } = useWishlist();
-  const searchParams = useSearchParams();
-  const urlColor = searchParams.get('color');
 
   const [selectedSize, setSelectedSize] = useState(product.sizes[0]);
   const [selectedVariantIndex, setSelectedVariantIndex] = useState(-1);
