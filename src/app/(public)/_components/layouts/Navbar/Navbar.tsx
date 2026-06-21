@@ -23,7 +23,7 @@ const Navbar = ({
   logo?: React.ReactNode;
   siteSettings?: any;
 }) => {
-  const { user } = useUser();
+  const { user, loading } = useUser();
   const cart = useCartOptional();
   let totalItems = cart?.totalItems || 0;
 
@@ -99,6 +99,7 @@ const Navbar = ({
     >
       <DesktopNavbar
         user={user}
+        loading={loading}
         navItems={navItems as any}
         activeOffers={activeOffers}
         logo={resolvedLogo}
@@ -108,6 +109,7 @@ const Navbar = ({
       />
       <MobileNavbar
         user={user}
+        loading={loading}
         navItems={navItems}
         logo={resolvedLogo}
         menuOpen={menuOpen}

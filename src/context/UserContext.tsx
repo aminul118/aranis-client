@@ -2,19 +2,28 @@
 
 import { getMe } from '@/services/user/users';
 import { IUser } from '@/types';
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import {
+  createContext,
+  Dispatch,
+  FC,
+  ReactNode,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 
 interface UserContextType {
   user: IUser | null;
   loading: boolean;
   refreshUser: () => Promise<void>;
-  setUser: React.Dispatch<React.SetStateAction<IUser | null>>;
+  setUser: Dispatch<SetStateAction<IUser | null>>;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
-export const UserProvider: React.FC<{
-  children: React.ReactNode;
+export const UserProvider: FC<{
+  children: ReactNode;
   initialUser?: IUser | null;
 }> = ({ children, initialUser = null }) => {
   const [user, setUser] = useState<IUser | null>(initialUser);

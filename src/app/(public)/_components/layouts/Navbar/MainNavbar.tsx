@@ -13,6 +13,7 @@ import NavSearch from './NavSearch';
 
 interface MainNavbarProps {
   user?: IUser | null;
+  loading?: boolean;
   logo?: ReactNode;
   totalItems?: number;
   wishlistCount?: number;
@@ -20,6 +21,7 @@ interface MainNavbarProps {
 
 const MainNavbar = ({
   user,
+  loading,
   logo,
   totalItems: propTotalItems,
   wishlistCount: propWishlistCount,
@@ -110,14 +112,20 @@ const MainNavbar = ({
 
           {/* User / Login */}
           <div className="flex items-center gap-3">
-            {user && (
-              <div className="mr-1 lg:mr-2">
-                <NotificationBell user={user} />
+            {loading ? (
+              <div className="flex items-center gap-3">
+                {/* Notification skeleton */}
+                <div className="h-8 w-8 animate-pulse rounded-full bg-white/20" />
+                {/* User avatar skeleton */}
+                <div className="h-9 w-9 animate-pulse rounded-full bg-white/20" />
               </div>
-            )}
-
-            {user ? (
-              <HeaderUser user={user} />
+            ) : user ? (
+              <>
+                <div className="mr-1 lg:mr-2">
+                  <NotificationBell user={user} />
+                </div>
+                <HeaderUser user={user} />
+              </>
             ) : (
               <Link
                 href="/login"

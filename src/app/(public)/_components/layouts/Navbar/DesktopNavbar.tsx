@@ -8,6 +8,7 @@ import TopBar from './TopBar';
 
 interface DesktopNavbarProps {
   user: IUser | null;
+  loading?: boolean;
   navItems: any[];
   activeOffers: any[];
   logo?: ReactNode;
@@ -18,6 +19,7 @@ interface DesktopNavbarProps {
 
 const DesktopNavbar = ({
   user,
+  loading,
   navItems,
   activeOffers,
   logo,
@@ -30,6 +32,7 @@ const DesktopNavbar = ({
       <TopBar siteSettings={siteSettings} />
       <MainNavbar
         user={user}
+        loading={loading}
         logo={logo}
         totalItems={totalItems}
         wishlistCount={wishlistCount}

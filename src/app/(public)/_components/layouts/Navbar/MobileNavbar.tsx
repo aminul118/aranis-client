@@ -15,6 +15,7 @@ import NavSearch from './NavSearch';
 
 interface MobileNavbarProps {
   user: IUser | null;
+  loading?: boolean;
   navItems: NavMenu[];
   logo?: ReactNode;
   menuOpen: boolean;
@@ -23,6 +24,7 @@ interface MobileNavbarProps {
 
 const MobileNavbar = ({
   user,
+  loading,
   navItems,
   logo,
   menuOpen,
@@ -35,7 +37,11 @@ const MobileNavbar = ({
         <div className="origin-left scale-75">{logo}</div>
         <div className="flex items-center gap-4">
           <NavSearch />
-          {user && <NotificationBell user={user} />}
+          {loading ? (
+            <div className="h-8 w-8 animate-pulse rounded-full bg-white/20" />
+          ) : (
+            user && <NotificationBell user={user} />
+          )}
           <Hamburger
             toggled={menuOpen}
             toggle={setMenuOpen}
