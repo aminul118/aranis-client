@@ -22,7 +22,7 @@ export async function proxy(req: NextRequest) {
       if (req.nextUrl.pathname.startsWith('/blocked')) {
         return NextResponse.next();
       }
-      return NextResponse.rewrite(new URL('/blocked', req.url));
+      return NextResponse.redirect(new URL('/blocked', req.url));
     }
   }
 

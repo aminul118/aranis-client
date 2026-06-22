@@ -97,9 +97,9 @@ export default function ReloadTracker() {
         // Set a cookie so Next.js middleware knows this user is blocked
         document.cookie = `aranis_block_until=${blockUntil}; path=/; max-age=${2 * 60}`;
 
-        // Force an immediate reload so the server middleware intercepts the request and shows the blocked page automatically
+        // Force an immediate redirect so they see the blocked page automatically
         if (!window.location.pathname.startsWith('/blocked')) {
-          window.location.reload();
+          window.location.href = '/blocked';
         }
       } else if (currentReloads >= WARNING_RELOAD) {
         setShowWarning(true);
