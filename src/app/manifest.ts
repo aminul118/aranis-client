@@ -2,15 +2,15 @@ import type { MetadataRoute } from 'next';
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Md Aminul Islam',
-    short_name: 'Aminul',
+    name: 'The Aranis',
+    short_name: 'Aranis',
     description:
-      'Md. Aminul Islam, a professional web developer specializing in frontend and backend development.',
+      'The Aranis - Discover curated collections of luxury apparel blending modern design with timeless elegance.',
     start_url: '/',
     display: 'standalone',
     background_color: '#021D2E',
     theme_color: '#021D2E',
-    categories: ['construction', 'engineering', 'services'],
+    categories: ['shopping', 'lifestyle', 'clothing'],
     lang: 'en',
     orientation: 'portrait',
     scope: '/',

@@ -30,8 +30,12 @@ const createHeroBanner = async (payload: FormData) => {
       body: payload,
     },
   );
-  revalidate('hero-banners');
-  revalidatePath('/', 'layout');
+  try {
+    revalidatePath('/', 'layout');
+    revalidate('hero-banners');
+  } catch (e) {
+    console.error(e);
+  }
   return res;
 };
 
@@ -42,8 +46,12 @@ const updateHeroBanner = async (payload: FormData, id: string) => {
       body: payload,
     },
   );
-  revalidate('hero-banners');
-  revalidatePath('/', 'layout');
+  try {
+    revalidatePath('/', 'layout');
+    revalidate('hero-banners');
+  } catch (e) {
+    console.error(e);
+  }
   return res;
 };
 
@@ -51,8 +59,12 @@ const deleteHeroBanner = async (id: string) => {
   const res = await serverFetch.delete<ApiResponse<IHeroBanner>>(
     `/hero-banners/${id}`,
   );
-  revalidate('hero-banners');
-  revalidatePath('/', 'layout');
+  try {
+    revalidatePath('/', 'layout');
+    revalidate('hero-banners');
+  } catch (e) {
+    console.error(e);
+  }
   return res;
 };
 
@@ -64,8 +76,12 @@ const deleteHeroBannerBulk = async (ids: string[]) => {
       headers: { 'Content-Type': 'application/json' },
     },
   );
-  revalidate('hero-banners');
-  revalidatePath('/', 'layout');
+  try {
+    revalidatePath('/', 'layout');
+    revalidate('hero-banners');
+  } catch (e) {
+    console.error(e);
+  }
   return res;
 };
 
@@ -90,8 +106,12 @@ const createMiniBanner = async (payload: FormData) => {
       body: payload,
     },
   );
-  revalidate('mini-banners');
-  revalidatePath('/', 'layout');
+  try {
+    revalidatePath('/', 'layout');
+    revalidate('mini-banners');
+  } catch (e) {
+    console.error(e);
+  }
   return res;
 };
 
@@ -102,8 +122,12 @@ const updateMiniBanner = async (payload: FormData, id: string) => {
       body: payload,
     },
   );
-  revalidate('mini-banners');
-  revalidatePath('/', 'layout');
+  try {
+    revalidatePath('/', 'layout');
+    revalidate('mini-banners');
+  } catch (e) {
+    console.error(e);
+  }
   return res;
 };
 
@@ -111,8 +135,12 @@ const deleteMiniBanner = async (id: string) => {
   const res = await serverFetch.delete<ApiResponse<IMiniBanner>>(
     `/mini-banners/${id}`,
   );
-  revalidate('mini-banners');
-  revalidatePath('/', 'layout');
+  try {
+    revalidatePath('/', 'layout');
+    revalidate('mini-banners');
+  } catch (e) {
+    console.error(e);
+  }
   return res;
 };
 
@@ -124,8 +152,12 @@ const deleteMiniBannerBulk = async (ids: string[]) => {
       headers: { 'Content-Type': 'application/json' },
     },
   );
-  revalidate('mini-banners');
-  revalidatePath('/', 'layout');
+  try {
+    revalidatePath('/', 'layout');
+    revalidate('mini-banners');
+  } catch (e) {
+    console.error(e);
+  }
   return res;
 };
 
