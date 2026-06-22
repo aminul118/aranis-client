@@ -16,27 +16,29 @@ export default function BlockedPage() {
       return null;
     };
 
-    const updateTimer = () => {
-      let blockUntilStr = getCookie('aranis_block_until');
+    let blockUntilStr = getCookie('aranis_block_until');
 
-      // Fallback to localStorage if the cookie cannot be read
-      if (!blockUntilStr) {
-        try {
-          const stored = localStorage.getItem('aranis_block_info');
-          if (stored) {
-            const parsed = JSON.parse(stored);
-            if (parsed.blockUntil) {
-              blockUntilStr = parsed.blockUntil.toString();
-            }
+    // Fallback to localStorage if the cookie cannot be read
+    if (!blockUntilStr) {
+      try {
+        const stored = localStorage.getItem('aranis_block_info');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (parsed.blockUntil) {
+            blockUntilStr = parsed.blockUntil.toString();
           }
-        } catch (e) {
-          // ignore parsing errors
         }
+      } catch (e) {
+        // ignore parsing errors
       }
+    }
 
-      if (!blockUntilStr) return;
+    // Fallback to 2 minutes from now if the timestamp is missing to prevent UI freezing
+    const blockUntil = blockUntilStr
+      ? parseInt(blockUntilStr, 10)
+      : Date.now() + 120 * 1000;
 
-      const blockUntil = parseInt(blockUntilStr, 10);
+    const updateTimer = () => {
       const now = Date.now();
       const diff = blockUntil - now;
 
