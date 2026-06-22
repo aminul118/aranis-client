@@ -151,6 +151,11 @@ const ProductsColumn: Column<IProduct>[] = [
               Special Offer
             </span>
           )}
+          {p.isDeleted && (
+            <span className="mt-1 w-max rounded bg-red-500/10 px-1.5 py-0.5 text-[10px] font-bold tracking-wider text-red-500 uppercase">
+              Deleted
+            </span>
+          )}
         </div>
       </Link>
     ),
@@ -207,7 +212,20 @@ const ProductsColumn: Column<IProduct>[] = [
     sortKey: 'isActive',
   },
   {
-    header: 'Created At',
+    header: 'Deleted',
+    accessor: (p) =>
+      p.isDeleted ? (
+        <>
+          {' '}
+          <Check size={14} className="text-emerald-500" />
+        </>
+      ) : (
+        <span className="text-muted-foreground text-xs">-</span>
+      ),
+    sortKey: 'isDeleted',
+  },
+  {
+    header: 'Time',
     accessor: (p) => (
       <div className="flex flex-col">
         <span className="text-xs font-medium">

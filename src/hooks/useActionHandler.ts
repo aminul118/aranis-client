@@ -47,6 +47,8 @@ const useActionHandler = () => {
       if (res?.success) {
         if (success?.message) {
           toast.success(success.message, { id: toastId });
+        } else if (res?.message) {
+          toast.success(res.message, { id: toastId });
         } else if (toastId) {
           toast.dismiss(toastId);
         }

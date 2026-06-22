@@ -25,7 +25,6 @@ const DeleteFromTableDropDown = ({ open, setOpen, onConfirm }: Props) => {
       action: onConfirm,
       success: {
         loadingText: 'Deleting...',
-        message: 'Deleted successfully',
         onSuccess: () => {
           setOpen(false);
         },

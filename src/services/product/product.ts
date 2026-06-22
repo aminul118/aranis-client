@@ -148,9 +148,19 @@ const getProductPriceRange = async () => {
   });
 };
 
+const forceDeleteProduct = async (id: string) => {
+  const res = await serverFetch.delete<ApiResponse<any>>(
+    `/products/force/${id}`,
+  );
+  revalidatePath('/', 'layout');
+  await revalidate(['product', `product-${id}`, 'new-arrivals']);
+  return res;
+};
+
 export {
   deleteProduct,
   deleteProductBulk,
+  forceDeleteProduct,
   getBestSellingProducts,
   getNewArrivals,
   getProductPriceRange,
