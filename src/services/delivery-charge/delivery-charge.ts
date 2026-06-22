@@ -1,5 +1,6 @@
 'use server';
 
+import { revalidate } from '@/lib/revalidate';
 import serverFetch from '@/lib/server-fetch';
 import type { IDeliveryCharge } from '@/services/delivery-charge/delivery-charge.interface';
 import type { ApiResponse } from '@/types';
@@ -26,8 +27,7 @@ export const updateDeliveryCharge = async (data: IDeliveryCharge) => {
   );
 
   try {
-    const { revalidateTag } = require('next/cache');
-    revalidateTag('delivery-charge');
+    revalidate('delivery-charge');
   } catch (e) {
     logger.error(e);
   }

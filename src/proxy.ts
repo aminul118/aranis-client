@@ -14,7 +14,7 @@ import getVerifiedUser from './services/user/verified-user';
  * Next.js Middleware to handle authentication, token refresh, and role-based access control.
  */
 export async function proxy(req: NextRequest) {
-  const { pathname, origin } = req.nextUrl;
+  const { pathname } = req.nextUrl;
 
   const isAuthPage = isAuthRoute(pathname);
   const routeOwner = getRouteOwner(pathname);

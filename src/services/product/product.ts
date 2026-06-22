@@ -16,7 +16,7 @@ export const createProduct = async (
   });
   try {
     revalidatePath('/', 'layout');
-    revalidate('product');
+    revalidate(['product', 'new-arrivals']);
   } catch (e) {
     logger.error(e);
   }
@@ -35,8 +35,7 @@ export const updateProduct = async (
   );
   try {
     revalidatePath('/', 'layout');
-    revalidate(`product-${id}`);
-    revalidate('product');
+    await revalidate(['product', `product-${id}`]);
   } catch (e) {
     logger.error(e);
   }
@@ -73,10 +72,10 @@ const deleteProduct = async (id: string) => {
   );
   try {
     revalidatePath('/', 'layout');
+    revalidate('product');
   } catch (e) {
     logger.error(e);
   }
-  revalidate('product');
   return res;
 };
 
@@ -95,7 +94,6 @@ const getNewArrivals = async () => {
     query: { sort: '-inStock -createdAt', limit: '12' },
     next: {
       tags: ['product', 'new-arrivals'],
-      revalidate: 3600,
     },
   });
 };
