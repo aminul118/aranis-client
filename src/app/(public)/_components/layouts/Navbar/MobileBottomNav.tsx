@@ -89,6 +89,26 @@ const MobileBottomNav = () => {
           );
 
           if (item.label === 'ACCOUNT' && user) {
+            if (user.role === 'ADMIN' || user.role === 'SUPER_ADMIN') {
+              return (
+                <Link
+                  key={item.label}
+                  href="/admin"
+                  className={cn(
+                    'flex min-w-[64px] flex-col items-center justify-center gap-1',
+                    isActive
+                      ? 'text-blue-600'
+                      : 'text-gray-500 dark:text-gray-400',
+                  )}
+                >
+                  {NavItemContent}
+                  <span className="text-[9px] font-black tracking-tighter uppercase">
+                    {item.label}
+                  </span>
+                </Link>
+              );
+            }
+
             return (
               <Sheet key={item.label}>
                 <SheetTrigger asChild>
