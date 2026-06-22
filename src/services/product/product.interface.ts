@@ -2,7 +2,7 @@ import type { ISizeGuide } from '@/services/size-guide/size-guide.interface';
 import { IVariant, IVariantSize } from '@/types';
 
 export interface IProduct {
-  _id?: string;
+  _id: string;
   name: string;
   category: string;
   subCategory: string;
@@ -33,6 +33,7 @@ export interface IProduct {
   returnPolicy?: string;
   sizeGuide?: ISizeGuide | string;
   isDeleted?: boolean;
+  isActive?: boolean;
   seo: {
     title: string;
     description: string;

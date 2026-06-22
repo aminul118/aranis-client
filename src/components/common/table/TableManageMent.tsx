@@ -42,6 +42,7 @@ export interface Column<T> {
     | ((row: T, index: number, globalIndex: number) => ReactNode);
   className?: string;
   sortKey?: string;
+  defaultSortOrder?: 'asc' | 'desc';
 }
 
 /* =======================
@@ -89,14 +90,21 @@ function TableManageMent<T>(props: TableManageMentProps<T>) {
 
   const hasActions = Boolean(onView || onEdit || onDelete);
 
-  const handleSort = (key: string) => {
+  const handleSort = (key: string, defaultOrder?: 'asc' | 'desc') => {
     const params = new URLSearchParams(searchParams.toString());
     const currentSort = params.get('sort');
 
     let newSort = key;
-    if (currentSort === key) {
-      newSort = `-${key}`;
-    } else if (currentSort === `-${key}`) {
+
+    // If default order is 'desc', the first click should result in `-${key}`
+    const defaultSortValue = defaultOrder === 'desc' ? `-${key}` : key;
+    const secondarySortValue = defaultOrder === 'desc' ? key : `-${key}`;
+
+    if (!currentSort || (currentSort !== key && currentSort !== `-${key}`)) {
+      newSort = defaultSortValue;
+    } else if (currentSort === defaultSortValue) {
+      newSort = secondarySortValue;
+    } else {
       newSort = '';
     }
 
@@ -203,7 +211,9 @@ function TableManageMent<T>(props: TableManageMentProps<T>) {
                       sortKey &&
                         'hover:text-foreground cursor-pointer transition-colors select-none hover:bg-black/5 dark:hover:bg-white/5',
                     )}
-                    onClick={() => sortKey && handleSort(sortKey)}
+                    onClick={() =>
+                      sortKey && handleSort(sortKey, column.defaultSortOrder)
+                    }
                   >
                     <div className="flex items-center gap-1">
                       {column.header}

@@ -68,6 +68,7 @@ export const productSchema = z.object({
     .optional()
     .default([]),
   featured: z.boolean().default(false),
+  isActive: z.boolean().default(false),
   sku: z.string().optional(),
   videoUrl: z.union([z.string(), z.any()]).optional(),
   youtubeVideoUrl: z.string().url('Invalid URL').optional().or(z.literal('')),

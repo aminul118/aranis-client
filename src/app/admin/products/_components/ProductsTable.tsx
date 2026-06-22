@@ -75,7 +75,7 @@ const ProductsTable = ({ products }: Props) => {
         </div>
       )}
 
-      <TableFilters searchPlaceholder="Search by product name" />
+      <TableFilters searchPlaceholder="Search by product name"></TableFilters>
 
       <TableManageMent
         columns={ProductsColumn}

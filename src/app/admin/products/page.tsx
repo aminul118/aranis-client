@@ -18,10 +18,13 @@ const ProductPage = async ({ searchParams }: SearchParams) => {
   const params = await cleanSearchParams(searchParams);
   const [productsRes, categoriesRes, colorsRes, sizeGuidesRes, offersRes] =
     await Promise.all([
-      getProducts(params, {
-        cache: 'no-store',
-        headers: { 'x-bypass-cache': 'true' },
-      }),
+      getProducts(
+        { isActive: 'all', ...params },
+        {
+          cache: 'no-store',
+          headers: { 'x-bypass-cache': 'true' },
+        },
+      ),
       getCategories({ limit: '1000' }),
       getColors({ limit: '1000' }),
       getAllSizeGuides(),

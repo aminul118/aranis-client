@@ -5,6 +5,7 @@ import { revalidate } from '@/lib/revalidate';
 import serverFetch from '@/lib/server-fetch';
 import type { IOrderPayload } from '@/services/order/order.interface';
 import { ApiResponse } from '@/types';
+import { revalidatePath } from 'next/cache';
 import { logger } from '../../lib/logger';
 import type { IOrder } from './order.types';
 import { OrderStatus } from './order.types';
@@ -28,7 +29,6 @@ const createOrder = async (payload: IOrderPayload) => {
   await revalidate(['ME', 'order', 'product']);
 
   try {
-    const { revalidatePath } = require('next/cache');
     revalidatePath('/offers');
     revalidatePath('/shop');
     revalidatePath('/');
@@ -79,7 +79,6 @@ const updateOrderStatus = async (id: string, status: OrderStatus) => {
   await revalidate(['order', 'product']);
 
   try {
-    const { revalidatePath } = require('next/cache');
     revalidatePath('/offers');
     revalidatePath('/shop');
     revalidatePath('/');
@@ -106,7 +105,6 @@ const deleteOrderBulk = async (ids: string[]) => {
   await revalidate(['order', 'product']);
 
   try {
-    const { revalidatePath } = require('next/cache');
     revalidatePath('/offers');
     revalidatePath('/shop');
     revalidatePath('/');

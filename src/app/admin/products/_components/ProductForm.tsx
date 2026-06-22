@@ -44,7 +44,7 @@ import {
 import type { ISizeGuide } from '@/services/size-guide/size-guide.interface';
 import type { ISize } from '@/services/size/size.interface';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Check, Plus, Save, Trash2 } from 'lucide-react';
+import { Check, Plus, Save, Trash2, Youtube } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -77,6 +77,7 @@ type FormValues = {
   sizes: string[];
   featured: boolean;
   isOffer: boolean;
+  isActive: boolean;
   offerTag: string;
   discountPercentage: number | string;
   sizeStock: {
@@ -146,6 +147,7 @@ const ProductForm = ({
       sizes: product?.sizes || [],
       featured: product?.featured || false,
       isOffer: product?.isOffer || false,
+      isActive: product?.isActive ?? true,
       offerTag: product?.offerTag || '',
       discountPercentage: product?.discountPercentage || 0,
       sizeStock: product?.sizeStock || [],
@@ -201,6 +203,7 @@ const ProductForm = ({
         sizes: product.sizes || [],
         featured: product.featured || false,
         isOffer: product.isOffer || false,
+        isActive: product.isActive ?? true,
         offerTag: product.offerTag || '',
         discountPercentage: product.discountPercentage || 0,
         sizeStock: product.sizeStock || [],
@@ -287,21 +290,26 @@ const ProductForm = ({
   const watchedVariants = form.watch('variants');
 
   useEffect(() => {
-    let totalStock = 0;
+    const hasSizeStock = watchedSizeStock && watchedSizeStock.length > 0;
+    const hasVariants = watchedVariants && watchedVariants.length > 0;
 
-    // Sum main color size stock
-    watchedSizeStock?.forEach((s) => {
-      totalStock += Number(s.stock) || 0;
-    });
+    if (hasSizeStock || hasVariants) {
+      let totalStock = 0;
 
-    // Sum all variants size stock
-    watchedVariants?.forEach((v) => {
-      v.sizes?.forEach((s) => {
+      // Sum main color size stock
+      watchedSizeStock?.forEach((s) => {
         totalStock += Number(s.stock) || 0;
       });
-    });
 
-    form.setValue('stock', totalStock);
+      // Sum all variants size stock
+      watchedVariants?.forEach((v) => {
+        v.sizes?.forEach((s) => {
+          totalStock += Number(s.stock) || 0;
+        });
+      });
+
+      form.setValue('stock', totalStock);
+    }
   }, [watchedSizeStock, watchedVariants, form]);
 
   const subCategories = selectedCategory?.subCategories || [];
@@ -371,14 +379,21 @@ const ProductForm = ({
 
     // ── Step 2: Build FormData with URLs only (no File objects) ───────────
     let totalStock = 0;
-    (data.sizeStock || []).forEach((s) => {
-      totalStock += Number(s.stock) || 0;
-    });
-    (data.variants || []).forEach((v) => {
-      (v.sizes || []).forEach((s) => {
+    const hasSizeStockData = data.sizeStock && data.sizeStock.length > 0;
+    const hasVariantsData = data.variants && data.variants.length > 0;
+
+    if (hasSizeStockData || hasVariantsData) {
+      (data.sizeStock || []).forEach((s) => {
         totalStock += Number(s.stock) || 0;
       });
-    });
+      (data.variants || []).forEach((v) => {
+        (v.sizes || []).forEach((s) => {
+          totalStock += Number(s.stock) || 0;
+        });
+      });
+    } else {
+      totalStock = Number(data.stock) || 0;
+    }
 
     const formData = new FormData();
     formData.append('name', data.name);
@@ -393,6 +408,7 @@ const ProductForm = ({
     formData.append('slug', data.slug || '');
     formData.append('featured', String(data.featured));
     formData.append('isOffer', String(data.isOffer));
+    formData.append('isActive', String(data.isActive));
     formData.append('offerTag', data.offerTag || '');
     formData.append('discountPercentage', String(data.discountPercentage));
     formData.append('videoUrl', finalVideoUrl);
@@ -472,7 +488,24 @@ const ProductForm = ({
           )}
         />
 
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-4">
+        <FormField
+          control={form.control}
+          name="slug"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Slug (Unique ID)</FormLabel>
+              <FormControl>
+                <Input placeholder="e.g. classic-silk-shirt" {...field} />
+              </FormControl>
+              <FormDescription>
+                Auto-generated from name if left empty.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-5">
           <FormField
             control={form.control}
             name="sku"
@@ -518,24 +551,94 @@ const ProductForm = ({
           />
           <FormField
             control={form.control}
-            name="stock"
+            name="discountPercentage"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>
-                  Stock Count <span className="text-red-500">*</span>
-                </FormLabel>
+                <FormLabel>Discount (%)</FormLabel>
                 <FormControl>
                   <Input
                     type="number"
-                    readOnly
-                    className="bg-muted cursor-not-allowed font-black text-blue-600"
+                    placeholder="e.g. 20"
                     {...field}
+                    onChange={(e) => {
+                      field.onChange(e);
+                      const percentage = Number(e.target.value);
+                      const price = Number(form.getValues('price'));
+                      if (price > 0) {
+                        if (percentage > 0 && percentage < 100) {
+                          const salePrice = Math.round(
+                            price - (price * percentage) / 100,
+                          );
+                          form.setValue('salePrice', salePrice);
+                        } else if (percentage === 0) {
+                          form.setValue('salePrice', 0);
+                        }
+                      }
+                    }}
                   />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
+          <FormField
+            control={form.control}
+            name="salePrice"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Discounted Price ($)</FormLabel>
+                <FormControl>
+                  <Input
+                    type="number"
+                    step="0.01"
+                    {...field}
+                    onChange={(e) => {
+                      field.onChange(e);
+                      const salePrice = Number(e.target.value);
+                      const price = Number(form.getValues('price'));
+                      if (price > 0) {
+                        if (salePrice > 0 && salePrice < price) {
+                          const percentage = Math.round(
+                            ((price - salePrice) / price) * 100,
+                          );
+                          form.setValue('discountPercentage', percentage);
+                        } else if (salePrice === 0 || salePrice >= price) {
+                          form.setValue('discountPercentage', 0);
+                        }
+                      }
+                    }}
+                  />
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          {(() => {
+            const isStockAutoCalculated =
+              (watchedSizeStock && watchedSizeStock.length > 0) ||
+              (watchedVariants && watchedVariants.length > 0);
+
+            if (isStockAutoCalculated) return null;
+
+            return (
+              <FormField
+                control={form.control}
+                name="stock"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      Stock Count <span className="text-red-500">*</span>
+                    </FormLabel>
+                    <FormControl>
+                      <Input type="number" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            );
+          })()}
         </div>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -570,8 +673,26 @@ const ProductForm = ({
                   name="offerTag"
                   render={({ field }) => (
                     <FormItem>
-                      <div className="flex items-center justify-between">
-                        <FormLabel>Offer Tag</FormLabel>
+                      <FormLabel>Offer Tag</FormLabel>
+                      <div className="flex items-center gap-2">
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger className="flex-1">
+                              <SelectValue placeholder="Select Tag" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="none">None</SelectItem>
+                            {localOffers.map((o) => (
+                              <SelectItem key={o._id} value={o.tag}>
+                                {o.name} ({o.tag})
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                         <QuickAddOffer
                           onSuccess={(newOffer) => {
                             setLocalOffers((prev) => [...prev, newOffer]);
@@ -600,190 +721,12 @@ const ProductForm = ({
                           }}
                         />
                       </div>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select Tag" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="none">None</SelectItem>
-                          {localOffers.map((o) => (
-                            <SelectItem key={o._id} value={o.tag}>
-                              {o.name} ({o.tag})
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
               </div>
             )}
-          </div>
-
-          <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="discountPercentage"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Discount (%)</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        placeholder="e.g. 20"
-                        {...field}
-                        onChange={(e) => {
-                          field.onChange(e);
-                          const percentage = Number(e.target.value);
-                          const price = Number(form.getValues('price'));
-                          if (price > 0) {
-                            if (percentage > 0 && percentage < 100) {
-                              const salePrice = Math.round(
-                                price - (price * percentage) / 100,
-                              );
-                              form.setValue('salePrice', salePrice);
-                            } else if (percentage === 0) {
-                              form.setValue('salePrice', 0);
-                            }
-                          }
-                        }}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="salePrice"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Discounted Price ($)</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        step="0.01"
-                        {...field}
-                        onChange={(e) => {
-                          field.onChange(e);
-                          const salePrice = Number(e.target.value);
-                          const price = Number(form.getValues('price'));
-                          if (price > 0) {
-                            if (salePrice > 0 && salePrice < price) {
-                              const percentage = Math.round(
-                                ((price - salePrice) / price) * 100,
-                              );
-                              form.setValue('discountPercentage', percentage);
-                            } else if (salePrice === 0 || salePrice >= price) {
-                              form.setValue('discountPercentage', 0);
-                            }
-                          }
-                        }}
-                      />
-                    </FormControl>
-                    <FormDescription>Set to 0 if no discount.</FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <FormField
-              control={form.control}
-              name="slug"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Slug (Unique ID)</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g. classic-silk-shirt" {...field} />
-                  </FormControl>
-                  <FormDescription>
-                    Auto-generated from name if left empty.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          <div className="flex flex-col gap-4">
-            <FormField
-              control={form.control}
-              name="youtubeVideoUrl"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>YouTube Video URL</FormLabel>
-                  <FormControl>
-                    <div className="space-y-4">
-                      <Input
-                        placeholder="e.g. https://www.youtube.com/watch?v=..."
-                        {...field}
-                      />
-                      {field.value && getYoutubeEmbedUrl(field.value) && (
-                        <div className="relative aspect-video w-full overflow-hidden rounded-xl border bg-black">
-                          <iframe
-                            width="100%"
-                            height="100%"
-                            src={getYoutubeEmbedUrl(field.value)}
-                            title="Product Video"
-                            frameBorder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowFullScreen
-                            referrerPolicy="origin"
-                            className="absolute inset-0 h-full w-full"
-                          />
-                          <Button
-                            type="button"
-                            variant="destructive"
-                            size="icon"
-                            className="absolute top-2 right-2 z-10"
-                            onClick={() => field.onChange('')}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      )}
-                    </div>
-                  </FormControl>
-                  <FormDescription>
-                    Paste a YouTube link to show a video of this product in the
-                    tabs section.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="videoUrl"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Upload Video</FormLabel>
-                  <FormControl>
-                    <SingleVideoUploader
-                      onChange={field.onChange}
-                      defaultValue={
-                        typeof field.value === 'string' ? field.value : ''
-                      }
-                    />
-                  </FormControl>
-                  <FormDescription>
-                    Upload an MP4 or WebM video to show in a floating modal on
-                    desktop.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
           </div>
 
           <FormField
@@ -1126,6 +1069,114 @@ const ProductForm = ({
             </div>
           </div>
         )}
+
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+          <FormField
+            control={form.control}
+            name="youtubeVideoUrl"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>YouTube Video URL</FormLabel>
+                <FormControl>
+                  <div className="space-y-4">
+                    <Input
+                      placeholder="e.g. https://www.youtube.com/watch?v=..."
+                      {...field}
+                    />
+                    {field.value && getYoutubeEmbedUrl(field.value) ? (
+                      <div className="relative aspect-video w-full overflow-hidden rounded-xl border bg-black">
+                        <iframe
+                          width="100%"
+                          height="100%"
+                          src={getYoutubeEmbedUrl(field.value)}
+                          title="Product Video"
+                          frameBorder="0"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                          referrerPolicy="origin"
+                          className="absolute inset-0 h-full w-full"
+                        />
+                        <Button
+                          type="button"
+                          variant="destructive"
+                          size="icon"
+                          className="absolute top-2 right-2 z-10"
+                          onClick={() => field.onChange('')}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    ) : (
+                      <div className="border-muted bg-muted/20 relative flex aspect-video w-full items-center justify-center overflow-hidden rounded-xl border-2 border-dashed">
+                        <div className="text-muted-foreground flex flex-col items-center justify-center space-y-2 opacity-50">
+                          <Youtube className="h-10 w-10" />
+                          <p className="text-sm font-medium">
+                            No YouTube Video
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </FormControl>
+                <FormDescription>
+                  Paste a YouTube link to show a video of this product in the
+                  tabs section.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="videoUrl"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="mb-2"></FormLabel>
+                <FormControl>
+                  <div className="space-y-4">
+                    {/* Dummy spacer to align perfectly with the YouTube Input field on the left */}
+                    <div className="h-10 w-full rounded-md border border-transparent" />
+                    <SingleVideoUploader
+                      onChange={field.onChange}
+                      defaultValue={
+                        typeof field.value === 'string' ? field.value : ''
+                      }
+                    />
+                  </div>
+                </FormControl>
+                <FormDescription>
+                  Upload an MP4 or WebM video to show in a floating modal on
+                  desktop.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        <FormField
+          control={form.control}
+          name="isActive"
+          render={({ field }) => (
+            <FormItem className="flex flex-row items-start space-y-0 space-x-3 rounded-md border border-white/10 p-4 shadow-sm">
+              <FormControl>
+                <Checkbox
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+              </FormControl>
+              <div className="space-y-1 leading-none">
+                <FormLabel className="font-black tracking-widest text-emerald-500 uppercase">
+                  Active Status
+                </FormLabel>
+                <FormDescription>
+                  Enable to show this product on the public store.
+                </FormDescription>
+              </div>
+            </FormItem>
+          )}
+        />
 
         <FormField
           control={form.control}

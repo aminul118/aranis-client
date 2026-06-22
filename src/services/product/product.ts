@@ -6,7 +6,6 @@ import serverFetch from '@/lib/server-fetch';
 import type { IProduct } from '@/services/product/product.interface';
 import type { ApiResponse } from '@/types';
 import { revalidatePath } from 'next/cache';
-import { logger } from '../../lib/logger';
 
 export const createProduct = async (
   payload: FormData,
@@ -14,12 +13,9 @@ export const createProduct = async (
   const res = await serverFetch.post<ApiResponse<IProduct>>('/products', {
     body: payload,
   });
-  try {
-    revalidatePath('/', 'layout');
-    await revalidate(['product', 'new-arrivals']);
-  } catch (e) {
-    logger.error(e);
-  }
+  revalidatePath('/', 'layout');
+  await revalidate(['product', 'new-arrivals']);
+
   return res;
 };
 
@@ -33,12 +29,9 @@ export const updateProduct = async (
       body: payload,
     },
   );
-  try {
-    revalidatePath('/', 'layout');
-    await revalidate(['product', `product-${id}`, 'new-arrivals']);
-  } catch (e) {
-    logger.error(e);
-  }
+  revalidatePath('/', 'layout');
+  await revalidate(['product', `product-${id}`, 'new-arrivals']);
+
   return res;
 };
 

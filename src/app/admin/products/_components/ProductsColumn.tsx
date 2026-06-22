@@ -11,6 +11,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { Check } from 'lucide-react';
 
 const StockBadge = ({ product }: { product: IProduct }) => {
   // Always calculate total stock from components to ensure accuracy in the table
@@ -187,20 +188,35 @@ const ProductsColumn: Column<IProduct>[] = [
     header: 'Featured',
     accessor: (p) =>
       p.featured ? (
-        <span className="rounded-full bg-blue-500/10 px-2 py-0.5 text-xs font-bold text-blue-500">
-          Yes
-        </span>
+        <Check size={14} className="text-emerald-500" />
       ) : (
-        <span className="text-muted-foreground text-xs">No</span>
+        <span className="text-muted-foreground text-xs">-</span>
       ),
     sortKey: 'featured',
   },
   {
+    header: 'Active',
+    accessor: (p) =>
+      p.isActive ? (
+        <>
+          <Check size={14} className="text-emerald-500" />
+        </>
+      ) : (
+        <span className="text-muted-foreground text-xs">-</span>
+      ),
+    sortKey: 'isActive',
+  },
+  {
     header: 'Created At',
     accessor: (p) => (
-      <span className="text-muted-foreground text-xs font-medium">
-        {formatDate(p.createdAt)}
-      </span>
+      <div className="flex flex-col">
+        <span className="text-xs font-medium">
+          {formatDate(p.createdAt, 'dd MMM yyyy')}
+        </span>
+        <span className="text-muted-foreground text-[10px]">
+          {formatDate(p.createdAt, 'hh:mm a')}
+        </span>
+      </div>
     ),
     sortKey: 'createdAt',
   },
