@@ -7,15 +7,32 @@ export default function BlockedPage() {
   const [timeLeft, setTimeLeft] = useState<string>('02:00');
 
   useEffect(() => {
-    // Helper to get cookie value
+    // Helper to get cookie value robustly
     const getCookie = (name: string) => {
-      const value = `; ${document.cookie}`;
-      const parts = value.split(`; ${name}=`);
-      if (parts.length === 2) return parts.pop()?.split(';').shift();
+      const match = document.cookie.match(
+        new RegExp('(^| )' + name + '=([^;]+)'),
+      );
+      if (match) return match[2];
       return null;
     };
 
-    const blockUntilStr = getCookie('aranis_block_until');
+    let blockUntilStr = getCookie('aranis_block_until');
+
+    // Fallback to localStorage if the cookie cannot be read (e.g. strict security or expired)
+    if (!blockUntilStr) {
+      try {
+        const stored = localStorage.getItem('aranis_reload_tracker');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (parsed.blockUntil) {
+            blockUntilStr = parsed.blockUntil.toString();
+          }
+        }
+      } catch (e) {
+        // ignore parsing errors
+      }
+    }
+
     if (!blockUntilStr) return;
 
     const blockUntil = parseInt(blockUntilStr, 10);
