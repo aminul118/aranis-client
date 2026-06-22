@@ -8,7 +8,6 @@ import { ApiResponse } from '@/types';
 const getHeroBanners = async (query: Record<string, string> = {}) => {
   return await serverFetch.get<ApiResponse<IHeroBanner[]>>('/hero-banners', {
     query,
-    cache: 'no-store',
     next: { tags: ['hero-banners'] },
   });
 };
