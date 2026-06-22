@@ -20,7 +20,7 @@ const createReview = async (payload: {
       'Content-Type': 'application/json',
     },
   });
-  revalidate('product');
+  await revalidate('product');
   return res;
 };
 
@@ -40,7 +40,7 @@ const deleteReviewBulk = async (ids: string[]) => {
       },
     },
   );
-  revalidate('product');
+  await revalidate('product');
   return res;
 };
 

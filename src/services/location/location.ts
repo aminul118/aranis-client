@@ -39,15 +39,13 @@ const updateLocation = async (id: string, payload: Partial<ILocation>) => {
       body: JSON.stringify(payload),
     },
   );
-  revalidate('locations');
-  revalidate(`location-${id}`);
+  await revalidate(['locations', `location-${id}`]);
   return res;
 };
 
 const deleteLocation = async (id: string) => {
   const res = await serverFetch.delete<ApiResponse<null>>(`/locations/${id}`);
-  revalidate('locations');
-  revalidate(`location-${id}`);
+  await revalidate(['locations', `location-${id}`]);
   return res;
 };
 
@@ -55,10 +53,7 @@ const deleteLocationBulk = async (ids: string[]) => {
   const res = await serverFetch.delete<ApiResponse<null>>('/locations', {
     body: JSON.stringify({ ids }),
   });
-  revalidate('locations');
-  ids.forEach((id) => {
-    revalidate(`location-${id}`);
-  });
+  await revalidate(['locations', ...ids.map((id) => `location-${id}`)]);
   return res;
 };
 

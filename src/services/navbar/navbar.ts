@@ -12,7 +12,7 @@ const createNavbar = async (payload: INavItem) => {
       'Content-Type': 'application/json',
     },
   });
-  revalidate('navbar');
+  await revalidate('navbar');
   return res;
 };
 
@@ -23,7 +23,7 @@ const updateNavbar = async (payload: Partial<INavItem>, id: string) => {
       'Content-Type': 'application/json',
     },
   });
-  revalidate('navbar');
+  await revalidate('navbar');
   return res;
 };
 
@@ -42,7 +42,7 @@ const getSingleNavbar = async (id: string) => {
 
 const deleteNavbar = async (id: string) => {
   const res = await serverFetch.delete<ApiResponse<INavItem>>(`/navbar/${id}`);
-  revalidate('navbar');
+  await revalidate('navbar');
   return res;
 };
 
@@ -56,7 +56,7 @@ const deleteNavbarBulk = async (ids: string[]) => {
       },
     },
   );
-  revalidate('navbar');
+  await revalidate('navbar');
   return res;
 };
 

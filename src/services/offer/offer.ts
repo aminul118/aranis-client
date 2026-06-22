@@ -8,13 +8,12 @@ import { revalidatePath } from 'next/cache';
 import { logger } from '../../lib/logger';
 
 // Helper to trigger concurrent Next.js revalidations
-const triggerRevalidations = () => {
+const triggerRevalidations = async () => {
   try {
     revalidatePath('/offers');
     revalidatePath('/shop');
     revalidatePath('/');
-    revalidate('product');
-    revalidate('offer');
+    await revalidate(['product', 'offer']);
   } catch (error) {
     logger.error('Failed to trigger Next.js cache revalidations:', error);
   }
@@ -27,7 +26,7 @@ export const createOffer = async (payload: Partial<IOffer>) => {
       'Content-Type': 'application/json',
     },
   });
-  triggerRevalidations();
+  await triggerRevalidations();
   return res;
 };
 
@@ -46,13 +45,13 @@ export const updateOffer = async (id: string, payload: Partial<IOffer>) => {
       'Content-Type': 'application/json',
     },
   });
-  triggerRevalidations();
+  await triggerRevalidations();
   return res;
 };
 
 export const deleteOffer = async (id: string) => {
   const res = await serverFetch.delete<ApiResponse<any>>(`/offers/${id}`);
-  triggerRevalidations();
+  await triggerRevalidations();
   return res;
 };
 
@@ -63,7 +62,7 @@ export const applyOffer = async (tag: string, productIds: string[]) => {
       'Content-Type': 'application/json',
     },
   });
-  triggerRevalidations();
+  await triggerRevalidations();
   return res;
 };
 
@@ -74,7 +73,7 @@ export const applyOfferToAll = async (tag: string) => {
       'Content-Type': 'application/json',
     },
   });
-  triggerRevalidations();
+  await triggerRevalidations();
   return res;
 };
 

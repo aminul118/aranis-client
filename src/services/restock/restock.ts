@@ -12,7 +12,7 @@ export const createRestockRequest = async (productId: string) => {
       'Content-Type': 'application/json',
     },
   });
-  revalidate('restock');
+  await revalidate('restock');
   return res;
 };
 
@@ -44,7 +44,7 @@ export const resolveRestockRequest = async (id: string) => {
   const res = await serverFetch.patch<ApiResponse<null>>(
     `/restock-request/${id}/resolve`,
   );
-  revalidate('restock');
+  await revalidate('restock');
   return res;
 };
 
@@ -58,7 +58,7 @@ export const deleteRestockRequestBulk = async (ids: string[]) => {
       },
     },
   );
-  revalidate('restock');
+  await revalidate('restock');
   return res;
 };
 
@@ -66,6 +66,6 @@ export const deleteRestockRequest = async (id: string) => {
   const res = await serverFetch.delete<ApiResponse<any>>(
     `/restock-request/${id}`,
   );
-  revalidate('restock');
+  await revalidate('restock');
   return res;
 };

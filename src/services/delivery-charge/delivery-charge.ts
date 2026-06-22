@@ -4,7 +4,6 @@ import { revalidate } from '@/lib/revalidate';
 import serverFetch from '@/lib/server-fetch';
 import type { IDeliveryCharge } from '@/services/delivery-charge/delivery-charge.interface';
 import type { ApiResponse } from '@/types';
-import { logger } from '../../lib/logger';
 
 export const getDeliveryCharge = async () => {
   return await serverFetch.get<ApiResponse<IDeliveryCharge>>(
@@ -25,12 +24,7 @@ export const updateDeliveryCharge = async (data: IDeliveryCharge) => {
       },
     },
   );
-
-  try {
-    revalidate('delivery-charge');
-  } catch (e) {
-    logger.error(e);
-  }
+  await revalidate('delivery-charge');
 
   return res;
 };

@@ -46,7 +46,7 @@ const updateUser = async (id: string, data: Partial<IUser>) => {
     },
   });
 
-  revalidate('ME');
+  await revalidate(['ME', 'users']);
 
   return res;
 };
@@ -58,8 +58,7 @@ const updateUserWithFormData = async (id: string, formData: FormData) => {
       tags: ['ME'],
     },
   });
-  revalidate('ME');
-  revalidate('users');
+  await revalidate(['ME', 'users']);
 
   return res;
 };
@@ -78,7 +77,7 @@ const assignUserRole = async (id: string, role: string) => {
     },
   );
 
-  revalidate('users');
+  await revalidate(['ME', 'users']);
 
   return res;
 };
@@ -94,7 +93,7 @@ const changePassword = async (data: any) => {
     },
   );
 
-  revalidate('ME');
+  await revalidate('ME');
 
   return res;
 };
@@ -106,7 +105,7 @@ const deleteUserBulk = async (ids: string[]) => {
       'Content-Type': 'application/json',
     },
   });
-  revalidate('users');
+  await revalidate(['users']);
   return res;
 };
 

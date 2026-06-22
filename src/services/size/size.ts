@@ -12,7 +12,7 @@ export const createSize = async (payload: ISize) => {
       'Content-Type': 'application/json',
     },
   });
-  revalidate('size');
+  await revalidate('size');
   return res;
 };
 
@@ -23,7 +23,7 @@ export const updateSize = async (payload: Partial<ISize>, id: string) => {
       'Content-Type': 'application/json',
     },
   });
-  revalidate('size');
+  await revalidate('size');
   return res;
 };
 
@@ -43,7 +43,7 @@ export const getSingleSize = async (id: string) => {
 
 export const deleteSize = async (id: string) => {
   const res = await serverFetch.delete<ApiResponse<ISize>>(`/sizes/${id}`);
-  revalidate('size');
+  await revalidate(['size', `size-${id}`]);
   return res;
 };
 
@@ -54,6 +54,6 @@ export const deleteSizeBulk = async (ids: string[]) => {
       'Content-Type': 'application/json',
     },
   });
-  revalidate('size');
+  await revalidate(['size', ...ids.map((id) => `size-${id}`)]);
   return res;
 };

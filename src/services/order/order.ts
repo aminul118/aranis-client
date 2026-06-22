@@ -1,8 +1,11 @@
 'use server';
 
+import type { FetchOptions } from '@/helpers/serverFetchHelper';
 import { revalidate } from '@/lib/revalidate';
 import serverFetch from '@/lib/server-fetch';
+import type { IOrderPayload } from '@/services/order/order.interface';
 import { ApiResponse } from '@/types';
+import { logger } from '../../lib/logger';
 import type { IOrder } from './order.types';
 import { OrderStatus } from './order.types';
 
@@ -22,9 +25,8 @@ const createOrder = async (payload: IOrderPayload) => {
     body: JSON.stringify(payload),
   });
 
-  revalidate('ME');
-  revalidate('order');
-  revalidate('product');
+  await revalidate(['ME', 'order', 'product']);
+
   try {
     const { revalidatePath } = require('next/cache');
     revalidatePath('/offers');
@@ -36,10 +38,6 @@ const createOrder = async (payload: IOrderPayload) => {
 
   return res;
 };
-
-import type { FetchOptions } from '@/helpers/serverFetchHelper';
-import type { IOrderPayload } from '@/services/order/order.interface';
-import { logger } from '../../lib/logger';
 
 const getAllOrders = async (
   query: Record<string, string>,
@@ -78,8 +76,8 @@ const updateOrderStatus = async (id: string, status: OrderStatus) => {
       },
     },
   );
-  revalidate('order');
-  revalidate('product');
+  await revalidate(['order', 'product']);
+
   try {
     const { revalidatePath } = require('next/cache');
     revalidatePath('/offers');
@@ -105,8 +103,8 @@ const deleteOrderBulk = async (ids: string[]) => {
       },
     },
   );
-  revalidate('order');
-  revalidate('product');
+  await revalidate(['order', 'product']);
+
   try {
     const { revalidatePath } = require('next/cache');
     revalidatePath('/offers');

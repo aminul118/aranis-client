@@ -22,7 +22,7 @@ export const createCoupon = async (data: Partial<ICoupon>) => {
       'Content-Type': 'application/json',
     },
   });
-  revalidate('COUPONS');
+  await revalidate('COUPONS');
   return res;
 };
 
@@ -33,13 +33,13 @@ export const updateCoupon = async (id: string, data: Partial<ICoupon>) => {
       'Content-Type': 'application/json',
     },
   });
-  revalidate('COUPONS');
+  await revalidate('COUPONS');
   return res;
 };
 
 export const deleteCoupon = async (id: string) => {
   const res = await serverFetch.delete<ApiResponse<null>>(`/coupons/${id}`);
-  revalidate('COUPONS');
+  await revalidate('COUPONS');
   return res;
 };
 
@@ -53,7 +53,7 @@ export const deleteCouponBulk = async (ids: string[]) => {
       },
     },
   );
-  revalidate('COUPONS');
+  await revalidate('COUPONS');
   return res;
 };
 

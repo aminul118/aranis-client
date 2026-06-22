@@ -9,7 +9,7 @@ export const createGiftCard = async (formData: FormData) => {
   const res = await serverFetch.post<ApiResponse<IGiftCard>>('/giftcards', {
     body: formData,
   });
-  revalidate('giftcard');
+  await revalidate('giftcard');
   return res;
 };
 
@@ -20,7 +20,7 @@ export const updateGiftCard = async (id: string, formData: FormData) => {
       body: formData,
     },
   );
-  revalidate('giftcard');
+  await revalidate('giftcard');
   return res;
 };
 
@@ -42,7 +42,7 @@ export const deleteGiftCard = async (id: string) => {
   const res = await serverFetch.delete<ApiResponse<IGiftCard>>(
     `/giftcards/${id}`,
   );
-  revalidate('giftcard');
+  await revalidate('giftcard');
   return res;
 };
 
@@ -56,6 +56,6 @@ export const deleteGiftCardBulk = async (ids: string[]) => {
       },
     },
   );
-  revalidate('giftcard');
+  await revalidate('giftcard');
   return res;
 };

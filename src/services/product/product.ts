@@ -16,7 +16,7 @@ export const createProduct = async (
   });
   try {
     revalidatePath('/', 'layout');
-    revalidate(['product', 'new-arrivals']);
+    await revalidate(['product', 'new-arrivals']);
   } catch (e) {
     logger.error(e);
   }
@@ -35,7 +35,7 @@ export const updateProduct = async (
   );
   try {
     revalidatePath('/', 'layout');
-    await revalidate(['product', `product-${id}`]);
+    await revalidate(['product', `product-${id}`, 'new-arrivals']);
   } catch (e) {
     logger.error(e);
   }
@@ -70,12 +70,10 @@ const deleteProduct = async (id: string) => {
   const res = await serverFetch.delete<ApiResponse<IProduct>>(
     `/products/${id}`,
   );
-  try {
-    revalidatePath('/', 'layout');
-    revalidate('product');
-  } catch (e) {
-    logger.error(e);
-  }
+
+  revalidatePath('/', 'layout');
+  await revalidate(['product', `product-${id}`, 'new-arrivals']);
+
   return res;
 };
 
@@ -118,12 +116,10 @@ const updateProductBulk = async (ids: string[], data: Partial<IProduct>) => {
       },
     },
   );
-  try {
-    revalidatePath('/', 'layout');
-  } catch (e) {
-    logger.error(e);
-  }
-  revalidate('product');
+
+  revalidatePath('/', 'layout');
+  await revalidate(ids.map((id) => `product-${id}`));
+
   return res;
 };
 
@@ -137,13 +133,14 @@ const deleteProductBulk = async (ids: string[]) => {
       },
     },
   );
-  try {
-    const { revalidatePath } = require('next/cache');
-    revalidatePath('/', 'layout');
-  } catch (e) {
-    logger.error(e);
-  }
-  revalidate('product');
+
+  revalidatePath('/', 'layout');
+  await revalidate([
+    'product',
+    'new-arrivals',
+    ...ids.map((id) => `product-${id}`),
+  ]);
+
   return res;
 };
 
