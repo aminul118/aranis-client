@@ -73,30 +73,29 @@ const ProductDetailContent = ({
     selectedSize,
   );
 
-  // Auto-select available size when variant changes
+  // Auto-select first size when variant changes
   useEffect(() => {
-    const getStockForSize = (size: string) => {
-      if (selectedVariantIndex >= 0) {
-        const variant = product.variants?.[selectedVariantIndex];
-        return (
-          variant?.sizes?.find((s: IVariantSize) => s.size === size)?.stock || 0
-        );
+    if (selectedVariantIndex >= 0) {
+      const variant = product.variants?.[selectedVariantIndex];
+      const variantSizes = variant?.sizes || [];
+      if (variantSizes.length > 0) {
+        setSelectedSize(variantSizes[0].size);
       }
-      return (
-        product.sizeStock?.find((s: IVariantSize) => s.size === size)?.stock ||
-        0
-      );
-    };
-
-    if (getStockForSize(selectedSize) === 0) {
-      const availableSizes = product.sizes.filter(
-        (s: string) => getStockForSize(s) > 0,
-      );
-      if (availableSizes.length > 0) {
-        setSelectedSize(availableSizes[0]);
+    } else {
+      // Main product
+      const mainSizes = product.sizeStock || [];
+      if (mainSizes.length > 0) {
+        setSelectedSize(mainSizes[0].size);
+      } else if (product.sizes?.length > 0) {
+        setSelectedSize(product.sizes[0]);
       }
     }
-  }, [selectedVariantIndex, product.variants, product.sizeStock]);
+  }, [
+    selectedVariantIndex,
+    product.variants,
+    product.sizeStock,
+    product.sizes,
+  ]);
 
   const handleRestockRequest = async () => {
     if (!user) {
