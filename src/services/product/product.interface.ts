@@ -42,3 +42,48 @@ export interface IProduct {
   createdAt: string | Date;
   updatedAt: string | Date;
 }
+
+export interface IProductUpload {
+  name: string;
+  category: string;
+  subCategory?: string;
+  type?: string;
+  price: number | string;
+  salePrice: number | string;
+  buyPrice: number | string;
+  stock: number | string;
+  slug: string;
+  description: string;
+  color: string;
+  variants: {
+    color: string;
+    sizes: {
+      size: string;
+      stock: number | string;
+    }[];
+    thumbnails: (string | File)[];
+    sku: string;
+  }[];
+  sizes: string[];
+  featured: boolean;
+  isOffer: boolean;
+  isActive: boolean;
+  offerTag: string;
+  discountPercentage: number | string;
+  sizeStock: {
+    size: string;
+    stock: number | string;
+  }[];
+  thumbnails: (string | File)[];
+  sku: string;
+  videoUrl: string | File;
+  youtubeVideoUrl: string;
+  refundPolicy: string;
+  returnPolicy: string;
+  sizeGuide: string;
+  seo: {
+    title: string;
+    description: string;
+    keywords: string;
+  };
+}

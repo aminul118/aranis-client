@@ -17,9 +17,13 @@ import { toast } from 'sonner';
 
 interface QuickAddColorProps {
   onSuccess: (newColor: any) => void;
+  customTrigger?: React.ReactNode;
 }
 
-export default function QuickAddColor({ onSuccess }: QuickAddColorProps) {
+export default function QuickAddColor({
+  onSuccess,
+  customTrigger,
+}: QuickAddColorProps) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState('');
@@ -51,13 +55,17 @@ export default function QuickAddColor({ onSuccess }: QuickAddColorProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button
-          variant="outline"
-          size="sm"
-          className="h-8 rounded-lg border-dashed text-[10px] font-black uppercase"
-        >
-          <Plus className="mr-1 h-3 w-3" /> New Color
-        </Button>
+        {customTrigger ? (
+          customTrigger
+        ) : (
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-8 rounded-lg border-dashed text-[10px] font-black uppercase"
+          >
+            <Plus className="mr-1 h-3 w-3" /> New Color
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

@@ -36,44 +36,68 @@ export const ProductDetailSizes = ({
         </h2>
       </div>
       <div className="flex flex-wrap gap-3">
-        {product.sizes.map((size) => {
-          const sizeStock = (() => {
-            if (selectedVariantIndex >= 0) {
-              const variant = product.variants?.[selectedVariantIndex];
-              const sizeObj = variant?.sizes?.find(
-                (s: IVariantSize) => s.size === size,
-              );
-              return sizeObj ? sizeObj.stock : 0;
-            } else {
-              const sizeObj = product.sizeStock?.find(
-                (s: IVariantSize) => s.size === size,
-              );
-              return sizeObj ? sizeObj.stock : 0;
-            }
-          })();
+        {(() => {
+          // Determine which sizes to display
+          let sizesToDisplay: string[] = [];
+          if (
+            selectedVariantIndex >= 0 &&
+            product.variants?.[selectedVariantIndex]
+          ) {
+            // Use sizes specific to the selected variant
+            const variant = product.variants[selectedVariantIndex];
+            sizesToDisplay = variant.sizes?.map((s) => s.size) || [];
+          } else {
+            // Fallback to primary product sizes
+            sizesToDisplay = product.sizes || [];
+          }
 
-          const isStockOut = sizeStock === 0;
+          if (sizesToDisplay.length === 0) {
+            return (
+              <p className="text-muted-foreground text-sm italic">
+                No sizes available
+              </p>
+            );
+          }
 
-          return (
-            <button
-              key={size}
-              onClick={() => !isStockOut && setSelectedSize(size)}
-              disabled={isStockOut}
-              className={cn(
-                'group relative flex min-w-16 flex-col items-center justify-center gap-0.5 overflow-hidden rounded-lg border-2 px-5 py-3 transition-all duration-300',
-                isStockOut
-                  ? 'cursor-not-allowed border-transparent bg-slate-200 text-slate-400 dark:bg-zinc-800 dark:text-zinc-500'
-                  : selectedSize === size
-                    ? 'border-primary bg-primary text-primary-foreground shadow-md'
-                    : 'border-primary text-primary hover:bg-primary/10 bg-transparent',
-              )}
-            >
-              <span className="text-sm font-black tracking-widest uppercase">
-                {size}
-              </span>
-            </button>
-          );
-        })}
+          return sizesToDisplay.map((size) => {
+            const sizeStock = (() => {
+              if (selectedVariantIndex >= 0) {
+                const variant = product.variants?.[selectedVariantIndex];
+                const sizeObj = variant?.sizes?.find(
+                  (s: IVariantSize) => s.size === size,
+                );
+                return sizeObj ? sizeObj.stock : 0;
+              } else {
+                const sizeObj = product.sizeStock?.find(
+                  (s: IVariantSize) => s.size === size,
+                );
+                return sizeObj ? sizeObj.stock : 0;
+              }
+            })();
+
+            const isStockOut = sizeStock === 0;
+
+            return (
+              <button
+                key={size}
+                onClick={() => !isStockOut && setSelectedSize(size)}
+                disabled={isStockOut}
+                className={cn(
+                  'group relative flex min-w-16 flex-col items-center justify-center gap-0.5 overflow-hidden rounded-lg border-2 px-5 py-3 transition-all duration-300',
+                  isStockOut
+                    ? 'cursor-not-allowed border-transparent bg-slate-200 text-slate-400 dark:bg-zinc-800 dark:text-zinc-500'
+                    : selectedSize === size
+                      ? 'border-primary bg-primary text-primary-foreground shadow-md'
+                      : 'border-primary text-primary hover:bg-primary/10 bg-transparent',
+                )}
+              >
+                <span className="text-sm font-black tracking-widest uppercase">
+                  {size}
+                </span>
+              </button>
+            );
+          });
+        })()}
       </div>
 
       {/* Size Guide Button */}

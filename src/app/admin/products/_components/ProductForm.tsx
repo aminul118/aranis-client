@@ -49,54 +49,10 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
-import QuickAddCategory from '../../categories/_components/QuickAddCategory';
 import QuickAddColor from '../../colors/_componnets/QuickAddColor';
 import QuickAddOffer from './QuickAddOffer';
 
-type FormValues = {
-  name: string;
-  category: string;
-  subCategory?: string;
-  type?: string;
-  price: number | string;
-  salePrice: number | string;
-  buyPrice: number | string;
-  stock: number | string;
-  slug: string;
-  description: string;
-  color: string;
-  variants: {
-    color: string;
-    sizes: {
-      size: string;
-      stock: number | string;
-    }[];
-    thumbnails: (string | File)[];
-    sku: string;
-  }[];
-  sizes: string[];
-  featured: boolean;
-  isOffer: boolean;
-  isActive: boolean;
-  offerTag: string;
-  discountPercentage: number | string;
-  sizeStock: {
-    size: string;
-    stock: number | string;
-  }[];
-  thumbnails: (string | File)[];
-  sku: string;
-  videoUrl: string | File;
-  youtubeVideoUrl: string;
-  refundPolicy: string;
-  returnPolicy: string;
-  sizeGuide: string;
-  seo: {
-    title: string;
-    description: string;
-    keywords: string;
-  };
-};
+import { IProductUpload } from '@/services/product/product.interface';
 
 interface Props {
   product?: IProduct;
@@ -125,7 +81,7 @@ const ProductForm = ({
   const isEdit = !!product;
   const schema = isEdit ? updateProductSchema : addProductSchema;
 
-  const form = useForm<FormValues>({
+  const form = useForm<IProductUpload>({
     resolver: zodResolver(schema) as any,
     defaultValues: {
       name: product?.name || '',
@@ -318,7 +274,7 @@ const ProductForm = ({
   );
   const types = selectedSubCategory?.items || [];
 
-  const onSubmit = async (data: FormValues) => {
+  const onSubmit = async (data: IProductUpload) => {
     // ── Step 1: Upload all images/videos directly from browser → Cloudflare R2 ──
     const { uploadManyToR2, uploadToR2 } = await import('@/lib/r2-upload');
 
@@ -525,7 +481,7 @@ const ProductForm = ({
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
-                  Buy Price ($) <span className="text-red-500">*</span>
+                  Buy Price (৳) <span className="text-red-500">*</span>
                 </FormLabel>
                 <FormControl>
                   <Input type="number" step="0.01" {...field} />
@@ -540,7 +496,7 @@ const ProductForm = ({
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
-                  Sale Price ($) <span className="text-red-500">*</span>
+                  Sale Price (৳) <span className="text-red-500">*</span>
                 </FormLabel>
                 <FormControl>
                   <Input type="number" step="0.01" {...field} />
@@ -586,7 +542,7 @@ const ProductForm = ({
             name="salePrice"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Discounted Price ($)</FormLabel>
+                <FormLabel>Discounted Price (৳)</FormLabel>
                 <FormControl>
                   <Input
                     type="number"
@@ -614,31 +570,7 @@ const ProductForm = ({
               </FormItem>
             )}
           />
-          {(() => {
-            const isStockAutoCalculated =
-              (watchedSizeStock && watchedSizeStock.length > 0) ||
-              (watchedVariants && watchedVariants.length > 0);
-
-            if (isStockAutoCalculated) return null;
-
-            return (
-              <FormField
-                control={form.control}
-                name="stock"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      Stock Count <span className="text-red-500">*</span>
-                    </FormLabel>
-                    <FormControl>
-                      <Input type="number" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            );
-          })()}
+          {/* Stock is entirely auto-calculated and hidden from UI as per request */}
         </div>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -804,16 +736,10 @@ const ProductForm = ({
             name="category"
             render={({ field }) => (
               <FormItem>
-                <div className="flex h-9 items-center justify-between">
+                <div className="flex h-9 items-center">
                   <FormLabel>
                     Category <span className="text-red-500">*</span>
                   </FormLabel>
-                  <QuickAddCategory
-                    onSuccess={(newCat) => {
-                      setLocalCategories((prev) => [...prev, newCat]);
-                      form.setValue('category', newCat.name);
-                    }}
-                  />
                 </div>
                 <Select
                   onValueChange={field.onChange}
@@ -901,126 +827,148 @@ const ProductForm = ({
           />
         </div>
 
-        <div className="md:col-span-2">
-          <FormField
-            control={form.control}
-            name="thumbnails"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <MultiImageUploader
-                    value={field.value}
-                    max={6}
-                    required={true}
-                    onChange={(files) => field.onChange(files)}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-
-        {/* Product Color & Sizes */}
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          <FormField
-            control={form.control}
-            name="color"
-            render={({ field }) => (
-              <FormItem>
-                <div className="flex h-9 items-center justify-between">
-                  <FormLabel>
-                    Product Color <span className="text-red-500">*</span>
-                  </FormLabel>
-                  <QuickAddColor
-                    onSuccess={(newColor) => {
-                      setLocalColors((prev) => [...prev, newColor]);
-                      form.setValue('color', newColor.name);
-                    }}
-                  />
-                </div>
-                <div className="border-border/50 bg-muted/10 flex flex-wrap gap-3 rounded-xl border p-4">
-                  {localColors.map((color) => (
-                    <button
-                      key={color.name}
-                      type="button"
-                      onClick={() => field.onChange(color.name)}
-                      className={cn(
-                        'group relative flex flex-col items-center gap-2 transition-all',
-                        field.value === color.name
-                          ? 'scale-110'
-                          : 'opacity-60 hover:opacity-100',
-                      )}
-                    >
-                      <div
+        {/* Main Product Layout: Color & Sizes (Left) | Gallery (Right) */}
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-12">
+          {/* Left Side: Color & Sizes */}
+          <div className="space-y-6 md:col-span-4">
+            <FormField
+              control={form.control}
+              name="color"
+              render={({ field }) => (
+                <FormItem>
+                  <div className="flex h-9 items-center justify-between">
+                    <FormLabel className="text-[10px] font-black tracking-widest text-zinc-500 uppercase">
+                      Product Color <span className="text-red-500">*</span>
+                    </FormLabel>
+                  </div>
+                  <div className="border-border/50 bg-muted/10 flex flex-wrap gap-3 rounded-xl border p-4">
+                    {localColors.map((color) => (
+                      <button
+                        key={color.name}
+                        type="button"
+                        onClick={() => field.onChange(color.name)}
                         className={cn(
-                          'flex h-10 w-10 items-center justify-center rounded-full border-2 transition-all',
+                          'group relative flex flex-col items-center gap-2 transition-all',
                           field.value === color.name
-                            ? 'border-blue-500 shadow-lg shadow-blue-500/20'
-                            : 'border-transparent',
+                            ? 'scale-110'
+                            : 'opacity-60 hover:opacity-100',
                         )}
-                        style={{ backgroundColor: color.hex }}
                       >
-                        {field.value === color.name && (
-                          <Check
-                            className={cn(
-                              'h-5 w-5',
-                              ['White', 'Beige', 'Silk White', 'Gold'].includes(
-                                color.name,
-                              )
-                                ? 'text-black'
-                                : 'text-white',
-                            )}
-                          />
-                        )}
-                      </div>
-                      <span className="text-[10px] font-bold tracking-tighter uppercase">
-                        {color.name}
-                      </span>
-                    </button>
-                  ))}
-                </div>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="sizes"
-            render={({ field }) => (
-              <FormItem>
-                <div className="flex h-9 items-center">
-                  <FormLabel>
-                    Available Sizes <span className="text-red-500">*</span>
-                  </FormLabel>
-                </div>
-                <div className="border-border/50 bg-muted/10 flex flex-wrap items-center gap-2 rounded-xl border p-4">
-                  {sizes.map((size) => (
-                    <button
-                      key={size._id}
-                      type="button"
-                      onClick={() => {
-                        const current = field.value || [];
-                        const updated = current.includes(size.name)
-                          ? current.filter((s: string) => s !== size.name)
-                          : [...current, size.name];
-                        field.onChange(updated);
+                        <div
+                          className={cn(
+                            'flex h-10 w-10 items-center justify-center rounded-full border-2 transition-all',
+                            field.value === color.name
+                              ? 'border-blue-500 shadow-lg shadow-blue-500/20'
+                              : 'border-transparent',
+                          )}
+                          style={{ backgroundColor: color.hex }}
+                        >
+                          {field.value === color.name && (
+                            <Check
+                              className={cn(
+                                'h-5 w-5',
+                                [
+                                  'White',
+                                  'Beige',
+                                  'Silk White',
+                                  'Gold',
+                                ].includes(color.name)
+                                  ? 'text-black'
+                                  : 'text-white',
+                              )}
+                            />
+                          )}
+                        </div>
+                        <span className="text-[10px] font-bold tracking-tighter uppercase">
+                          {color.name}
+                        </span>
+                      </button>
+                    ))}
+                    <QuickAddColor
+                      customTrigger={
+                        <button
+                          type="button"
+                          className="group relative flex flex-col items-center gap-2 opacity-60 transition-all hover:opacity-100"
+                        >
+                          <div className="border-muted-foreground/50 group-hover:border-foreground/50 flex h-10 w-10 items-center justify-center rounded-full border-2 border-dashed bg-transparent transition-all">
+                            <Plus className="text-muted-foreground group-hover:text-foreground h-5 w-5 transition-all" />
+                          </div>
+                          <span className="text-muted-foreground group-hover:text-foreground text-[10px] font-bold tracking-tighter uppercase">
+                            New
+                          </span>
+                        </button>
+                      }
+                      onSuccess={(newColor) => {
+                        setLocalColors((prev) => [...prev, newColor]);
+                        form.setValue('color', newColor.name);
                       }}
-                      className={cn(
-                        'flex h-10 min-w-[3rem] cursor-pointer items-center justify-center rounded-lg border px-4 text-xs font-black transition-all',
-                        field.value?.includes(size.name)
-                          ? 'bg-foreground text-background border-foreground shadow-md'
-                          : 'border-border/50 bg-background text-muted-foreground hover:border-foreground/30',
-                      )}
-                    >
-                      {size.name}
-                    </button>
-                  ))}
-                </div>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+                    />
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="sizes"
+              render={({ field }) => (
+                <FormItem>
+                  <div className="flex h-9 items-center">
+                    <FormLabel className="text-[10px] font-black tracking-widest text-zinc-500 uppercase">
+                      Available Sizes <span className="text-red-500">*</span>
+                    </FormLabel>
+                  </div>
+                  <div className="border-border/50 bg-muted/10 flex flex-wrap items-center gap-2 rounded-xl border p-4">
+                    {sizes.map((size) => (
+                      <button
+                        key={size._id}
+                        type="button"
+                        onClick={() => {
+                          const current = field.value || [];
+                          const updated = current.includes(size.name)
+                            ? current.filter((s: string) => s !== size.name)
+                            : [...current, size.name];
+                          field.onChange(updated);
+                        }}
+                        className={cn(
+                          'flex h-10 min-w-[3rem] cursor-pointer items-center justify-center rounded-lg border px-4 text-xs font-black transition-all',
+                          field.value?.includes(size.name)
+                            ? 'bg-foreground text-background border-foreground shadow-md'
+                            : 'border-border/50 bg-background text-muted-foreground hover:border-foreground/30',
+                        )}
+                      >
+                        {size.name}
+                      </button>
+                    ))}
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          {/* Right Side: Gallery Images */}
+          <div className="md:col-span-8">
+            <FormField
+              control={form.control}
+              name="thumbnails"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <MultiImageUploader
+                      label="Main Gallery Images"
+                      value={field.value}
+                      max={6}
+                      required={true}
+                      onChange={(files) => field.onChange(files)}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
         </div>
         {/* Main Product Size-wise Stock */}
         {watchedSizes.length > 0 && (
@@ -1212,7 +1160,6 @@ const ProductForm = ({
             </div>
             <Button
               type="button"
-              variant="outline"
               size="sm"
               onClick={() =>
                 appendVariant({
@@ -1222,7 +1169,7 @@ const ProductForm = ({
                   sku: '',
                 })
               }
-              className="rounded-xl border-2 border-blue-500 font-black text-blue-500 hover:bg-blue-50"
+              className="rounded-xl bg-blue-600 font-black text-white shadow-md transition-all hover:bg-blue-700"
             >
               <Plus className="mr-2 h-4 w-4" /> Add Variant
             </Button>
@@ -1256,7 +1203,7 @@ const ProductForm = ({
                             Variant Color{' '}
                             <span className="text-red-500">*</span>
                           </FormLabel>
-                          <div className="grid grid-cols-4 gap-2">
+                          <div className="flex flex-wrap gap-3">
                             {colors.map((color) => (
                               <button
                                 key={color.name}
@@ -1264,21 +1211,25 @@ const ProductForm = ({
                                 onClick={() => field.onChange(color.name)}
                                 title={color.name}
                                 className={cn(
-                                  'relative flex aspect-square items-center justify-center overflow-hidden rounded-full border-2 transition-all',
+                                  'group relative flex flex-col items-center justify-center gap-2 transition-all',
                                   field.value === color.name
-                                    ? 'scale-110 border-blue-500 shadow-lg'
-                                    : 'border-transparent opacity-80 hover:opacity-100',
+                                    ? 'scale-110'
+                                    : 'opacity-60 hover:scale-105 hover:opacity-100',
                                 )}
                               >
                                 <div
-                                  className="h-full w-full"
+                                  className={cn(
+                                    'flex h-10 w-10 items-center justify-center rounded-full border-2 transition-all',
+                                    field.value === color.name
+                                      ? 'border-blue-500 shadow-lg shadow-blue-500/20'
+                                      : 'border-transparent',
+                                  )}
                                   style={{ backgroundColor: color.hex }}
-                                />
-                                {field.value === color.name && (
-                                  <div className="absolute inset-0 flex items-center justify-center bg-black/10">
+                                >
+                                  {field.value === color.name && (
                                     <Check
                                       className={cn(
-                                        'h-4 w-4',
+                                        'h-5 w-5',
                                         [
                                           'White',
                                           'Beige',
@@ -1289,8 +1240,11 @@ const ProductForm = ({
                                           : 'text-white',
                                       )}
                                     />
-                                  </div>
-                                )}
+                                  )}
+                                </div>
+                                <span className="text-[10px] font-bold tracking-tighter uppercase">
+                                  {color.name}
+                                </span>
                               </button>
                             ))}
                           </div>
@@ -1302,49 +1256,95 @@ const ProductForm = ({
                       )}
                     />
 
+                    {/* Variant Sizes Selector */}
+                    <div className="space-y-4">
+                      <FormLabel className="text-muted-foreground text-xs font-black tracking-widest uppercase">
+                        Variant Sizes <span className="text-red-500">*</span>
+                      </FormLabel>
+                      <div className="border-border/50 bg-muted/10 flex flex-wrap items-center gap-2 rounded-xl border p-4">
+                        {sizes.map((size) => {
+                          const variantSizes =
+                            form.watch(`variants.${index}.sizes`) || [];
+                          const isSelected = variantSizes.some(
+                            (s: { size: string }) => s.size === size.name,
+                          );
+
+                          return (
+                            <button
+                              key={size._id}
+                              type="button"
+                              onClick={() => {
+                                const current = [...variantSizes];
+                                const existingIdx = current.findIndex(
+                                  (s: { size: string }) => s.size === size.name,
+                                );
+                                if (existingIdx >= 0) {
+                                  current.splice(existingIdx, 1);
+                                } else {
+                                  current.push({ size: size.name, stock: 0 });
+                                }
+                                form.setValue(
+                                  `variants.${index}.sizes`,
+                                  current,
+                                  {
+                                    shouldValidate: true,
+                                  },
+                                );
+                              }}
+                              className={cn(
+                                'flex h-10 min-w-[3rem] cursor-pointer items-center justify-center rounded-lg border px-4 text-xs font-black transition-all',
+                                isSelected
+                                  ? 'bg-foreground text-background border-foreground shadow-md'
+                                  : 'border-border/50 bg-background text-muted-foreground hover:border-foreground/30',
+                              )}
+                            >
+                              {size.name}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
                     <div className="space-y-4">
                       <FormLabel className="text-muted-foreground text-xs font-black tracking-widest uppercase">
                         Size-wise Stock
                       </FormLabel>
                       <div className="grid grid-cols-2 gap-3">
-                        {watchedSizes.map((sizeName) => {
-                          const variantSizes =
-                            form.getValues(`variants.${index}.sizes`) || [];
-                          const sizeEntryIdx = variantSizes.findIndex(
-                            (s) => s.size === sizeName,
-                          );
+                        {(form.watch(`variants.${index}.sizes`) || []).map(
+                          (sizeObj: { size: string }, sizeEntryIdx: number) => {
+                            const sizeName = sizeObj.size;
 
-                          if (sizeEntryIdx === -1) return null;
-
-                          return (
-                            <div key={sizeName} className="space-y-1">
-                              <div className="flex items-center justify-between px-1">
-                                <span className="text-[10px] font-bold text-slate-500">
-                                  {sizeName}
-                                </span>
+                            return (
+                              <div key={sizeName} className="space-y-1">
+                                <div className="flex items-center justify-between px-1">
+                                  <span className="text-[10px] font-bold text-slate-500">
+                                    {sizeName}
+                                  </span>
+                                </div>
+                                <FormField
+                                  control={form.control}
+                                  name={`variants.${index}.sizes.${sizeEntryIdx}.stock`}
+                                  render={({ field }) => (
+                                    <FormControl>
+                                      <Input
+                                        type="number"
+                                        placeholder="0"
+                                        className="h-8 rounded-lg border-2 text-xs"
+                                        {...field}
+                                        onChange={(e) =>
+                                          field.onChange(Number(e.target.value))
+                                        }
+                                      />
+                                    </FormControl>
+                                  )}
+                                />
                               </div>
-                              <FormField
-                                control={form.control}
-                                name={`variants.${index}.sizes.${sizeEntryIdx}.stock`}
-                                render={({ field }) => (
-                                  <FormControl>
-                                    <Input
-                                      type="number"
-                                      placeholder="0"
-                                      className="h-8 rounded-lg border-2 text-xs"
-                                      {...field}
-                                      onChange={(e) =>
-                                        field.onChange(Number(e.target.value))
-                                      }
-                                    />
-                                  </FormControl>
-                                )}
-                              />
-                            </div>
-                          );
-                        })}
+                            );
+                          },
+                        )}
                       </div>
-                      {watchedSizes.length === 0 && (
+                      {(form.watch(`variants.${index}.sizes`) || []).length ===
+                        0 && (
                         <p className="text-muted-foreground text-[10px] italic">
                           Please select sizes above first.
                         </p>
@@ -1359,20 +1359,14 @@ const ProductForm = ({
                       name={`variants.${index}.thumbnails`}
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-[10px] font-black tracking-widest text-zinc-500 uppercase">
-                            Variant Thumbnails
-                          </FormLabel>
                           <FormControl>
                             <MultiImageUploader
+                              label="Variant Gallery Images"
                               value={field.value}
                               max={6}
                               onChange={(files) => field.onChange(files)}
                             />
                           </FormControl>
-                          <FormDescription>
-                            Upload 4:5 aspect ratio images (e.g., 800x1000) for
-                            best display.
-                          </FormDescription>
                           <FormMessage />
                         </FormItem>
                       )}
