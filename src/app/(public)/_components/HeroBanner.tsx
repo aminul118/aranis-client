@@ -139,7 +139,7 @@ const HeroBanner = ({ mainSlides, miniBanners }: HeroBannerProps) => {
 
           {/* ── Mini Banners ──────────────────────────────────────── */}
           {minis.length > 0 && (
-            <div className="grid grid-cols-2 gap-3 lg:flex lg:w-[320px] lg:flex-col">
+            <div className="hidden gap-3 lg:flex lg:w-[320px] lg:flex-col">
               {minis.slice(0, 2).map((banner, i) => (
                 <Link
                   key={banner._id ?? i}
@@ -164,7 +164,7 @@ const HeroBanner = ({ mainSlides, miniBanners }: HeroBannerProps) => {
         {/* ── Mobile mini banners (horizontal) ────────────────────── */}
         {minis.length > 0 && (
           <div className="mt-3 grid grid-cols-2 gap-3 lg:hidden">
-            {minis.map((banner, i) => (
+            {minis.slice(0, 2).map((banner, i) => (
               <Link
                 key={(banner._id ?? i) + '-m'}
                 href={banner.link || '#'}
