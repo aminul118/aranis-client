@@ -14,7 +14,16 @@ export function decodeToken(token: string) {
     while (base64.length % 4) {
       base64 += '=';
     }
-    return JSON.parse(atob(base64));
+
+    // Use decodeURIComponent to correctly parse UTF-8 characters in JWT payload
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split('')
+        .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+        .join(''),
+    );
+
+    return JSON.parse(jsonPayload);
   } catch (error) {
     logger.error('Failed to decode token:', error);
     return null;

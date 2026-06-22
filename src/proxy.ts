@@ -42,7 +42,8 @@ export async function proxy(req: NextRequest) {
 
   // Helper for redirection
   const redirectTo = (path: string) => {
-    const url = new URL(path, origin);
+    const url = req.nextUrl.clone();
+    url.pathname = path;
     if (path === '/login' && pathname !== '/') {
       url.searchParams.set('redirect', pathname);
     }
