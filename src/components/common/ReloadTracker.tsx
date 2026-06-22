@@ -2,7 +2,7 @@
 
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AlertCircle, X } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { logger } from '../../lib/logger';
 
 const RELOAD_LIMIT = 5;
@@ -17,15 +17,15 @@ interface ReloadData {
   lastPath: string;
 }
 
+let sessionLoadCounted = false;
+
 export default function ReloadTracker() {
   const [showWarning, setShowWarning] = useState(false);
   const [warningCount, setWarningCount] = useState(0);
 
-  const hasRun = useRef(false);
-
   useEffect(() => {
-    if (hasRun.current) return;
-    hasRun.current = true;
+    if (sessionLoadCounted) return;
+    sessionLoadCounted = true;
 
     const today = new Date().toDateString();
 
