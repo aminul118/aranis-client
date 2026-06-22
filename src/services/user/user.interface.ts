@@ -1,5 +1,13 @@
 import { Auth } from '@/types';
 
+export interface DecodedToken {
+  userId: string;
+  email: string;
+  role: string;
+  iat: number;
+  exp: number;
+}
+
 export interface IUserAddress {
   title: string;
   address: string;

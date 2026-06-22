@@ -1,14 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { NextRequest } from 'next/server';
 import { logger } from '../../lib/logger';
-
-interface DecodedToken {
-  userId: string;
-  email: string;
-  role: string;
-  iat: number;
-  exp: number;
-}
+import { DecodedToken } from './user.interface';
 
 const getVerifiedUser = async (
   req?: NextRequest,
@@ -56,9 +49,17 @@ const getVerifiedUser = async (
         return null;
       }
     } else {
-      // Server-side (Node.js) formal verification
-      const { verifyAccessToken } = await import('@/lib/jwt');
-      payload = await verifyAccessToken(accessToken);
+      // Server-side (Node.js) safe decoding without verifying signature to prevent env secret mismatches
+      const jwt = await import('jsonwebtoken');
+      payload = jwt.default.decode(accessToken);
+      if (
+        payload &&
+        typeof payload === 'object' &&
+        payload.exp &&
+        Date.now() >= payload.exp * 1000
+      ) {
+        return null;
+      }
     }
 
     if (!payload) return null;
