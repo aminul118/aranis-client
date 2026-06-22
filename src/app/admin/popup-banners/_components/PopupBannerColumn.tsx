@@ -8,7 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import type { IPopupBanner } from '@/services/popup-banner/popup-banner.interface';
+import type { IPopupBanner } from '@/services/banners/popup-banner/popup-banner.interface';
 import Image from 'next/image';
 import PopupBannerActions from './PopupBannerActions';
 

@@ -16,20 +16,14 @@ import useActionHandler from '@/hooks/useActionHandler';
 import {
   createPopupBanner,
   updatePopupBanner,
-} from '@/services/popup-banner/popup-banner';
-import type { IPopupBanner } from '@/services/popup-banner/popup-banner.interface';
+} from '@/services/banners/popup-banner/popup-banner';
+import type { IPopupBanner } from '@/services/banners/popup-banner/popup-banner.interface';
+import { popupBannerSchema } from '@/services/banners/popup-banner/popup-banner.validation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ImageIcon, Plus, Save } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-
-const popupBannerSchema = z.object({
-  image: z.any().refine((val) => val, 'Image is required'),
-  link: z.string().optional().or(z.literal('')),
-  title: z.string().optional().or(z.literal('')),
-  isActive: z.boolean().default(true),
-});
 
 type FormValues = z.infer<typeof popupBannerSchema>;
 

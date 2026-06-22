@@ -9,8 +9,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { deletePopupBanner } from '@/services/popup-banner/popup-banner';
-import type { IPopupBanner } from '@/services/popup-banner/popup-banner.interface';
+import { deletePopupBanner } from '@/services/banners/popup-banner/popup-banner';
+import type { IPopupBanner } from '@/services/banners/popup-banner/popup-banner.interface';
 import { EllipsisIcon, PencilIcon, Trash2Icon } from 'lucide-react';
 import { useState } from 'react';
 interface Props {

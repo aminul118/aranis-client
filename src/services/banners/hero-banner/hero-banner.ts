@@ -2,7 +2,7 @@
 
 import { revalidate } from '@/lib/revalidate';
 import serverFetch from '@/lib/server-fetch';
-import type { IHeroBanner } from '@/services/hero-banner/hero-banner.interface';
+import type { IHeroBanner } from '@/services/banners/hero-banner/hero-banner.interface';
 import { ApiResponse } from '@/types';
 
 const getHeroBanners = async (query: Record<string, string> = {}) => {

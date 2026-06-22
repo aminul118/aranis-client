@@ -10,7 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import type { IPopupBanner } from '@/services/popup-banner/popup-banner.interface';
+import type { IPopupBanner } from '@/services/banners/popup-banner/popup-banner.interface';
 import { IMeta } from '@/types';
 import { Plus } from 'lucide-react';
 import { useState } from 'react';

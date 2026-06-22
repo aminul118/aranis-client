@@ -1,7 +1,7 @@
 import MiniBannerForm from '@/app/admin/mini-banners/_components/MiniBannerForm';
 import BackButton from '@/components/common/BackButton';
 import ClientTableWrapper from '@/components/common/wrapper/ClientTableWrapper';
-import { getSingleMiniBanner } from '@/services/mini-banner/mini-banner';
+import { getSingleMiniBanner } from '@/services/banners/mini-banner/mini-banner';
 import { Metadata } from 'next';
 
 export const dynamic = 'force-dynamic';

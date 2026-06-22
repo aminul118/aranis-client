@@ -1,6 +1,6 @@
 import PopupBannerTable from '@/app/admin/popup-banners/_components/PopupBannerTable';
 import cleanSearchParams from '@/lib/cleanSearchParams';
-import { getPopupBanners } from '@/services/popup-banner/popup-banner';
+import { getPopupBanners } from '@/services/banners/popup-banner/popup-banner';
 import { SearchParams } from '@/types';
 import { Metadata } from 'next';
 

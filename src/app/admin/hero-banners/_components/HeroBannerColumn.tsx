@@ -8,7 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import type { IHeroBanner } from '@/services/hero-banner/hero-banner.interface';
+import type { IHeroBanner } from '@/services/banners/hero-banner/hero-banner.interface';
 import Image from 'next/image';
 import HeroBannerActions from './HeroBannerActions';
 

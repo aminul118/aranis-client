@@ -9,8 +9,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { deleteHeroBanner } from '@/services/hero-banner/hero-banner';
-import type { IHeroBanner } from '@/services/hero-banner/hero-banner.interface';
+import { deleteHeroBanner } from '@/services/banners/hero-banner/hero-banner';
+import type { IHeroBanner } from '@/services/banners/hero-banner/hero-banner.interface';
 import { EllipsisIcon, PencilIcon, Trash2Icon } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';

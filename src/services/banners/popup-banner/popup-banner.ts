@@ -2,7 +2,7 @@
 
 import { revalidate } from '@/lib/revalidate';
 import serverFetch from '@/lib/server-fetch';
-import type { IPopupBanner } from '@/services/popup-banner/popup-banner.interface';
+import type { IPopupBanner } from '@/services/banners/popup-banner/popup-banner.interface';
 import { ApiResponse } from '@/types';
 
 const getActivePopupBanner = async () => {

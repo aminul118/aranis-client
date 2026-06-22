@@ -16,9 +16,9 @@ import useActionHandler from '@/hooks/useActionHandler';
 import {
   createMiniBanner,
   updateMiniBanner,
-} from '@/services/mini-banner/mini-banner';
-import { IMiniBanner } from '@/services/mini-banner/mini-banner.interface';
-import { miniBannerSchema } from '@/services/mini-banner/mini-banner.validation';
+} from '@/services/banners/mini-banner/mini-banner';
+import { IMiniBanner } from '@/services/banners/mini-banner/mini-banner.interface';
+import { miniBannerSchema } from '@/services/banners/mini-banner/mini-banner.validation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ImageIcon, Plus, Save } from 'lucide-react';
 import { useRouter } from 'next/navigation';

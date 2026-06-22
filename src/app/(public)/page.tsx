@@ -1,8 +1,8 @@
 import HeroBanner from '@/app/(public)/_components/HeroBanner';
 import NewArrivals from '@/app/(public)/_components/NewArrivals';
 import generateMetaTags from '@/seo/generateMetaTags';
-import { getHeroBanners } from '@/services/hero-banner/hero-banner';
-import { getMiniBanners } from '@/services/mini-banner/mini-banner';
+import { getHeroBanners } from '@/services/banners/hero-banner/hero-banner';
+import { getMiniBanners } from '@/services/banners/mini-banner/mini-banner';
 import { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 const BestSellingProducts = dynamic(

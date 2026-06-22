@@ -1,7 +1,7 @@
 import HeroBannerForm from '@/app/admin/hero-banners/_components/HeroBannerForm';
 import BackButton from '@/components/common/BackButton';
 import ClientTableWrapper from '@/components/common/wrapper/ClientTableWrapper';
-import { getSingleHeroBanner } from '@/services/hero-banner/hero-banner';
+import { getSingleHeroBanner } from '@/services/banners/hero-banner/hero-banner';
 import { Metadata } from 'next';
 
 export const dynamic = 'force-dynamic';

@@ -16,8 +16,8 @@ import useActionHandler from '@/hooks/useActionHandler';
 import {
   createHeroBanner,
   updateHeroBanner,
-} from '@/services/hero-banner/hero-banner';
-import type { IHeroBanner } from '@/services/hero-banner/hero-banner.interface';
+} from '@/services/banners/hero-banner/hero-banner';
+import type { IHeroBanner } from '@/services/banners/hero-banner/hero-banner.interface';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ImageIcon, Plus, Save } from 'lucide-react';
 import { useRouter } from 'next/navigation';

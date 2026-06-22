@@ -2,7 +2,7 @@ import HeroBannerTable from '@/app/admin/hero-banners/_components/HeroBannerTabl
 import ClientTableWrapper from '@/components/common/wrapper/ClientTableWrapper';
 import { Button } from '@/components/ui/button';
 import cleanSearchParams from '@/lib/cleanSearchParams';
-import { getHeroBanners } from '@/services/hero-banner/hero-banner';
+import { getHeroBanners } from '@/services/banners/hero-banner/hero-banner';
 import { SearchParams } from '@/types';
 import { Plus } from 'lucide-react';
 import { Metadata } from 'next';

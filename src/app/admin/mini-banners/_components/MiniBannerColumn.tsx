@@ -8,7 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import type { IMiniBanner } from '@/services/mini-banner/mini-banner.interface';
+import type { IMiniBanner } from '@/services/banners/mini-banner/mini-banner.interface';
 import Image from 'next/image';
 import MiniBannerActions from './MiniBannerActions';
 
