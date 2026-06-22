@@ -16,28 +16,27 @@ export default function BlockedPage() {
       return null;
     };
 
-    let blockUntilStr = getCookie('aranis_block_until');
-
-    // Fallback to localStorage if the cookie cannot be read (e.g. strict security or expired)
-    if (!blockUntilStr) {
-      try {
-        const stored = localStorage.getItem('aranis_block_info');
-        if (stored) {
-          const parsed = JSON.parse(stored);
-          if (parsed.blockUntil) {
-            blockUntilStr = parsed.blockUntil.toString();
-          }
-        }
-      } catch (e) {
-        // ignore parsing errors
-      }
-    }
-
-    if (!blockUntilStr) return;
-
-    const blockUntil = parseInt(blockUntilStr, 10);
-
     const updateTimer = () => {
+      let blockUntilStr = getCookie('aranis_block_until');
+
+      // Fallback to localStorage if the cookie cannot be read
+      if (!blockUntilStr) {
+        try {
+          const stored = localStorage.getItem('aranis_block_info');
+          if (stored) {
+            const parsed = JSON.parse(stored);
+            if (parsed.blockUntil) {
+              blockUntilStr = parsed.blockUntil.toString();
+            }
+          }
+        } catch (e) {
+          // ignore parsing errors
+        }
+      }
+
+      if (!blockUntilStr) return;
+
+      const blockUntil = parseInt(blockUntilStr, 10);
       const now = Date.now();
       const diff = blockUntil - now;
 
