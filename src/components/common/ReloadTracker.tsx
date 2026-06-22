@@ -68,6 +68,23 @@ export default function ReloadTracker() {
         localStorage.removeItem(BLOCK_INFO_KEY);
       }
 
+      let isReload = false;
+      try {
+        if (window.performance && window.performance.navigation) {
+          isReload = window.performance.navigation.type === 1;
+        }
+        if (window.performance && window.performance.getEntriesByType) {
+          const navEntries = window.performance.getEntriesByType('navigation');
+          if (navEntries.length > 0) {
+            isReload =
+              (navEntries[0] as PerformanceNavigationTiming).type === 'reload';
+          }
+        }
+      } catch (e) {
+        // Fallback to true if performance API fails, just in case
+        isReload = true;
+      }
+
       // If they navigated to a different path, it's not a reload spam. Reset timestamps.
       if (reloadData.lastPath !== currentPath) {
         reloadData.timestamps = [];
@@ -78,8 +95,11 @@ export default function ReloadTracker() {
         );
       }
 
-      // Add current reload timestamp
-      reloadData.timestamps.push(now);
+      // Add current reload timestamp ONLY if it is an actual reload
+      if (isReload) {
+        reloadData.timestamps.push(now);
+      }
+
       reloadData.lastPath = currentPath;
 
       const currentReloads = reloadData.timestamps.length;
