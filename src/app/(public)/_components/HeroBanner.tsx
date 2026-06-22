@@ -56,10 +56,10 @@ const HeroBanner = ({ mainSlides, miniBanners }: HeroBannerProps) => {
   return (
     <section className="bg-background w-full pb-4">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 gap-3 lg:grid-cols-[1fr_320px]">
+        <div className="flex flex-col gap-3 lg:flex-row">
           {/* ── Main Carousel ─────────────────────────────────────── */}
           {slides.length > 0 && (
-            <div className="group bg-muted relative aspect-[16/9] w-full overflow-hidden rounded-2xl">
+            <div className="group bg-muted relative aspect-[16/9] w-full flex-1 overflow-hidden rounded-2xl">
               {/* Slides */}
               <AnimatePresence custom={direction} initial={false}>
                 {slide && (
@@ -87,7 +87,6 @@ const HeroBanner = ({ mainSlides, miniBanners }: HeroBannerProps) => {
                         priority
                         fetchPriority="high"
                         sizes="(max-width: 1024px) 100vw, 75vw"
-                        quality={60}
                       />
                     </Link>
                   </motion.div>
@@ -120,24 +119,6 @@ const HeroBanner = ({ mainSlides, miniBanners }: HeroBannerProps) => {
                 </>
               )}
 
-              {/* Dot indicators */}
-              {slides.length > 1 && (
-                <div className="absolute bottom-4 left-1/2 z-20 flex -translate-x-1/2 gap-2">
-                  {slides.map((s, i) => (
-                    <button
-                      key={s._id ?? i}
-                      onClick={() => goTo(i)}
-                      className={`box-content h-1.5 rounded-full bg-clip-content p-[21px] transition-all duration-300 ${
-                        i === current
-                          ? 'w-6 bg-white'
-                          : 'w-1.5 bg-white/40 hover:bg-white/70'
-                      }`}
-                      aria-label={`Go to slide ${i + 1}`}
-                    />
-                  ))}
-                </div>
-              )}
-
               {/* Progress bar */}
               {slides.length > 1 && (
                 <div className="absolute right-0 bottom-0 left-0 z-20 h-0.5 bg-white/10">
@@ -158,12 +139,12 @@ const HeroBanner = ({ mainSlides, miniBanners }: HeroBannerProps) => {
 
           {/* ── Mini Banners ──────────────────────────────────────── */}
           {minis.length > 0 && (
-            <div className="hidden flex-col gap-3 lg:flex">
-              {minis.map((banner, i) => (
+            <div className="grid grid-cols-2 gap-3 lg:flex lg:w-[320px] lg:flex-col">
+              {minis.slice(0, 2).map((banner, i) => (
                 <Link
                   key={banner._id ?? i}
                   href={banner.link || '#'}
-                  className="group relative block flex-1 overflow-hidden rounded-2xl"
+                  className="group relative block aspect-[4/3] w-full overflow-hidden rounded-2xl lg:aspect-auto lg:flex-1"
                   aria-label={`Mini Banner ${i + 1}`}
                 >
                   <Image
@@ -172,8 +153,7 @@ const HeroBanner = ({ mainSlides, miniBanners }: HeroBannerProps) => {
                     fill
                     priority={i < 2}
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    sizes="320px"
-                    quality={60}
+                    sizes="(max-width: 1024px) 50vw, 320px"
                   />
                 </Link>
               ))}

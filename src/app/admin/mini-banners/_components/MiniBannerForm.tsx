@@ -101,7 +101,7 @@ const MiniBannerForm = ({ banner }: Props) => {
                 <SingleImageUploader
                   defaultValue={field.value}
                   onChange={(file) => field.onChange(file)}
-                  recommendation="Recommended Size: 600x400px (3:2 aspect ratio) for best display on all devices."
+                  recommendation="Recommended Size: 800x600px (4:3 aspect ratio) to perfectly match the UI on desktop and mobile."
                 />
               </FormControl>
               <FormMessage />
