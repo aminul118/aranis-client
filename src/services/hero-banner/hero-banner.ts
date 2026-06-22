@@ -2,19 +2,13 @@
 
 import { revalidate } from '@/lib/revalidate';
 import serverFetch from '@/lib/server-fetch';
-import type {
-  IHeroBanner,
-  IMiniBanner,
-} from '@/services/hero-banner/hero-banner.interface';
+import type { IHeroBanner } from '@/services/hero-banner/hero-banner.interface';
 import { ApiResponse } from '@/types';
-import { revalidatePath } from 'next/cache';
-
-// ─── Hero Banner ─────────────────────────────────────────────────────────────
 
 const getHeroBanners = async (query: Record<string, string> = {}) => {
   return await serverFetch.get<ApiResponse<IHeroBanner[]>>('/hero-banners', {
     query,
-    cache: 'force-cache',
+    cache: 'no-store',
     next: { tags: ['hero-banners'] },
   });
 };
@@ -31,8 +25,7 @@ const createHeroBanner = async (payload: FormData) => {
     },
   );
   try {
-    revalidatePath('/', 'layout');
-    revalidate('hero-banners');
+    await revalidate('hero-banners');
   } catch (e) {
     console.error(e);
   }
@@ -47,8 +40,7 @@ const updateHeroBanner = async (payload: FormData, id: string) => {
     },
   );
   try {
-    revalidatePath('/', 'layout');
-    revalidate('hero-banners');
+    await revalidate('hero-banners');
   } catch (e) {
     console.error(e);
   }
@@ -60,8 +52,7 @@ const deleteHeroBanner = async (id: string) => {
     `/hero-banners/${id}`,
   );
   try {
-    revalidatePath('/', 'layout');
-    revalidate('hero-banners');
+    await revalidate('hero-banners');
   } catch (e) {
     console.error(e);
   }
@@ -77,84 +68,7 @@ const deleteHeroBannerBulk = async (ids: string[]) => {
     },
   );
   try {
-    revalidatePath('/', 'layout');
-    revalidate('hero-banners');
-  } catch (e) {
-    console.error(e);
-  }
-  return res;
-};
-
-// ─── Mini Banner ─────────────────────────────────────────────────────────────
-
-const getMiniBanners = async (query: Record<string, string> = {}) => {
-  return await serverFetch.get<ApiResponse<IMiniBanner[]>>('/mini-banners', {
-    query,
-    cache: 'force-cache',
-    next: { tags: ['mini-banners'] },
-  });
-};
-
-const getSingleMiniBanner = async (id: string) => {
-  return await serverFetch.get<ApiResponse<IMiniBanner>>(`/mini-banners/${id}`);
-};
-
-const createMiniBanner = async (payload: FormData) => {
-  const res = await serverFetch.post<ApiResponse<IMiniBanner>>(
-    '/mini-banners',
-    {
-      body: payload,
-    },
-  );
-  try {
-    revalidatePath('/', 'layout');
-    revalidate('mini-banners');
-  } catch (e) {
-    console.error(e);
-  }
-  return res;
-};
-
-const updateMiniBanner = async (payload: FormData, id: string) => {
-  const res = await serverFetch.patch<ApiResponse<IMiniBanner>>(
-    `/mini-banners/${id}`,
-    {
-      body: payload,
-    },
-  );
-  try {
-    revalidatePath('/', 'layout');
-    revalidate('mini-banners');
-  } catch (e) {
-    console.error(e);
-  }
-  return res;
-};
-
-const deleteMiniBanner = async (id: string) => {
-  const res = await serverFetch.delete<ApiResponse<IMiniBanner>>(
-    `/mini-banners/${id}`,
-  );
-  try {
-    revalidatePath('/', 'layout');
-    revalidate('mini-banners');
-  } catch (e) {
-    console.error(e);
-  }
-  return res;
-};
-
-const deleteMiniBannerBulk = async (ids: string[]) => {
-  const res = await serverFetch.delete<ApiResponse<any>>(
-    '/mini-banners/bulk-delete',
-    {
-      body: JSON.stringify({ ids }),
-      headers: { 'Content-Type': 'application/json' },
-    },
-  );
-  try {
-    revalidatePath('/', 'layout');
-    revalidate('mini-banners');
+    await revalidate('hero-banners');
   } catch (e) {
     console.error(e);
   }
@@ -163,15 +77,9 @@ const deleteMiniBannerBulk = async (ids: string[]) => {
 
 export {
   createHeroBanner,
-  createMiniBanner,
   deleteHeroBanner,
   deleteHeroBannerBulk,
-  deleteMiniBanner,
-  deleteMiniBannerBulk,
   getHeroBanners,
-  getMiniBanners,
   getSingleHeroBanner,
-  getSingleMiniBanner,
   updateHeroBanner,
-  updateMiniBanner,
 };

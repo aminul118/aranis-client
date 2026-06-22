@@ -9,8 +9,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { deleteMiniBanner } from '@/services/hero-banner/hero-banner';
-import type { IMiniBanner } from '@/services/hero-banner/hero-banner.interface';
+import { deleteMiniBanner } from '@/services/mini-banner/mini-banner';
+import type { IMiniBanner } from '@/services/mini-banner/mini-banner.interface';
 import { EllipsisIcon, PencilIcon, Trash2Icon } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';

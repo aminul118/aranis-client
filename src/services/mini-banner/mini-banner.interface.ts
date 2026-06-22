@@ -1,4 +1,4 @@
-export interface IHeroBanner {
+export interface IMiniBanner {
   _id?: string;
   image: string;
   link?: string;

@@ -2,7 +2,7 @@ import MiniBannerTable from '@/app/admin/mini-banners/_components/MiniBannerTabl
 import ClientTableWrapper from '@/components/common/wrapper/ClientTableWrapper';
 import { Button } from '@/components/ui/button';
 import cleanSearchParams from '@/lib/cleanSearchParams';
-import { getMiniBanners } from '@/services/hero-banner/hero-banner';
+import { getMiniBanners } from '@/services/mini-banner/mini-banner';
 import { SearchParams } from '@/types';
 import { Plus } from 'lucide-react';
 import { Metadata } from 'next';

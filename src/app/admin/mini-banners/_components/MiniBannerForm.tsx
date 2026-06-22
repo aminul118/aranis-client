@@ -16,29 +16,14 @@ import useActionHandler from '@/hooks/useActionHandler';
 import {
   createMiniBanner,
   updateMiniBanner,
-} from '@/services/hero-banner/hero-banner';
-import type { IMiniBanner } from '@/services/hero-banner/hero-banner.interface';
+} from '@/services/mini-banner/mini-banner';
+import { IMiniBanner } from '@/services/mini-banner/mini-banner.interface';
+import { miniBannerSchema } from '@/services/mini-banner/mini-banner.validation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ImageIcon, Plus, Save } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-
-const miniBannerSchema = z.object({
-  image: z
-    .any()
-    .refine(
-      (val) =>
-        val &&
-        (typeof val === 'string' ||
-          val instanceof File ||
-          (typeof val === 'object' && val !== null)),
-      'Image is required',
-    ),
-  link: z.string().optional().or(z.literal('')),
-  order: z.coerce.number().default(0),
-  isActive: z.boolean().default(true),
-});
 
 type FormValues = z.infer<typeof miniBannerSchema>;
 
