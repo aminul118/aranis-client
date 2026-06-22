@@ -10,11 +10,11 @@ const WARNING_RELOAD = 4;
 const BLOCK_DURATION_MS = 2 * 60 * 1000; // 2 minutes
 const TIME_WINDOW_MS = 10 * 1000; // 10 seconds window for rapid reloads
 const STORAGE_KEY = 'aranis_reload_tracker';
+const BLOCK_INFO_KEY = 'aranis_block_info';
 
 interface ReloadData {
   timestamps: number[];
-  date: string;
-  blockUntil?: number;
+  lastPath: string;
 }
 
 export default function ReloadTracker() {
@@ -28,64 +28,87 @@ export default function ReloadTracker() {
     hasRun.current = true;
 
     const today = new Date().toDateString();
-    let reloadData: ReloadData = { timestamps: [], date: today };
 
+    // Read block status from localStorage
+    let blockUntil: number | undefined;
     try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        const parsed = JSON.parse(stored) as ReloadData;
-        if (parsed.date === today) {
-          reloadData = parsed;
+      const storedBlock = localStorage.getItem(BLOCK_INFO_KEY);
+      if (storedBlock) {
+        const parsed = JSON.parse(storedBlock);
+        if (parsed.date === today && parsed.blockUntil) {
+          blockUntil = parsed.blockUntil;
         }
+      }
+    } catch (e) {
+      // ignore
+    }
+
+    // Read timestamps from sessionStorage
+    let reloadData: ReloadData = { timestamps: [], lastPath: '' };
+    try {
+      const stored = sessionStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        reloadData = JSON.parse(stored);
       }
     } catch (e) {
       logger.error('Failed to parse reload tracker data', e);
     }
 
     const now = Date.now();
+    const currentPath = window.location.pathname;
 
-    if (reloadData.blockUntil && now < reloadData.blockUntil) {
+    if (blockUntil && now < blockUntil) {
       // Still blocked
-
-      document.cookie = `aranis_block_until=${reloadData.blockUntil}; path=/; max-age=${Math.ceil((reloadData.blockUntil - now) / 1000)}`;
+      document.cookie = `aranis_block_until=${blockUntil}; path=/; max-age=${Math.ceil((blockUntil - now) / 1000)}`;
     } else {
       // Block expired or not blocked
-      if (reloadData.blockUntil && now >= reloadData.blockUntil) {
+      if (blockUntil && now >= blockUntil) {
         // Reset after block expires
-        reloadData.timestamps = [];
-        delete reloadData.blockUntil;
+        blockUntil = undefined;
+        localStorage.removeItem(BLOCK_INFO_KEY);
       }
 
-      // Filter out timestamps that are older than the time window
-      reloadData.timestamps = (reloadData.timestamps || []).filter(
-        (t) => now - t <= TIME_WINDOW_MS,
-      );
+      // If they navigated to a different path, it's not a reload spam. Reset timestamps.
+      if (reloadData.lastPath !== currentPath) {
+        reloadData.timestamps = [];
+      } else {
+        // Filter out timestamps that are older than the time window
+        reloadData.timestamps = (reloadData.timestamps || []).filter(
+          (t) => now - t <= TIME_WINDOW_MS,
+        );
+      }
 
       // Add current reload timestamp
       reloadData.timestamps.push(now);
+      reloadData.lastPath = currentPath;
 
       const currentReloads = reloadData.timestamps.length;
       setWarningCount(currentReloads);
 
       if (currentReloads >= RELOAD_LIMIT) {
-        reloadData.blockUntil = now + BLOCK_DURATION_MS;
+        blockUntil = now + BLOCK_DURATION_MS;
+
+        // Save block info to localStorage
+        localStorage.setItem(
+          BLOCK_INFO_KEY,
+          JSON.stringify({ blockUntil, date: today }),
+        );
 
         // Set a cookie so Next.js middleware knows this user is blocked
-        document.cookie = `aranis_block_until=${reloadData.blockUntil}; path=/; max-age=${2 * 60}`;
+        document.cookie = `aranis_block_until=${blockUntil}; path=/; max-age=${2 * 60}`;
       } else if (currentReloads >= WARNING_RELOAD) {
         setShowWarning(true);
       }
     }
 
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(reloadData));
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(reloadData));
 
     // If blocked, set a timeout to automatically unblock them when the time expires
-    if (reloadData.blockUntil && reloadData.blockUntil > Date.now()) {
-      const timeRemaining = reloadData.blockUntil - Date.now();
+    if (blockUntil && blockUntil > Date.now()) {
+      const timeRemaining = blockUntil - Date.now();
       const timeoutId = setTimeout(() => {
-        reloadData.timestamps = [];
-        delete reloadData.blockUntil;
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(reloadData));
+        sessionStorage.removeItem(STORAGE_KEY);
+        localStorage.removeItem(BLOCK_INFO_KEY);
         // Remove the cookie
         document.cookie = 'aranis_block_until=; path=/; max-age=0';
 

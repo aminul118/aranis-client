@@ -21,7 +21,7 @@ export default function BlockedPage() {
     // Fallback to localStorage if the cookie cannot be read (e.g. strict security or expired)
     if (!blockUntilStr) {
       try {
-        const stored = localStorage.getItem('aranis_reload_tracker');
+        const stored = localStorage.getItem('aranis_block_info');
         if (stored) {
           const parsed = JSON.parse(stored);
           if (parsed.blockUntil) {
