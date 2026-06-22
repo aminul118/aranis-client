@@ -18,13 +18,13 @@ import {
   InputOTPSlot,
 } from '@/components/ui/input-otp';
 import useSearchParamsValues from '@/hooks/useSearchParamsValues';
+import { otpValidation } from '@/services/auth/auth.validation';
 import { requestOTP } from '@/services/auth/otp/sendOTP';
 import { verifyOTP } from '@/services/auth/otp/verifyOTP';
 import {
   getDefaultDashboardRoute,
   UserRole,
 } from '@/services/user/user-access';
-import { otpValidation } from '@/zod/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';

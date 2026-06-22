@@ -1,6 +1,6 @@
 'use client';
 
-import { IOffer } from '@/services/offer/offer';
+import type { IOffer } from '@/services/offer/offer.interface';
 import { useEffect, useState } from 'react';
 
 interface Props {

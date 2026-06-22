@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { deleteSizeGuide } from '@/services/size-guide/size-guide';
-import { ISizeGuide } from '@/types';
+import type { ISizeGuide } from '@/services/size-guide/size-guide.interface';
 import { EllipsisIcon, EyeIcon, PencilIcon, Trash2Icon } from 'lucide-react';
 import { useState } from 'react';
 

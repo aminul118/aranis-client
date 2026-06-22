@@ -2,21 +2,8 @@
 
 import { revalidate } from '@/lib/revalidate';
 import serverFetch from '@/lib/server-fetch';
+import type { IReview } from '@/services/review/review.interface';
 import { ApiResponse } from '@/types';
-
-export interface IReview {
-  _id?: string;
-  user: {
-    _id: string;
-    firstName: string;
-    lastName: string;
-    image?: string;
-  };
-  product: string;
-  rating: number;
-  comment: string;
-  createdAt: string;
-}
 
 const getProductReviews = async (productId: string) => {
   return await serverFetch.get<ApiResponse<IReview[]>>(`/reviews/${productId}`);

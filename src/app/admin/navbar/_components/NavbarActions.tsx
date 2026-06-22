@@ -9,7 +9,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { deleteNavbar, INavItem } from '@/services/navbar/navbar';
+import { deleteNavbar } from '@/services/navbar/navbar';
+import type { INavItem } from '@/services/navbar/navbar.interface';
 import { EllipsisIcon, PencilIcon, Trash2Icon } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';

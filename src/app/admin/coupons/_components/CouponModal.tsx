@@ -8,7 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { ICoupon } from '@/services/coupon/coupon';
+import type { ICoupon } from '@/services/coupon/coupon.interface';
 import { Plus, TicketPercent } from 'lucide-react';
 import { ReactNode, useState } from 'react';
 import CouponForm from './CouponForm';

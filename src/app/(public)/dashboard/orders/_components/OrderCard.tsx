@@ -5,7 +5,7 @@ import Image from '@/components/common/SafeImage';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { OrderStatus } from '@/services/order/order.types';
-import { IProduct } from '@/types';
+import type { IProduct } from '@/services/product/product.interface';
 import { format } from 'date-fns';
 import { motion } from 'framer-motion';
 import {

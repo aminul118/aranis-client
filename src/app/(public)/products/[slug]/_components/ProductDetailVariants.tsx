@@ -1,7 +1,7 @@
 import Image from '@/components/common/SafeImage';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
-import { IProduct } from '@/types';
+import type { IProduct } from '@/services/product/product.interface';
 import { Check } from 'lucide-react';
 
 interface ProductDetailVariantsProps {

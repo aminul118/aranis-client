@@ -2,10 +2,8 @@
 
 import { Button } from '@/components/ui/button';
 import useActionHandler from '@/hooks/useActionHandler';
-import {
-  IRestockRequest,
-  resolveRestockRequest,
-} from '@/services/restock/restock';
+import { resolveRestockRequest } from '@/services/restock/restock';
+import type { IRestockRequest } from '@/services/restock/restock.interface';
 import { CheckCircle2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 

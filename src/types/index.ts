@@ -11,23 +11,7 @@ export type {
   SectionProps,
 } from './react.types';
 
-export type {
-  ApiResponse,
-  Auth,
-  IBlog,
-  IContact,
-  ICoupon,
-  IExperience,
-  IInvoice,
-  ILogin,
-  IMeta,
-  IProject,
-  ISizeGuide,
-  IStats,
-  IUser,
-} from './api.types';
-
-import { ISizeGuide } from './api.types';
+export type { ApiResponse, Auth, ILogin, IMeta } from './api.types';
 
 export enum Role {
   ADMIN = 'ADMIN',
@@ -51,53 +35,4 @@ export interface IVariant {
   sizes: IVariantSize[];
   sku?: string;
   soldCount?: number;
-}
-
-export interface IProduct {
-  _id?: string;
-  name: string;
-  category: string;
-  subCategory: string;
-  type: string;
-  price: number;
-  thumbnails: string[];
-  description?: string;
-  color: string;
-  variants?: IVariant[];
-  sizes: string[];
-  featured: boolean;
-  slug: string;
-  sku?: string;
-  stock: number;
-  sizeStock?: IVariantSize[];
-  buyPrice: number;
-  salePrice?: number;
-  discountPercentage?: number;
-  discountType?: 'percentage' | 'fixed';
-  discountValue?: number;
-  isOffer?: boolean;
-  offerTag?: string;
-  rating?: number;
-  soldCount?: number;
-  videoUrl?: string;
-  youtubeVideoUrl?: string;
-  refundPolicy?: string;
-  returnPolicy?: string;
-  sizeGuide?: ISizeGuide | string;
-  isDeleted?: boolean;
-  seo: {
-    title: string;
-    description: string;
-    keywords: string;
-  };
-  createdAt: string | Date;
-  updatedAt: string | Date;
-}
-
-export interface ICartItem extends IProduct {
-  cartItemId?: string;
-  quantity: number;
-  selectedColor?: string;
-  selectedSize?: string;
-  isStockOut?: boolean;
 }

@@ -1,6 +1,9 @@
 'use client';
 
-import { IHeroBanner, IMiniBanner } from '@/services/hero-banner/hero-banner';
+import type {
+  IHeroBanner,
+  IMiniBanner,
+} from '@/services/hero-banner/hero-banner.interface';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Image from 'next/image';

@@ -3,8 +3,8 @@
 import HtmlContent from '@/components/rich-text/core/html-content';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/CartContext';
-import { IGiftCard } from '@/services/giftcard/giftcard';
-import { IProduct } from '@/types';
+import type { IGiftCard } from '@/services/giftcard/giftcard.interface';
+import type { IProduct } from '@/services/product/product.interface';
 import { CheckCircle, Clock } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';

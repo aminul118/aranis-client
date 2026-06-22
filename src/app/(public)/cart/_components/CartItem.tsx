@@ -1,7 +1,7 @@
 'use client';
 
 import Image from '@/components/common/SafeImage';
-import { ICartItem } from '@/types';
+import type { ICartItem } from '@/services/cart/cart.interface';
 import { motion } from 'framer-motion';
 import { Minus, Plus, Trash2 } from 'lucide-react';
 import Link from 'next/link';

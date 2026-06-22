@@ -2,8 +2,8 @@
 
 import { revalidate } from '@/lib/revalidate';
 import serverFetch from '@/lib/server-fetch';
-import { ApiResponse, ICoupon } from '@/types';
-export type { ICoupon } from '@/types';
+import type { ICoupon } from '@/services/coupon/coupon.interface';
+import { ApiResponse } from '@/types';
 
 export const getCoupons = async (query?: Record<string, string>) => {
   const params = new URLSearchParams(query);

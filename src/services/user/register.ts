@@ -2,7 +2,8 @@
 
 import { revalidate } from '@/lib/revalidate';
 import serverFetch from '@/lib/server-fetch';
-import { ApiResponse, IUser } from '@/types';
+import type { IUser } from '@/services/user/user.interface';
+import { ApiResponse } from '@/types';
 
 export const registerUserFromAdmin = async (payload: Partial<IUser>) => {
   const res = await serverFetch.post<ApiResponse<IUser>>(

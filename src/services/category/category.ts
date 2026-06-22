@@ -2,19 +2,8 @@
 
 import { revalidate } from '@/lib/revalidate';
 import serverFetch from '@/lib/server-fetch';
+import type { ICategory } from '@/services/category/category.interface';
 import { ApiResponse } from '@/types';
-
-export interface ISubCategory {
-  title?: string;
-  items?: string[];
-}
-
-export interface ICategory {
-  _id?: string;
-  name: string;
-  subCategories: ISubCategory[];
-  isDeleted?: boolean;
-}
 
 export const createCategory = async (payload: ICategory) => {
   const res = await serverFetch.post<ApiResponse<ICategory>>('/categories', {

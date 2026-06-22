@@ -12,7 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { IUser } from '@/types';
+import type { IUser } from '@/services/user/user.interface';
 import { BadgeCheck, XCircle } from 'lucide-react';
 
 const Profile = ({ user }: { user: IUser }) => {

@@ -11,8 +11,9 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import useActionHandler from '@/hooks/useActionHandler';
-import { createCoupon, ICoupon, updateCoupon } from '@/services/coupon/coupon';
-import { addCouponSchema } from '@/zod/coupon';
+import { createCoupon, updateCoupon } from '@/services/coupon/coupon';
+import type { ICoupon } from '@/services/coupon/coupon.interface';
+import { addCouponSchema } from '@/services/coupon/coupon.validation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Plus, Save } from 'lucide-react';
 import { useRouter } from 'next/navigation';

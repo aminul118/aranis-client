@@ -9,7 +9,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { deleteSize, ISize } from '@/services/size/size';
+import { deleteSize } from '@/services/size/size';
+import type { ISize } from '@/services/size/size.interface';
 import { EllipsisIcon, PencilIcon, Trash2Icon } from 'lucide-react';
 import { useState } from 'react';
 import SizeModal from './SizeModal';

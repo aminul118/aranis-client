@@ -2,27 +2,8 @@
 
 import { revalidate } from '@/lib/revalidate';
 import serverFetch from '@/lib/server-fetch';
+import type { INavItem } from '@/services/navbar/navbar.interface';
 import { ApiResponse } from '@/types';
-
-export interface INavItemLink {
-  label: string;
-  url: string;
-}
-
-export interface INavSubItem {
-  title?: string;
-  href?: string;
-  items: INavItemLink[];
-}
-
-export interface INavItem {
-  _id?: string;
-  title: string;
-  href: string;
-  subItems?: INavSubItem[];
-  order: number;
-  isDeleted?: boolean;
-}
 
 const createNavbar = async (payload: INavItem) => {
   const res = await serverFetch.post<ApiResponse<INavItem>>('/navbar', {

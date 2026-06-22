@@ -1,7 +1,8 @@
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { getSiteSettings } from '@/services/settings/settings';
+import type { IUser } from '@/services/user/user.interface';
 import { getMe } from '@/services/user/users';
-import { Children, IUser } from '@/types';
+import { Children } from '@/types';
 import { Metadata } from 'next';
 import AdminSidebar from './_components/layouts/admin-sidebar';
 import AdminHeader from './_components/layouts/AdminHeader';

@@ -19,7 +19,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { applyOfferToAll, deleteOffer, IOffer } from '@/services/offer/offer';
+import { applyOfferToAll, deleteOffer } from '@/services/offer/offer';
+import type { IOffer } from '@/services/offer/offer.interface';
 import { EllipsisIcon, GlobeIcon, PencilIcon, Trash2Icon } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';

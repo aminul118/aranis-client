@@ -2,19 +2,8 @@
 
 import { revalidate } from '@/lib/revalidate';
 import serverFetch from '@/lib/server-fetch';
+import type { ILocation } from '@/services/location/location.interface';
 import { ApiResponse } from '@/types';
-
-export interface ILocation {
-  _id?: string;
-  name: string;
-  address: string;
-  offDay?: string;
-  phone: string[];
-  hours: string;
-  isActive: boolean;
-  createdAt?: string;
-  updatedAt?: string;
-}
 
 const createLocation = async (payload: ILocation) => {
   const res = await serverFetch.post<ApiResponse<ILocation>>('/locations', {

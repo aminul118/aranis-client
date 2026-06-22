@@ -1,7 +1,7 @@
 'use client';
 
+import type { IUser } from '@/services/user/user.interface';
 import { getMe } from '@/services/user/users';
-import { IUser } from '@/types';
 import {
   createContext,
   Dispatch,

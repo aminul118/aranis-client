@@ -1,5 +1,5 @@
 import { Column } from '@/components/common/table/TableManageMent';
-import { IColor } from '@/services/color/color';
+import type { IColor } from '@/services/color/color.interface';
 import ColorActions from './ColorActions';
 
 const ColorsColumn: Column<IColor>[] = [

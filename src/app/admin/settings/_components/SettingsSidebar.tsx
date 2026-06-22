@@ -5,7 +5,8 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { settingNavigationMenu } from './settingNavigationMenu';
 
-import { IUser, Role } from '@/types';
+import type { IUser } from '@/services/user/user.interface';
+import { Role } from '@/types';
 
 const SettingsSidebar = ({
   basePath = '/admin/settings',

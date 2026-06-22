@@ -1,8 +1,8 @@
 'use client';
 
 import { useCart } from '@/context/CartContext';
-import { IGiftCard } from '@/services/giftcard/giftcard';
-import { IProduct } from '@/types';
+import type { IGiftCard } from '@/services/giftcard/giftcard.interface';
+import type { IProduct } from '@/services/product/product.interface';
 import { ShoppingBag } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';

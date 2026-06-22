@@ -11,8 +11,8 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import { loginFormValidation } from '@/services/auth/auth.validation';
 import { forgotPassword } from '@/services/auth/password-reset';
-import { loginFormValidation } from '@/zod/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Turnstile } from '@marsidev/react-turnstile';
 import { Mail } from 'lucide-react';

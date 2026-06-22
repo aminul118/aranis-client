@@ -23,8 +23,11 @@ import {
 import Password from '@/components/ui/password';
 import { useUser } from '@/context/UserContext';
 import useActionHandler from '@/hooks/useActionHandler';
+import {
+  setPasswordSchema,
+  SetPasswordValues,
+} from '@/services/auth/auth.validation';
 import { changePassword } from '@/services/user/users';
-import { setPasswordSchema, SetPasswordValues } from '@/zod/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { KeyRound, X } from 'lucide-react';
 import { useForm } from 'react-hook-form';

@@ -7,7 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { ICustomerInterestItem } from '@/services/customer-interest/customer-interest';
+import type { ICustomerInterestItem } from '@/services/customer-interest/customer-interest.interface';
 import { Eye, MoreHorizontal } from 'lucide-react';
 import Link from 'next/link';
 

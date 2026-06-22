@@ -1,4 +1,4 @@
-import { ILocation } from '@/services/location/location';
+import type { ILocation } from '@/services/location/location.interface';
 import { CalendarOff, Clock, MapPin, Phone } from 'lucide-react';
 
 const LocationCard = ({ loc }: { loc: ILocation }) => {

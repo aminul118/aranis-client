@@ -1,6 +1,6 @@
 'use client';
 
-import { IUser } from '@/types';
+import type { IUser } from '@/services/user/user.interface';
 import { ReactNode } from 'react';
 import CategoryBar from './CategoryBar';
 import MainNavbar from './MainNavbar';

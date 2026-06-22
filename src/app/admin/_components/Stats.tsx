@@ -10,7 +10,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
-import { IStats } from '@/types';
+import type { IStats } from '@/services/stats/stats.interface';
 import {
   AlertTriangle,
   ArrowUpRight,

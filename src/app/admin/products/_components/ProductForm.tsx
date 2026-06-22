@@ -32,13 +32,17 @@ import SingleVideoUploader from '@/components/ui/single-video-uploader';
 import { Textarea } from '@/components/ui/textarea';
 import useActionHandler from '@/hooks/useActionHandler';
 import { cn, getYoutubeEmbedUrl } from '@/lib/utils';
-import { ICategory } from '@/services/category/category';
-import { IColor } from '@/services/color/color';
-import { IOffer } from '@/services/offer/offer';
+import type { ICategory } from '@/services/category/category.interface';
+import type { IColor } from '@/services/color/color.interface';
+import type { IOffer } from '@/services/offer/offer.interface';
 import { createProduct, updateProduct } from '@/services/product/product';
-import { ISize } from '@/services/size/size';
-import { IProduct, ISizeGuide } from '@/types';
-import { addProductSchema, updateProductSchema } from '@/zod/product';
+import type { IProduct } from '@/services/product/product.interface';
+import {
+  addProductSchema,
+  updateProductSchema,
+} from '@/services/product/product.validation';
+import type { ISizeGuide } from '@/services/size-guide/size-guide.interface';
+import type { ISize } from '@/services/size/size.interface';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Check, Plus, Save, Trash2 } from 'lucide-react';
 import Image from 'next/image';

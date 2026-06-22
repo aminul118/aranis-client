@@ -1,5 +1,5 @@
 import { IOrder } from '@/services/order/order.types';
-import { IProduct } from '@/types';
+import type { IProduct } from '@/services/product/product.interface';
 import Image from 'next/image';
 
 const OrderPrint = ({ order }: { order: IOrder }) => {

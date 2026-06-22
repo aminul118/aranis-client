@@ -3,10 +3,8 @@
 import DeleteConfirmation from '@/components/common/actions/DeleteConfirmation';
 import AppSearching from '@/components/common/searching/AppSearching';
 import { Button } from '@/components/ui/button';
-import {
-  deleteRestockRequest,
-  IRestockRequest,
-} from '@/services/restock/restock';
+import { deleteRestockRequest } from '@/services/restock/restock';
+import type { IRestockRequest } from '@/services/restock/restock.interface';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowRight, RefreshCcw, Trash2 } from 'lucide-react';
 import Image from 'next/image';

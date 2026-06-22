@@ -15,9 +15,9 @@ import { Switch } from '@/components/ui/switch';
 import useActionHandler from '@/hooks/useActionHandler';
 import {
   createHeroBanner,
-  IHeroBanner,
   updateHeroBanner,
 } from '@/services/hero-banner/hero-banner';
+import type { IHeroBanner } from '@/services/hero-banner/hero-banner.interface';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ImageIcon, Plus, Save } from 'lucide-react';
 import { useRouter } from 'next/navigation';

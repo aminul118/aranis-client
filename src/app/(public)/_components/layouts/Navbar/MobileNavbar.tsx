@@ -3,7 +3,7 @@
 import NotificationBell from '@/components/layouts/NotificationBell';
 import { toUrlSlug } from '@/lib/url-slugs';
 import { cn } from '@/lib/utils';
-import { IUser } from '@/types';
+import type { IUser } from '@/services/user/user.interface';
 import { AnimatePresence, motion, Variants } from 'framer-motion';
 import { Fade as Hamburger } from 'hamburger-react';
 import { ChevronDown } from 'lucide-react';

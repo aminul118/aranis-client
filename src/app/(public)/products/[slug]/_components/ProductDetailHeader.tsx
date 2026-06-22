@@ -4,7 +4,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { IProduct } from '@/types';
+import type { IProduct } from '@/services/product/product.interface';
 import { Copy, Facebook, Heart, MessageCircle, Share2 } from 'lucide-react';
 
 interface ProductDetailHeaderProps {

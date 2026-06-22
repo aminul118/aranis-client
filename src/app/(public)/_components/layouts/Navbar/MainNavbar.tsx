@@ -4,7 +4,7 @@ import HeaderUser from '@/components/layouts/HeaderUser';
 import NotificationBell from '@/components/layouts/NotificationBell';
 import { useCartOptional } from '@/context/CartContext';
 import { useWishlistOptional } from '@/context/WishlistContext';
-import { IUser } from '@/types';
+import type { IUser } from '@/services/user/user.interface';
 import { Gift, Heart, ShoppingCart, User } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';

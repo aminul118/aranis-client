@@ -2,20 +2,8 @@
 
 import { revalidate } from '@/lib/revalidate';
 import serverFetch from '@/lib/server-fetch';
+import type { INotification } from '@/services/notification/notification.interface';
 import { ApiResponse } from '@/types';
-
-export interface INotification {
-  _id: string;
-  user?: string;
-  title: string;
-  message: string;
-  type: 'Order' | 'System' | 'Payment' | 'Chat' | 'Wishlist' | 'Restock';
-  isRead: boolean;
-  orderId?: string;
-  conversationId?: string;
-  link?: string;
-  createdAt: string;
-}
 
 const getMyNotifications = async () => {
   return await serverFetch.get<ApiResponse<INotification[]>>(

@@ -2,16 +2,8 @@
 
 import { revalidate } from '@/lib/revalidate';
 import serverFetch from '@/lib/server-fetch';
+import type { IPopupBanner } from '@/services/popup-banner/popup-banner.interface';
 import { ApiResponse } from '@/types';
-
-export interface IPopupBanner {
-  _id?: string;
-  image: string;
-  link?: string;
-  title?: string;
-  isActive: boolean;
-  isDeleted?: boolean;
-}
 
 const getActivePopupBanner = async () => {
   return await serverFetch.get<ApiResponse<IPopupBanner>>(

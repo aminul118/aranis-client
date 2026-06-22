@@ -13,9 +13,9 @@ import {
 } from '@/components/ui/form';
 import { useUser } from '@/context/UserContext';
 import useSearchParamsValues from '@/hooks/useSearchParamsValues';
+import { passwordLoginValidation } from '@/services/auth/auth.validation';
 import { loginWithPassword } from '@/services/auth/login';
 import { getDefaultDashboardRoute } from '@/services/user/user-access';
-import { passwordLoginValidation } from '@/zod/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Turnstile } from '@marsidev/react-turnstile';
 import { Eye, EyeOff, Lock, Mail } from 'lucide-react';

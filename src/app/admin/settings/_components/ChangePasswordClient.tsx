@@ -12,8 +12,11 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import useActionHandler from '@/hooks/useActionHandler';
+import {
+  changePasswordSchema,
+  ChangePasswordValues,
+} from '@/services/auth/auth.validation';
 import { changePassword } from '@/services/auth/change-password';
-import { changePasswordSchema, ChangePasswordValues } from '@/zod/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Eye, EyeOff } from 'lucide-react';
 import { useState } from 'react';

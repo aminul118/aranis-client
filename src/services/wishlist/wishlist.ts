@@ -2,17 +2,8 @@
 
 import { revalidate } from '@/lib/revalidate';
 import serverFetch from '@/lib/server-fetch';
-import { ApiResponse, IProduct } from '@/types';
-
-export interface IWishlistItem {
-  _id: string;
-  user: string;
-  product: IProduct;
-  quantity: number;
-  createdAt: string;
-  selectedColor?: string;
-  selectedSize?: string;
-}
+import type { IWishlistItem } from '@/services/wishlist/wishlist.interface';
+import { ApiResponse } from '@/types';
 
 export const toggleWishlist = async (
   productId: string,

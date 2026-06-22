@@ -1,14 +1,9 @@
 'use server';
 
 import serverFetch from '@/lib/server-fetch';
+import type { IDeliveryCharge } from '@/services/delivery-charge/delivery-charge.interface';
 import type { ApiResponse } from '@/types';
 import { logger } from '../../lib/logger';
-
-export interface IDeliveryCharge {
-  insideDhaka: number;
-  outsideDhaka: number;
-  freeDeliveryThreshold: number;
-}
 
 export const getDeliveryCharge = async () => {
   return await serverFetch.get<ApiResponse<IDeliveryCharge>>(

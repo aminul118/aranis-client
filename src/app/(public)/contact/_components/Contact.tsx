@@ -1,5 +1,5 @@
 import SectionHeading from '@/components/ui/SectionHeading';
-import { ISiteSetting } from '@/services/settings/settings';
+import type { ISiteSetting } from '@/services/settings/settings.interface';
 import ContactForm from './ContactForm';
 import ContactInfo from './ContactInfo';
 

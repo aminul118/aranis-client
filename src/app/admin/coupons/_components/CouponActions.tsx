@@ -9,7 +9,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { deleteCoupon, ICoupon } from '@/services/coupon/coupon';
+import { deleteCoupon } from '@/services/coupon/coupon';
+import type { ICoupon } from '@/services/coupon/coupon.interface';
 import { EllipsisIcon, PencilIcon, Trash2Icon } from 'lucide-react';
 import { useState } from 'react';
 import CouponModal from './CouponModal';

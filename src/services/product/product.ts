@@ -3,7 +3,9 @@
 import type { FetchOptions } from '@/helpers/serverFetchHelper';
 import { revalidate } from '@/lib/revalidate';
 import serverFetch from '@/lib/server-fetch';
-import type { ApiResponse, IProduct } from '@/types';
+import type { IProduct } from '@/services/product/product.interface';
+import type { ApiResponse } from '@/types';
+import { revalidatePath } from 'next/cache';
 import { logger } from '../../lib/logger';
 
 export const createProduct = async (
@@ -13,12 +15,8 @@ export const createProduct = async (
     body: payload,
   });
   try {
-    const { revalidatePath, revalidateTag } = require('next/cache');
-    revalidatePath('/offers');
-    revalidatePath('/shop');
-    revalidatePath('/');
-    revalidatePath('/admin/products', 'layout');
-    revalidateTag('product');
+    revalidatePath('/', 'layout');
+    revalidate('product');
   } catch (e) {
     logger.error(e);
   }
@@ -36,15 +34,9 @@ export const updateProduct = async (
     },
   );
   try {
-    const { revalidatePath, revalidateTag } = require('next/cache');
-    revalidatePath('/offers');
-    revalidatePath('/shop');
-    revalidatePath('/');
-    revalidatePath('/admin/products', 'page');
-    revalidatePath(`/admin/products/${id}`, 'page');
-    revalidatePath(`/admin/products/${id}/edit`, 'page');
-    revalidateTag(`product-${id}`);
-    revalidateTag('product');
+    revalidatePath('/', 'layout');
+    revalidate(`product-${id}`);
+    revalidate('product');
   } catch (e) {
     logger.error(e);
   }
@@ -80,11 +72,7 @@ const deleteProduct = async (id: string) => {
     `/products/${id}`,
   );
   try {
-    const { revalidatePath } = require('next/cache');
-    revalidatePath('/offers');
-    revalidatePath('/shop');
-    revalidatePath('/');
-    revalidatePath('/admin/products', 'layout');
+    revalidatePath('/', 'layout');
   } catch (e) {
     logger.error(e);
   }
@@ -133,11 +121,7 @@ const updateProductBulk = async (ids: string[], data: Partial<IProduct>) => {
     },
   );
   try {
-    const { revalidatePath } = require('next/cache');
-    revalidatePath('/offers');
-    revalidatePath('/shop');
-    revalidatePath('/');
-    revalidatePath('/admin/products', 'layout');
+    revalidatePath('/', 'layout');
   } catch (e) {
     logger.error(e);
   }
@@ -157,10 +141,7 @@ const deleteProductBulk = async (ids: string[]) => {
   );
   try {
     const { revalidatePath } = require('next/cache');
-    revalidatePath('/offers');
-    revalidatePath('/shop');
-    revalidatePath('/');
-    revalidatePath('/admin/products', 'layout');
+    revalidatePath('/', 'layout');
   } catch (e) {
     logger.error(e);
   }

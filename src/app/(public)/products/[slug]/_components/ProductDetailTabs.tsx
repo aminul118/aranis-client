@@ -1,7 +1,7 @@
 import HtmlContent from '@/components/rich-text/core/html-content';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ISiteSetting } from '@/services/settings/settings';
-import { IProduct } from '@/types';
+import type { IProduct } from '@/services/product/product.interface';
+import type { ISiteSetting } from '@/services/settings/settings.interface';
 import { DraggableVideoPlayer } from './DraggableVideoPlayer';
 
 interface ProductDetailTabsProps {

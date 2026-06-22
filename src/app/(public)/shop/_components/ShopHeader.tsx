@@ -16,7 +16,7 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
-import { ICategory } from '@/services/category/category';
+import type { ICategory } from '@/services/category/category.interface';
 import {
   FilterX,
   LayoutGrid,

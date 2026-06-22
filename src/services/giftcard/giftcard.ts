@@ -2,25 +2,8 @@
 
 import { revalidate } from '@/lib/revalidate';
 import serverFetch from '@/lib/server-fetch';
+import type { IGiftCard } from '@/services/giftcard/giftcard.interface';
 import { ApiResponse } from '@/types';
-
-export interface IGiftCard {
-  _id?: string;
-  name: string;
-  slug?: string;
-  description: string;
-  price: number;
-  discountPercentage: number;
-  image: string;
-  status: 'active' | 'inactive';
-  validityDays: number;
-  isDeleted?: boolean;
-  seo: {
-    title: string;
-    description: string;
-    keywords: string;
-  };
-}
 
 export const createGiftCard = async (formData: FormData) => {
   const res = await serverFetch.post<ApiResponse<IGiftCard>>('/giftcards', {

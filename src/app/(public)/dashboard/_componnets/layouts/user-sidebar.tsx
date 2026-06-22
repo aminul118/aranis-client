@@ -4,7 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useUser } from '@/context/UserContext';
 import { logger } from '@/lib/logger';
 import { logOut } from '@/services/auth/logout';
-import { IUser } from '@/types';
+import type { IUser } from '@/services/user/user.interface';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';

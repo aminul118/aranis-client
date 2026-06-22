@@ -12,7 +12,8 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import useActionHandler from '@/hooks/useActionHandler';
-import { createSize, ISize, updateSize } from '@/services/size/size';
+import { createSize, updateSize } from '@/services/size/size';
+import type { ISize } from '@/services/size/size.interface';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Plus, Save } from 'lucide-react';
 import { useRouter } from 'next/navigation';

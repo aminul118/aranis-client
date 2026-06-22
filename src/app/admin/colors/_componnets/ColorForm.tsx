@@ -12,8 +12,9 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import useActionHandler from '@/hooks/useActionHandler';
-import { createColor, IColor, updateColor } from '@/services/color/color';
-import { addColorSchema } from '@/zod/color';
+import { createColor, updateColor } from '@/services/color/color';
+import type { IColor } from '@/services/color/color.interface';
+import { addColorSchema } from '@/services/color/color.validation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Plus, Save } from 'lucide-react';
 import { useRouter } from 'next/navigation';

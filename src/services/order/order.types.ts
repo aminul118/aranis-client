@@ -1,4 +1,5 @@
-import { IProduct, IUser } from '../../types';
+import type { IProduct } from '@/services/product/product.interface';
+import type { IUser } from '@/services/user/user.interface';
 
 export enum OrderStatus {
   PENDING = 'Pending',

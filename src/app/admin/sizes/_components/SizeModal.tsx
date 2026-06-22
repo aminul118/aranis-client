@@ -8,7 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { ISize } from '@/services/size/size';
+import type { ISize } from '@/services/size/size.interface';
 import { Plus } from 'lucide-react';
 import { ReactNode, useState } from 'react';
 import SizeForm from './SizeForm';

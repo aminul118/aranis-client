@@ -4,7 +4,7 @@ import Image from '@/components/common/SafeImage';
 import { Button } from '@/components/ui/button';
 import { useWishlist } from '@/context/WishlistContext';
 import { cn, extractPlainText } from '@/lib/utils';
-import { IProduct } from '@/types';
+import type { IProduct } from '@/services/product/product.interface';
 import { Heart, ShoppingCart } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 

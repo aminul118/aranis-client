@@ -5,7 +5,8 @@ import { Form } from '@/components/ui/form';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import useActionHandler from '@/hooks/useActionHandler';
 import { logger } from '@/lib/logger';
-import { ISiteSetting, updateSiteSettings } from '@/services/settings/settings';
+import { updateSiteSettings } from '@/services/settings/settings';
+import type { ISiteSetting } from '@/services/settings/settings.interface';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Facebook,

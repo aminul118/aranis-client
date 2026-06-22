@@ -14,8 +14,8 @@ import {
 import { Input } from '@/components/ui/input';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import useSearchParamsValues from '@/hooks/useSearchParamsValues';
+import { registrationFormValidation } from '@/services/auth/auth.validation';
 import { registerWithOTP } from '@/services/auth/register';
-import { registrationFormValidation } from '@/zod/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Turnstile } from '@marsidev/react-turnstile';
 import { Mail, Phone } from 'lucide-react';

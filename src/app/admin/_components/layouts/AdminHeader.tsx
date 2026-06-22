@@ -7,7 +7,7 @@ import { SidebarTrigger } from '@/components/ui/sidebar';
 import { useSocket } from '@/hooks/useSocket';
 import { logger } from '@/lib/logger';
 import { getAdminStats } from '@/services/stats/stats';
-import { IUser } from '@/types';
+import type { IUser } from '@/services/user/user.interface';
 import { useCallback, useEffect, useState } from 'react';
 import DashboardBreadcrumb from './DashboardBreadcrumb ';
 

@@ -3,7 +3,7 @@
 import ProductCard from '@/components/common/ProductCard';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { IProduct } from '@/types';
+import type { IProduct } from '@/services/product/product.interface';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 

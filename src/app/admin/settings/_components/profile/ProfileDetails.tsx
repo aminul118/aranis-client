@@ -2,7 +2,7 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { IUser } from '@/types/api.types';
+import type { IUser } from '@/services/user/user.interface';
 import { Mail, PencilLine, Phone, User } from 'lucide-react';
 
 type Props = {

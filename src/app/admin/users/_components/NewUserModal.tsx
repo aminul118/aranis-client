@@ -25,8 +25,8 @@ import {
 import { Input } from '@/components/ui/input';
 import Password from '@/components/ui/password';
 import useActionHandler from '@/hooks/useActionHandler';
+import { adminUserRegistrationValidation } from '@/services/auth/auth.validation';
 import { registerUserFromAdmin } from '@/services/user/register';
-import { adminUserRegistrationValidation } from '@/zod/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { UserPlus, X } from 'lucide-react';
 import { useState } from 'react';

@@ -14,9 +14,12 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import useActionHandler from '@/hooks/useActionHandler';
+import {
+  userUpdateSchema,
+  UserUpdateValues,
+} from '@/services/auth/auth.validation';
+import type { IUser } from '@/services/user/user.interface';
 import { updateUser, updateUserWithFormData } from '@/services/user/users';
-import { IUser } from '@/types/api.types';
-import { userUpdateSchema, UserUpdateValues } from '@/zod/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Camera } from 'lucide-react';
 import { useRouter } from 'next/navigation';

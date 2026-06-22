@@ -5,8 +5,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import { ISiteSetting } from '@/services/settings/settings';
-import { IProduct } from '@/types';
+import type { IProduct } from '@/services/product/product.interface';
+import type { ISiteSetting } from '@/services/settings/settings.interface';
 import { DraggableVideoPlayer } from './DraggableVideoPlayer';
 
 interface ProductDetailMobileSectionsProps {

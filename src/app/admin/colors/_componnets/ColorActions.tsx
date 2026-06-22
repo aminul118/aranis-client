@@ -9,7 +9,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { deleteColor, IColor } from '@/services/color/color';
+import { deleteColor } from '@/services/color/color';
+import type { IColor } from '@/services/color/color.interface';
 import { EllipsisIcon, PencilIcon, Trash2Icon } from 'lucide-react';
 import { useState } from 'react';
 import ColorModal from './ColorModal';

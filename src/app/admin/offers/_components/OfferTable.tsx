@@ -10,7 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { IOffer } from '@/services/offer/offer';
+import type { IOffer } from '@/services/offer/offer.interface';
 import { IMeta } from '@/types';
 import { Plus } from 'lucide-react';
 import { useState } from 'react';

@@ -12,12 +12,9 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import useActionHandler from '@/hooks/useActionHandler';
-import {
-  createCategory,
-  ICategory,
-  updateCategory,
-} from '@/services/category/category';
-import { addCategorySchema } from '@/zod/category';
+import { createCategory, updateCategory } from '@/services/category/category';
+import type { ICategory } from '@/services/category/category.interface';
+import { addCategorySchema } from '@/services/category/category.validation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Plus, Save, Trash2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';

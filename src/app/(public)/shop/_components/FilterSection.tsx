@@ -10,9 +10,9 @@ import {
 } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
 import { cn } from '@/lib/utils';
-import { ICategory } from '@/services/category/category';
-import { IColor } from '@/services/color/color';
-import { ISize } from '@/services/size/size';
+import type { ICategory } from '@/services/category/category.interface';
+import type { IColor } from '@/services/color/color.interface';
+import type { ISize } from '@/services/size/size.interface';
 import { motion } from 'framer-motion';
 import { Check } from 'lucide-react';
 import { useEffect, useState } from 'react';

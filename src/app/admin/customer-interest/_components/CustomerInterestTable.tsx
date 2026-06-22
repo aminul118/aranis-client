@@ -2,7 +2,7 @@
 
 import TableFilters from '@/components/common/table/TableFilters';
 import TableManageMent from '@/components/common/table/TableManageMent';
-import { ICustomerInterestItem } from '@/services/customer-interest/customer-interest';
+import type { ICustomerInterestItem } from '@/services/customer-interest/customer-interest.interface';
 import CustomerInterestColumn from './CustomerInterestColumn';
 
 const CustomerInterestTable = ({ data }: { data: ICustomerInterestItem[] }) => {

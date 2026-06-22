@@ -4,10 +4,8 @@ import DeleteConfirmation from '@/components/common/actions/DeleteConfirmation';
 import TableFilters from '@/components/common/table/TableFilters';
 import TableManageMent from '@/components/common/table/TableManageMent';
 import { Button } from '@/components/ui/button';
-import {
-  deleteRestockRequestBulk,
-  IRestockRequest,
-} from '@/services/restock/restock';
+import { deleteRestockRequestBulk } from '@/services/restock/restock';
+import type { IRestockRequest } from '@/services/restock/restock.interface';
 import { Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import RestockRequestsColumn from './RestockRequestsColumn';

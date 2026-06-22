@@ -1,13 +1,13 @@
 'use client';
 
+import type { IProduct } from '@/services/product/product.interface';
 import {
   getMyWishlist,
-  IWishlistItem,
   removeFromWishlist as removeFromWishlistService,
   toggleWishlist as toggleWishlistService,
   updateWishlistQuantity,
 } from '@/services/wishlist/wishlist';
-import { IProduct } from '@/types';
+import type { IWishlistItem } from '@/services/wishlist/wishlist.interface';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 

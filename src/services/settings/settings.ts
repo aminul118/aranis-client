@@ -2,24 +2,10 @@
 
 import { revalidate } from '@/lib/revalidate';
 import serverFetch from '@/lib/server-fetch';
+import type { ISiteSetting } from '@/services/settings/settings.interface';
 import { ApiResponse } from '@/types';
 import { revalidatePath } from 'next/cache';
 import { logger } from '../../lib/logger';
-
-export interface ISocialLink {
-  platform: string;
-  url: string;
-  isActive: boolean;
-}
-
-export interface ISiteSetting {
-  _id?: string;
-  logo: string;
-  socialLinks: ISocialLink[];
-  contactNumber?: string;
-  email?: string;
-  location?: string;
-}
 
 const getSiteSettings = async () => {
   return await serverFetch.get<ApiResponse<ISiteSetting>>('/site-settings', {

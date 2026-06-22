@@ -9,7 +9,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { deleteCategory, ICategory } from '@/services/category/category';
+import { deleteCategory } from '@/services/category/category';
+import type { ICategory } from '@/services/category/category.interface';
 import { EllipsisIcon, PencilIcon, Trash2Icon } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';

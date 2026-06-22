@@ -14,20 +14,6 @@ export type {
   PaymentStatus,
 } from './order.types';
 
-export interface IOrderPayload {
-  items: {
-    product: string;
-    quantity: number;
-    price: number;
-  }[];
-  totalPrice: number;
-  subTotal: number;
-  discount: number;
-  couponCode?: string | null;
-  shippingAddress: string;
-  paymentMethod: 'COD' | 'CARD';
-}
-
 const createOrder = async (payload: IOrderPayload) => {
   const res = await serverFetch.post<ApiResponse<any>>('/orders', {
     headers: {
@@ -52,6 +38,7 @@ const createOrder = async (payload: IOrderPayload) => {
 };
 
 import type { FetchOptions } from '@/helpers/serverFetchHelper';
+import type { IOrderPayload } from '@/services/order/order.interface';
 import { logger } from '../../lib/logger';
 
 const getAllOrders = async (

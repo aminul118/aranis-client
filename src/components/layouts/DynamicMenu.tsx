@@ -19,7 +19,7 @@ import {
 import { useSocket } from '@/hooks/useSocket';
 import { getUnreadCount } from '@/services/chat/chat';
 import { getUnreadOrdersCount } from '@/services/order/order';
-import { IUser } from '@/types';
+import type { IUser } from '@/services/user/user.interface';
 import { MenuGroup, UserRole } from '@/types/admin-menu';
 import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';

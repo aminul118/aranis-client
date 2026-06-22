@@ -9,7 +9,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { deleteGiftCard, IGiftCard } from '@/services/giftcard/giftcard';
+import { deleteGiftCard } from '@/services/giftcard/giftcard';
+import type { IGiftCard } from '@/services/giftcard/giftcard.interface';
 import { EllipsisIcon, PencilIcon, Trash2Icon } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';

@@ -7,7 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { ICategory } from '@/services/category/category';
+import type { ICategory } from '@/services/category/category.interface';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 export default function SubCategoryFilter({

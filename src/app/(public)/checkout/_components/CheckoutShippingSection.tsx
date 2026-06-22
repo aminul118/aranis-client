@@ -1,7 +1,7 @@
 'use client';
 
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { IUser } from '@/types';
+import type { IUser } from '@/services/user/user.interface';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Lock, MapPin, Plus, Truck } from 'lucide-react';
 import { useEffect, useState } from 'react';

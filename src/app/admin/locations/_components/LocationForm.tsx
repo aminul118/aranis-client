@@ -12,11 +12,8 @@ import {
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import useActionHandler from '@/hooks/useActionHandler';
-import {
-  createLocation,
-  ILocation,
-  updateLocation,
-} from '@/services/location/location';
+import { createLocation, updateLocation } from '@/services/location/location';
+import type { ILocation } from '@/services/location/location.interface';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CalendarOff, Clock, MapPin, Phone, Save } from 'lucide-react';
 import { useRouter } from 'next/navigation';

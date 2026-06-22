@@ -8,10 +8,10 @@ import {
   clearAll,
   deleteOneNotification,
   getMyNotifications,
-  INotification,
   markAllAsRead,
   markAsRead,
 } from '@/services/notification/notification';
+import type { INotification } from '@/services/notification/notification.interface';
 import {
   Bell,
   CheckCircle,

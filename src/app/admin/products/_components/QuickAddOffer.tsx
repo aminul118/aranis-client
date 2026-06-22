@@ -10,7 +10,8 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { createOffer, IOffer } from '@/services/offer/offer';
+import { createOffer } from '@/services/offer/offer';
+import type { IOffer } from '@/services/offer/offer.interface';
 import { Plus } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';

@@ -12,8 +12,9 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import useActionHandler from '@/hooks/useActionHandler';
-import { createNavbar, INavItem, updateNavbar } from '@/services/navbar/navbar';
-import { addNavItemSchema } from '@/zod/navbar';
+import { createNavbar, updateNavbar } from '@/services/navbar/navbar';
+import type { INavItem } from '@/services/navbar/navbar.interface';
+import { addNavItemSchema } from '@/services/navbar/navbar.validation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { GripVertical, Plus, Save, Trash2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';

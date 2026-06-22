@@ -1,7 +1,7 @@
 'use client';
 
 import { useUser } from '@/context/UserContext';
-import { IUser } from '@/types';
+import type { IUser } from '@/services/user/user.interface';
 import { ShieldAlert, X } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '../ui/button';

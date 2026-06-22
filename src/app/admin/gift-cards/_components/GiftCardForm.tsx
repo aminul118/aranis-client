@@ -23,11 +23,8 @@ import SingleImageUploader from '@/components/ui/single-image-uploader';
 import { Textarea } from '@/components/ui/textarea';
 import useActionHandler from '@/hooks/useActionHandler';
 import { cn } from '@/lib/utils';
-import {
-  createGiftCard,
-  IGiftCard,
-  updateGiftCard,
-} from '@/services/giftcard/giftcard';
+import { createGiftCard, updateGiftCard } from '@/services/giftcard/giftcard';
+import type { IGiftCard } from '@/services/giftcard/giftcard.interface';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ImageIcon, Plus, Save } from 'lucide-react';
 import { useRouter } from 'next/navigation';

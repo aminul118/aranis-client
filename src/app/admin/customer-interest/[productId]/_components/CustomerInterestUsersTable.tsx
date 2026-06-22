@@ -2,7 +2,7 @@
 
 import TableFilters from '@/components/common/table/TableFilters';
 import TableManageMent from '@/components/common/table/TableManageMent';
-import { IProductInterestUser } from '@/services/customer-interest/customer-interest';
+import type { IProductInterestUser } from '@/services/customer-interest/customer-interest.interface';
 import CustomerInterestUsersColumn from './CustomerInterestUsersColumn';
 
 interface Props {

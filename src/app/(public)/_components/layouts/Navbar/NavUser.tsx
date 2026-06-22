@@ -16,7 +16,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { getDefaultDashboardRoute } from '@/services/user/user-access';
-import { IUser } from '@/types';
+import type { IUser } from '@/services/user/user.interface';
 import { LayoutGrid, Truck, User } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';

@@ -10,8 +10,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { logger } from '@/lib/logger';
+import type { IUser } from '@/services/user/user.interface';
 import { deleteUserBulk, getMe } from '@/services/user/users';
-import { IUser } from '@/types/api.types';
 import { EllipsisIcon, Trash2Icon } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { UserDetailsModal } from './UserDetailsModal';

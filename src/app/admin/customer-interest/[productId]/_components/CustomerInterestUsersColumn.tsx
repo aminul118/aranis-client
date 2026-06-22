@@ -2,7 +2,7 @@
 
 import { Column } from '@/components/common/table/TableManageMent';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { IProductInterestUser } from '@/services/customer-interest/customer-interest';
+import type { IProductInterestUser } from '@/services/customer-interest/customer-interest.interface';
 import { Heart, ShoppingCart } from 'lucide-react';
 
 const CustomerInterestUsersColumn: Column<IProductInterestUser>[] = [

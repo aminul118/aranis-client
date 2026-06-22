@@ -13,8 +13,8 @@ import {
 import {
   deleteLocation,
   deleteLocationBulk,
-  ILocation,
 } from '@/services/location/location';
+import type { ILocation } from '@/services/location/location.interface';
 import { MapPin, Trash2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';

@@ -7,7 +7,8 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
-import { IProduct, IVariantSize } from '@/types';
+import type { IProduct } from '@/services/product/product.interface';
+import { IVariantSize } from '@/types';
 import { Ruler } from 'lucide-react';
 
 interface ProductDetailSizesProps {

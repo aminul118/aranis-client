@@ -4,8 +4,8 @@ import { Button } from '@/components/ui/button';
 import {
   checkReviewEligibility,
   getProductReviews,
-  IReview,
 } from '@/services/review/review';
+import type { IReview } from '@/services/review/review.interface';
 import { Star } from 'lucide-react';
 import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';

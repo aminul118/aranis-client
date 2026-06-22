@@ -16,7 +16,7 @@ import {
   createSizeGuide,
   updateSizeGuide,
 } from '@/services/size-guide/size-guide';
-import { ISizeGuide } from '@/types';
+import type { ISizeGuide } from '@/services/size-guide/size-guide.interface';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ImageIcon, Plus, Save } from 'lucide-react';
 import { useRouter } from 'next/navigation';

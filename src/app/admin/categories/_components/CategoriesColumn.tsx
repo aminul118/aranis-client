@@ -1,5 +1,5 @@
 import { Column } from '@/components/common/table/TableManageMent';
-import { ICategory } from '@/services/category/category';
+import type { ICategory } from '@/services/category/category.interface';
 import CategoryActions from './CategoryActions';
 
 const CategoriesColumn: Column<ICategory>[] = [

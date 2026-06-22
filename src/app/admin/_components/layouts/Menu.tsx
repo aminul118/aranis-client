@@ -3,7 +3,7 @@
 import DynamicMenu from '@/components/layouts/DynamicMenu';
 import { adminSidebarMenu } from './admin-menu';
 
-import { IUser } from '@/types';
+import type { IUser } from '@/services/user/user.interface';
 
 interface MenuProps {
   user?: IUser;

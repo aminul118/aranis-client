@@ -1,7 +1,7 @@
 import SocialLinks from '@/app/(public)/_components/SocialLinks';
 import AminulLogo from '@/components/common/Logo';
-import { INavItem } from '@/services/navbar/navbar';
-import { ISocialLink } from '@/services/settings/settings';
+import type { INavItem } from '@/services/navbar/navbar.interface';
+import type { ISocialLink } from '@/services/settings/settings.interface';
 import Link from 'next/link';
 import ThemeToggle from './ThemeToggle';
 

@@ -14,10 +14,8 @@ import {
 import GradientTitle from '@/components/ui/gradientTitle';
 import { Input } from '@/components/ui/input';
 import useActionHandler from '@/hooks/useActionHandler';
-import {
-  IDeliveryCharge,
-  updateDeliveryCharge,
-} from '@/services/delivery-charge/delivery-charge';
+import { updateDeliveryCharge } from '@/services/delivery-charge/delivery-charge';
+import type { IDeliveryCharge } from '@/services/delivery-charge/delivery-charge.interface';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Save } from 'lucide-react';
 import { useRouter } from 'next/navigation';

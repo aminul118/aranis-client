@@ -3,7 +3,7 @@ import PlaceHolderImage from '@/components/common/PlaceHolderImage';
 import { Column } from '@/components/common/table/TableManageMent';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { IUser } from '@/types';
+import type { IUser } from '@/services/user/user.interface';
 import { BadgeCheck } from 'lucide-react';
 import UserActions from './user-actions';
 

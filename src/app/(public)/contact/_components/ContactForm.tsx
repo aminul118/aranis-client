@@ -14,7 +14,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import useActionHandler from '@/hooks/useActionHandler';
 import { contactAction } from '@/services/contact/contact';
-import { contactSchemaZodValidation } from '@/zod/contact';
+import { contactSchemaZodValidation } from '@/services/contact/contact.validation';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Send } from 'lucide-react';

@@ -8,7 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { IColor } from '@/services/color/color';
+import type { IColor } from '@/services/color/color.interface';
 import { Plus } from 'lucide-react';
 import { ReactNode, useState } from 'react';
 import ColorForm from './ColorForm';

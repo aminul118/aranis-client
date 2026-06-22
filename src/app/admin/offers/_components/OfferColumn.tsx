@@ -2,7 +2,7 @@
 
 import { Column } from '@/components/common/table/TableManageMent';
 import { Badge } from '@/components/ui/badge';
-import { IOffer } from '@/services/offer/offer';
+import type { IOffer } from '@/services/offer/offer.interface';
 import { format } from 'date-fns';
 import OfferActions from './OfferActions';
 

@@ -1,5 +1,5 @@
 import { Column } from '@/components/common/table/TableManageMent';
-import { IGiftCard } from '@/services/giftcard/giftcard';
+import type { IGiftCard } from '@/services/giftcard/giftcard.interface';
 import Image from 'next/image';
 import GiftCardActions from './GiftCardActions';
 

@@ -1,5 +1,5 @@
 import { Card, CardContent } from '@/components/ui/card';
-import { IUser } from '@/types';
+import type { IUser } from '@/services/user/user.interface';
 import {
   Book,
   Gift,

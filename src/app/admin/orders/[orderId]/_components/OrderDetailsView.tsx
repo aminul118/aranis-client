@@ -11,7 +11,8 @@ import { useUser } from '@/context/UserContext';
 import { cn } from '@/lib/utils';
 import { updateOrderStatus } from '@/services/order/order';
 import { IOrder, OrderStatus } from '@/services/order/order.types';
-import { IProduct, Role } from '@/types';
+import type { IProduct } from '@/services/product/product.interface';
+import { Role } from '@/types';
 import {
   ArrowLeft,
   Ban,

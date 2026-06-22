@@ -1,5 +1,6 @@
 import generateMetaTags from '@/seo/generateMetaTags';
-import { getCoupons, ICoupon } from '@/services/coupon/coupon';
+import { getCoupons } from '@/services/coupon/coupon';
+import type { ICoupon } from '@/services/coupon/coupon.interface';
 import { format } from 'date-fns';
 import { Calendar, Percent, Ticket } from 'lucide-react';
 import { Metadata } from 'next';

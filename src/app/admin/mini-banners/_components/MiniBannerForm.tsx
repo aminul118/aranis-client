@@ -15,9 +15,9 @@ import { Switch } from '@/components/ui/switch';
 import useActionHandler from '@/hooks/useActionHandler';
 import {
   createMiniBanner,
-  IMiniBanner,
   updateMiniBanner,
 } from '@/services/hero-banner/hero-banner';
+import type { IMiniBanner } from '@/services/hero-banner/hero-banner.interface';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ImageIcon, Plus, Save } from 'lucide-react';
 import { useRouter } from 'next/navigation';

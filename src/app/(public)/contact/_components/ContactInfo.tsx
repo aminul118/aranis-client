@@ -1,4 +1,4 @@
-import { ISiteSetting } from '@/services/settings/settings';
+import type { ISiteSetting } from '@/services/settings/settings.interface';
 import { Mail, MapPin, Phone } from 'lucide-react';
 
 interface Props {

@@ -19,9 +19,9 @@ import {
 } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { logger } from '@/lib/logger';
+import type { IUser } from '@/services/user/user.interface';
 import { assignUserRole, getMe } from '@/services/user/users';
 import { IModal, Role } from '@/types';
-import { IUser } from '@/types/api.types';
 import { ShieldCheck, User2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';

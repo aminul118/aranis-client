@@ -1,7 +1,7 @@
 import { Column } from '@/components/common/table/TableManageMent';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
-import { IRestockRequest } from '@/services/restock/restock';
+import type { IRestockRequest } from '@/services/restock/restock.interface';
 import { User } from 'lucide-react';
 import Image from 'next/image';
 import RestockRequestActions from './RestockRequestActions';

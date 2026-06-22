@@ -3,13 +3,12 @@
 import ErrorAlertModal from '@/components/common/error/ErrorAlertModal';
 import { useCart } from '@/context/CartContext';
 import { registerWithOTP } from '@/services/auth/register';
-import {
-  getDeliveryCharge,
-  IDeliveryCharge,
-} from '@/services/delivery-charge/delivery-charge';
+import { getDeliveryCharge } from '@/services/delivery-charge/delivery-charge';
+import type { IDeliveryCharge } from '@/services/delivery-charge/delivery-charge.interface';
 import { createOrder } from '@/services/order/order';
+import type { IUser } from '@/services/user/user.interface';
 import { getMe } from '@/services/user/users';
-import { IUser, Role } from '@/types';
+import { Role } from '@/types';
 import { Turnstile } from '@marsidev/react-turnstile';
 import { ArrowLeft, ShieldCheck } from 'lucide-react';
 import Link from 'next/link';

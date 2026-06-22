@@ -1,6 +1,6 @@
 'use client';
 
-import { IReview } from '@/services/review/review';
+import type { IReview } from '@/services/review/review.interface';
 import { format } from 'date-fns';
 import { motion } from 'framer-motion';
 import { Star, User } from 'lucide-react';

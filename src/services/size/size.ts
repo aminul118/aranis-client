@@ -2,14 +2,8 @@
 
 import { revalidate } from '@/lib/revalidate';
 import serverFetch from '@/lib/server-fetch';
+import type { ISize } from '@/services/size/size.interface';
 import { ApiResponse } from '@/types';
-
-export interface ISize {
-  _id?: string;
-  name: string;
-  order?: number;
-  isDeleted?: boolean;
-}
 
 export const createSize = async (payload: ISize) => {
   const res = await serverFetch.post<ApiResponse<ISize>>('/sizes', {

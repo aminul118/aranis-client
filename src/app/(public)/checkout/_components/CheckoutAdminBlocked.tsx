@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { IUser } from '@/types';
+import type { IUser } from '@/services/user/user.interface';
 import { motion } from 'framer-motion';
 import { ShieldAlert } from 'lucide-react';
 import Link from 'next/link';

@@ -11,7 +11,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { ISizeGuide } from '@/types';
+import type { ISizeGuide } from '@/services/size-guide/size-guide.interface';
 import { Plus } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';

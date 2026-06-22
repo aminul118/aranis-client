@@ -5,10 +5,8 @@ import DeleteConfirmation from '@/components/common/actions/DeleteConfirmation';
 import TableFilters from '@/components/common/table/TableFilters';
 import TableManageMent from '@/components/common/table/TableManageMent';
 import { Button } from '@/components/ui/button';
-import {
-  deleteHeroBannerBulk,
-  IHeroBanner,
-} from '@/services/hero-banner/hero-banner';
+import { deleteHeroBannerBulk } from '@/services/hero-banner/hero-banner';
+import type { IHeroBanner } from '@/services/hero-banner/hero-banner.interface';
 import { Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import HeroBannerColumn from './HeroBannerColumn';

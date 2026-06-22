@@ -11,7 +11,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { getAllLocations, ILocation } from '@/services/location/location';
+import { getAllLocations } from '@/services/location/location';
+import type { ILocation } from '@/services/location/location.interface';
 import { MapPin, Plus } from 'lucide-react';
 import { useEffect, useState } from 'react';
 

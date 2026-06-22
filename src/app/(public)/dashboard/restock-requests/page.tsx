@@ -1,8 +1,6 @@
 import cleanSearchParams from '@/lib/cleanSearchParams';
-import {
-  getMyRestockRequests,
-  IRestockRequest,
-} from '@/services/restock/restock';
+import { getMyRestockRequests } from '@/services/restock/restock';
+import type { IRestockRequest } from '@/services/restock/restock.interface';
 import { SearchParams } from '@/types';
 import { logger } from '../../../../lib/logger';
 import RestockRequestsList from './_components/RestockRequestsList';

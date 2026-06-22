@@ -1,5 +1,5 @@
 import { Column } from '@/components/common/table/TableManageMent';
-import { INavItem } from '@/services/navbar/navbar';
+import type { INavItem } from '@/services/navbar/navbar.interface';
 import NavbarActions from './NavbarActions';
 
 const NavbarColumn: Column<INavItem>[] = [

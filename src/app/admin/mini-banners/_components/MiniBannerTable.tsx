@@ -4,10 +4,8 @@ import DeleteConfirmation from '@/components/common/actions/DeleteConfirmation';
 import TableFilters from '@/components/common/table/TableFilters';
 import TableManageMent from '@/components/common/table/TableManageMent';
 import { Button } from '@/components/ui/button';
-import {
-  deleteMiniBannerBulk,
-  IMiniBanner,
-} from '@/services/hero-banner/hero-banner';
+import { deleteMiniBannerBulk } from '@/services/hero-banner/hero-banner';
+import type { IMiniBanner } from '@/services/hero-banner/hero-banner.interface';
 import { Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import MiniBannerColumn from './MiniBannerColumn';

@@ -7,12 +7,12 @@ import {
   clearAll,
   deleteOneNotification,
   getMyNotifications,
-  INotification,
   markAllAsRead,
   markAsRead,
 } from '@/services/notification/notification';
+import type { INotification } from '@/services/notification/notification.interface';
+import type { IUser } from '@/services/user/user.interface';
 import { getMe } from '@/services/user/users';
-import { IUser } from '@/types';
 import {
   Bell,
   CheckCircle,

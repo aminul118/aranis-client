@@ -10,9 +10,10 @@ import {
   updateCartQuantityService,
   updateCartSizeService,
 } from '@/services/cart/cart';
-import { ICoupon } from '@/services/coupon/coupon';
+import type { ICartItem } from '@/services/cart/cart.interface';
+import type { ICoupon } from '@/services/coupon/coupon.interface';
 import { getProducts } from '@/services/product/product';
-import { ICartItem, IProduct } from '@/types';
+import type { IProduct } from '@/services/product/product.interface';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { logger } from '../lib/logger';

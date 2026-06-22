@@ -15,9 +15,9 @@ import { Switch } from '@/components/ui/switch';
 import useActionHandler from '@/hooks/useActionHandler';
 import {
   createPopupBanner,
-  IPopupBanner,
   updatePopupBanner,
 } from '@/services/popup-banner/popup-banner';
+import type { IPopupBanner } from '@/services/popup-banner/popup-banner.interface';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ImageIcon, Plus, Save } from 'lucide-react';
 import { useRouter } from 'next/navigation';

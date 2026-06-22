@@ -12,8 +12,8 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import useSearchParamsValues from '@/hooks/useSearchParamsValues';
+import { loginFormValidation } from '@/services/auth/auth.validation';
 import { requestOTP } from '@/services/auth/otp/sendOTP';
-import { loginFormValidation } from '@/zod/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Turnstile } from '@marsidev/react-turnstile';
 import { Mail } from 'lucide-react';

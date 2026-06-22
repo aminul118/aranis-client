@@ -6,7 +6,7 @@ import {
   SidebarHeader,
   SidebarRail,
 } from '@/components/ui/sidebar';
-import { IUser } from '@/types';
+import type { IUser } from '@/services/user/user.interface';
 import Menu from './Menu';
 
 const AdminSidebar = ({ user, logoUrl }: { user: IUser; logoUrl?: string }) => {

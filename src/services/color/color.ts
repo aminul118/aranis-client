@@ -2,14 +2,8 @@
 
 import { revalidate } from '@/lib/revalidate';
 import serverFetch from '@/lib/server-fetch';
+import type { IColor } from '@/services/color/color.interface';
 import { ApiResponse } from '@/types';
-
-export interface IColor {
-  _id?: string;
-  name: string;
-  hex?: string;
-  isDeleted?: boolean;
-}
 
 export const createColor = async (payload: IColor) => {
   const res = await serverFetch.post<ApiResponse<IColor>>('/colors', {

@@ -2,19 +2,10 @@
 
 import { revalidate } from '@/lib/revalidate';
 import serverFetch from '@/lib/server-fetch';
+import type { IOffer } from '@/services/offer/offer.interface';
 import { ApiResponse } from '@/types';
 import { revalidatePath } from 'next/cache';
 import { logger } from '../../lib/logger';
-
-export interface IOffer {
-  _id?: string;
-  name: string;
-  tag: string;
-  discountPercentage: number;
-  startDate: string | Date;
-  endDate: string | Date;
-  isActive: boolean;
-}
 
 // Helper to trigger concurrent Next.js revalidations
 const triggerRevalidations = () => {

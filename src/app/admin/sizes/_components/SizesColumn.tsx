@@ -1,5 +1,5 @@
 import { Column } from '@/components/common/table/TableManageMent';
-import { ISize } from '@/services/size/size';
+import type { ISize } from '@/services/size/size.interface';
 import SizeActions from './SizeActions';
 
 const SizesColumn: Column<ISize>[] = [

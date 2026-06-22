@@ -1,6 +1,6 @@
 import { Column } from '@/components/common/table/TableManageMent';
 import { formatDate } from '@/lib/utils';
-import { IProduct } from '@/types';
+import type { IProduct } from '@/services/product/product.interface';
 import Image from 'next/image';
 import Link from 'next/link';
 import ProductActions from './ProductActions';

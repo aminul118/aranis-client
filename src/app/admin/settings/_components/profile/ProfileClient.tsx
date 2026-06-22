@@ -1,6 +1,6 @@
 'use client';
 
-import { IUser } from '@/types';
+import type { IUser } from '@/services/user/user.interface';
 import { useState } from 'react';
 import ProfileDetails from './ProfileDetails';
 import UpdateProfileForm from './UpdateProfileForm';

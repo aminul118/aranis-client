@@ -2,16 +2,8 @@
 
 import { revalidate } from '@/lib/revalidate';
 import serverFetch from '@/lib/server-fetch';
-import { ApiResponse, IProduct, IUser } from '@/types';
-
-export interface IRestockRequest {
-  _id: string;
-  user: IUser;
-  product: IProduct;
-  status: 'Pending' | 'Resolved';
-  createdAt: string;
-  updatedAt: string;
-}
+import type { IRestockRequest } from '@/services/restock/restock.interface';
+import { ApiResponse } from '@/types';
 
 export const createRestockRequest = async (productId: string) => {
   const res = await serverFetch.post<ApiResponse<null>>('/restock-request', {

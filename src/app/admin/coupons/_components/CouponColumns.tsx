@@ -1,6 +1,6 @@
 import { Column } from '@/components/common/table/TableManageMent';
 import { Badge } from '@/components/ui/badge';
-import { ICoupon } from '@/services/coupon/coupon';
+import type { ICoupon } from '@/services/coupon/coupon.interface';
 import CouponActions from './CouponActions';
 
 const CouponColumns: Column<ICoupon>[] = [

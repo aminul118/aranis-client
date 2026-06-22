@@ -13,7 +13,8 @@ import {
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import useActionHandler from '@/hooks/useActionHandler';
-import { createOffer, IOffer, updateOffer } from '@/services/offer/offer';
+import { createOffer, updateOffer } from '@/services/offer/offer';
+import type { IOffer } from '@/services/offer/offer.interface';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Plus, Save } from 'lucide-react';
 import { useRouter } from 'next/navigation';

@@ -1,24 +1,13 @@
 'use server';
 
 import serverFetch from '@/lib/server-fetch';
-import { ApiResponse, IContact } from '@/types';
-
-type ContactPayload = {
-  name: string;
-  email: string;
-  subject: string;
-  message: string;
-};
+import { ApiResponse } from '@/types';
+import { ContactPayload, IContact } from './contact.interface';
 
 const contactAction = async (payload: ContactPayload) => {
-  const res = await serverFetch.post<ApiResponse<IContact>>('/contact', {
-    headers: {
-      'Content-Type': 'application/json',
-    },
+  return await serverFetch.post<ApiResponse<IContact>>('/contact', {
     body: JSON.stringify(payload),
   });
-
-  return res;
 };
 
 export { contactAction };

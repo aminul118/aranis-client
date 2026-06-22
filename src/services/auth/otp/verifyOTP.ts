@@ -1,7 +1,8 @@
 'use server';
 
 import serverFetch from '@/lib/server-fetch';
-import { ApiResponse, IUser } from '@/types';
+import type { IUser } from '@/services/user/user.interface';
+import { ApiResponse } from '@/types';
 import { setAccessToken, setRefreshToken } from '../cookie-token';
 
 interface IOtp {

@@ -1,5 +1,5 @@
 import { Column } from '@/components/common/table/TableManageMent';
-import { ICustomerInterestItem } from '@/services/customer-interest/customer-interest';
+import type { ICustomerInterestItem } from '@/services/customer-interest/customer-interest.interface';
 import { Heart, ShoppingCart } from 'lucide-react';
 import Image from 'next/image';
 import CustomerInterestActions from './CustomerInterestActions';

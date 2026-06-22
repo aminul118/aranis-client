@@ -2,26 +2,12 @@
 
 import { revalidate } from '@/lib/revalidate';
 import serverFetch from '@/lib/server-fetch';
+import type {
+  IHeroBanner,
+  IMiniBanner,
+} from '@/services/hero-banner/hero-banner.interface';
 import { ApiResponse } from '@/types';
 import { revalidatePath } from 'next/cache';
-
-export interface IHeroBanner {
-  _id?: string;
-  image: string;
-  link?: string;
-  order: number;
-  isActive: boolean;
-  isDeleted?: boolean;
-}
-
-export interface IMiniBanner {
-  _id?: string;
-  image: string;
-  link?: string;
-  order: number;
-  isActive: boolean;
-  isDeleted?: boolean;
-}
 
 // ─── Hero Banner ─────────────────────────────────────────────────────────────
 
