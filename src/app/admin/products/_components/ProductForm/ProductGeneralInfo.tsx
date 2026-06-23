@@ -18,7 +18,6 @@ import {
 import type { ICategory } from '@/services/category/category.interface';
 import { IProductUpload } from '@/services/product/product.interface';
 import { useFormContext } from 'react-hook-form';
-import QuickAddCategory from '../../../categories/_components/QuickAddCategory';
 
 interface Props {
   localCategories: ICategory[];
@@ -85,16 +84,10 @@ export default function ProductGeneralInfo({
           name="category"
           render={({ field }) => (
             <FormItem>
-              <div className="flex h-9 items-center justify-between">
+              <div className="flex h-9 items-center">
                 <FormLabel>
                   Category <span className="text-red-500">*</span>
                 </FormLabel>
-                <QuickAddCategory
-                  onSuccess={(newCategory) => {
-                    setLocalCategories((prev) => [...prev, newCategory]);
-                    field.onChange(newCategory.name);
-                  }}
-                />
               </div>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>

@@ -8,6 +8,12 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import MultiImageUploader from '@/components/ui/multi-image-uploader';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 import type { IColor } from '@/services/color/color.interface';
 import { IProductUpload } from '@/services/product/product.interface';
@@ -57,45 +63,53 @@ export default function ProductVariants({
                   </FormLabel>
                 </div>
                 <div className="border-border/50 bg-muted/10 flex flex-wrap gap-3 rounded-xl border p-4">
-                  {localColors.map((color) => (
-                    <button
-                      key={color.name}
-                      type="button"
-                      onClick={() => field.onChange(color.name)}
-                      className={cn(
-                        'group relative flex flex-col items-center gap-2 transition-all',
-                        field.value === color.name
-                          ? 'scale-110'
-                          : 'opacity-60 hover:opacity-100',
-                      )}
-                    >
-                      <div
-                        className={cn(
-                          'flex h-10 w-10 items-center justify-center rounded-full border-2 transition-all',
-                          field.value === color.name
-                            ? 'border-blue-500 shadow-lg shadow-blue-500/20'
-                            : 'border-transparent',
-                        )}
-                        style={{ backgroundColor: color.hex }}
-                      >
-                        {field.value === color.name && (
-                          <Check
+                  <TooltipProvider delayDuration={100}>
+                    {localColors.map((color) => (
+                      <Tooltip key={color.name}>
+                        <TooltipTrigger asChild>
+                          <button
+                            type="button"
+                            onClick={() => field.onChange(color.name)}
                             className={cn(
-                              'h-5 w-5',
-                              ['White', 'Beige', 'Silk White', 'Gold'].includes(
-                                color.name,
-                              )
-                                ? 'text-black'
-                                : 'text-white',
+                              'group relative flex flex-col items-center gap-2 transition-all',
+                              field.value === color.name
+                                ? 'scale-110'
+                                : 'opacity-60 hover:opacity-100',
                             )}
-                          />
-                        )}
-                      </div>
-                      <span className="text-[10px] font-bold tracking-tighter uppercase">
-                        {color.name}
-                      </span>
-                    </button>
-                  ))}
+                          >
+                            <div
+                              className={cn(
+                                'flex h-10 w-10 items-center justify-center rounded-full border-2 transition-all',
+                                field.value === color.name
+                                  ? 'border-blue-500 shadow-lg shadow-blue-500/20'
+                                  : 'border-transparent',
+                              )}
+                              style={{ backgroundColor: color.hex }}
+                            >
+                              {field.value === color.name && (
+                                <Check
+                                  className={cn(
+                                    'h-5 w-5',
+                                    [
+                                      'White',
+                                      'Beige',
+                                      'Silk White',
+                                      'Gold',
+                                    ].includes(color.name)
+                                      ? 'text-black'
+                                      : 'text-white',
+                                  )}
+                                />
+                              )}
+                            </div>
+                          </button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>{color.name}</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    ))}
+                  </TooltipProvider>
                   <QuickAddColor
                     customTrigger={
                       <button
@@ -264,16 +278,23 @@ export default function ProductVariants({
               key={field.id}
               className="border-border/50 bg-background group relative rounded-2xl border-2 p-6 shadow-sm transition-all hover:border-blue-500/30"
             >
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                onClick={() => removeVariant(index)}
-                className="text-muted-foreground absolute top-4 right-4 h-8 w-8 rounded-full hover:bg-red-50 hover:text-red-500"
-              >
-                <Trash2 className="h-4 w-4" />
-              </Button>
-
+              <div className="border-border/50 mb-6 flex items-center justify-between border-b pb-4">
+                <h4 className="text-muted-foreground text-xs font-black tracking-widest uppercase">
+                  Variant {index + 1}{' '}
+                  {form.watch(`variants.${index}.color`)
+                    ? `- ${form.watch(`variants.${index}.color`)} color`
+                    : ''}
+                </h4>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => removeVariant(index)}
+                  className="text-muted-foreground h-8 w-8 rounded-full hover:bg-red-50 hover:text-red-500"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </div>
               <div className="grid grid-cols-1 gap-8 md:grid-cols-12">
                 {/* Variant Color Section */}
                 <div className="space-y-4 md:col-span-4">
@@ -286,49 +307,53 @@ export default function ProductVariants({
                           Variant Color <span className="text-red-500">*</span>
                         </FormLabel>
                         <div className="flex flex-wrap gap-3">
-                          {localColors.map((color) => (
-                            <button
-                              key={color.name}
-                              type="button"
-                              onClick={() => field.onChange(color.name)}
-                              title={color.name}
-                              className={cn(
-                                'group relative flex flex-col items-center justify-center gap-2 transition-all',
-                                field.value === color.name
-                                  ? 'scale-110'
-                                  : 'opacity-60 hover:scale-105 hover:opacity-100',
-                              )}
-                            >
-                              <div
-                                className={cn(
-                                  'flex h-10 w-10 items-center justify-center rounded-full border-2 transition-all',
-                                  field.value === color.name
-                                    ? 'border-blue-500 shadow-lg shadow-blue-500/20'
-                                    : 'border-transparent',
-                                )}
-                                style={{ backgroundColor: color.hex }}
-                              >
-                                {field.value === color.name && (
-                                  <Check
+                          <TooltipProvider delayDuration={100}>
+                            {localColors.map((color) => (
+                              <Tooltip key={color.name}>
+                                <TooltipTrigger asChild>
+                                  <button
+                                    type="button"
+                                    onClick={() => field.onChange(color.name)}
                                     className={cn(
-                                      'h-5 w-5',
-                                      [
-                                        'White',
-                                        'Beige',
-                                        'Silk White',
-                                        'Gold',
-                                      ].includes(color.name)
-                                        ? 'text-black'
-                                        : 'text-white',
+                                      'group relative flex flex-col items-center justify-center gap-2 transition-all',
+                                      field.value === color.name
+                                        ? 'scale-110'
+                                        : 'opacity-60 hover:scale-105 hover:opacity-100',
                                     )}
-                                  />
-                                )}
-                              </div>
-                              <span className="text-[10px] font-bold tracking-tighter uppercase">
-                                {color.name}
-                              </span>
-                            </button>
-                          ))}
+                                  >
+                                    <div
+                                      className={cn(
+                                        'flex h-10 w-10 items-center justify-center rounded-full border-2 transition-all',
+                                        field.value === color.name
+                                          ? 'border-blue-500 shadow-lg shadow-blue-500/20'
+                                          : 'border-transparent',
+                                      )}
+                                      style={{ backgroundColor: color.hex }}
+                                    >
+                                      {field.value === color.name && (
+                                        <Check
+                                          className={cn(
+                                            'h-5 w-5',
+                                            [
+                                              'White',
+                                              'Beige',
+                                              'Silk White',
+                                              'Gold',
+                                            ].includes(color.name)
+                                              ? 'text-black'
+                                              : 'text-white',
+                                          )}
+                                        />
+                                      )}
+                                    </div>
+                                  </button>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  <p>{color.name}</p>
+                                </TooltipContent>
+                              </Tooltip>
+                            ))}
+                          </TooltipProvider>
                         </div>
                         <p className="text-muted-foreground mt-2 text-center text-[10px] font-black uppercase">
                           {field.value || 'Select a color'}
