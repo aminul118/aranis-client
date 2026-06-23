@@ -18,8 +18,8 @@ const nextConfig: NextConfig = {
     },
     // Customize stale-time behavior for the client-side router cache
     staleTimes: {
-      dynamic: 0,
-      static: 30,
+      dynamic: 30,
+      static: 180,
     },
   },
 

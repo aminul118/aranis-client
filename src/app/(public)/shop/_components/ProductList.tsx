@@ -79,9 +79,9 @@ const ProductList = ({
       {filteredProducts.map((product, index) => (
         <motion.div
           key={product._id}
-          layout
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
+          transition={{ duration: 0.3 }}
         >
           <ProductCard
             product={product}
