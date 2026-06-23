@@ -33,7 +33,8 @@ export default function ProductMedia() {
                     <div className="relative aspect-video w-full overflow-hidden rounded-xl border bg-black">
                       <iframe
                         src={getYoutubeEmbedUrl(field.value) || ''}
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerPolicy="strict-origin-when-cross-origin"
                         allowFullScreen
                         className="absolute top-0 left-0 h-full w-full"
                       />
