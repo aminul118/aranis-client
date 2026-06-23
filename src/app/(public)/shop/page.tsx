@@ -16,7 +16,7 @@ interface Props {
 const ShopPage = async ({ searchParams }: Props) => {
   const resolvedSearchParams = await searchParams;
   const page = resolvedSearchParams.page || '1';
-  const limit = '12';
+  const limit = '20';
 
   const query = {
     ...resolvedSearchParams,
@@ -60,7 +60,6 @@ export async function generateMetadata(): Promise<Metadata> {
     getNavbars({ limit: '1000' }),
   ]);
 
-  const settings = settingsRes?.data;
   const shopNavItem = navItemsRes?.data?.find((item) => item.href === '/shop');
 
   return generateMetaTags({

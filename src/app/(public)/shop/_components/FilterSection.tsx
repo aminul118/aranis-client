@@ -1,5 +1,11 @@
 'use client';
 
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
 import {
   Select,
@@ -40,7 +46,35 @@ const card =
   'rounded-3xl border border-black/5 dark:border-white/10 bg-white/70 dark:bg-white/[0.03] shadow-[0_8px_30px_rgba(0,0,0,0.02)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.2)] backdrop-blur-xl transition-all duration-300';
 
 const heading =
-  'mb-4 text-xs font-extrabold tracking-[0.22em] uppercase text-muted-foreground';
+  'text-xs font-extrabold tracking-[0.22em] uppercase text-muted-foreground';
+
+const CollapsibleCard = ({
+  title,
+  children,
+  defaultOpen = true,
+}: {
+  title: string;
+  children: React.ReactNode;
+  defaultOpen?: boolean;
+}) => {
+  return (
+    <Accordion
+      type="single"
+      collapsible
+      defaultValue={defaultOpen ? 'item-1' : undefined}
+      className={cn(card, 'overflow-hidden')}
+    >
+      <AccordionItem value="item-1" className="border-none">
+        <AccordionTrigger className="px-5 py-5 hover:no-underline">
+          <div className={heading}>{title}</div>
+        </AccordionTrigger>
+        <AccordionContent className="px-5 pt-0 pb-5">
+          {children}
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
+  );
+};
 
 const FilterSection = ({
   dbCategories,
@@ -102,13 +136,11 @@ const FilterSection = ({
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35 }}
-      className="flex flex-col gap-6 pb-24"
+      className="flex flex-col gap-6 pb-6"
     >
       {/* SORT */}
       {showSort && (
-        <div className={cn(card, 'p-5')}>
-          <div className={heading}>Sort By</div>
-
+        <CollapsibleCard title="Sort By">
           <div className="flex flex-col gap-2">
             {sortOptions.map((item) => {
               const active = sortBy === item.value;
@@ -142,14 +174,12 @@ const FilterSection = ({
               );
             })}
           </div>
-        </div>
+        </CollapsibleCard>
       )}
 
       {/* CATEGORY */}
       {showCategory && (
-        <div className={cn(card, 'p-5')}>
-          <div className={heading}>Category</div>
-
+        <CollapsibleCard title="Category">
           <Select
             value={selectedCategory}
             onValueChange={(value) => {
@@ -176,14 +206,12 @@ const FilterSection = ({
               ))}
             </SelectContent>
           </Select>
-        </div>
+        </CollapsibleCard>
       )}
 
       {/* SUBCATEGORY */}
       {currentCategoryData && currentCategoryData.subCategories.length > 0 && (
-        <div className={cn(card, 'p-5')}>
-          <div className={heading}>Sub Category</div>
-
+        <CollapsibleCard title="Sub Category">
           <div className="flex flex-col gap-2">
             {currentCategoryData.subCategories.map((sub) => {
               const active = selectedSubCategory === sub.title;
@@ -215,7 +243,7 @@ const FilterSection = ({
               );
             })}
           </div>
-        </div>
+        </CollapsibleCard>
       )}
 
       {/* TYPES */}
@@ -223,9 +251,7 @@ const FilterSection = ({
         currentCategoryData?.subCategories.find(
           (s) => s.title === selectedSubCategory,
         ) && (
-          <div className={cn(card, 'p-5')}>
-            <div className={heading}>Collection Type</div>
-
+          <CollapsibleCard title="Collection Type">
             <div className="flex flex-wrap gap-2">
               {currentCategoryData.subCategories
                 .find((s) => s.title === selectedSubCategory)
@@ -254,14 +280,12 @@ const FilterSection = ({
                   );
                 })}
             </div>
-          </div>
+          </CollapsibleCard>
         )}
 
       {/* PRICE RANGE */}
       {globalMax >= globalMin && (
-        <div className={cn(card, 'p-5')}>
-          <div className={heading}>Price Range</div>
-
+        <CollapsibleCard title="Price Range">
           <div className="px-2 pt-2">
             <Slider
               min={globalMin}
@@ -374,13 +398,11 @@ const FilterSection = ({
               />
             </div>
           </div>
-        </div>
+        </CollapsibleCard>
       )}
 
       {/* COLORS */}
-      <div className={cn(card, 'p-5')}>
-        <div className={heading}>Colors</div>
-
+      <CollapsibleCard title="Colors">
         <div className="grid grid-cols-4 gap-3">
           {dbColors.map((color) => {
             const active = selectedColors.includes(color.name);
@@ -428,12 +450,10 @@ const FilterSection = ({
             );
           })}
         </div>
-      </div>
+      </CollapsibleCard>
 
       {/* SIZES */}
-      <div className={cn(card, 'p-5')}>
-        <div className={heading}>Sizes</div>
-
+      <CollapsibleCard title="Sizes">
         <div className="flex flex-wrap gap-2">
           {sizes.map((size) => {
             const active = selectedSizes.includes(size);
@@ -462,7 +482,7 @@ const FilterSection = ({
             );
           })}
         </div>
-      </div>
+      </CollapsibleCard>
     </motion.div>
   );
 };

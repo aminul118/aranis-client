@@ -1,11 +1,11 @@
 'use client';
 
-import AppPagination from '@/components/common/pagination/AppPagination';
 import { TransitionContext } from '@/context/useTransition';
 import { generateShopPath } from '@/lib/url-slugs';
 import { cn } from '@/lib/utils';
 import type { ICategory } from '@/services/category/category.interface';
 import type { IColor } from '@/services/color/color.interface';
+import { getProducts } from '@/services/product/product';
 import type { IProduct } from '@/services/product/product.interface';
 import type { ISize } from '@/services/size/size.interface';
 import { IMeta } from '@/types';
@@ -17,6 +17,7 @@ import {
   useTransition as useReactTransition,
   useState,
 } from 'react';
+import { useInView } from 'react-intersection-observer';
 import ActiveFilters from './ActiveFilters';
 import FilterSection from './FilterSection';
 import ProductList from './ProductList';
@@ -59,6 +60,71 @@ const ShopContent = ({
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+
+  // Infinite Scroll State
+  const [allProducts, setAllProducts] = useState<IProduct[]>(products);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [localMeta, setLocalMeta] = useState<IMeta | null>(meta);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+
+  const { ref, inView } = useInView({
+    threshold: 0,
+    rootMargin: '400px',
+  });
+
+  // Sync state when filters change (server components pass new props)
+  useEffect(() => {
+    setAllProducts(products);
+    setCurrentPage(1);
+    setLocalMeta(meta);
+  }, [products, meta, searchParams]);
+
+  // Load more function
+  const loadMore = async () => {
+    if (!localMeta || currentPage >= localMeta.totalPage || isLoadingMore)
+      return;
+
+    setIsLoadingMore(true);
+    const nextPage = currentPage + 1;
+
+    const query: Record<string, string> = {};
+    searchParams.forEach((val, key) => {
+      if (key !== 'page') query[key] = val;
+    });
+    query.page = nextPage.toString();
+    query.limit = '20';
+
+    try {
+      const res = await getProducts(query);
+      if (res?.data) {
+        setAllProducts((prev) => {
+          const existingIds = new Set(prev.map((p) => p._id));
+          const newProducts = res.data.filter((p) => !existingIds.has(p._id));
+          return [...prev, ...newProducts];
+        });
+        setCurrentPage(nextPage);
+        if (res.meta) {
+          setLocalMeta(res.meta);
+        }
+      }
+    } catch (err) {
+      console.error('Failed to load more products:', err);
+    } finally {
+      setIsLoadingMore(false);
+    }
+  };
+
+  useEffect(() => {
+    if (
+      inView &&
+      !isLoadingMore &&
+      !isPending &&
+      localMeta &&
+      currentPage < localMeta.totalPage
+    ) {
+      loadMore();
+    }
+  }, [inView, isLoadingMore, isPending, localMeta, currentPage]);
 
   // Load view mode from localStorage on mount
   useEffect(() => {
@@ -256,7 +322,7 @@ const ShopContent = ({
                 selectedCategory={selectedCategory}
                 selectedSubCategory={selectedSubCategory}
                 selectedType={selectedType}
-                totalItems={meta?.total || 0}
+                totalItems={localMeta?.total || 0}
                 viewMode={viewMode}
                 sortBy={sortBy}
                 isSidebarOpen={isSidebarOpen}
@@ -313,7 +379,7 @@ const ShopContent = ({
               </div>
 
               <div className="flex items-start gap-12">
-                <aside className="sticky top-32 hidden w-64 shrink-0 flex-col gap-10 lg:flex">
+                <aside className="hidden w-64 shrink-0 flex-col gap-10 lg:flex">
                   <FilterSection
                     dbCategories={dbCategories}
                     dbColors={dbColors}
@@ -335,17 +401,45 @@ const ShopContent = ({
 
                 <main className="flex-1">
                   <ProductList
-                    products={products}
+                    products={allProducts}
                     loading={isPending}
                     viewMode={viewMode}
                     selectedColors={selectedColors}
                   />
 
-                  {meta && (
-                    <div className="flex justify-center py-12">
-                      <AppPagination meta={meta} />
+                  {localMeta && currentPage < localMeta.totalPage && (
+                    <div
+                      ref={ref}
+                      className={cn(
+                        'mt-12 grid gap-6 md:gap-8',
+                        viewMode === 'grid'
+                          ? 'grid-cols-2 md:grid-cols-3 xl:grid-cols-4'
+                          : 'grid-cols-1',
+                      )}
+                    >
+                      {/* Premium Skeleton Loaders */}
+                      {Array.from({ length: 4 }).map((_, i) => (
+                        <div key={i} className="flex flex-col gap-3 opacity-60">
+                          <div className="aspect-[4/5] w-full animate-pulse overflow-hidden bg-zinc-200 dark:bg-zinc-800" />
+                          <div className="px-1 py-2">
+                            <div className="mb-2 h-3 w-1/3 animate-pulse rounded bg-zinc-200 dark:bg-zinc-800" />
+                            <div className="mb-4 h-4 w-3/4 animate-pulse rounded bg-zinc-200 dark:bg-zinc-800" />
+                            <div className="h-5 w-1/4 animate-pulse rounded bg-zinc-200 dark:bg-zinc-800" />
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   )}
+                  {localMeta &&
+                    currentPage >= localMeta.totalPage &&
+                    allProducts.length > 0 && (
+                      <div className="mt-16 flex flex-col items-center justify-center py-10 opacity-60">
+                        <div className="mb-4 h-1 w-12 rounded-full bg-zinc-300 dark:bg-zinc-700" />
+                        <p className="text-muted-foreground text-[10px] font-bold tracking-widest uppercase">
+                          End of Collection
+                        </p>
+                      </div>
+                    )}
                 </main>
               </div>
             </>
