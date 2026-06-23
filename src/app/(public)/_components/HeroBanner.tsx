@@ -75,7 +75,7 @@ const HeroBanner = ({ mainSlides, miniBanners }: HeroBannerProps) => {
                   >
                     <Link
                       href={slide.link || '#'}
-                      className="block h-full w-full"
+                      className="relative block h-full w-full"
                       aria-label={`Main Banner ${currentSafe + 1}`}
                     >
                       {/* Background image */}

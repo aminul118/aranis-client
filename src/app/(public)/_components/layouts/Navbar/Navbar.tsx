@@ -69,6 +69,7 @@ const Navbar = ({
       className="h-8 w-auto object-contain"
       priority
       fetchPriority="high"
+      style={{ width: 'auto', height: 'auto' }}
     />
   ) : (
     logo

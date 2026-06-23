@@ -94,6 +94,7 @@ const WishlistItemCard = ({
           src={previewImage}
           alt={product.name}
           fill
+          sizes="(max-width: 640px) 128px, 128px"
           className="object-cover transition-transform duration-700 group-hover:scale-110"
         />
         {product.salePrice && product.salePrice < product.price && (

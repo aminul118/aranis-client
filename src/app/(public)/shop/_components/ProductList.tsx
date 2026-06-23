@@ -76,7 +76,7 @@ const ProductList = ({
           : 'grid-cols-1',
       )}
     >
-      {filteredProducts.map((product) => (
+      {filteredProducts.map((product, index) => (
         <motion.div
           key={product._id}
           layout
@@ -85,6 +85,7 @@ const ProductList = ({
         >
           <ProductCard
             product={product}
+            index={index}
             viewMode={viewMode}
             selectedColors={selectedColors}
           />

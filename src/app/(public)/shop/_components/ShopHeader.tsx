@@ -10,7 +10,9 @@ import {
 } from '@/components/ui/select';
 import {
   Sheet,
+  SheetClose,
   SheetContent,
+  SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
@@ -23,6 +25,7 @@ import {
   List,
   RefreshCw,
   SlidersHorizontal,
+  X,
 } from 'lucide-react';
 import { ReactNode } from 'react';
 
@@ -145,41 +148,49 @@ const ShopHeader = ({
             </SheetTrigger>
             <SheetContent
               side="right"
-              className="w-full border-white/5 bg-[#0f111a] sm:max-w-md"
+              className="w-full border-white/5 bg-[#0f111a] sm:max-w-md [&>button]:hidden"
             >
-              <SheetHeader className="mb-6 flex flex-row items-center justify-between space-y-0 border-b border-white/5 pb-4">
+              <SheetDescription className="sr-only">
+                Filter products by category, size, color, and price.
+              </SheetDescription>
+              <SheetHeader className="mx-6 mb-4 flex flex-row items-center justify-between border-b border-white/5 pt-6 pb-4">
                 <SheetTitle className="text-left text-2xl font-black text-white">
                   Shop Filters
                 </SheetTitle>
-                <div className="mt-0 flex items-center gap-2">
-                  {onClearAll && (
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      onClick={() => {
-                        onClearAll();
-                        setIsSidebarOpen(false);
-                      }}
-                      className="h-8 rounded-full bg-red-500/10 px-3 text-xs font-bold text-red-400 hover:bg-red-500/20 hover:text-red-300"
-                    >
-                      <FilterX className="mr-1.5 h-3.5 w-3.5" />
-                      Clear
-                    </Button>
-                  )}
+                <SheetClose className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-red-500/10 text-red-400 transition-all outline-none hover:bg-red-500 hover:text-white focus:ring-0">
+                  <X className="h-4 w-4" />
+                </SheetClose>
+              </SheetHeader>
+
+              <div className="mb-6 flex items-center gap-3 px-6">
+                {onClearAll && (
                   <Button
                     size="sm"
                     variant="ghost"
                     onClick={() => {
-                      window.location.href = window.location.pathname;
+                      onClearAll();
+                      setIsSidebarOpen(false);
                     }}
-                    className="h-8 rounded-full bg-white/10 px-3 text-xs font-bold text-white hover:bg-white/20"
+                    className="h-10 flex-1 rounded-full bg-red-500/10 px-4 text-sm font-bold text-red-400 hover:bg-red-500/20 hover:text-red-300"
                   >
-                    <RefreshCw className="mr-1.5 h-3.5 w-3.5" />
-                    Refresh
+                    <FilterX className="mr-2 h-4 w-4" />
+                    Clear
                   </Button>
-                </div>
-              </SheetHeader>
-              <div className="flex flex-col gap-10 overflow-y-auto pr-2 pb-32">
+                )}
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => {
+                    window.location.href = window.location.pathname;
+                  }}
+                  className="h-10 flex-1 rounded-full bg-white/10 px-4 text-sm font-bold text-white hover:bg-white/20"
+                >
+                  <RefreshCw className="mr-2 h-4 w-4" />
+                  Refresh
+                </Button>
+              </div>
+
+              <div className="flex flex-col gap-10 overflow-y-auto px-6 pb-32">
                 {children}
               </div>
               <div className="absolute right-0 bottom-0 left-0 border-t border-white/5 bg-[#0f111a] p-6 pb-12">
