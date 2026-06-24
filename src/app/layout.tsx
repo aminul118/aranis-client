@@ -20,10 +20,6 @@ const MainLayout = ({ children }: Children) => {
       <head>
         <link rel="preconnect" href="https://cdn.thearanis.com" />
         <link rel="dns-prefetch" href="https://cdn.thearanis.com" />
-        <link rel="preconnect" href="https://www.googletagmanager.com" />
-        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
-        <link rel="preconnect" href="https://static.cloudflareinsights.com" />
-        <link rel="dns-prefetch" href="https://static.cloudflareinsights.com" />
       </head>
       <body className={fonts.spaceGrotesk.className} suppressHydrationWarning>
         <TopLoadingBar />

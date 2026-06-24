@@ -152,6 +152,7 @@ const HeroBanner = ({ mainSlides, miniBanners }: HeroBannerProps) => {
                     alt="Mini Banner"
                     fill
                     priority={i < 2}
+                    fetchPriority={i === 0 ? 'high' : 'auto'}
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                     sizes="(max-width: 1024px) 50vw, 320px"
                   />
