@@ -14,6 +14,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
       defaultTheme="dark"
       enableSystem
       disableTransitionOnChange
+      scriptProps={{ 'data-cfasync': 'false' }}
     >
       <UserProvider>
         <CartProvider>
