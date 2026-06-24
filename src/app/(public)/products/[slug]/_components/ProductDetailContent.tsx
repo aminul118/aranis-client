@@ -29,13 +29,11 @@ import { ShoppingCart } from 'lucide-react';
 interface ProductDetailContentProps {
   product: IProduct;
   settings?: ISiteSetting;
-  urlColor?: string;
 }
 
 const ProductDetailContent = ({
   product,
   settings,
-  urlColor,
 }: ProductDetailContentProps) => {
   const router = useRouter();
   const { addToCart } = useCart();
@@ -47,21 +45,26 @@ const ProductDetailContent = ({
 
   // Initialize variant from URL color
   useEffect(() => {
-    if (urlColor && product.variants) {
-      const sColor = urlColor.toLowerCase();
-      const idx = product.variants.findIndex((v) => {
-        const vColor = v.color?.toLowerCase();
-        return vColor
-          ? vColor === sColor ||
-              vColor.includes(sColor) ||
-              sColor.includes(vColor)
-          : false;
-      });
-      if (idx !== -1) {
-        setSelectedVariantIndex(idx);
+    if (typeof window !== 'undefined' && product.variants) {
+      const params = new URLSearchParams(window.location.search);
+      const urlColor = params.get('color');
+
+      if (urlColor) {
+        const sColor = urlColor.toLowerCase();
+        const idx = product.variants.findIndex((v) => {
+          const vColor = v.color?.toLowerCase();
+          return vColor
+            ? vColor === sColor ||
+                vColor.includes(sColor) ||
+                sColor.includes(vColor)
+            : false;
+        });
+        if (idx !== -1) {
+          setSelectedVariantIndex(idx);
+        }
       }
     }
-  }, [urlColor, product.variants]);
+  }, [product.variants]);
   const [isRequesting, setIsRequesting] = useState(false);
   const currentSelectedColor =
     (selectedVariantIndex === -1

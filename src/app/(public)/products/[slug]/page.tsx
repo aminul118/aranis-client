@@ -9,7 +9,6 @@ import { notFound } from 'next/navigation';
 
 interface Props {
   params: Promise<{ slug: string }>;
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 export async function generateStaticParams() {
@@ -57,10 +56,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-const ProductPage = async ({ params, searchParams }: Props) => {
+const ProductPage = async ({ params }: Props) => {
   const { slug } = await params;
-  const sp = await searchParams;
-  const urlColor = typeof sp?.color === 'string' ? sp.color : undefined;
   const [{ data: product }, { data: settings }] = await Promise.all([
     getSingleProduct(slug),
     getSiteSettings(),
@@ -91,11 +88,7 @@ const ProductPage = async ({ params, searchParams }: Props) => {
           Explore More Collections
         </Link>
 
-        <ProductDetailContent
-          product={product}
-          settings={settings}
-          urlColor={urlColor}
-        />
+        <ProductDetailContent product={product} settings={settings} />
 
         {relatedProducts.length > 0 && (
           <div className="mt-12 pt-16">
