@@ -1,9 +1,21 @@
 'use client';
 
-import { BaseEditorKit } from '@/components/rich-text/kits/editor-base-kit';
-import { EditorStatic } from '@/components/rich-text/ui/editor-static';
-import { createSlateEditor } from 'platejs';
+import dynamic from 'next/dynamic';
 import { useEffect, useMemo, useState } from 'react';
+
+// Dynamically import the heavy Plate renderer to avoid bundling it unconditionally
+const PlateRenderer = dynamic(
+  () =>
+    import('@/components/rich-text/core/plate-renderer').then(
+      (mod) => mod.PlateRenderer,
+    ),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="h-20 w-full animate-pulse rounded bg-slate-100 dark:bg-slate-800"></div>
+    ),
+  },
+);
 
 interface IHtml {
   content: string;
@@ -30,21 +42,13 @@ const HtmlContent = ({ content, className }: IHtml) => {
     }
   }, [content]);
 
-  const staticEditor = useMemo(() => {
-    if (!isPlate) return null;
-    return createSlateEditor({ plugins: BaseEditorKit });
-  }, [isPlate]);
-
-  if (isPlate && staticEditor) {
-    // Server renders an empty placeholder; client fills in PlateStatic after
-    // mount — prevents the className mismatch hydration error from PlateStatic
-    // adding classes (m-0 px-0 py-1) that the server never emitted.
+  if (isPlate && value) {
     if (!mounted) {
       return <div className={className} suppressHydrationWarning />;
     }
     return (
       <div className={className} suppressHydrationWarning>
-        <EditorStatic value={value} editor={staticEditor} variant="none" />
+        <PlateRenderer value={value} />
       </div>
     );
   }
