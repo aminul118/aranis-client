@@ -38,6 +38,7 @@ export const ProductDetailVariants = ({
         {/* Default/Main Product Variant */}
         <button
           onClick={() => setSelectedVariantIndex(-1)}
+          aria-label={`Select color ${product.color}`}
           className={cn(
             'group relative h-24 w-20 overflow-hidden rounded-2xl border-2 transition-all duration-500',
             selectedVariantIndex === -1
@@ -79,6 +80,7 @@ export const ProductDetailVariants = ({
           <button
             key={idx}
             onClick={() => setSelectedVariantIndex(idx)}
+            aria-label={`Select color ${variant.color}`}
             className={cn(
               'group relative h-24 w-20 overflow-hidden rounded-2xl border-2 transition-all duration-500',
               selectedVariantIndex === idx

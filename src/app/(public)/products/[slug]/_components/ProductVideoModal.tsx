@@ -37,6 +37,7 @@ export default function ProductVideoModal({
             <button
               onClick={() => setIsOpen(false)}
               onPointerDown={(e) => e.stopPropagation()}
+              aria-label="Close video modal"
               className="flex h-6 w-6 items-center justify-center rounded-full bg-black/60 text-white backdrop-blur-md hover:bg-black/80"
             >
               <X className="h-3 w-3" />

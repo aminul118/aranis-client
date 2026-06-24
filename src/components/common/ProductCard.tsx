@@ -6,6 +6,7 @@ import { useWishlist } from '@/context/WishlistContext';
 import { cn, extractPlainText } from '@/lib/utils';
 import type { IProduct } from '@/services/product/product.interface';
 import { Heart, ShoppingCart } from 'lucide-react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 interface ProductCardProps {
@@ -65,12 +66,12 @@ const ProductCard = ({
   }`;
 
   return (
-    <div
+    <Link
+      href={productUrl}
       className={cn(
         'group relative flex h-full cursor-pointer overflow-hidden bg-white transition-all duration-700 hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.15)] dark:bg-zinc-900/50 dark:hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.4)]',
         isList ? 'flex-row gap-8' : 'flex-col',
       )}
-      onClick={() => router.push(productUrl)}
     >
       {/* Image Container */}
       <div
@@ -219,7 +220,7 @@ const ProductCard = ({
           )}
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 

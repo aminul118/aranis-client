@@ -82,6 +82,7 @@ export const ProductDetailSizes = ({
                 key={size}
                 onClick={() => !isStockOut && setSelectedSize(size)}
                 disabled={isStockOut}
+                aria-label={`Select size ${size}`}
                 className={cn(
                   'group relative flex min-w-16 flex-col items-center justify-center gap-0.5 overflow-hidden rounded-lg border-2 px-5 py-3 transition-all duration-300',
                   isStockOut

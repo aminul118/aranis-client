@@ -69,6 +69,7 @@ export const DraggableVideoPlayer = ({
           onClick={() => setIsPoppedOut(true)}
           className="absolute right-4 bottom-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black/60 text-white opacity-0 shadow-lg backdrop-blur-md transition-all duration-300 group-hover:opacity-100 hover:scale-110 hover:bg-black/80"
           title="Pop out video"
+          aria-label="Pop out video"
         >
           <PictureInPicture2 className="h-5 w-5" />
         </button>
@@ -93,6 +94,7 @@ export const DraggableVideoPlayer = ({
             onClick={() => setIsPoppedOut(false)}
             className="flex h-8 w-8 items-center justify-center rounded-full bg-black/70 text-white shadow-lg backdrop-blur-md transition-all hover:bg-black/90"
             title="Restore video"
+            aria-label="Restore video"
             onPointerDown={(e) => e.stopPropagation()} // Prevent drag when clicking button
           >
             <Maximize2 className="h-4 w-4" />
@@ -103,6 +105,7 @@ export const DraggableVideoPlayer = ({
             onClick={() => setIsPoppedOut(false)}
             className="flex h-8 w-8 items-center justify-center rounded-full bg-black/70 text-white shadow-lg backdrop-blur-md transition-all hover:bg-black/90"
             title="Close miniplayer"
+            aria-label="Close miniplayer"
             onPointerDown={(e) => e.stopPropagation()} // Prevent drag when clicking button
           >
             <X className="h-4 w-4" />
