@@ -17,10 +17,6 @@ const MainLayout = ({ children }: Children) => {
       suppressHydrationWarning
       data-scroll-behavior="smooth"
     >
-      <head>
-        <link rel="preconnect" href="https://cdn.thearanis.com" />
-        <link rel="dns-prefetch" href="https://cdn.thearanis.com" />
-      </head>
       <body className={fonts.spaceGrotesk.className} suppressHydrationWarning>
         <TopLoadingBar />
         <Providers>{children}</Providers>
