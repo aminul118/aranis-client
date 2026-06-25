@@ -7,7 +7,7 @@ import { cn, extractPlainText } from '@/lib/utils';
 import type { IProduct } from '@/services/product/product.interface';
 import { Heart, ShoppingCart } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 interface ProductCardProps {
   product: IProduct;
@@ -23,6 +23,7 @@ const ProductCard = ({
   selectedColors = [],
 }: ProductCardProps) => {
   const router = useRouter();
+  const pathname = usePathname();
   const { toggleWishlist, isInWishlist } = useWishlist();
 
   const isList = viewMode === 'list';
@@ -153,11 +154,16 @@ const ProductCard = ({
           isList ? 'py-4 pr-4' : 'p-3 pt-3 sm:p-5 sm:pt-4',
         )}
       >
-        <div className="mb-1 flex items-center justify-between">
-          <p className="text-muted-foreground text-[10px] font-bold tracking-[0.15em] uppercase">
-            {product.category || 'Collection'}
-          </p>
-        </div>
+        {/* Only show category label on /shop, /offers, or home routes */}
+        {(pathname === '/shop' ||
+          pathname === '/' ||
+          pathname.startsWith('/offers')) && (
+          <div className="mb-1 flex items-center justify-between">
+            <p className="text-muted-foreground text-[10px] font-bold tracking-[0.15em] uppercase">
+              {product.subCategory || product.category || 'Collection'}
+            </p>
+          </div>
+        )}
 
         <h2 className="mb-3 line-clamp-2 min-h-[32px] text-xs leading-tight font-bold tracking-tight text-zinc-900 transition-colors group-hover:text-blue-500 sm:min-h-[36px] sm:text-sm sm:leading-tight dark:text-white">
           {product.name}

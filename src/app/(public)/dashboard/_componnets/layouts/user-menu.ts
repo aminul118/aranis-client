@@ -1,6 +1,7 @@
 import { MenuGroup } from '@/types/admin-menu';
 import {
   BookOpen,
+  FileText,
   LayoutDashboard,
   Lock,
   MessageCirclePlus,
@@ -17,6 +18,7 @@ const userSidebarMenu: MenuGroup[] = [
     menu: [
       { name: 'Dashboard', url: '/dashboard', icon: LayoutDashboard },
       { name: 'My Orders', url: '/dashboard/orders', icon: Package },
+      { name: 'My Invoices', url: '/dashboard/invoices', icon: FileText },
       {
         name: 'Customer Support',
         url: '/dashboard/chat',

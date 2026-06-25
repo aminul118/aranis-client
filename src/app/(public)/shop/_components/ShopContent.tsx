@@ -91,6 +91,18 @@ const ShopContent = ({
     searchParams.forEach((val, key) => {
       if (key !== 'page') query[key] = val;
     });
+
+    // Include initial filters so category pages don't lose context on pagination
+    if (initialFilters?.category && initialFilters.category !== 'All') {
+      query.category = initialFilters.category;
+    }
+    if (initialFilters?.subCategory) {
+      query.subCategory = initialFilters.subCategory;
+    }
+    if (initialFilters?.type) {
+      query.type = initialFilters.type;
+    }
+
     query.page = nextPage.toString();
     query.limit = '20';
 
