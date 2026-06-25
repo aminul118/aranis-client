@@ -96,11 +96,13 @@ export default function ProductGeneralInfo({
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {localCategories.map((c) => (
-                    <SelectItem key={c.name} value={c.name}>
-                      {c.name}
-                    </SelectItem>
-                  ))}
+                  {localCategories
+                    .filter((c) => c.name)
+                    .map((c) => (
+                      <SelectItem key={c.name} value={c.name}>
+                        {c.name}
+                      </SelectItem>
+                    ))}
                 </SelectContent>
               </Select>
               <FormMessage />
@@ -126,14 +128,13 @@ export default function ProductGeneralInfo({
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {subCategories.map((s, idx) => (
-                    <SelectItem
-                      key={s.title || `sub-${idx}`}
-                      value={s.title || ''}
-                    >
-                      {s.title}
-                    </SelectItem>
-                  ))}
+                  {subCategories
+                    .filter((s) => s.title)
+                    .map((s) => (
+                      <SelectItem key={s.title!} value={s.title!}>
+                        {s.title}
+                      </SelectItem>
+                    ))}
                 </SelectContent>
               </Select>
               <FormMessage />
@@ -159,7 +160,7 @@ export default function ProductGeneralInfo({
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {types.map((t) => (
+                  {types.filter(Boolean).map((t) => (
                     <SelectItem key={t} value={t}>
                       {t}
                     </SelectItem>

@@ -7,5 +7,4 @@ export interface ICategory {
   _id?: string;
   name: string;
   subCategories: ISubCategory[];
-  isDeleted?: boolean;
 }
