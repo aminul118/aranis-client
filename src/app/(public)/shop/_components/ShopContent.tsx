@@ -445,10 +445,25 @@ const ShopContent = ({
                   {localMeta &&
                     currentPage >= localMeta.totalPage &&
                     allProducts.length > 0 && (
-                      <div className="mt-16 flex flex-col items-center justify-center py-10 opacity-60">
-                        <div className="mb-4 h-1 w-12 rounded-full bg-zinc-300 dark:bg-zinc-700" />
-                        <p className="text-muted-foreground text-[10px] font-bold tracking-widest uppercase">
+                      <div className="mt-20 flex flex-col items-center justify-center pb-20 opacity-80">
+                        <div className="mb-6 flex w-full max-w-[200px] items-center justify-center">
+                          <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent to-zinc-300 dark:to-zinc-700" />
+                          <div className="mx-2 h-1.5 w-1.5 rotate-45 bg-zinc-400 dark:bg-zinc-500" />
+                          <div className="h-[1px] flex-1 bg-gradient-to-l from-transparent to-zinc-300 dark:to-zinc-700" />
+                        </div>
+                        <p className="text-foreground mb-3 text-xs font-bold tracking-[0.2em] uppercase">
                           End of Collection
+                        </p>
+                        <p className="text-muted-foreground text-sm">
+                          Showing{' '}
+                          <span className="text-foreground font-semibold">
+                            {allProducts.length}
+                          </span>{' '}
+                          of{' '}
+                          <span className="text-foreground font-semibold">
+                            {localMeta.total}
+                          </span>{' '}
+                          products
                         </p>
                       </div>
                     )}
