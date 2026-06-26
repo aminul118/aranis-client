@@ -14,6 +14,10 @@ const AdminLayout = async ({ children }: Children) => {
     getMe(),
     getSiteSettings(),
   ]);
+  if (!user) {
+    const { redirect } = await import('next/navigation');
+    redirect('/auth/login');
+  }
 
   return (
     <SidebarProvider>

@@ -13,7 +13,7 @@ const CustomerInterestPage = async ({ searchParams }: SearchParams) => {
   const res = await getCustomerInterestStats({
     ...params,
     cache: 'no-store',
-  } as any);
+  });
 
   if (res && !res.success) {
     return (
