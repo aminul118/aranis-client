@@ -248,12 +248,12 @@ const FilterSection = ({
 
       {/* TYPES */}
       {selectedSubCategory &&
-        currentCategoryData?.subCategories.find(
+        (currentCategoryData?.subCategories.find(
           (s) => s.title === selectedSubCategory,
-        ) && (
+        )?.items?.length || 0) > 0 && (
           <CollapsibleCard title="Collection Type">
             <div className="flex flex-wrap gap-2">
-              {currentCategoryData.subCategories
+              {currentCategoryData?.subCategories
                 .find((s) => s.title === selectedSubCategory)
                 ?.items?.map((type) => {
                   const active = selectedType === type;

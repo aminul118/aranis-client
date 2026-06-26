@@ -11,7 +11,10 @@ export const dynamic = 'force-dynamic';
 
 const UsersPage = async ({ searchParams }: SearchParams) => {
   const params = await cleanSearchParams(searchParams);
-  const { data, meta } = await getUsers(params);
+  const { data, meta } = await getUsers(params, {
+    cache: 'no-store',
+    headers: { 'x-bypass-cache': 'true' },
+  });
 
   return (
     <>

@@ -20,7 +20,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function OrderDetailPage({ params }: Props) {
   const { orderId } = await params;
-  const { data: order } = await getSingleOrder(orderId);
+  const { data: order } = await getSingleOrder(orderId, {
+    cache: 'no-store',
+    headers: { 'x-bypass-cache': 'true' },
+  });
 
   if (!order) {
     notFound();

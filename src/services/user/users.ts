@@ -1,5 +1,6 @@
 'use server';
 
+import type { FetchOptions } from '@/helpers/serverFetchHelper';
 import { getCookie } from '@/lib/jwt';
 import { revalidate } from '@/lib/revalidate';
 import serverFetch from '@/lib/server-fetch';
@@ -18,11 +19,19 @@ const getMe = async () => {
   });
 };
 
-const getUsers = async (query: Record<string, string>) => {
+const getUsers = async (
+  query: Record<string, string>,
+  options?: FetchOptions,
+) => {
   return await serverFetch.get<ApiResponse<IUser[]>>('/user/all-users', {
     query,
     next: {
       tags: ['users'],
+      ...options?.next,
+    },
+    ...options,
+    headers: {
+      ...options?.headers,
     },
   });
 };

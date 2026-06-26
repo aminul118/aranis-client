@@ -20,7 +20,7 @@ const CategoriesColumn: Column<ICategory>[] = [
     },
   },
   {
-    header: 'Types',
+    header: 'Category Types',
     accessor: (c) => {
       const allTypes = c.subCategories
         ?.flatMap((s) => s.items || [])
