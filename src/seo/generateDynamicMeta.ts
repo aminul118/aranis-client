@@ -40,7 +40,8 @@ export async function generateCategorizedMeta(
     return {};
   }
 
-  const { data: navItems } = await getNavbars({ limit: '1000' });
+  const { data } = await getNavbars({ limit: '1000' });
+  const navItems = data || [];
 
   // 1. Find the Category (Primary Nav Item)
   const categorySlug = slugs[0]?.toLowerCase();
