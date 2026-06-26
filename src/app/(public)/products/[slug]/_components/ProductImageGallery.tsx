@@ -3,7 +3,7 @@
 import Image from '@/components/common/SafeImage';
 import { AnimatePresence, motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
-import { ReactNode, useCallback, useRef, useState } from 'react';
+import { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 
 const MobileZoomViewer = dynamic(() => import('./MobileZoomViewer'), {
   ssr: false,
@@ -25,8 +25,17 @@ const ProductImageGallery = ({
   const [selectedImage, setSelectedImage] = useState(thumbnails[0] || '');
   const [isZoomed, setIsZoomed] = useState(false);
   const [zoomOrigin, setZoomOrigin] = useState({ x: 50, y: 50 });
+  const [shouldPreload, setShouldPreload] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const thumbsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // Delay preloading other images to prioritize LCP and fast initial load
+    const timer = setTimeout(() => {
+      setShouldPreload(true);
+    }, 1500);
+    return () => clearTimeout(timer);
+  }, []);
 
   // ── Cursor-tracking zoom ──────────────────────────────────────────────────
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
@@ -55,7 +64,25 @@ const ProductImageGallery = ({
 
   return (
     <div className="relative flex gap-3 select-none">
-      {/* ── Removed heavy preload block to improve LCP and bandwidth ──────────────── */}
+      {/* ── Preload full-size images for fast switching ──────────────── */}
+      {shouldPreload && (
+        <div className="hidden" aria-hidden="true">
+          {thumbnails.map((img) => {
+            if (img === thumbnails[0]) return null;
+            return (
+              <Image
+                key={`preload-${img}`}
+                src={img}
+                alt=""
+                fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                quality={60}
+                priority={true}
+              />
+            );
+          })}
+        </div>
+      )}
 
       {/* ── Left Thumbnail Strip ─────────────────────────────────────────── */}
       {hasMultiple && (
