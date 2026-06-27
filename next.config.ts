@@ -21,12 +21,14 @@ const nextConfig: NextConfig = {
       dynamic: 30,
       static: 180,
     },
+    optimizePackageImports: ['lucide-react', 'framer-motion'],
   },
 
   // --- Image Optimization ---
   images: {
     // Prefer modern image formats if the browser supports them
     formats: ['image/avif', 'image/webp'],
+    deviceSizes: [540, 640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     qualities: [50, 60, 75, 100],
     // Allow external images to be optimized and served from our specific CDN
     remotePatterns: [
