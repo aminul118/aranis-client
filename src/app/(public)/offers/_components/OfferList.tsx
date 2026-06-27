@@ -1,5 +1,6 @@
 'use client';
 
+import AnimatedSection from '@/components/common/AnimatedSection';
 import ProductCard from '@/components/common/ProductCard';
 import { motion } from 'framer-motion';
 import { Gift } from 'lucide-react';
@@ -16,16 +17,13 @@ const OfferList = ({ products, tag }: OfferListProps) => {
     <div className="container mx-auto px-4">
       {/* Grid Section */}
       {hasProducts ? (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.4 }}
-          className="grid grid-cols-2 gap-x-4 gap-y-12 sm:gap-x-8 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
-        >
+        <div className="grid grid-cols-2 gap-x-4 gap-y-12 sm:gap-x-8 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
           {products.map((product, index) => (
-            <ProductCard key={product._id} product={product} index={index} />
+            <AnimatedSection key={product._id} variant="fadeUp">
+              <ProductCard product={product} index={index} />
+            </AnimatedSection>
           ))}
-        </motion.div>
+        </div>
       ) : (
         /* Cute & Simple Empty State (Matching Cart/Wishlist) */
         <div className="flex min-h-[60vh] flex-col items-center justify-center py-20 text-center">

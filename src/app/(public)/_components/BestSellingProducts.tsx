@@ -3,7 +3,7 @@ import ProductCard from '@/components/common/ProductCard';
 import { getBestSellingProducts } from '@/services/product/product';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
-import AnimatedSection from './AnimatedSection';
+import AnimatedSection from '../../../components/common/AnimatedSection';
 
 const BestSellingProducts = async () => {
   const { data: products = [] } = await getBestSellingProducts();
@@ -43,7 +43,9 @@ const BestSellingProducts = async () => {
 
         <Grid cols={4} className="gap-x-4 gap-y-6 md:gap-x-8 md:gap-y-12">
           {products.map((product, index) => (
-            <ProductCard key={product._id} product={product} index={index} />
+            <AnimatedSection key={product._id} variant="fadeUp">
+              <ProductCard product={product} index={index} />
+            </AnimatedSection>
           ))}
         </Grid>
       </div>

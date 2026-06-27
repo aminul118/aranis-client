@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { getTopRatedProducts } from '@/services/product/product';
 import Link from 'next/link';
-import AnimatedSection from './AnimatedSection';
+import AnimatedSection from '../../../components/common/AnimatedSection';
 import TopRatedSwiper from './TopRatedSwiper';
 
 const TopRatedProducts = async () => {

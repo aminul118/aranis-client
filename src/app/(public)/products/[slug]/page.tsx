@@ -1,4 +1,5 @@
 import ProductDetailContent from '@/app/(public)/products/[slug]/_components/ProductDetailContent';
+import AnimatedSection from '@/components/common/AnimatedSection';
 import ProductCard from '@/components/common/ProductCard';
 import { getProducts, getSingleProduct } from '@/services/product/product';
 import { getSiteSettings } from '@/services/settings/settings';
@@ -120,11 +121,9 @@ const ProductPage = async ({ params }: Props) => {
             </div>
             <div className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
               {relatedProducts.map((relatedProduct, index) => (
-                <ProductCard
-                  key={relatedProduct._id}
-                  product={relatedProduct}
-                  index={index}
-                />
+                <AnimatedSection key={relatedProduct._id} variant="fadeUp">
+                  <ProductCard product={relatedProduct} index={index} />
+                </AnimatedSection>
               ))}
             </div>
           </div>

@@ -1,10 +1,10 @@
 'use client';
 
+import AnimatedSection from '@/components/common/AnimatedSection';
 import ProductCard from '@/components/common/ProductCard';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import type { IProduct } from '@/services/product/product.interface';
-import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 
 interface ProductListProps {
@@ -77,19 +77,14 @@ const ProductList = ({
       )}
     >
       {filteredProducts.map((product, index) => (
-        <motion.div
-          key={product._id}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.3 }}
-        >
+        <AnimatedSection key={product._id} variant="fadeUp">
           <ProductCard
             product={product}
             index={index}
             viewMode={viewMode}
             selectedColors={selectedColors}
           />
-        </motion.div>
+        </AnimatedSection>
       ))}
     </div>
   );

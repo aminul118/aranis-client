@@ -35,7 +35,7 @@ const AnimatedSection = ({
     <motion.div
       initial={variants[variant].initial}
       whileInView={variants[variant].animate}
-      viewport={{ once: true, margin: '-100px' }}
+      viewport={{ once: true, amount: 0.1 }}
       transition={{
         duration: 0.8,
         delay,

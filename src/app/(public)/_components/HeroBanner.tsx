@@ -1,12 +1,18 @@
 'use client';
 
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from '@/components/ui/carousel';
 import type { IHeroBanner } from '@/services/banners/hero-banner/hero-banner.interface';
 import type { IMiniBanner } from '@/services/banners/mini-banner/mini-banner.interface';
-import { AnimatePresence, motion } from 'framer-motion';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import Autoplay from 'embla-carousel-autoplay';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useCallback, useEffect, useState } from 'react';
+import { useRef } from 'react';
 
 const SLIDE_INTERVAL = 5000;
 
@@ -15,43 +21,17 @@ interface HeroBannerProps {
   miniBanners?: IMiniBanner[];
 }
 
-const HeroBanner = ({ mainSlides, miniBanners }: HeroBannerProps) => {
+const HeroBanner2 = ({ mainSlides, miniBanners }: HeroBannerProps) => {
   const slides = mainSlides || [];
   const minis = miniBanners || [];
 
-  const [current, setCurrent] = useState(0);
-  const [direction, setDirection] = useState(1);
-
-  const goTo = useCallback(
-    (index: number) => {
-      if (slides.length === 0) return;
-      setDirection(index > current ? 1 : -1);
-      setCurrent((index + slides.length) % slides.length);
-    },
-    [current, slides.length],
+  const plugin = useRef(
+    Autoplay({ delay: SLIDE_INTERVAL, stopOnInteraction: true }),
   );
-
-  const next = useCallback(() => goTo(current + 1), [current, goTo]);
-  const prev = useCallback(() => goTo(current - 1), [current, goTo]);
-
-  useEffect(() => {
-    if (slides.length <= 1) return;
-    const timer = setInterval(next, SLIDE_INTERVAL);
-    return () => clearInterval(timer);
-  }, [next, slides.length]);
 
   if (slides.length === 0 && minis.length === 0) {
     return null;
   }
-
-  const currentSafe = current >= slides.length ? 0 : current;
-  const slide = slides[currentSafe];
-
-  const variants = {
-    enter: (dir: number) => ({ x: dir > 0 ? '100%' : '-100%', opacity: 0 }),
-    center: { x: 0, opacity: 1 },
-    exit: (dir: number) => ({ x: dir > 0 ? '-100%' : '100%', opacity: 0 }),
-  };
 
   return (
     <section className="bg-background w-full pb-4">
@@ -60,80 +40,47 @@ const HeroBanner = ({ mainSlides, miniBanners }: HeroBannerProps) => {
           {/* ── Main Carousel ─────────────────────────────────────── */}
           {slides.length > 0 && (
             <div className="group bg-muted relative aspect-[16/9] w-full flex-1 overflow-hidden rounded-2xl">
-              {/* Slides */}
-              <AnimatePresence custom={direction} initial={false}>
-                {slide && (
-                  <motion.div
-                    key={slide._id ?? String(currentSafe)}
-                    custom={direction}
-                    variants={variants}
-                    initial="enter"
-                    animate="center"
-                    exit="exit"
-                    transition={{ duration: 0.55, ease: 'easeInOut' }}
-                    className="absolute inset-0"
-                  >
-                    <Link
-                      href={slide.link || '#'}
-                      className="relative block h-full w-full"
-                      aria-label={`Main Banner ${currentSafe + 1}`}
+              <Carousel
+                plugins={[plugin.current]}
+                className="h-full w-full"
+                opts={{
+                  loop: true,
+                }}
+              >
+                <CarouselContent className="h-full">
+                  {slides.map((slide, currentSafe) => (
+                    <CarouselItem
+                      key={slide._id ?? String(currentSafe)}
+                      className="relative h-full w-full"
                     >
-                      {/* Background image */}
-                      <Image
-                        src={slide.image}
-                        alt="Hero Banner"
-                        fill
-                        className="object-cover object-top"
-                        priority
-                        fetchPriority="high"
-                        sizes="(max-width: 1024px) 100vw, 75vw"
-                      />
-                    </Link>
-                  </motion.div>
+                      <Link
+                        href={slide.link || '#'}
+                        className="relative block aspect-[16/9] h-full w-full"
+                        aria-label={`Main Banner ${currentSafe + 1}`}
+                      >
+                        {/* Background image */}
+                        <Image
+                          src={slide.image}
+                          alt="Hero Banner"
+                          fill
+                          className="object-cover object-top"
+                          priority={currentSafe === 0}
+                          fetchPriority={currentSafe === 0 ? 'high' : 'auto'}
+                          sizes="(max-width: 1024px) 100vw, 75vw"
+                        />
+                      </Link>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+
+                {/* Arrow controls */}
+                {slides.length > 1 && (
+                  <>
+                    <CarouselPrevious className="absolute top-1/2 left-3 z-20 h-11 w-11 -translate-y-1/2 rounded-full border-none bg-black/40 text-white opacity-0 backdrop-blur-sm transition-all group-hover:opacity-100 hover:bg-black/70 hover:text-white" />
+                    <CarouselNext className="absolute top-1/2 right-3 z-20 h-11 w-11 -translate-y-1/2 rounded-full border-none bg-black/40 text-white opacity-0 backdrop-blur-sm transition-all group-hover:opacity-100 hover:bg-black/70 hover:text-white" />
+                  </>
                 )}
-              </AnimatePresence>
-
-              {/* Arrow controls */}
-              {slides.length > 1 && (
-                <>
-                  <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      prev();
-                    }}
-                    className="absolute top-1/2 left-3 z-20 -translate-y-1/2 rounded-full bg-black/40 p-3.5 text-white opacity-0 backdrop-blur-sm transition-all group-hover:opacity-100 hover:bg-black/70"
-                    aria-label="Previous"
-                  >
-                    <ChevronLeft size={22} />
-                  </button>
-                  <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      next();
-                    }}
-                    className="absolute top-1/2 right-3 z-20 -translate-y-1/2 rounded-full bg-black/40 p-3.5 text-white opacity-0 backdrop-blur-sm transition-all group-hover:opacity-100 hover:bg-black/70"
-                    aria-label="Next"
-                  >
-                    <ChevronRight size={22} />
-                  </button>
-                </>
-              )}
-
-              {/* Progress bar */}
-              {slides.length > 1 && (
-                <div className="absolute right-0 bottom-0 left-0 z-20 h-0.5 bg-white/10">
-                  <motion.div
-                    key={current}
-                    className={`h-full bg-white`}
-                    initial={{ width: '0%' }}
-                    animate={{ width: '100%' }}
-                    transition={{
-                      duration: SLIDE_INTERVAL / 1000,
-                      ease: 'linear',
-                    }}
-                  />
-                </div>
-              )}
+              </Carousel>
             </div>
           )}
 
@@ -191,4 +138,4 @@ const HeroBanner = ({ mainSlides, miniBanners }: HeroBannerProps) => {
   );
 };
 
-export default HeroBanner;
+export default HeroBanner2;
