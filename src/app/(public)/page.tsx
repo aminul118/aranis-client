@@ -1,4 +1,4 @@
-import HeroBanner from '@/app/(public)/_components/HeroBanner';
+import HeroBanner2 from '@/app/(public)/_components/HeroBanner2';
 import NewArrivals from '@/app/(public)/_components/NewArrivals';
 import generateMetaTags from '@/seo/generateMetaTags';
 import { getHeroBanners } from '@/services/banners/hero-banner/hero-banner';
@@ -23,7 +23,7 @@ const HomePage = async () => {
 
   return (
     <>
-      <HeroBanner
+      <HeroBanner2
         mainSlides={heroBannersRes?.data}
         miniBanners={miniBannersRes?.data}
       />
