@@ -16,7 +16,7 @@ const AdminLayout = async ({ children }: Children) => {
   ]);
   if (!user) {
     const { redirect } = await import('next/navigation');
-    redirect('/auth/login');
+    redirect('/login');
   }
 
   return (

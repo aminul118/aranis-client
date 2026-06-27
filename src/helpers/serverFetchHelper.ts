@@ -60,6 +60,17 @@ const serverFetchHelper = async <T>(
   try {
     const res = await makeRequest();
 
+    if (res.status === 429) {
+      try {
+        const { logOut } = await import('@/services/auth/logout');
+        await logOut();
+      } catch (e) {
+        // Ignore cookie deletion errors in Server Components
+      }
+      const { redirect } = await import('next/navigation');
+      redirect('/login');
+    }
+
     const contentType = res.headers.get('content-type');
     const isJson = contentType && contentType.includes('application/json');
 
@@ -104,6 +115,12 @@ const serverFetchHelper = async <T>(
       data: null,
     } as any as T;
   } catch (error: any) {
+    if (
+      error?.message === 'NEXT_REDIRECT' ||
+      error?.digest?.startsWith('NEXT_REDIRECT')
+    ) {
+      throw error;
+    }
     logger.error('Fetch Error Detail:', {
       url,
       method: options.method,
