@@ -12,7 +12,24 @@ interface Props {
 }
 
 export async function generateStaticParams() {
-  const { data: products } = await getProducts({ limit: '1000' });
+  const products = [];
+  let page = 1;
+  let hasMore = true;
+
+  while (hasMore) {
+    const res = await getProducts({ limit: '50', page: page.toString() });
+    if (res?.data && res.data.length > 0) {
+      products.push(...res.data);
+      if (page >= (res.meta?.totalPage || 1)) {
+        hasMore = false;
+      } else {
+        page++;
+      }
+    } else {
+      hasMore = false;
+    }
+  }
+
   return (
     products?.map((product) => ({
       slug: product.slug,

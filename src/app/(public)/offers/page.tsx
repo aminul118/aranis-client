@@ -1,3 +1,4 @@
+import { pick, validProductFilters } from '@/lib/pick';
 import { getCategories } from '@/services/category/category';
 import { getColors } from '@/services/color/color';
 import { getActiveOffer, getOffers } from '@/services/offer/offer';
@@ -45,7 +46,7 @@ const OffersPage = async ({ searchParams }: Props) => {
   const page = resolvedSearchParams.page || '1';
   const limit = '20';
 
-  const query: Record<string, string> = {
+  const rawQuery: Record<string, string> = {
     ...resolvedSearchParams,
     isOffer: 'true',
     page,
@@ -53,8 +54,10 @@ const OffersPage = async ({ searchParams }: Props) => {
   };
 
   if (verifiedTag) {
-    query.offerTag = verifiedTag;
+    rawQuery.offerTag = verifiedTag;
   }
+
+  const query = pick(rawQuery, validProductFilters) as Record<string, string>;
 
   const [
     { data: products, meta },

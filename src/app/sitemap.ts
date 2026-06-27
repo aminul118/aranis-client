@@ -6,14 +6,26 @@ import { getProducts } from '@/services/product/product';
 import { MetadataRoute } from 'next';
 
 const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
-  // 1) Fetch dynamic data
-  const [navRes, productsRes] = await Promise.all([
-    getNavbars({ limit: '1000' }),
-    getProducts({ limit: '1000' }), // Fetch a large batch for sitemap
-  ]);
-
+  const navRes = await getNavbars({ limit: '1000' });
   const navItems = navRes?.data || [];
-  const products = productsRes?.data || [];
+
+  const products = [];
+  let page = 1;
+  let hasMore = true;
+
+  while (hasMore) {
+    const res = await getProducts({ limit: '50', page: page.toString() });
+    if (res?.data && res.data.length > 0) {
+      products.push(...res.data);
+      if (page >= (res.meta?.totalPage || 1)) {
+        hasMore = false;
+      } else {
+        page++;
+      }
+    } else {
+      hasMore = false;
+    }
+  }
 
   // 2) Map dynamic data to Routes format
   // Recursively generate all categorization routes from navbar

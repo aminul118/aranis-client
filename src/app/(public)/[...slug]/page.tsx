@@ -1,3 +1,4 @@
+import { pick, validProductFilters } from '@/lib/pick';
 import { resolveSlugs } from '@/lib/url-slugs';
 import { generateCategorizedMeta } from '@/seo/generateDynamicMeta';
 import { getCategories } from '@/services/category/category';
@@ -73,12 +74,7 @@ const DynamicShopPage = async ({ params, searchParams }: Props) => {
     limit,
   };
 
-  const query: Record<string, string> = {};
-  Object.entries(rawQuery).forEach(([key, value]) => {
-    if (value !== undefined && value !== null) {
-      query[key] = value as string;
-    }
-  });
+  const query = pick(rawQuery, validProductFilters) as Record<string, string>;
 
   const { data: products, meta } = await getProducts(query);
 

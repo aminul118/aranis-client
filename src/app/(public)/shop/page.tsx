@@ -13,17 +13,20 @@ interface Props {
   searchParams: Promise<Record<string, string>>;
 }
 
+import { pick, validProductFilters } from '@/lib/pick';
+
 const ShopPage = async ({ searchParams }: Props) => {
   const resolvedSearchParams = await searchParams;
   const page = resolvedSearchParams.page || '1';
   const limit = '20';
 
-  const query = {
+  const rawQuery = {
     ...resolvedSearchParams,
     page,
     limit,
   };
 
+  const query = pick(rawQuery, validProductFilters) as Record<string, string>;
   const [
     { data: products, meta },
     { data: dbCategories },

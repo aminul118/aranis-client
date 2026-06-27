@@ -1,6 +1,7 @@
 'use client';
 
 import { TransitionContext } from '@/context/useTransition';
+import { pick, validProductFilters } from '@/lib/pick';
 import { generateShopPath } from '@/lib/url-slugs';
 import { cn } from '@/lib/utils';
 import type { ICategory } from '@/services/category/category.interface';
@@ -107,7 +108,11 @@ const ShopContent = ({
     query.limit = '20';
 
     try {
-      const res = await getProducts(query);
+      const filteredQuery = pick(query, validProductFilters) as Record<
+        string,
+        string
+      >;
+      const res = await getProducts(filteredQuery);
       if (res?.data) {
         setAllProducts((prev) => {
           const existingIds = new Set(prev.map((p) => p._id));
