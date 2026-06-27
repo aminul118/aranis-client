@@ -209,7 +209,11 @@ const CategoryBar = ({
                                           {TitleContent}
                                         </Link>
                                       ) : (
-                                        TitleContent
+                                        <Link
+                                          href={`/${categorySlug}/${subCategorySlug}`}
+                                        >
+                                          {TitleContent}
+                                        </Link>
                                       ))}
                                     <div className="flex flex-col gap-2">
                                       {sub.items?.map((subItem: any) => {

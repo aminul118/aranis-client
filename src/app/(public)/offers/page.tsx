@@ -43,7 +43,7 @@ const OffersPage = async ({ searchParams }: Props) => {
   const verifiedTag = activeOffer?.tag;
 
   const page = resolvedSearchParams.page || '1';
-  const limit = '12';
+  const limit = '20';
 
   const query: Record<string, string> = {
     ...resolvedSearchParams,

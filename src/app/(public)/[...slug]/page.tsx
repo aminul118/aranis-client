@@ -64,7 +64,7 @@ const DynamicShopPage = async ({ params, searchParams }: Props) => {
   };
 
   const page = resolvedSearchParams.page || '1';
-  const limit = '12';
+  const limit = '20';
 
   const rawQuery = {
     ...resolvedSearchParams,

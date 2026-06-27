@@ -194,9 +194,13 @@ const Mobile = ({ navItems, setMenuOpen, logo }: MobileProps) => {
                                 className="flex flex-col gap-1.5"
                               >
                                 {sub.title && (
-                                  <p className="px-3 text-xs font-bold tracking-wider text-gray-900 uppercase opacity-70 dark:text-gray-100">
+                                  <Link
+                                    href={`/${categorySlug}/${subCategorySlug}`}
+                                    onClick={() => setMenuOpen(false)}
+                                    className="px-3 text-xs font-bold tracking-wider text-gray-900 uppercase opacity-70 transition-colors hover:text-blue-600 dark:text-gray-100 dark:hover:text-blue-400"
+                                  >
                                     {sub.title}
-                                  </p>
+                                  </Link>
                                 )}
                                 <div className="flex flex-col gap-1">
                                   {sub.items?.map((item: any) => {
