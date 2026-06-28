@@ -42,6 +42,7 @@ const getProducts = async (
   return await serverFetch.get<ApiResponse<IProduct[]>>('/products', {
     query,
     cache: 'force-cache',
+    skipAuth: true,
     next: { tags: ['product'], ...options?.next },
     ...options,
     headers: {
@@ -52,6 +53,7 @@ const getProducts = async (
 
 const getSingleProduct = async (id: string) => {
   return await serverFetch.get<ApiResponse<IProduct>>(`/products/${id}`, {
+    skipAuth: true,
     next: {
       tags: [`product-${id}`, 'product'],
       revalidate: 3600,
@@ -73,6 +75,7 @@ const deleteProduct = async (id: string) => {
 const getBestSellingProducts = async () => {
   return await serverFetch.get<ApiResponse<IProduct[]>>('/products', {
     query: { sort: '-inStock -soldCount -createdAt', limit: '12' },
+    skipAuth: true,
     next: {
       tags: ['product', 'best-selling'],
       revalidate: 3600,
@@ -83,6 +86,7 @@ const getBestSellingProducts = async () => {
 const getNewArrivals = async () => {
   return await serverFetch.get<ApiResponse<IProduct[]>>('/products', {
     query: { sort: '-inStock -createdAt', limit: '12' },
+    skipAuth: true,
     next: {
       tags: ['product', 'new-arrivals'],
     },
@@ -92,6 +96,7 @@ const getNewArrivals = async () => {
 const getTopRatedProducts = async () => {
   return await serverFetch.get<ApiResponse<IProduct[]>>('/products', {
     query: { sort: '-rating', limit: '12' },
+    skipAuth: true,
     next: {
       tags: ['product', 'top-rated'],
       revalidate: 3600,
@@ -141,6 +146,7 @@ const getProductPriceRange = async () => {
   return await serverFetch.get<
     ApiResponse<{ minPrice: number; maxPrice: number }>
   >('/products/price-range', {
+    skipAuth: true,
     next: {
       tags: ['product-price-range'],
       revalidate: 3600, // Revalidate every hour

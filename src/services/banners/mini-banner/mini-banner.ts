@@ -9,6 +9,7 @@ import { IMiniBanner } from './mini-banner.interface';
 const getMiniBanners = async (query: Record<string, string> = {}) => {
   return await serverFetch.get<ApiResponse<IMiniBanner[]>>('/mini-banners', {
     query,
+    skipAuth: true,
     next: { tags: ['mini-banners'] },
   });
 };

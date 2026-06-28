@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { LazyMotion, domAnimation, m } from 'framer-motion';
 import { ReactNode } from 'react';
 
 interface AnimatedSectionProps {
@@ -32,19 +32,21 @@ const AnimatedSection = ({
   variant = 'fadeUp',
 }: AnimatedSectionProps) => {
   return (
-    <motion.div
-      initial={variants[variant].initial}
-      whileInView={variants[variant].animate}
-      viewport={{ once: true, amount: 0.1 }}
-      transition={{
-        duration: 0.8,
-        delay,
-        ease: [0.21, 0.47, 0.32, 0.98],
-      }}
-      className={className}
-    >
-      {children}
-    </motion.div>
+    <LazyMotion features={domAnimation}>
+      <m.div
+        initial={variants[variant].initial}
+        whileInView={variants[variant].animate}
+        viewport={{ once: true, amount: 0.1 }}
+        transition={{
+          duration: 0.8,
+          delay,
+          ease: [0.21, 0.47, 0.32, 0.98],
+        }}
+        className={className}
+      >
+        {children}
+      </m.div>
+    </LazyMotion>
   );
 };
 

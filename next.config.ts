@@ -34,7 +34,6 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        // cspell:disable-next-line
         hostname: 'cdn.thearanis.com',
       },
     ],
