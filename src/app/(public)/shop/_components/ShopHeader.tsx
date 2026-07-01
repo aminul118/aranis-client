@@ -223,7 +223,7 @@ const ShopHeader = ({
               >
                 <SelectTrigger
                   aria-label="Subcategory options"
-                  className="!h-12 flex-1 rounded-full border border-black/10 bg-white/70 px-6 font-bold text-zinc-800 shadow-sm ring-offset-0 transition-all hover:bg-white focus:ring-0 sm:w-[220px] sm:flex-none dark:border-white/10 dark:bg-white/[0.03] dark:text-white dark:shadow-2xl dark:hover:bg-white/[0.05]"
+                  className="hidden !h-12 flex-1 rounded-full border border-black/10 bg-white/70 px-6 font-bold text-zinc-800 shadow-sm ring-offset-0 transition-all hover:bg-white focus:ring-0 sm:w-[220px] sm:flex-none lg:flex dark:border-white/10 dark:bg-white/[0.03] dark:text-white dark:shadow-2xl dark:hover:bg-white/[0.05]"
                 >
                   <SelectValue placeholder="All Subcategories" />
                 </SelectTrigger>

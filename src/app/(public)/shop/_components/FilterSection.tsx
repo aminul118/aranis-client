@@ -209,6 +209,45 @@ const FilterSection = ({
         </CollapsibleCard>
       )}
 
+      {/* SUBCATEGORY (MOBILE ONLY) */}
+      {currentCategoryData && currentCategoryData.subCategories.length > 0 && (
+        <div className="lg:hidden">
+          <CollapsibleCard title="Sub Category">
+            <Select
+              value={selectedSubCategory || 'All'}
+              onValueChange={(value) =>
+                onUpdateURL({
+                  subCategory: value === 'All' ? '' : value,
+                  type: '',
+                })
+              }
+            >
+              <SelectTrigger className="h-12 w-full rounded-2xl border-black/10 bg-black/[0.02] px-5 font-semibold text-zinc-700 shadow-sm ring-offset-0 focus:ring-0 dark:border-white/10 dark:bg-white/[0.04] dark:text-white">
+                <SelectValue placeholder="All Subcategories" />
+              </SelectTrigger>
+
+              <SelectContent className="dark:bg-background/95 rounded-2xl border-black/10 bg-white/95 backdrop-blur-xl dark:border-white/10">
+                <SelectItem value="All" className="font-semibold">
+                  All Subcategories
+                </SelectItem>
+                {currentCategoryData.subCategories.map((sub) => {
+                  if (!sub.title) return null;
+                  return (
+                    <SelectItem
+                      key={sub.title}
+                      value={sub.title}
+                      className="font-semibold"
+                    >
+                      {sub.title}
+                    </SelectItem>
+                  );
+                })}
+              </SelectContent>
+            </Select>
+          </CollapsibleCard>
+        </div>
+      )}
+
       {/* TYPES */}
       {selectedSubCategory &&
         (currentCategoryData?.subCategories.find(
