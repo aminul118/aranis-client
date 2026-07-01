@@ -29,13 +29,21 @@ const ProductImageGallery = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const thumbsRef = useRef<HTMLDivElement>(null);
 
+  const [isLcpLoaded, setIsLcpLoaded] = useState(false);
+
   useEffect(() => {
-    // Delay preloading just enough to not block LCP, but fast enough for the user
+    // Fallback in case onLoad doesn't fire (e.g. cached image)
     const timer = setTimeout(() => {
       setShouldPreload(true);
-    }, 200);
+    }, 1500);
     return () => clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    if (isLcpLoaded) {
+      setShouldPreload(true);
+    }
+  }, [isLcpLoaded]);
 
   // ── Cursor-tracking zoom ──────────────────────────────────────────────────
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
@@ -77,7 +85,7 @@ const ProductImageGallery = ({
                 fill
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 quality={60}
-                priority={true}
+                loading="lazy"
               />
             );
           })}
@@ -149,6 +157,7 @@ const ProductImageGallery = ({
                 priority
                 fetchPriority="high"
                 draggable={false}
+                onLoad={() => setIsLcpLoaded(true)}
                 className="pointer-events-none object-cover"
                 quality={60}
               />
@@ -232,6 +241,7 @@ const ProductImageGallery = ({
             priority
             fetchPriority="high"
             draggable={false}
+            onLoad={() => setIsLcpLoaded(true)}
             className="object-cover"
             quality={60}
           />
