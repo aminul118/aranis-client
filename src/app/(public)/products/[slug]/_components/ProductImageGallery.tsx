@@ -134,6 +134,16 @@ const ProductImageGallery = ({
               transition={{ duration: 0.15 }}
               className="absolute inset-0"
             >
+              {/* Instant Cache Placeholder (Zero-delay cache hit from Shop page) */}
+              <Image
+                src={selectedImage}
+                alt=""
+                fill
+                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 250px"
+                priority
+                className="pointer-events-none object-cover"
+                quality={40}
+              />
               <Image
                 src={selectedImage}
                 alt={productName}

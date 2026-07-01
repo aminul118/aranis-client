@@ -38,6 +38,17 @@ export default function MobileZoomViewer({
               className="relative h-full w-full overflow-hidden"
               style={{ width: '100%', height: '100%' }}
             >
+              {/* Instant Cache Placeholder (Zero-delay cache hit from Shop page) */}
+              <Image
+                src={selectedImage}
+                alt=""
+                fill
+                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 250px"
+                priority
+                className="object-cover"
+                quality={40}
+              />
+              {/* Fast loading base image (for initial crispness before zoom) */}
               <Image
                 src={selectedImage}
                 alt={productName}
@@ -48,6 +59,16 @@ export default function MobileZoomViewer({
                 draggable={false}
                 className="object-cover"
                 quality={60}
+              />
+              {/* Ultra-sharp lazy-loaded overlay for zoom */}
+              <Image
+                src={selectedImage}
+                alt={`${productName} full resolution`}
+                fill
+                unoptimized
+                loading="lazy"
+                draggable={false}
+                className="object-cover"
               />
             </div>
           </TransformComponent>
