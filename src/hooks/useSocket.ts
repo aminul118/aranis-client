@@ -21,6 +21,17 @@ export const getSocket = () => {
       joinedRooms.clear();
       joinedUserId = null;
     });
+
+    if (typeof window !== 'undefined') {
+      window.addEventListener('pagehide', () => {
+        if (socketInstance) socketInstance.disconnect();
+      });
+      window.addEventListener('pageshow', (event) => {
+        if (event.persisted && socketInstance) {
+          socketInstance.connect();
+        }
+      });
+    }
   }
   return socketInstance;
 };

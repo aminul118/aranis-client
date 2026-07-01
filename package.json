@@ -161,8 +161,9 @@
     "@types/react-dom": "19.2.3"
   },
   "browserslist": [
-    "> 0.5%",
-    "last 2 versions",
-    "not dead"
+    "chrome >= 94",
+    "edge >= 94",
+    "firefox >= 93",
+    "safari >= 15"
   ]
 }

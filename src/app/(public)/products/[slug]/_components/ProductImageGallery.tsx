@@ -30,10 +30,10 @@ const ProductImageGallery = ({
   const thumbsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Delay preloading other images to prioritize LCP and fast initial load
+    // Delay preloading just enough to not block LCP, but fast enough for the user
     const timer = setTimeout(() => {
       setShouldPreload(true);
-    }, 1500);
+    }, 200);
     return () => clearTimeout(timer);
   }, []);
 
@@ -88,6 +88,7 @@ const ProductImageGallery = ({
       {hasMultiple && (
         <div
           ref={thumbsRef}
+          onMouseEnter={() => setShouldPreload(true)}
           className="scrollbar-none flex w-[72px] shrink-0 flex-col gap-2 overflow-y-auto py-0.5"
         >
           {thumbnails.map((img, idx) => {
@@ -131,13 +132,13 @@ const ProductImageGallery = ({
           className="border-border/50 bg-secondary/30 absolute inset-0 cursor-crosshair overflow-hidden rounded-3xl border backdrop-blur-sm"
           style={{ isolation: 'isolate' }}
         >
-          <AnimatePresence mode="wait" initial={false}>
+          <AnimatePresence initial={false}>
             <motion.div
               key={selectedImage}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
+              transition={{ duration: 0.15 }}
               className="absolute inset-0"
             >
               <Image

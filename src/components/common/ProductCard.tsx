@@ -89,7 +89,7 @@ const ProductCard = ({
           priority={index !== undefined && index < 4}
           fetchPriority={index !== undefined && index < 4 ? 'high' : 'auto'}
           sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 250px"
-          quality={60}
+          quality={40}
           className="object-cover transition-transform duration-1000 ease-out group-hover:scale-110"
         />
         {secondaryThumbnail && (
@@ -99,7 +99,7 @@ const ProductCard = ({
             alt={`${product.name} - View 2`}
             fill
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 250px"
-            quality={50}
+            quality={30}
             loading="lazy"
             className="object-cover opacity-0 transition-all duration-1000 ease-out group-hover:scale-110 group-hover:opacity-100"
           />
