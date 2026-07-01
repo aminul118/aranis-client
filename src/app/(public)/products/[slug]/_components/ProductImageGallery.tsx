@@ -29,21 +29,10 @@ const ProductImageGallery = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const thumbsRef = useRef<HTMLDivElement>(null);
 
-  const [isLcpLoaded, setIsLcpLoaded] = useState(false);
-
   useEffect(() => {
-    // Fallback in case onLoad doesn't fire (e.g. cached image)
-    const timer = setTimeout(() => {
-      setShouldPreload(true);
-    }, 1500);
-    return () => clearTimeout(timer);
+    // Preload all gallery images immediately for instant switching
+    setShouldPreload(true);
   }, []);
-
-  useEffect(() => {
-    if (isLcpLoaded) {
-      setShouldPreload(true);
-    }
-  }, [isLcpLoaded]);
 
   // ── Cursor-tracking zoom ──────────────────────────────────────────────────
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
@@ -74,7 +63,10 @@ const ProductImageGallery = ({
     <div className="relative flex gap-3 select-none">
       {/* ── Preload full-size images for fast switching ──────────────── */}
       {shouldPreload && (
-        <div className="hidden" aria-hidden="true">
+        <div
+          className="pointer-events-none absolute h-px w-px overflow-hidden opacity-0"
+          aria-hidden="true"
+        >
           {thumbnails.map((img) => {
             if (img === thumbnails[0]) return null;
             return (
@@ -82,10 +74,10 @@ const ProductImageGallery = ({
                 key={`preload-${img}`}
                 src={img}
                 alt=""
-                fill
-                sizes="(max-width: 1024px) 100vw, 50vw"
+                width={800}
+                height={1000}
                 quality={60}
-                loading="lazy"
+                priority={true}
               />
             );
           })}
