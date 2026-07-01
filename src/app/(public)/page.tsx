@@ -1,4 +1,4 @@
-import HeroBanner from '@/app/(public)/_components/HeroBanner';
+import HeroBanner from '@/app/(public)/_components/HeroBanner/HeroBanner';
 import NewArrivals from '@/app/(public)/_components/NewArrivals';
 import generateMetaTags from '@/seo/generateMetaTags';
 import { getHeroBanners } from '@/services/banners/hero-banner/hero-banner';
@@ -21,8 +21,30 @@ const HomePage = async () => {
     getMiniBanners({ isActive: 'true', sort: 'order' }),
   ]);
 
+  const firstHeroImage = heroBannersRes?.data?.[0]?.image;
+  const firstMiniBanners = miniBannersRes?.data?.slice(0, 2) || [];
+
   return (
     <>
+      {/* Manually force preload the raw CDN images for absolute fastest LCP */}
+      {firstHeroImage && (
+        <link
+          rel="preload"
+          as="image"
+          href={firstHeroImage}
+          fetchPriority="high"
+        />
+      )}
+      {firstMiniBanners.map((banner, i) => (
+        <link
+          key={i}
+          rel="preload"
+          as="image"
+          href={banner.image}
+          fetchPriority="high"
+        />
+      ))}
+
       <HeroBanner
         mainSlides={heroBannersRes?.data}
         miniBanners={miniBannersRes?.data}
