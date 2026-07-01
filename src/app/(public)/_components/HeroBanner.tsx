@@ -67,6 +67,7 @@ const HeroBanner2 = ({ mainSlides, miniBanners }: HeroBannerProps) => {
                           priority={currentSafe === 0}
                           fetchPriority={currentSafe === 0 ? 'high' : 'auto'}
                           sizes="(max-width: 1024px) 100vw, 75vw"
+                          unoptimized
                         />
                       </Link>
                     </CarouselItem>
@@ -102,6 +103,7 @@ const HeroBanner2 = ({ mainSlides, miniBanners }: HeroBannerProps) => {
                     fetchPriority={i === 0 ? 'high' : 'auto'}
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                     sizes="(max-width: 1024px) 50vw, 320px"
+                    unoptimized
                   />
                 </Link>
               ))}
@@ -128,6 +130,7 @@ const HeroBanner2 = ({ mainSlides, miniBanners }: HeroBannerProps) => {
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
                   sizes="50vw"
                   quality={60}
+                  unoptimized
                 />
               </Link>
             ))}
