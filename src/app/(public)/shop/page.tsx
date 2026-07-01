@@ -18,7 +18,7 @@ import { pick, validProductFilters } from '@/lib/pick';
 const ShopPage = async ({ searchParams }: Props) => {
   const resolvedSearchParams = await searchParams;
   const page = resolvedSearchParams.page || '1';
-  const limit = '20';
+  const limit = '28';
 
   const rawQuery = {
     ...resolvedSearchParams,

@@ -105,7 +105,7 @@ const ShopContent = ({
     }
 
     query.page = nextPage.toString();
-    query.limit = '20';
+    query.limit = '28';
 
     try {
       const filteredQuery = pick(query, validProductFilters) as Record<

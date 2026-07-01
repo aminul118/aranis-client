@@ -3,7 +3,7 @@
 import Image from '@/components/common/SafeImage';
 import { AnimatePresence, motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
-import { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
+import { ReactNode, useCallback, useRef, useState } from 'react';
 
 const MobileZoomViewer = dynamic(() => import('./MobileZoomViewer'), {
   ssr: false,
@@ -29,11 +29,6 @@ const ProductImageGallery = ({
   const [isLcpLoaded, setIsLcpLoaded] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const thumbsRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    // Preload all gallery images immediately for instant switching
-    setShouldPreload(true);
-  }, []);
 
   // ── Cursor-tracking zoom ──────────────────────────────────────────────────
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
@@ -71,15 +66,17 @@ const ProductImageGallery = ({
           {thumbnails.map((img) => {
             if (img === thumbnails[0]) return null;
             return (
-              <Image
-                key={`preload-${img}`}
-                src={img}
-                alt=""
-                width={800}
-                height={1000}
-                quality={60}
-                priority={true}
-              />
+              <div key={`preload-${img}`} className="relative h-full w-full">
+                <Image
+                  src={img}
+                  alt={`${productName} image`}
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 600px"
+                  quality={60}
+                  priority={true}
+                  fetchPriority="high"
+                />
+              </div>
             );
           })}
         </div>
@@ -114,7 +111,7 @@ const ProductImageGallery = ({
                   sizes="72px"
                   draggable={false}
                   className="pointer-events-none object-cover"
-                  quality={60}
+                  quality={40}
                 />
                 {active && <div className="absolute inset-0 bg-blue-500/10" />}
               </button>
@@ -146,7 +143,7 @@ const ProductImageGallery = ({
                 src={selectedImage}
                 alt={productName}
                 fill
-                sizes="(max-width: 1024px) 100vw, 50vw"
+                sizes="(max-width: 1024px) 100vw, 600px"
                 priority
                 fetchPriority="high"
                 draggable={false}
@@ -224,21 +221,7 @@ const ProductImageGallery = ({
         className="border-border/50 bg-secondary/30 relative aspect-[4/5] flex-1 overflow-hidden rounded-3xl border backdrop-blur-sm md:hidden"
         style={{ isolation: 'isolate' }}
       >
-        {/* SSR Image for instant LCP */}
-        <div className="absolute inset-0">
-          <Image
-            src={selectedImage}
-            alt={productName}
-            fill
-            sizes="(max-width: 1024px) 100vw, 50vw"
-            priority
-            fetchPriority="high"
-            draggable={false}
-            onLoad={() => setIsLcpLoaded(true)}
-            className="object-cover"
-            quality={60}
-          />
-        </div>
+        {/* SSR Image removed to prevent it from showing in the background during zoom */}
 
         {/* Interactive Zoom Overlay (Client-only) */}
         <div className="absolute inset-0 z-10">
