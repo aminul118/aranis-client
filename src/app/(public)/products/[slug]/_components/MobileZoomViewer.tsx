@@ -47,7 +47,7 @@ export default function MobileZoomViewer({
                 fetchPriority="high"
                 draggable={false}
                 className="object-cover"
-                quality={75}
+                quality={60}
               />
             </div>
           </TransformComponent>

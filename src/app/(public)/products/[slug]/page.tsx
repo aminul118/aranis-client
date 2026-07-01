@@ -18,7 +18,7 @@ export async function generateStaticParams() {
   let hasMore = true;
 
   while (hasMore) {
-    const res = await getProducts({ limit: '50', page: page.toString() });
+    const res = await getProducts({ limit: '28', page: page.toString() });
     if (res?.data && res.data.length > 0) {
       products.push(...res.data);
       if (page >= (res.meta?.totalPage || 1)) {

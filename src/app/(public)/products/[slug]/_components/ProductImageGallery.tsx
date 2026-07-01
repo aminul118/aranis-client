@@ -25,8 +25,7 @@ const ProductImageGallery = ({
   const [selectedImage, setSelectedImage] = useState(thumbnails[0] || '');
   const [isZoomed, setIsZoomed] = useState(false);
   const [zoomOrigin, setZoomOrigin] = useState({ x: 50, y: 50 });
-  const [shouldPreload, setShouldPreload] = useState(false);
-  const [isLcpLoaded, setIsLcpLoaded] = useState(false);
+  const [shouldPreload, setShouldPreload] = useState(true);
   const containerRef = useRef<HTMLDivElement>(null);
   const thumbsRef = useRef<HTMLDivElement>(null);
 
@@ -147,7 +146,6 @@ const ProductImageGallery = ({
                 priority
                 fetchPriority="high"
                 draggable={false}
-                onLoad={() => setIsLcpLoaded(true)}
                 className="pointer-events-none object-cover"
                 quality={60}
               />
