@@ -2,12 +2,8 @@
 
 import Image from '@/components/common/SafeImage';
 import { AnimatePresence, motion } from 'framer-motion';
-import dynamic from 'next/dynamic';
 import { ReactNode, useCallback, useRef, useState } from 'react';
-
-const MobileZoomViewer = dynamic(() => import('./MobileZoomViewer'), {
-  ssr: false,
-});
+import MobileZoomViewer from './MobileZoomViewer';
 
 interface ProductImageGalleryProps {
   thumbnails: string[];
