@@ -26,6 +26,7 @@ const ProductImageGallery = ({
   const [isZoomed, setIsZoomed] = useState(false);
   const [zoomOrigin, setZoomOrigin] = useState({ x: 50, y: 50 });
   const [shouldPreload, setShouldPreload] = useState(false);
+  const [isLcpLoaded, setIsLcpLoaded] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const thumbsRef = useRef<HTMLDivElement>(null);
 
