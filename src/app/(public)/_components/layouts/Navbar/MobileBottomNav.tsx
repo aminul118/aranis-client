@@ -73,6 +73,7 @@ const MobileBottomNav = () => {
                   'transition-transform duration-200',
                   isActive && 'scale-110',
                   item.color,
+                  item.label === 'OFFER' && 'animate-bounce',
                 )}
               />
               {(item.count ?? 0) > 0 && (

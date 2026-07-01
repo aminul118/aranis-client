@@ -52,19 +52,22 @@ const MainNavbar = ({
         {/* Action Buttons */}
         <div className="ml-auto flex items-center gap-2 lg:gap-4">
           {/* Offers */}
-          <Link
-            href="/offers"
-            className={`group flex items-center gap-2 rounded-md border px-4 py-2 transition-colors ${
-              pathname === '/offers' || pathname.startsWith('/offers?')
-                ? 'border-white/50 bg-white/20 text-orange-400 shadow-[0_0_15px_rgba(255,255,255,0.1)]'
-                : 'border-orange-500/40 bg-orange-500/10 text-orange-400 hover:bg-orange-500/20'
-            }`}
-          >
-            <Gift size={18} />
-            <span className="hidden text-[10px] font-black tracking-widest uppercase md:inline">
-              Offers
-            </span>
-          </Link>
+          <div className="relative overflow-hidden rounded-md p-[1px]">
+            <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#00000000_0%,#f97316_50%,#00000000_100%)]" />
+            <Link
+              href="/offers"
+              className={`relative flex h-full w-full items-center gap-2 rounded-md px-4 py-2 ${
+                pathname === '/offers' || pathname.startsWith('/offers?')
+                  ? 'bg-black text-orange-400 shadow-[0_0_15px_rgba(255,255,255,0.1)]'
+                  : 'bg-black text-orange-400'
+              }`}
+            >
+              <Gift size={18} />
+              <span className="hidden text-[10px] font-black tracking-widest uppercase md:inline">
+                Offers
+              </span>
+            </Link>
+          </div>
 
           {/* Wishlist */}
           <Link
