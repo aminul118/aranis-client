@@ -209,43 +209,6 @@ const FilterSection = ({
         </CollapsibleCard>
       )}
 
-      {/* SUBCATEGORY */}
-      {currentCategoryData && currentCategoryData.subCategories.length > 0 && (
-        <CollapsibleCard title="Sub Category">
-          <div className="flex flex-col gap-2">
-            {currentCategoryData.subCategories.map((sub) => {
-              const active = selectedSubCategory === sub.title;
-
-              return (
-                <motion.div
-                  key={sub.title || Math.random().toString()}
-                  whileHover={{ scale: 1.01 }}
-                  whileTap={{ scale: 0.99 }}
-                >
-                  <Button
-                    className={cn(
-                      'w-full justify-between rounded-2xl px-4 py-6 font-semibold transition-all duration-300',
-                      active
-                        ? 'bg-primary/10 dark:bg-primary/20 text-primary shadow-[0_0_0_1px_rgba(99,102,241,0.35)]'
-                        : 'bg-transparent text-zinc-700 hover:bg-black/5 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-white/5 dark:hover:text-white',
-                    )}
-                    variant="ghost"
-                    onClick={() =>
-                      onUpdateURL({ subCategory: sub.title || null, type: '' })
-                    }
-                  >
-                    <span>{sub.title}</span>
-                    {active && (
-                      <span className="bg-primary h-2 w-2 rounded-full" />
-                    )}
-                  </Button>
-                </motion.div>
-              );
-            })}
-          </div>
-        </CollapsibleCard>
-      )}
-
       {/* TYPES */}
       {selectedSubCategory &&
         (currentCategoryData?.subCategories.find(

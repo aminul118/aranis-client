@@ -204,6 +204,53 @@ const ShopHeader = ({
             </SheetContent>
           </Sheet>
 
+          {(() => {
+            const currentCat = dbCategories.find(
+              (c) => c.name === selectedCategory,
+            );
+            if (!currentCat || currentCat.subCategories.length === 0)
+              return null;
+
+            return (
+              <Select
+                value={selectedSubCategory || 'All'}
+                onValueChange={(value) =>
+                  onUpdateURL({
+                    subCategory: value === 'All' ? '' : value,
+                    type: '',
+                  })
+                }
+              >
+                <SelectTrigger
+                  aria-label="Subcategory options"
+                  className="!h-12 flex-1 rounded-full border border-black/10 bg-white/70 px-6 font-bold text-zinc-800 shadow-sm ring-offset-0 transition-all hover:bg-white focus:ring-0 sm:w-[220px] sm:flex-none dark:border-white/10 dark:bg-white/[0.03] dark:text-white dark:shadow-2xl dark:hover:bg-white/[0.05]"
+                >
+                  <SelectValue placeholder="All Subcategories" />
+                </SelectTrigger>
+                <SelectContent className="shadow-3xl rounded-[20px] border-black/10 bg-white text-zinc-800 backdrop-blur-xl dark:border-white/10 dark:bg-[#151722] dark:text-white">
+                  <SelectItem
+                    value="All"
+                    className="font-bold focus:bg-black/5 focus:text-zinc-900 dark:focus:bg-white/10 dark:focus:text-white"
+                  >
+                    All Subcategories
+                  </SelectItem>
+                  {currentCat.subCategories.map((sub) => {
+                    if (!sub.title) return null;
+                    return (
+                      <SelectItem
+                        key={sub.title}
+                        value={sub.title}
+                        className="font-bold focus:bg-black/5 focus:text-zinc-900 dark:focus:bg-white/10 dark:focus:text-white"
+                      >
+                        {sub.title}
+                      </SelectItem>
+                    );
+                  })}
+                </SelectContent>
+              </Select>
+            );
+          })()}
+
           <Select
             value={sortBy}
             onValueChange={(value) => onUpdateURL({ sort: value })}

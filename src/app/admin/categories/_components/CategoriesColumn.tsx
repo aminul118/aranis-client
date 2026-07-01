@@ -9,19 +9,19 @@ const CategoriesColumn: Column<ICategory>[] = [
   },
   {
     header: 'Name',
-    accessor: (c) => <span className="font-semibold">{c.name}</span>,
+    accessor: (c: ICategory) => <span className="font-semibold">{c.name}</span>,
     sortKey: 'name',
   },
   {
     header: 'Sub Categories',
-    accessor: (c) => {
+    accessor: (c: ICategory) => {
       const titles = c.subCategories?.map((s) => s.title).filter(Boolean);
       return titles?.length ? titles.join(', ') : '-';
     },
   },
   {
     header: 'Category Types',
-    accessor: (c) => {
+    accessor: (c: ICategory) => {
       const allTypes = c.subCategories
         ?.flatMap((s) => s.items || [])
         .filter(Boolean);
@@ -30,7 +30,7 @@ const CategoriesColumn: Column<ICategory>[] = [
   },
   {
     header: 'Actions',
-    accessor: (c) => <CategoryActions category={c} />,
+    accessor: (c: ICategory) => <CategoryActions category={c} />,
   },
 ];
 
